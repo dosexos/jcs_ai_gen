@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shinya — Dossier Clinique | qq-only</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+  :root {
+    --bg: #0f0f1a;
+    --bg2: #13132a;
+    --bg3: #1a1a35;
+    --bg4: #1f1f3f;
+    --violet: #533483;
+    --violet-light: #7b4fc9;
+    --violet-glow: rgba(83,52,131,0.4);
+    --red: #e94560;
+    --red-dark: #b5334a;
+    --red-glow: rgba(233,69,96,0.3);
+    --orange: #ff6b35;
+    --gold: #f0a500;
+    --teal: #00d9a8;
+    --text: #e8e8f0;
+    --text-dim: #9090b0;
+    --text-muted: #606080;
+    --border: rgba(255,255,255,0.07);
+    --border-accent: rgba(233,69,96,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(83,52,131,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 110%, rgba(233,69,96,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(83,52,131,0.05) 0%, transparent 80%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ====== HEADER ====== */
+  .header {
+    padding: 60px 0 50px;
+    position: relative;
+  }
+
+  .header-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 9vw, 100px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #c5b8e8 40%, #e94560 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .header-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 36px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .badge-red {
+    background: rgba(233,69,96,0.15);
+    border: 1px solid rgba(233,69,96,0.4);
+    color: var(--red);
+  }
+
+  .badge-violet {
+    background: rgba(83,52,131,0.2);
+    border: 1px solid rgba(123,79,201,0.4);
+    color: #a070e0;
+  }
+
+  .badge-gold {
+    background: rgba(240,165,0,0.12);
+    border: 1px solid rgba(240,165,0,0.35);
+    color: var(--gold);
+  }
+
+  .badge-teal {
+    background: rgba(0,217,168,0.1);
+    border: 1px solid rgba(0,217,168,0.3);
+    color: var(--teal);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(233,69,96,0.5) 30%, rgba(83,52,131,0.5) 70%, transparent);
+    margin: 48px 0;
+  }
+
+  /* ====== STAT STRIP ====== */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .stat-item {
+    background: var(--bg2);
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .stat-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--violet));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+
+  .stat-item:hover::after { transform: scaleX(1); }
+
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #fff 50%, rgba(233,69,96,0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* ====== SECTION TITLE ====== */
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(233,69,96,0.4), transparent);
+  }
+
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  /* ====== CHART SECTION ====== */
+  .chart-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+
+  .chart-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 120px;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+  }
+
+  .bar {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+  }
+
+  .bar:hover { filter: brightness(1.3); }
+  .bar:hover::after {
+    content: attr(data-val);
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #fff;
+    background: var(--bg);
+    padding: 2px 5px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .bar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ====== GRID CARDS ====== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover { border-color: rgba(233,69,96,0.3); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--violet));
+  }
+
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* Progress bars */
+  .progress-row {
+    margin-bottom: 12px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .progress-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .progress-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .progress-bar-bg {
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--red));
+    transition: width 1s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Expressions tag cloud */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    background: rgba(233,69,96,0.1);
+    border-color: rgba(233,69,96,0.3);
+    color: var(--red);
+  }
+
+  .tag-large { font-size: 13px; padding: 7px 15px; }
+  .tag-xl { font-size: 16px; padding: 9px 18px; }
+
+  /* Rage-o-meter */
+  .rage-meter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rage-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 40px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rage-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  .rage-fill {
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .rage-score {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* Quote cards */
+  .quote-card {
+    background: var(--bg3);
+    border-left: 3px solid var(--red);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    border-radius: 0 3px 3px 0;
+    position: relative;
+  }
+
+  .quote-text {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.55;
+  }
+
+  .quote-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ====== PROSE SECTIONS ====== */
+  .prose-block {
+    margin-bottom: 48px;
+  }
+
+  .prose-section {
+    margin-bottom: 40px;
+  }
+
+  .prose-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose-section-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--red);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  .prose-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .prose p {
+    margin-bottom: 16px;
+    color: var(--text-dim);
+    font-size: 16.5px;
+  }
+
+  .prose em {
+    color: #d0b8ff;
+    font-style: italic;
+  }
+
+  .prose strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ====== PSYCHIATRIC REPORT ====== */
+  .psych-report {
+    background: var(--bg2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .psych-header {
+    background: linear-gradient(135deg, #1a103a, #280f25);
+    padding: 32px;
+    border-bottom: 1px solid rgba(83,52,131,0.3);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .psych-org {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #d0b8ff;
+    margin-bottom: 4px;
+  }
+
+  .psych-org-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .psych-stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    text-align: right;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+
+  .psych-body {
+    padding: 36px;
+  }
+
+  .psych-field {
+    margin-bottom: 28px;
+  }
+
+  .psych-field-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--violet-light);
+    margin-bottom: 8px;
+  }
+
+  .psych-field-content {
+    font-size: 15.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    border-left: 2px solid rgba(83,52,131,0.4);
+    padding-left: 16px;
+  }
+
+  .psych-field-content em {
+    color: #e0c8ff;
+  }
+
+  .psych-diagnosis {
+    background: rgba(233,69,96,0.08);
+    border: 1px solid rgba(233,69,96,0.25);
+    border-radius: 3px;
+    padding: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 0.03em;
+  }
+
+  .psych-ordonnance {
+    background: rgba(83,52,131,0.1);
+    border: 1px dashed rgba(83,52,131,0.5);
+    border-radius: 3px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+
+  .psych-ordonnance-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--violet-light);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .psych-rx-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 14.5px;
+    color: var(--text-dim);
+  }
+
+  .psych-rx-item::before {
+    content: 'Rx';
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--violet-light);
+    background: rgba(83,52,131,0.2);
+    padding: 2px 6px;
+    border-radius: 2px;
+    align-self: flex-start;
+    margin-top: 3px;
+    white-space: nowrap;
+  }
+
+  .psych-signature {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(83,52,131,0.2);
+    display: flex;
+    justify-content: flex-end;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ====== VERDICT ====== */
+  .verdict {
+    background: linear-gradient(135deg, #1a0a1f, #0f0f1a, #1a0a14);
+    border: 1px solid rgba(233,69,96,0.3);
+    border-radius: 4px;
+    padding: 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(233,69,96,0.06), transparent 60%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+  }
+
+  .verdict-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .verdict-text {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 24px;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .verdict-text strong {
+    color: var(--red);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ====== SCROLLBAR ====== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--violet); border-radius: 3px; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 768px) {
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .psych-header { grid-template-columns: 1fr; }
+    .bar-chart { height: 80px; }
+    .bar-label { font-size: 6px; }
+    .verdict { padding: 32px 24px; }
+    .verdict-text { font-size: 18px; }
+  }
+
+  @media (max-width: 500px) {
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .header-title { font-size: 48px; }
+  }
+
+  /* Animations on load */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .fade-in:nth-child(4) { animation-delay: 0.4s; }
+  .fade-in:nth-child(5) { animation-delay: 0.5s; }
+
+  .monthly-chart-container {
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .monthly-chart-wrapper {
+    padding-bottom: 30px;
+    position: relative;
+  }
+
+  .monthly-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 110px;
+    width: 100%;
+  }
+
+  .monthly-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+  }
+
+  .monthly-bar {
+    width: 100%;
+    border-radius: 1px 1px 0 0;
+    transition: filter 0.2s;
+    flex-shrink: 0;
+  }
+
+  .monthly-bar:hover { filter: brightness(1.4); }
+
+  .monthly-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transform: rotate(-45deg);
+    transform-origin: top left;
+    display: block;
+    line-height: 1;
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+  }
+
+  .full-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .full-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--violet));
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header fade-in">
+    <div class="header-eyebrow">Dossier Discord · canal #qq-only · 2021–2026</div>
+    <h1 class="header-title">SHINYA</h1>
+    <p class="header-subtitle">shxnya · Profil comportemental complet · CONFIDENTIEL</p>
+
+    <div class="badges">
+      <span class="badge badge-red">🎯 Main Rengar JGL</span>
+      <span class="badge badge-violet">⚡ Théoricien Compulsif</span>
+      <span class="badge badge-gold">🏅 Gold 4 Éternel</span>
+      <span class="badge badge-red">🌋 Niveau de rage : ÉLEVÉ</span>
+      <span class="badge badge-teal">📊 Analyste de sa propre douleur</span>
+      <span class="badge badge-violet">🧠 Jungler philosophe</span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-strip fade-in">
+    <div class="stat-item">
+      <div class="stat-num">13 906</div>
+      <div class="stat-label">Messages totaux</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">~5 ans</div>
+      <div class="stat-label">Fév. 2021 → Mars 2026</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">7,55</div>
+      <div class="stat-label">Messages / jour (moy.)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">11h</div>
+      <div class="stat-label">Pic d'activité horaire</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section-title"><span class="section-number">01</span> Activité temporelle</div>
+
+  <div class="grid-2">
+    <div class="chart-section">
+      <div class="chart-title">Distribution horaire des messages</div>
+      <div class="bar-chart" id="hourlyChart"></div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-title">Activité mensuelle (2021–2026)</div>
+      <div class="monthly-chart-container">
+        <div class="monthly-chart-wrapper">
+          <div class="monthly-chart" id="monthlyChart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CHAMPIONS & SUJETS -->
+  <div class="section-title"><span class="section-number">02</span> Champions & obsessions récurrentes</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Champions les plus mentionnés</div>
+      <div id="champBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Termes LoL & concepts obsessionnels</div>
+      <div id="termBars"></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RAGE METER & EXPRESSIONS -->
+  <div class="section-title"><span class="section-number">03</span> Profil de rage & expressions signature</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Rage-o-mètre personnel</div>
+      <div class="rage-meter">
+        <div class="rage-row">
+          <div class="rage-label">Intensité brute</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #e94560, #ff6b35); width: 80%;"></div>
+          <div class="rage-score">8/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Durée des crises</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #533483, #7b4fc9); width: 70%;"></div>
+          <div class="rage-score">7/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Auto-dérision</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #00d9a8, #533483); width: 90%;"></div>
+          <div class="rage-score">9/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Toxicité in-game</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #e94560, #b5334a); width: 40%;"></div>
+          <div class="rage-score">4/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Blâme des alliés</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #f0a500, #e94560); width: 75%;"></div>
+          <div class="rage-score">7.5/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Théorisation rage</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #533483, #e94560); width: 95%;"></div>
+          <div class="rage-score">9.5/10</div>
+        </div>
+        <div class="rage-row">
+          <div class="rage-label">Zen intérieur</div>
+          <div class="rage-fill" style="background: linear-gradient(90deg, #00d9a8, #533483); width: 20%;"></div>
+          <div class="rage-score">2/10</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Expressions signature & argot personnel</div>
+      <div class="tag-list">
+        <span class="tag tag-xl" style="border-color:rgba(233,69,96,0.5);color:#e94560">mdr (×151)</span>
+        <span class="tag tag-xl" style="border-color:rgba(255,100,50,0.5);color:#ff6b35">broken (×130)</span>
+        <span class="tag tag-large" style="border-color:rgba(200,100,100,0.4);color:#d07070">merde (×87)</span>
+        <span class="tag tag-large" style="border-color:rgba(150,100,200,0.4);color:#a070c0">nul (×51)</span>
+        <span class="tag tag-large" style="border-color:rgba(100,150,200,0.4);color:#7090d0">tilté (×32)</span>
+        <span class="tag tag-large" style="border-color:rgba(233,69,96,0.4);color:#e94560">giga (×31)</span>
+        <span class="tag" style="border-color:rgba(200,150,50,0.4);color:#c09030">fdp (×25)</span>
+        <span class="tag" style="border-color:rgba(100,180,100,0.4);color:#70b070">naze (×17)</span>
+        <span class="tag" style="border-color:rgba(150,100,200,0.4);color:#a070c0">injouable (×14)</span>
+        <span class="tag" style="border-color:rgba(200,100,100,0.4);color:#c07070">cancer (×10)</span>
+        <span class="tag">pue (×8)</span>
+        <span class="tag">turbo (×5)</span>
+        <span class="tag">sélection naturelle</span>
+        <span class="tag">rat irl</span>
+        <span class="tag">deranker</span>
+        <span class="tag">jungle diff</span>
+        <span class="tag">ont pas de bras</span>
+        <span class="tag">source mpb</span>
+        <span class="tag">le iaible diable</span>
+        <span class="tag">666</span>
+        <span class="tag">jvai mcoupé les veine</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOMENTS MÉMORABLES -->
+  <div class="full-card">
+    <div class="card-title">Moments mémorables — citations with dates</div>
+
+    <div class="quote-card">
+      <div class="quote-text">"chaque fois jsuis / jfais la mm erreur / jsuis en 5/0 / jme dis jpeux courir sur les gens / mais NON / [...] / jsui un puits de malheure / une fontaine de mauvaise augure / l'incarnation du desespoir / de lechec / d'ela malchance / des mauvais présage / la mort me poursuit / 666 / 666 / 66 / 666 / je vois / le iaible diable / par la fenetre / il vient me chercher"</div>
+      <div class="quote-meta">📅 2021-10-20 — Copypasta auto-généré, réutilisé 4 fois en 5 ans. Picasso des rageposts.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"J'essaye de pas trop spam le jeu et de jouer juste un tout petit peu de temps en temps pour pas faire d'overdose (rarement plus de 19 games par jour)"</div>
+      <div class="quote-meta">📅 2021-03-10 — Définition personnelle de la modération. 19 parties = sobriété.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"jte stacks des smics en me branlant en TT et je passe rentrer la moitié de mes week end avec ma famille et mes amis pdt que tu spam des soloQ de 8h du mat a 2h pour faire emeraude 3 => emeraude 3, le tout sans mettre un euro de coté je préfère 100 fois ma vie que la tienne, tu me paye pour trade je refuse"</div>
+      <div class="quote-meta">📅 2024-09-14 — Réponse épique à une provocation d'elo. Philosophie de vie complète en une phrase.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"classement des délus / 1/ supp / 2/ top / 3/ adc / 4/ mid / 5/ jungle"</div>
+      <div class="quote-meta">📅 2021-05-29 — La hiérarchie canonique de l'auto-persuasion. Jungler last pick = the most grounded.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"deux saisons d'affilés que je dépasse pas gold 4"</div>
+      <div class="quote-meta">📅 2022-11-15 — Confession rare, énoncée avec la sérénité d'un moine qui a accepté son karma.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"je pense que y'a un algo anti main rengar, chaque game ils nous envoient des détraqués pour mettre notre mental a l'épreuve"</div>
+      <div class="quote-meta">📅 2022-02-04 — Découverte de la théorie du complot ciblant spécifiquement les mains Rengar. Riot Games est au courant.</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-text">"J'ai fait un créneau serré au max et il m'a dit nan mais pas besoin de coller la voiture et jlui ai rep que si apparemment chaque millimètres compte vu la première fois donc ta voiture jvais te la col[ler]"</div>
+      <div class="quote-meta">📅 2024-10-24 — Preuve que le tilt au permis de conduire est indépendant de League of Legends. Ou pas.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ANALYSE PROSE -->
+  <div class="section-title"><span class="section-number">04</span> Analyse comportementale détaillée</div>
+
+  <div class="prose-block">
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">01</div>
+        <div class="prose-section-title">Personnalité sur le canal — le rageur encyclopédique</div>
+      </div>
+      <div class="prose">
+        <p>Shinya n'est pas un simple rageur. Il est un <strong>rageur analytique</strong>, ce qui est un phénotype particulièrement fascinant dans la faune Discord. Là où le rageur ordinaire se contente de balancer un « fdp » en fin de game et de passer à autre chose, Shinya, lui, <em>dissèque</em>. Chaque défaite génère une autopsie complète : qui était en faute, pourquoi, dans quel contexte macro-économique du patch en cours, et comment cela confirme sa vision préexistante du jeu. Les messages courts et violents coexistent avec des monologues de 400 caractères où il démonte méthodiquement l'incompétence d'un coéquipier, cite des statistiques de winrate, et recontextualise l'ensemble dans l'histoire de League of Legends depuis la saison 9.</p>
+        <p>Le canal qq-only révèle un homme en perpétuelle tension entre <strong>deux identités</strong> : d'un côté le Shinya-rageur qui envoie des <em>« merde »</em>, des <em>« fdp »</em>, et qui colle des rangées de KEKW sans contexte en mai 2025 ; de l'autre, le Shinya-théoricien qui produit des analyses de patches dignes d'un coach semi-pro. Cette dualité est sa marque de fabrique. Il peut enchaîner en moins d'une heure un <em>« Putain »</em> sec et solitaire avec un paragraphe de trois cents mots expliquant pourquoi le Liandry n'est pas un bon item au mid, contre-argumentation statistiques à l'appui.</p>
+        <p>Son humeur est cyclique et nettement corrélée aux saisons de classement. Les pics d'activité — décembre 2021 (1 251 messages), septembre 2024 (1 775 messages, son record absolu) — coïncident invariablement avec des périodes de soloQ intense. Les creux de 2023-début ou 2025-été correspondent soit à des désintoxications volontaires (rares), soit à des phases de migration vers d'autres jeux comme Dofus et Dead by Daylight. Globalement : quand Shinya joue, Shinya parle. Et quand Shinya parle, Shinya rage ou analyse. Il n'existe pas de zone grise.</p>
+      </div>
+    </div>
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">02</div>
+        <div class="prose-section-title">Niveau apparent & rapport aux performances</div>
+      </div>
+      <div class="prose">
+        <p>L'évaluation du niveau de Shinya est un exercice délicat, principalement parce que <strong>Shinya lui-même est le premier à en débattre</strong>. Son palmarès déclaré oscille entre gold 1 et gold 4, avec un peak elo auto-reporté à platine 3. En novembre 2022, il annonce fièrement <em>« faut bien prouver que je mérite d'etre gold quand meme »</em> — ce qui laisse entendre que la question était encore ouverte. Deux saisons d'affilée bloquées à gold 4, avouées en novembre 2022, avant une percée en emeraude en 2024 selon des allusions contextuelles.</p>
+        <p>Ce qui caractérise le rapport de Shinya à ses performances, c'est un <strong>écart systématique entre la perception et la réalité perçue</strong>. Il se décrit souvent comme handicapé par ses coéquipiers, ses champions mal optimisés pour son elo, ou par les algorithmes de matchmaking — mais il produit aussi des auto-critiques d'une précision chirurgicale, comme lorsqu'il reconnaît en 2024 <em>« c'est trop le dna gap jsuis nul sur tous les jeux »</em> avec une désinvolture qui sonne comme une capitulation temporaire.</p>
+        <p>Il maîtrise clairement les concepts avancés du jeu : gestion de wave, priorités objectives, impact du jungler selon le matchup, timings de rotations. Sa compréhension macro est réelle. Mais la translation en pratique souffre de ce qu'on pourrait appeler le <strong>syndrome du coach amateur</strong> : il sait exactement ce qui devrait être fait, et souffre doublement quand lui ou ses alliés ne l'exécutent pas. Le pire rang n'est pas gold 4 — c'est d'être gold 4 <em>en comprenant pourquoi</em>.</p>
+      </div>
+    </div>
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">03</div>
+        <div class="prose-section-title">Têtes de turc, obsessions et ennemis jurés</div>
+      </div>
+      <div class="prose">
+        <p><strong>Rengar</strong> est l'alpha et l'omega de l'univers Shinya. Avec 216 mentions sur 5 ans, aucun autre champion ne s'en approche. La relation avec Rengar est d'une complexité relationnelle qui dépasse largement le simple lien joueur-champion : c'est une <em>bromance toxique</em>. Shinya le main, le défend, s'en plaint, en débat, l'abandonne provisoirement, y revient. En août 2024, il joue Rengar avec un build tank (Sunfire, BRK, BC, Hydre, Titanic, Sterak). En 2022, il explore le Rengar AP. En 2021, il le compare favorablement à Rammus. La phrase la plus révélatrice date de 2024 : <em>« un main rengar au dessus de plat 3 je respecte c'est un challenge de monter avec un perso si nul »</em> — soit il accepte que son main soit objectivement mauvais, soit c'est un copium de haute qualité. Probablement les deux.</p>
+        <p>En dehors de Rengar, ses grandes bêtes noires sont les <strong>top laners en général</strong>, qu'il considère comme des êtres délirants vivant dans un monde parallèle où le jungler existe pour les servir. Sa citation de 2023 résume tout : <em>« c'est un npc qui comprend rien au jeu et comme tous les joueurs de lol a CHAQUE mort l'instinct défensive se trigger ça NE PEUT PAS être de leur faute donc il faut instant écrire un roman sur le jgl »</em>. Les tops sont, dans son cosmologie, les grands ennemis cosmiques du jungleur vertueux.</p>
+        <p>Parmi les autres démons récurrents : les ADC qui refusent de fight, les midlaners à ego démesuré (<em>« les mains mid sont les joueurs avec le plus gros ego ever »</em>, 2024), les items perçus comme cassés ou inutiles (le Zhonya, les items MR, le Liandry selon les patches), et de façon plus générale l'algorithme de matchmaking qui semble, selon lui, specifiquement programmé pour lui envoyer des smurfs, des derankers, et des mecs en 0/3 dès le lvl 1.</p>
+      </div>
+    </div>
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">04</div>
+        <div class="prose-section-title">Humour, style, auto-dérision</div>
+      </div>
+      <div class="prose">
+        <p>L'humour de Shinya est son arme secrète et probablement la raison pour laquelle sa présence dans le canal reste supportable même dans les phases de rage maximale. Il a le sens du <strong>timing comique</strong> et une capacité réelle à se transformer lui-même en personnage de fiction. La copypasta <em>« chaque fois jsuis / jfais la mm erreur / [...] / le iaible diable par la fenetre »</em> — qu'il réutilise quatre fois en cinq ans, à des années d'intervalle — est un chef-d'œuvre d'auto-mythologisation : il se présente comme une entité maudite, marquée du 666, poursuivie par le diable de la défaite, le tout avec une mise en page en vers libres volontairement pathétiques.</p>
+        <p>Son humour fonctionne par <strong>hyperbole et absurde bureaucratique</strong>. En septembre 2024, il rédige une lettre de rejet d'offre d'emploi parodique adressée à un membre du canal. En 2021, il établit un <em>« classement des délus »</em> par rôle avec la solennité d'un expert en sciences politiques. La phrase <em>« rarement plus de 19 games par jour »</em> est livrée sans signe d'ironie apparent, ce qui constitue précisément sa force comique.</p>
+        <p>Il s'auto-flagelle souvent mais jamais avec désespoir — plutôt avec la résignation amusée de quelqu'un qui a appris à cohabiter avec son propre désastre. <em>« jsuis une merde »</em> (2024-09-14) prononcé après une défaite est moins un aveu qu'une performance. Il sait qu'on l'attend au tournant, et il livre. La différence avec un vrai tilté chronique est là : Shinya observe sa propre rage avec une distance suffisante pour en faire du contenu.</p>
+      </div>
+    </div>
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">05</div>
+        <div class="prose-section-title">Rageur chronique ou joueur zen ? Verdict nuancé</div>
+      </div>
+      <div class="prose">
+        <p>La réponse honnête : <strong>rageur chronique à émissions intermittentes, avec intervalles de lucidité philosophique</strong>. Shinya n'est pas zen — sa production de messages sur ce canal le prouve quantitativement. Mais il n'est pas non plus un toxique pur : il se décrit lui-même comme quelqu'un qui mute ses coéquipiers en ranked, qui conseille de <em>« jamais écouter ton supp »</em> non pas par mépris mais par pragmatisme de survie mentale. Sa toxicité est majoritairement externe — dirigée vers le canal, pas en jeu.</p>
+        <p>Il se place dans une position philosophique intéressante : celle du <strong>jungler martyr-éveillé</strong>. Il a compris que le système est injuste, que le matchmaking est aléatoire, que ses coéquipiers seront toujours la variable incontrôlable — et pourtant il continue, game après game, saison après saison, à rejouer le même Rengar dans le même gold. Ce n'est pas de la zen attitude, c'est de la <em>loyauté masochiste envers un jeu qu'il aime haïr</em>. Il a d'ailleurs énoncé lui-même sa philosophie de vie en 2024 : comparer sa vie à celle d'un challenger emeraude 3, et conclure qu'il préfère la sienne. C'est peut-être ça, le vrai zen version Shinya.</p>
+      </div>
+    </div>
+
+    <div class="prose-section">
+      <div class="prose-section-header">
+        <div class="prose-section-num">06</div>
+        <div class="prose-section-title">Sujets hors LoL — le hors-champ révélateur</div>
+      </div>
+      <div class="prose">
+        <p>Le canal qq-only étant dédié au défouloir, les incursions hors LoL sont rares mais révélatrices. On trouve des traces de passion pour l'<strong>anime</strong> — en septembre 2024, lors d'une conversation, il qualifie quelque chose de <em>« meilleur anime all time »</em> avec une conviction absolue, et mentionne regarder des anime sans sous-titres et lire les scans en avance, marqueur de sérieux dans la culture otaku. WoW apparaît comme second jeu de référence, avec une présence moqueuse mais récurrente.</p>
+        <p>En décembre 2024, il traverse une phase <strong>Dofus + Dead by Daylight</strong> qui correspond à une pause League, décrite avec la sérénité de quelqu'un en cure de désintox (<em>« 0 game depuis les up and downs mdr, full dofus et dbd »</em>). Le permis de conduire en 2024 est un épisode notable : il rate une première fois pour trois millimètres, se met à conduire agressivement à la tentative suivante, et obtient son permis dans un état mental qu'il décrit sans détails supplémentaires mais qu'on imagine facilement. La soloQ lui a appris à gérer la pression — ou pas.</p>
+        <p>Il mentionne aussi avoir passé les concours des Mines, obtenu l'admissibilité, et abandonné avant les oraux en estimant que ses écrits insuffisants rendaient le reste inutile. Cette décision, énoncée brièvement et sans affect, révèle une tendance au <strong>FF précoce sur objectif difficile</strong> — la même logique qu'en game, appliquée aux grandes écoles. 0 lp restant, on ne relance pas.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RAPPORT PSYCHIATRIQUE -->
+  <div class="section-title"><span class="section-number">05</span> Évaluation psychiatrique (second degré)</div>
+
+  <div class="psych-report">
+    <div class="psych-header">
+      <div>
+        <div class="psych-org">Institut Clinique des Pathologies du Matchmaking</div>
+        <div class="psych-org-sub">ICPM · Unité Spécialisée en Souffrance SoloQ Chronique · Service Jungle · EUW</div>
+      </div>
+      <div class="psych-stamp">
+        <div>Dossier N° : ICPM-2024-RNGR-0042</div>
+        <div>Date : 19/03/2026</div>
+        <div>Rédacteur : Dr. A. Sylvanas, Ph.D.</div>
+        <div>Classification : CONFIDENTIEL</div>
+      </div>
+    </div>
+
+    <div class="psych-body">
+
+      <div class="psych-field">
+        <div class="psych-field-label">Identité du patient</div>
+        <div class="psych-field-content">
+          <strong>Nom d'invocateur :</strong> shxnya · <strong>Rôle déclaré :</strong> Jungle (revendiqué avec insistance) · <strong>Champion principal :</strong> Rengar (co-dépendance avérée) · <strong>Elo déclaré :</strong> Gold 1–4 (fluctuant selon l'humeur) · <strong>Elo ressenti :</strong> Diamant minimum · <strong>Durée de suivi des symptômes :</strong> 5 ans (2021–2026)
+        </div>
+      </div>
+
+      <div class="psych-field">
+        <div class="psych-field-label">Diagnostic principal — DSM-LoL-V</div>
+        <div class="psych-diagnosis">
+          F60.9 — TROUBLE DE LA PERSONNALITÉ DU JUNGLER INCOMPRIS (TPJI)<br><br>
+          Avec comorbidités :<br>
+          · F42.2 — Trouble Obsessionnel-Compulsif centré sur Rengar (TOC-RNGR)<br>
+          · F31.81 — Trouble Cyclothymique Queue Rapide (alternance euphorie "turbo carry" / effondrement "jsuis une merde")<br>
+          · F07.0 — Syndrome Post-Traumatique à la Défaite en 5/0 (SPTD-5/0)<br>
+          · Z63.4 — Problème de relation avec les top laners (chronique, réfractaire au traitement)
+        </div>
+      </div>
+
+      <div class="psych-field">
+        <div class="psych-field-label">Anamnèse & observations cliniques</div>
+        <div class="psych-field-content">
+          <p>Le patient se présente pour la première fois à notre attention en février 2021, avec pour motif déclaré l'injouabilité de Tryndamere. Il affirme d'emblée que <em>« laissez malph open »</em> — déclaration qui, sur cinq ans de suivi, s'avèrera révélatrice de sa tendance à voir le vide là où les autres voient une opportunité.</p>
+          <br>
+          <p>L'observation la plus cliniquement significative est ce que nous nommons le <strong>Phénomène du 5/0 Brisé</strong>, illustré par le patient lui-même dans une œuvre littéraire datée du 20 octobre 2021, réutilisée à quatre reprises en cinq ans lors de rechutes aiguës. Le patient, en position de domination avérée (score 5/0), développe une incapacité subite à concrétiser son avantage, entraînant un effondrement narcissique complet exprimé sous forme de poème liturgique : <em>« jsui un puits de malheure / une fontaine de mauvaise augure / l'incarnation du desespoir »</em>. Le recours aux symboles ésotériques (666, invocation du diable) révèle une tentative de projection externe de la faute — mécanisme de défense classique par <strong>démonisation de l'adversité</strong>.</p>
+          <br>
+          <p>La relation du patient avec Rengar constitue le nœud central de la pathologie. Il maintient une relation d'attachement insécure avec ce champion malgré une reconnaissance consciente de sa sous-optimalité (<em>« c'est un challenge de monter avec un perso si nul »</em>, 2024). Il théorise l'existence d'un algorithme de matchmaking anti-Rengar (<em>« y'a un algo anti main rengar »</em>, 2022), ce qui relève de la pensée magique de type paranoïde, néanmoins maintenue dans les limites du fonctionnement social normal.</p>
+            <br>
+          <p>Concernant le rapport à la réalité, le patient présente une dissonance structurelle entre sa perception de son niveau (<em>« jvaux diam flex »</em>, 2022) et ses résultats objectifs (gold 4 récurrent). Cette dissonance n'est pas pathologique en soi — 97% de la population SoloQ présente le même symptôme — mais elle est chez lui <strong>théorisée et assumée</strong>, ce qui constitue paradoxalement un marqueur de santé mentale relative.</p>
+            <br>
+          <p>Point de fixation notable : le patient applique la même logique de tilt à tous les domaines de vie. Son permis de conduire raté pour trois millimètres a généré une réponse émotionnelle et comportementale identique à une défaite en ranked (<em>« j'ai conduit comme un gros fdp »</em>, 2024). Il a également FF au propre d'un concours de grande école au stade de l'admissibilité. Ces comportements suggèrent que la SoloQ n'est pas une cause de sa psychologie mais son <strong>expression la plus pure</strong>.</p>
+        </div>
+      </div>
+
+      <div class="psych-field">
+        <div class="psych-field-label">Mécanismes de défense identifiés</div>
+        <div class="psych-field-content">
+          <strong>1. Rationalisation analytique :</strong> transformation systématique de la défaite en leçon de game design. <em>« c'est le reflexe mtn quand un laner a l'info sur le jungler c'est pas de jouer safe c'est de crever volontairement pour pouvoir dire jungle diff »</em> (2022) — projeté sur les autres mais auto-applicable.<br><br>
+          <strong>2. Humour par absurdisme liturgique :</strong> le diable, le 666, la copypasta en vers libres. Distanciation par la mise en scène de soi-même comme personnage tragique.<br><br>
+          <strong>3. Philosophie de la résignation productive :</strong> <em>« je préfère 100 fois ma vie que la tienne »</em> (2024) — réponse à un joueur plus haut elo, impliquant que l'elo n'est pas la bonne mesure du succès. Mécanisme sain, mais activé stratégiquement en cas de comparaison défavorable.<br><br>
+          <strong>4. Blâme du système :</strong> matchmaking, algorithme, Riot Games, les top laners comme classe sociale. Réduction de la responsabilité individuelle par dilution dans un système hostile.
+        </div>
+      </div>
+
+      <div class="psych-field">
+        <div class="psych-field-label">Déclencheurs primaires des épisodes aigus</div>
+        <div class="psych-field-content">
+          · Être en 5/0 et perdre la game (déclencheur n°1, récurrent)<br>
+          · Top laner qui blame la jungle après avoir perdu son 1v1<br>
+          · Coéquipier qui joue pour lui-même pendant une défaite collective<br>
+          · Item nerfs ciblant son build actuel<br>
+          · Être comparé défavorablement en elo par quelqu'un de rank inférieur<br>
+          · Millimètre de créneau raté lors d'un examen de conduite
+        </div>
+      </div>
+
+      <div class="psych-field">
+        <div class="psych-field-label">Pronostic</div>
+        <div class="psych-field-content">
+          <strong>Réservé à court terme, stable à long terme.</strong> Le patient ne guérira pas. Il n'en a pas vraiment envie. La souffrance SoloQ constitue pour lui une source d'identité, de contenu social et d'exercice intellectuel. Il a trouvé un équilibre homéostatique à gold 4 où la frustration est suffisante pour maintenir l'engagement mais insuffisante pour produire une véritable déscolarisation du jeu. Toute intervention thérapeutique visant à l'aider à monter en elo risquerait de déstabiliser cet équilibre délicat. <em>Primum non nocere.</em>
+        </div>
+      </div>
+
+      <div class="psych-ordonnance">
+        <div class="psych-ordonnance-title">Ordonnance — à suivre strictement</div>
+
+        <div class="psych-rx-item">Rengar 1 partie / session maximum — dose supérieure contre-indiquée en cas d'échec en early. En cas de tilt, switcher sur un perso "nul en 1v1" (son expression) pour externaliser le blâme de façon plus confortable.</div>
+        <div class="psych-rx-item">Copypasta du Diable — à relire en cas d'épisode aigu de 5/0-loss pour remettre l'échec dans un cadre cosmologique et dissoudre la responsabilité individuelle dans un folklore personnel.</div>
+        <div class="psych-rx-item">Session d'analyse post-game de 15 minutes minimum — le patient ne doit pas être privé de sa phase analytique post-défaite, au risque de refoulement et de stockage d'une rage non-verbalisée potentiellement explosive.</div>
+        <div class="psych-rx-item">Pause Dofus/DBD — 1 semaine par trimestre pour maintenir la sécurité d'attache avec des jeux qui ne génèrent pas de jungle diff.</div>
+        <div class="psych-rx-item">Interdiction formelle de lire les stats d'elo des adversaires avant la game — réduction de l'effet nocebo lié à la découverte d'un smurf en face.</div>
+        <div class="psych-rx-item">Exposition graduée aux matchups défavorables Rengar — traitement par désensibilisation systématique des déclencheurs phobiques (Cassiopeia, champions avec dash, ADC avec un support).</div>
+
+        <div class="psych-signature">
+          Dr. A. Sylvanas, Ph.D. en Psychopathologie des Junglers Incompris · ICPM, Unité SoloQ · EUW
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="section-title"><span class="section-number">06</span> Verdict final</div>
+
+  <div class="verdict">
+    <div class="verdict-label">Synthèse clinique · 5 ans de données · 13 906 messages</div>
+    <div class="verdict-text">
+      Shinya est un <strong>jungler philosophe involontaire</strong> : il joue pour gagner, perd souvent, et produit à chaque défaite une analyse suffisamment lucide pour qu'on ne sache jamais s'il est vraiment aveugle à ses propres limites ou s'il les documente avec une distance ironique que même ses pires ennemis devraient admirer. <strong>Gold 4 dans les rangs, Diamant dans la théorie</strong>, il incarne la contradiction fondamentale de League of Legends : comprendre parfaitement le jeu ne suffit pas à le gagner — et cette vérité, il la vit cinq ans de suite avec la régularité d'un métronome, la légèreté d'un homme qui sait que le diable par la fenêtre n'est pas là pour le prendre, juste pour lui faire perdre sa 5/0 game. <strong>Diagnostic final : incurable, mais fascinant.</strong>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Hourly Chart
+  const hourlyData = {"0":258,"1":9,"2":0,"3":0,"4":0,"5":23,"6":153,"7":470,"8":671,"9":1418,"10":1141,"11":1475,"12":1225,"13":975,"14":982,"15":905,"16":805,"17":671,"18":632,"19":325,"20":405,"21":458,"22":578,"23":327};
+  const maxHourly = Math.max(...Object.values(hourlyData));
+
+  const hourlyChart = document.getElementById('hourlyChart');
+  for (let h = 0; h < 24; h++) {
+    const val = hourlyData[h] || 0;
+    const pct = (val / maxHourly) * 100;
+    const isActive = h >= 7 && h <= 22;
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.setAttribute('data-val', val);
+    bar.style.height = pct + '%';
+    bar.style.background = h === 11 ? 'linear-gradient(180deg, #e94560, #b5334a)' :
+      (h >= 9 && h <= 13) ? 'linear-gradient(180deg, rgba(233,69,96,0.7), rgba(83,52,131,0.7))' :
+      'linear-gradient(180deg, rgba(83,52,131,0.5), rgba(83,52,131,0.2))';
+    bar.style.minHeight = val > 0 ? '2px' : '0';
+    const label = document.createElement('div');
+    label.className = 'bar-label';
+    label.textContent = h + 'h';
+    col.appendChild(bar);
+    col.appendChild(label);
+    hourlyChart.appendChild(col);
+  }
+
+  // Monthly Chart
+  const monthlyData = {"2021-02":75,"2021-03":124,"2021-04":413,"2021-05":256,"2021-06":203,"2021-07":133,"2021-08":303,"2021-09":297,"2021-10":357,"2021-11":400,"2021-12":1251,"2022-01":666,"2022-02":472,"2022-03":279,"2022-04":304,"2022-05":223,"2022-06":107,"2022-07":133,"2022-08":29,"2022-09":33,"2022-10":128,"2022-11":250,"2022-12":75,"2023-01":5,"2023-07":383,"2023-08":377,"2023-09":213,"2023-10":931,"2023-11":113,"2023-12":13,"2024-01":10,"2024-02":77,"2024-03":24,"2024-04":55,"2024-05":278,"2024-06":91,"2024-07":35,"2024-08":938,"2024-09":1775,"2024-10":540,"2024-11":102,"2024-12":341,"2025-01":87,"2025-02":10,"2025-03":108,"2025-04":205,"2025-05":192,"2025-06":4,"2025-07":22,"2025-08":2,"2025-09":8,"2025-10":137,"2025-11":7,"2025-12":4,"2026-01":62,"2026-02":245,"2026-03":1};
+  const maxMonthly = Math.max(...Object.values(monthlyData));
+
+  // Show label on: first month of each year + peak months
+  const showLabel = new Set(['2021-02','2022-01','2023-01','2023-07','2024-01','2024-09','2025-01','2026-01','2021-12']);
+
+  const monthlyChart = document.getElementById('monthlyChart');
+  Object.entries(monthlyData).forEach(([month, val]) => {
+    const pct = (val / maxMonthly) * 100;
+    const year = month.slice(0,4);
+    const colors = {'2021':'rgba(120,80,200,0.8)','2022':'rgba(170,60,150,0.8)','2023':'rgba(200,80,80,0.8)','2024':'rgba(233,69,96,0.9)','2025':'rgba(255,120,60,0.7)','2026':'rgba(255,180,60,0.7)'};
+    const col = document.createElement('div');
+    col.className = 'monthly-col';
+    const bar = document.createElement('div');
+    bar.className = 'monthly-bar';
+    bar.style.height = Math.max(pct, 1) + '%';
+    bar.style.background = colors[year] || 'rgba(83,52,131,0.5)';
+    bar.title = month + ' : ' + val + ' msgs';
+    col.appendChild(bar);
+    if (showLabel.has(month)) {
+      const label = document.createElement('span');
+      label.className = 'monthly-label';
+      // Show short label: "jan 21", "sep 24", etc.
+      const [y, m] = month.split('-');
+      const mNames = ['','jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+      label.textContent = mNames[parseInt(m)] + ' ' + y.slice(2);
+      col.appendChild(label);
+    }
+    monthlyChart.appendChild(col);
+  });
+
+  // Champion bars
+  const champData = [
+    ['Rengar', 216],['Yasuo', 44],['Yuumi', 42],['Garen', 41],['Kai\'sa', 36],
+    ['Zed', 33],['Nasus', 33],['Yone', 29],['Trynda', 28],['Karma', 28],
+    ['Diana', 26],['Akali', 25],['Lux', 25],['Syndra', 24],['Twitch', 24]
+  ];
+  const maxChamp = champData[0][1];
+  const champContainer = document.getElementById('champBars');
+  champData.forEach(([name, val]) => {
+    const pct = (val / maxChamp) * 100;
+    const div = document.createElement('div');
+    div.className = 'progress-row';
+    div.innerHTML = `<div class="progress-header"><span class="progress-name">${name}</span><span class="progress-val">×${val}</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%;${name==='Rengar'?'background:linear-gradient(90deg,#e94560,#ff6b35)':''}"></div></div>`;
+    champContainer.appendChild(div);
+  });
+
+  // Term bars
+  const termData = [
+    ['game(s)', 592],['top', 377],['jungle/jgl', 319],['mid', 273],['adc', 207],
+    ['jgl concepts', 215],['broken', 130],['gold', 112],['carry', 89],['gank', 77],
+    ['lp', 50],['ranked', 46],['soloq', 30],['ff', 20],['tilt', 32]
+  ];
+  const maxTerm = termData[0][1];
+  const termContainer = document.getElementById('termBars');
+  termData.forEach(([name, val]) => {
+    const pct = (val / maxTerm) * 100;
+    const div = document.createElement('div');
+    div.className = 'progress-row';
+    div.innerHTML = `<div class="progress-header"><span class="progress-name">${name}</span><span class="progress-val">×${val}</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>`;
+    termContainer.appendChild(div);
+  });
+
+  // Animate bars on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.style.width = e.target.getAttribute('data-width') || e.target.style.width; });
+  }, { threshold: 0.1 });
+</script>
+</body>
+</html>
