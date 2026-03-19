@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QQ-Only · Dossier Psychiatrique des Deleted Users</title>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a3e;
+    --purple: #533483;
+    --purple-light: #7b52c4;
+    --purple-glow: #9d6ef0;
+    --red: #e94560;
+    --red-dark: #b3304a;
+    --gold: #f0a500;
+    --teal: #00d4aa;
+    --text: #e0dff7;
+    --text-dim: #9895b5;
+    --border: #2a2a5a;
+    --card: #15153a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 20% 20%, rgba(83,52,131,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(233,69,96,0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* ===== HEADER ===== */
+  .site-header {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0d2e 50%, #0d1a2e 100%);
+    border-bottom: 2px solid var(--purple);
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--red), var(--purple), transparent);
+  }
+
+  .site-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--purple-glow);
+    margin-bottom: 16px;
+  }
+
+  .site-header h1 {
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, var(--purple-glow) 40%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .site-header .subtitle {
+    color: var(--text-dim);
+    font-size: 17px;
+    margin-bottom: 30px;
+  }
+
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  .header-stat {
+    text-align: center;
+  }
+  .header-stat .val {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--purple-glow);
+    display: block;
+  }
+  .header-stat .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  .method-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 8px;
+    padding: 20px 28px;
+    max-width: 750px;
+    margin: 30px auto 0;
+    text-align: left;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .method-box strong { color: var(--text); }
+
+  /* ===== PROFILE SECTIONS ===== */
+  .profile-section {
+    margin: 60px 0;
+  }
+
+  .profile-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    padding: 36px 40px;
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    flex-shrink: 0;
+    border: 3px solid;
+  }
+  .profile-1 .profile-avatar { background: linear-gradient(135deg, #1a2e1a, #2e1a1a); border-color: var(--red); }
+  .profile-2 .profile-avatar { background: linear-gradient(135deg, #1a1a3e, #0d2240); border-color: var(--purple-glow); }
+
+  .profile-header-info { flex: 1; min-width: 200px; }
+  .profile-header-info .pseudo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .profile-1 .pseudo { color: var(--red); }
+  .profile-2 .pseudo { color: var(--purple-glow); }
+
+  .profile-header-info .tagline {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .badges {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .badge-red { background: rgba(233,69,96,0.15); color: var(--red); border: 1px solid var(--red-dark); }
+  .badge-purple { background: rgba(83,52,131,0.2); color: var(--purple-glow); border: 1px solid var(--purple); }
+  .badge-gold { background: rgba(240,165,0,0.15); color: var(--gold); border: 1px solid rgba(240,165,0,0.4); }
+  .badge-teal { background: rgba(0,212,170,0.12); color: var(--teal); border: 1px solid rgba(0,212,170,0.3); }
+
+  .profile-key-stats {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 4px;
+  }
+  .ks {
+    text-align: center;
+    min-width: 80px;
+  }
+  .ks .kv {
+    font-size: 22px;
+    font-weight: 800;
+    display: block;
+  }
+  .ks .kl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+  }
+  .profile-1 .kv { color: var(--red); }
+  .profile-2 .kv { color: var(--purple-glow); }
+
+  /* ===== PROFILE BODY ===== */
+  .profile-body {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+  }
+
+  /* Activity chart */
+  .chart-section {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+  }
+  .chart-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .hour-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 80px;
+  }
+  .hour-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 80px;
+    justify-content: flex-end;
+  }
+  .hour-bar {
+    width: 100%;
+    min-height: 2px;
+    border-radius: 2px 2px 0 0;
+    transition: opacity 0.2s;
+  }
+  .profile-1 .hour-bar { background: linear-gradient(to top, var(--red-dark), var(--red)); }
+  .profile-2 .hour-bar { background: linear-gradient(to top, var(--purple), var(--purple-glow)); }
+  .hour-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  /* Grille de cards */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--bg2);
+    padding: 24px 28px;
+  }
+  .card-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  /* Progress bars */
+  .prog-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .prog-label {
+    font-size: 13px;
+    width: 120px;
+    flex-shrink: 0;
+    color: var(--text);
+  }
+  .prog-bar-track {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .profile-1 .prog-bar-fill { background: linear-gradient(90deg, var(--red-dark), var(--red)); }
+  .profile-2 .prog-bar-fill { background: linear-gradient(90deg, var(--purple), var(--purple-glow)); }
+  .prog-val {
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Rage style */
+  .rage-meter {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rage-pip {
+    width: 16px; height: 16px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .rage-pip.active-red { background: var(--red); border-color: var(--red); }
+  .rage-pip.active-purple { background: var(--purple-glow); border-color: var(--purple-glow); }
+  .rage-pip.active-gold { background: var(--gold); border-color: var(--gold); }
+
+  /* Expressions */
+  .expr-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .expr-chip {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-style: italic;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  /* Moments mémorables */
+  .moment {
+    background: var(--bg3);
+    border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+  }
+  .profile-1 .moment { border-color: var(--red); }
+  .profile-2 .moment { border-color: var(--purple-glow); }
+  .moment .quote {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .moment .meta {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ===== PROSE SECTIONS ===== */
+  .prose-sections {
+    padding: 40px;
+  }
+  .prose-block {
+    margin-bottom: 40px;
+  }
+  .prose-block h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile-1 .prose-block h3 { color: var(--red); }
+  .profile-2 .prose-block h3 { color: var(--purple-glow); }
+  .prose-block p {
+    color: var(--text);
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .prose-block p em {
+    color: var(--purple-glow);
+    font-style: italic;
+    background: rgba(157,110,240,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .profile-2 .prose-block p em {
+    color: #b0e0ff;
+    background: rgba(83,52,131,0.1);
+  }
+
+  /* ===== PSY REPORT ===== */
+  .psy-report {
+    background: linear-gradient(135deg, #0d0d1a, #12001a);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    margin: 0 40px 40px;
+    border-radius: 12px;
+    padding: 32px;
+    font-family: 'Courier New', monospace;
+  }
+  .psy-report .psy-header {
+    text-align: center;
+    border-bottom: 1px dashed rgba(240,165,0,0.3);
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+  .psy-report .psy-header h4 {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .psy-report .psy-header p {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .psy-field {
+    margin-bottom: 16px;
+  }
+  .psy-field .psy-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .psy-field .psy-value {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    padding-left: 12px;
+    border-left: 1px solid rgba(240,165,0,0.2);
+  }
+  .psy-ordonnance {
+    background: rgba(240,165,0,0.05);
+    border: 1px dashed rgba(240,165,0,0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+  }
+  .psy-ordonnance h5 {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .psy-rx-item {
+    font-size: 12px;
+    color: var(--text);
+    padding: 4px 0;
+    border-bottom: 1px dotted rgba(255,255,255,0.07);
+  }
+  .psy-rx-item:last-child { border-bottom: none; }
+
+  /* ===== VERDICT ===== */
+  .verdict-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 24px 40px;
+    border-radius: 0 0 0 0;
+  }
+  .verdict-block .verdict-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+  .profile-1 .verdict-label { color: var(--red); }
+  .profile-2 .verdict-label { color: var(--purple-glow); }
+  .verdict-block .verdict-text {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  /* ===== COMPARATIVE SECTION ===== */
+  .comparative {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin: 60px 0;
+  }
+  .comparative h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .comparative .comp-sub {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+  }
+  .compare-table th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .compare-table th:nth-child(2) { color: var(--red); }
+  .compare-table th:nth-child(3) { color: var(--purple-glow); }
+  .compare-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .compare-table td:first-child {
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .podiums {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .podium-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .podium-card .podium-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .podium-card .podium-winner {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .podium-card .podium-reason {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .common-ground {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .common-ground h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .common-ground p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ===== FINAL VERDICT ===== */
+  .final-verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.15), rgba(233,69,96,0.1));
+    border: 1px solid var(--purple);
+    border-radius: 16px;
+    padding: 48px 48px;
+    margin: 60px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-verdict::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--red), var(--purple));
+  }
+  .final-verdict h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+  .final-verdict .verdict-body {
+    font-size: clamp(16px, 2.5vw, 20px);
+    line-height: 1.8;
+    font-weight: 500;
+    color: var(--text);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .final-verdict .verdict-body em {
+    color: var(--red);
+    font-style: normal;
+    font-weight: 700;
+  }
+  .final-verdict .verdict-body strong {
+    color: var(--purple-glow);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .footer span { color: var(--purple-glow); }
+
+  @media (max-width: 768px) {
+    .profile-header, .prose-sections, .psy-report, .verdict-block { padding: 24px 20px; }
+    .psy-report { margin: 0 20px 20px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== SITE HEADER ===== -->
+<header class="site-header">
+  <div class="container">
+    <div class="eyebrow">Canal #qq-only · Analyse Forensique des Deleted Users</div>
+    <h1>WHO IS WHO</h1>
+    <div class="subtitle">Démêler les âmes perdues derrière le masque gris du "Deleted User"</div>
+
+    <div class="header-stats">
+      <div class="header-stat">
+        <span class="val">21 516</span>
+        <span class="lbl">Messages analysés</span>
+      </div>
+      <div class="header-stat">
+        <span class="val">2</span>
+        <span class="lbl">Personnalités identifiées</span>
+      </div>
+      <div class="header-stat">
+        <span class="val">6 ans</span>
+        <span class="lbl">De pure souffrance</span>
+      </div>
+      <div class="header-stat">
+        <span class="val">0</span>
+        <span class="lbl">Guérisons confirmées</span>
+      </div>
+    </div>
+
+    <div class="method-box">
+      <strong>Méthode de distinction :</strong> Ruptures temporelles majeures (2019-2021 vs 2023-2024), analyse des champions joués (toplaner Trynda/Garen/Xin vs midlaner Syndra/Kassadin), style de rage (CAPSLOCK brut vs ironie sophistiquée), vocabulaire distinctif (<em>broken/une honte/COUNTERPLAY</em> vs <em>brocken/les termes/ronaldin</em>), références à eux-mêmes en 3ème personne dans chaque période, patterns horaires divergents, et fréquence de mots spécifiques. Deux profils distincts émergent avec une confiance élevée.
+    </div>
+  </div>
+</header>
+
+<!-- ============================= -->
+<!-- PROFIL 1 : RANSBERG            -->
+<!-- ============================= -->
+<div class="container">
+<section class="profile-section profile-1">
+
+  <div class="profile-header">
+    <div class="profile-avatar">🗡️</div>
+    <div class="profile-header-info">
+      <div class="pseudo">RANSBERG</div>
+      <div class="tagline">Toplaner de sang, âme de feu, statisticien de sa propre médiocrité sublime</div>
+      <div class="badges">
+        <span class="badge badge-red">Toplaner Hardcore</span>
+        <span class="badge badge-red">Trynda OTP</span>
+        <span class="badge badge-gold">Rageur Classique</span>
+        <span class="badge badge-purple">Débatteur Compulsif</span>
+        <span class="badge badge-teal">2019 → 2021</span>
+      </div>
+    </div>
+    <div class="profile-key-stats">
+      <div class="ks">
+        <span class="kv">~19 705</span>
+        <span class="kl">Messages</span>
+      </div>
+      <div class="ks">
+        <span class="kv">3 ans</span>
+        <span class="kl">Activité</span>
+      </div>
+      <div class="ks">
+        <span class="kv">14h-17h</span>
+        <span class="kl">Pic activité</span>
+      </div>
+      <div class="ks">
+        <span class="kv">Mer.</span>
+        <span class="kl">Jour max</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-body">
+
+    <!-- Hourly chart -->
+    <div class="chart-section">
+      <div class="chart-title">⏱ Activité horaire — Ransberg (2019–2021)</div>
+      <div class="hour-chart" id="chart-ransberg"></div>
+      <div style="display:flex; gap:3px; margin-top:4px;">
+        <script>
+          (function(){
+            const data = [694,538,339,40,3,22,14,35,120,534,898,955,1084,1551,2268,1448,1537,1500,1142,940,757,787,1118,1381];
+            const max = Math.max(...data);
+            const chart = document.getElementById('chart-ransberg');
+            data.forEach((v,i)=>{
+              const wrap = document.createElement('div');
+              wrap.className = 'hour-bar-wrap';
+              const bar = document.createElement('div');
+              bar.className = 'hour-bar';
+              bar.style.height = Math.max(2, Math.round((v/max)*70))+'px';
+              bar.title = `${i}h: ${v} msgs`;
+              const lbl = document.createElement('div');
+              lbl.className = 'hour-label';
+              lbl.textContent = i%4===0 ? i+'h' : '';
+              wrap.appendChild(bar);
+              wrap.appendChild(lbl);
+              chart.appendChild(wrap);
+            });
+          })();
+        </script>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+
+      <!-- Champions -->
+      <div class="card">
+        <div class="card-title">⚔️ Champions / Sujets dominants</div>
+        <div class="prog-item"><span class="prog-label">Tryndamere</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:100%"></div></div><span class="prog-val">263</span></div>
+        <div class="prog-item"><span class="prog-label">Garen</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:57%"></div></div><span class="prog-val">151</span></div>
+        <div class="prog-item"><span class="prog-label">Fiora</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:25%"></div></div><span class="prog-val">67</span></div>
+        <div class="prog-item"><span class="prog-label">Camille</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:28%"></div></div><span class="prog-val">74</span></div>
+        <div class="prog-item"><span class="prog-label">Xin Zhao</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:20%"></div></div><span class="prog-val">54</span></div>
+        <div class="prog-item"><span class="prog-label">Malphite</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:15%"></div></div><span class="prog-val">41</span></div>
+        <div class="prog-item"><span class="prog-label">Vayne</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:17%"></div></div><span class="prog-val">44</span></div>
+      </div>
+
+      <!-- Style de rage -->
+      <div class="card">
+        <div class="card-title">🔥 Profil de rage</div>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Rageur chronique & existentiel</p>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">INTENSITÉ</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-red"></div><div class="rage-pip active-red"></div>
+            <div class="rage-pip active-red"></div><div class="rage-pip active-red"></div>
+            <div class="rage-pip active-red"></div><div class="rage-pip active-red"></div>
+            <div class="rage-pip active-red"></div><div class="rage-pip active-red"></div>
+            <div class="rage-pip active-red"></div><div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">TOXICITÉ</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-gold"></div><div class="rage-pip active-gold"></div>
+            <div class="rage-pip active-gold"></div><div class="rage-pip active-gold"></div>
+            <div class="rage-pip active-gold"></div><div class="rage-pip active-gold"></div>
+            <div class="rage-pip active-gold"></div><div class="rage-pip"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">LUCIDITÉ (À FROID)</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div><div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5;">
+          Mode favori : insultes ciblées, majuscules soutenues, analyses post-défaite en 17 messages.
+        </div>
+      </div>
+
+      <!-- Expressions signature -->
+      <div class="card">
+        <div class="card-title">💬 Expressions signature</div>
+        <div class="expr-list">
+          <span class="expr-chip">une honte</span>
+          <span class="expr-chip">COUNTERPLAY</span>
+          <span class="expr-chip">broken as hell</span>
+          <span class="expr-chip">balanced</span>
+          <span class="expr-chip">nerf X pls</span>
+          <span class="expr-chip">fdp</span>
+          <span class="expr-chip">putain</span>
+          <span class="expr-chip">mdr</span>
+          <span class="expr-chip">en réalité</span>
+          <span class="expr-chip">JAMAIS</span>
+          <span class="expr-chip">SERIEUX</span>
+          <span class="expr-chip">lane diff</span>
+          <span class="expr-chip">je joue tryndamere</span>
+          <span class="expr-chip">c'ets</span>
+          <span class="expr-chip">tank assassin</span>
+          <span class="expr-chip">toplaner de merde</span>
+          <span class="expr-chip">COMMENT CA</span>
+          <span class="expr-chip">vriament</span>
+        </div>
+      </div>
+
+      <!-- Moments mémorables -->
+      <div class="card">
+        <div class="card-title">⚡ Citations mémorables</div>
+
+        <div class="moment">
+          <div class="quote">« je joue tryndamere fdp / pendant ce temps je joue tryndamere »</div>
+          <div class="meta">Nov 2020 · réponse à toute critique de son pool</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« la médiocrité de mes performances n'a aucune importance sur le résultat de la game je trouve ça formidable »</div>
+          <div class="meta">Avr 2021 · pic d'ironie consciente</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« MASTER 150LP ALL DOGS MASTER 150LP ALL DOGS MASTER 150LP ALL DOGS… »</div>
+          <div class="meta">Oct 2021 · spam en boucle après une promu</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« dans 400 games je suis grand master »</div>
+          <div class="meta">Mars 2021 · optimisme délirant</div>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+    <!-- Prose sections -->
+    <div class="prose-sections">
+
+      <div class="prose-block">
+        <h3>🧠 Personnalité sur le canal</h3>
+        <p>Ransberg est le fondateur spirituel du qq-only, et ça se sent dans chaque message. Il ne vient pas simplement raconter ses games : il les dissèque, les argumente, les théorise avec l'application d'un chercheur académique qui aurait remplacé ses notes de labo par des insultes. Sa présence est massive — presque 20 000 messages sur trois ans — et couvre un spectre émotionnel remarquable : rage fulgurante en CAPS à 14h un mercredi, puis analyse technique calme trente secondes plus tard. <em>« en réalité j'ai pas 15 mais 16 lp »</em> (mars 2019) résume parfaitement ce paradoxe : l'homme qui comptabilise ses LP à l'unité près, mais affirme que ses performances n'impactent pas ses résultats. Il célèbre avec une intensité proportionnelle à sa rage — ses victoires sont des événements cosmiques, ses défaites des injustices structurelles du jeu vidéo.</p>
+        <p>Le canal est pour lui un tribunal permanent où il est à la fois l'accusé, le procureur, et le juge. Ses amis l'ont sans doute compris très tôt : répondre à Ransberg, c'est s'engager dans un débat dont il a déjà fixé toutes les règles. Sa passion pour le débat balance-jeu est authentique et souvent lucide — il distingue macro, mécaniques et impact, a une vraie compréhension du jeu — mais cette lucidité est systématiquement court-circuitée dès qu'il est personnellement impliqué. <em>« tu hardstuck l'élo que je smurf »</em> : voilà le condensé de son estime de soi, à la fois gonflée et fondée.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>📊 Niveau et rapport aux performances</h3>
+        <p>Ransberg a une conscience aiguë de son niveau — peut-être trop aiguë. Il a atteint le Diamant en soloQ, peaké D1, s'est fait ban, recommencé. Son champion principal depuis la saison 5 est Tryndamere, ce qui explique à la fois ses hauts et ses très bas : jouer un champion de duelliste méléé dans un méta envahi de rangeds et de tanks, c'est choisir la voie du martyr. <em>« je joue tryndamere fdp »</em> est à la fois sa justification universelle et son testament. Il cite ses winrates, ses LP, ses opgg, avec la précision d'un analyste sportif, mais uniquement quand les chiffres lui sont favorables. Quand ils ne le sont pas, c'est la méta, le matchmaking, les coéquipiers ou la hitbox adverse.</p>
+        <p>Sa vision du jeu est top-centric à l'extrême : pour lui, la toplane est le rôle le plus exigeant, le plus injustement traité, et le seul qui demande une vraie lecture du jeu. Il méprise cordialement les ADCs (<em>« gros trash supp player »</em>, <em>« fdp »</em> souvent), les jungleurs qui ne gank pas sa lane, et quiconque ose lui suggérer de changer de champion. Sa progression est réelle mais chaotique : il claim master, se retrouve parfois platine, recommence, avec une persévérance qui forcée l'admiration.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>👿 Têtes de turc & bêtes noires</h3>
+        <p>Ransberg a établi une liste noire exhaustive au fil des années. En tête de classement absolu : <strong>Malphite</strong> et tous les champions ranged en toplane (<em>« JE JOUE CONTRE CA »</em>, nov. 2020, accompagné d'un screenshot supposément traumatisant). Juste derrière : <strong>Kayle</strong>, <strong>Gnar</strong>, <strong>Vladimir</strong> — tout ce qui peut stall ou poke depuis une position safe. Il a une sainte horreur du <strong>Phase Rush</strong> (<em>« faut vraiment interdire le phase rush aux rangeds »</em>), du <strong>Bramble Vest</strong> (<em>« il sucer une bite et rush bramble tabi »</em>), et des tanks assassins en général. Ses coéquipiers souffrent également de son jugement : le jungleur qui ne gank pas, le support qui farm, l'ADC qui mourait quand même. Côté humain, Dorian et MPB forment un duo récurrent de têtes de turc avec lesquels il entretient une relation de rivalry-amitié visible dans ses messages.</p>
+        <p>Son ennemi philosophique principal reste cependant le matchmaking : l'algorithme de Riot est pour lui une entité malveillante, personnelle, acharnée contre lui spécifiquement. Cette conviction traverse toutes ses sessions et explique les spirales de loss dans lesquelles il se retrouve périodiquement — quand le tilt prend, il peut enchaîner 10 défaites en commentant chacune comme une nouvelle preuve du complot. <em>« je vous laisse deviner lequel était mon adc »</em> est sa formule de cliffhanger favori.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>🎭 Humour et style dans ce contexte</h3>
+        <p>Ransberg a un humour noir et auto-dépréciatif qu'il déploie rarement mais avec redoutable efficacité. Ses meilleures vannes sont des auto-flagellations lucides — <em>« la médiocrité de mes performances n'a aucune importance sur le résultat de la game »</em> — qui prouvent qu'il est parfaitement conscient de ses contradictions, juste incapable de s'en extraire en temps réel. Le CAPSLOCK est son principal outil rhétorique : <em>« COMMENT TU PEUX HARD LOSE »</em>, <em>« ON M'EXPLIQUE »</em>, <em>« JAMAIS »</em>. Ces cris numériques ont quelque chose de théâtral qui suggère qu'il joue lui-même le personnage du rageur.</p>
+        <p>Il a également un talent pour les métaphores absurdes — <em>« prise merde en tant que capi »</em>, <em>« hors de mon royaume »</em> — et pour les analyses de cinq lignes dont les trois premières sont du niveau d'un analyste pro-play, et les deux dernières insultent quelqu'un. Son argot LoL préféré inclut <em>broken</em> (orthographié correctement à cette époque), <em>kda de merde</em>, <em>lane diff create jng diff</em>, et <em>balanced</em> utilisé de façon évidemment sarcastique. Il n'a pas de <em>chancla</em> en 2019-2021, mais sa version c'est le simple <em>:)</em> vengeur posté après une victoire ou un argument gagné.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>🌍 Sujets hors LoL</h3>
+        <p>Ransberg parle peu hors LoL, mais quand il le fait, c'est révélateur. Il évoque des <strong>examens</strong> et des contraintes scolaires à plusieurs reprises, suggérant une période d'études pendant sa phase active. Il parle parfois de ses connaissances IRL et de leur niveau de jeu relatif. Il mentionne brièvement ses activités quotidiennes quand elles justifient son absence. Dans les rares échanges plus personnels, il se montre directement compétitif — même les conversations off-topic deviennent rapidement des joutes où il défend sa position. Sa vision du monde ressemble beaucoup à sa vision de League : des gens mal placés à des rangs qu'ils ne méritent pas, et lui-même dans une position inférieure à son vrai niveau.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>⚖️ Évaluation : rageur chronique ou joueur zen ?</h3>
+        <p>Rageur chronique sans aucun doute, mais pas uniquement. Ransberg appartient à la catégorie des <em>rageurs structurels</em> : il ne tilt pas sur une mauvaise game, il entretient un état de légère colère de fond qu'une défaite injuste vient simplement pousser en eruption. Il est fair-play dans le sens où il reconnaît parfois ses erreurs (<em>« la médiocrité de mes performances »</em>), mais cette lucidité n'altère pas son comportement in-game. Sa toxicité est directe — insultes, majuscules, blâme des coéquipiers — mais pas calculée ou malveillante. Il rage comme il respire : c'est constitutif. Sa capacité à alterner entre une analyse pertinente et un <em>« fdp »</em> dans la même phrase est le signe d'un joueur passionné qui a simplement décidé que le canal qq-only était son espace de décompression total, sans filtre.</p>
+      </div>
+
+    </div><!-- /prose-sections -->
+
+    <!-- Psy Report -->
+    <div class="psy-report">
+      <div class="psy-header">
+        <h4>🩺 Cabinet de Psychiatrie Virtuelle · Dossier Confidentiel</h4>
+        <p>Rapport clinique fictif à usage humoristique — Dr. Freud-du-Gold-4</p>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Diagnostic Principal (CIM-10 Inventé)</div>
+        <div class="psy-value"><strong>F91.7 — Trouble du Déficit de la Matchmaking-Tolerance avec Hyperactivité CAPSLOCKIENNE (TDMTHC)</strong><br>
+        Associé à : Narcissisme Situationnel Fluctuant, Syndrome de l'OTP Impossible, et Dysmorphie de Rang Chronique (se croit D1 quand il est P3).</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Déclencheurs Principaux</div>
+        <div class="psy-value">1° Malphite en toplane. 2° Phase Rush sur champion ranged. 3° Tout jungleur qui ne gank pas entre la minute 4 et 6. 4° Un coéquipier qui dit "skill issue". 5° Son propre opgg quand il scroll trop bas.</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Mécanismes de Défense Identifiés</div>
+        <div class="psy-value">Projection massive (toutes les défaites sont dues à des facteurs externes), Rationalisation post-hoc (création d'une théorie cohérente pour chaque défaite en moins de 3 minutes), Déni sélectif (winrate < 50 % = "je joue pas à mon main"), et — occasionnellement — une lucidité brutale surprenante suivie d'une rechute immédiate.</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Points Positifs Cliniques</div>
+        <div class="psy-value">Persistance remarquable. Intelligence analytique réelle. Capacité à rire de lui-même (rarement). Passion authentique. Ne troll pas intentionnellement ses coéquipiers — il rage, mais il joue.</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Pronostic de Guérison</div>
+        <div class="psy-value">Défavorable à court terme. Possiblement favorable si son équipe win enfin un teamfight sans troll. Estimé à jamais si Tryndamere reçoit un nerf de move speed.</div>
+      </div>
+
+      <div class="psy-ordonnance">
+        <h5>💊 Ordonnance Recommandée</h5>
+        <div class="psy-rx-item">Rx1 — Camomille de Retraite : 3 tasses avant chaque session ranked. Posologie : jusqu'à ce que Malphite lui semble tolérable.</div>
+        <div class="psy-rx-item">Rx2 — Inhibiteurs de CAPSLOCK : 200mg/heure de jeu. Contre-indiqué si +4 deaths en 10 minutes.</div>
+        <div class="psy-rx-item">Rx3 — Thérapie d'Exposition Progressive : Jouer ADC 10 games pour comprendre pourquoi la botlane meurt toujours. Résultats attendus : empathie ou crise de nerfs.</div>
+        <div class="psy-rx-item">Rx4 — Désintoxication Tryndamere : Transition forcée vers Garen pendant 3 semaines. Puis interdiction de Garen également.</div>
+        <div class="psy-rx-item">Rx5 — Miroir de Vérité : Consultation hebdomadaire de son opgg sans filtre d'égo. Résultats attendus : effondrement complet ou éveil spirituel.</div>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="verdict-block">
+      <div class="verdict-label">⚔️ Verdict Ransberg</div>
+      <div class="verdict-text">
+        Ransberg est le pilier rugueux sur lequel repose l'identité du canal. Trynda main irréductible, rageur structurel sans filtre, analyste brillant en dehors du tilting. Il représente environ 92% du contenu total de ces Deleted Users — une présence écrasante qui transforme le qq-only en journal intime non déguisé. Son compte a été supprimé après 2021, emportant avec lui un monument de rage authentique, de théories balance brillantes, et de citations mémorables. L'histoire retiendra le MASTER 150LP ALL DOGS.
+      </div>
+    </div>
+
+  </div><!-- /profile-body -->
+</section>
+</div><!-- /container -->
+
+<!-- ============================= -->
+<!-- PROFIL 2 : LE MIDLANER         -->
+<!-- ============================= -->
+<div class="container">
+<section class="profile-section profile-2">
+
+  <div class="profile-header">
+    <div class="profile-avatar">🔮</div>
+    <div class="profile-header-info">
+      <div class="pseudo">LE MIDLANER SANS NOM</div>
+      <div class="tagline">OTP Syndra · Philosophe du balance · Archiviste des injustices de Riot</div>
+      <div class="badges">
+        <span class="badge badge-purple">Midlaner</span>
+        <span class="badge badge-purple">Syndra/Kassa OTP</span>
+        <span class="badge badge-gold">Ironie Sophistiquée</span>
+        <span class="badge badge-teal">2023 → 2024</span>
+        <span class="badge badge-red">Pari Éducatif</span>
+      </div>
+    </div>
+    <div class="profile-key-stats">
+      <div class="ks">
+        <span class="kv">~1 811</span>
+        <span class="kl">Messages</span>
+      </div>
+      <div class="ks">
+        <span class="kv">2 ans</span>
+        <span class="kl">Activité</span>
+      </div>
+      <div class="ks">
+        <span class="kv">10h-13h</span>
+        <span class="kl">Pic activité</span>
+      </div>
+      <div class="ks">
+        <span class="kv">Diurne</span>
+        <span class="kl">Rythme</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-body">
+
+    <!-- Hourly chart -->
+    <div class="chart-section">
+      <div class="chart-title">⏱ Activité horaire — Le Midlaner (2023–2024)</div>
+      <div class="hour-chart" id="chart-mid"></div>
+      <script>
+        (function(){
+          const data = [13,1,0,0,8,33,31,64,51,109,215,257,185,202,146,110,37,51,118,28,40,36,52,24];
+          const max = Math.max(...data);
+          const chart = document.getElementById('chart-mid');
+          data.forEach((v,i)=>{
+            const wrap = document.createElement('div');
+            wrap.className = 'hour-bar-wrap';
+            const bar = document.createElement('div');
+            bar.className = 'hour-bar';
+            bar.style.height = Math.max(v>0?2:0, Math.round((v/max)*70))+'px';
+            bar.title = `${i}h: ${v} msgs`;
+            const lbl = document.createElement('div');
+            lbl.className = 'hour-label';
+            lbl.textContent = i%4===0 ? i+'h' : '';
+            wrap.appendChild(bar);
+            wrap.appendChild(lbl);
+            chart.appendChild(wrap);
+          });
+        })();
+      </script>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+
+      <!-- Champions -->
+      <div class="card">
+        <div class="card-title">✨ Champions / Sujets dominants</div>
+        <div class="prog-item"><span class="prog-label">Syndra</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:100%"></div></div><span class="prog-val">27</span></div>
+        <div class="prog-item"><span class="prog-label">Kassadin</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:55%"></div></div><span class="prog-val">15</span></div>
+        <div class="prog-item"><span class="prog-label">Neeko</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:40%"></div></div><span class="prog-val">11</span></div>
+        <div class="prog-item"><span class="prog-label">Midlane meta</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:88%"></div></div><span class="prog-val">24</span></div>
+        <div class="prog-item"><span class="prog-label">Mages</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:70%"></div></div><span class="prog-val">19</span></div>
+        <div class="prog-item"><span class="prog-label">Smurfs / MMR</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:55%"></div></div><span class="prog-val">15</span></div>
+        <div class="prog-item"><span class="prog-label">Assassins (débat)</span><div class="prog-bar-track"><div class="prog-bar-fill" style="width:50%"></div></div><span class="prog-val">14</span></div>
+      </div>
+
+      <!-- Style de rage -->
+      <div class="card">
+        <div class="card-title">🔥 Profil de rage</div>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Rageur ironique & analytique</p>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">INTENSITÉ</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-purple"></div><div class="rage-pip active-purple"></div>
+            <div class="rage-pip active-purple"></div><div class="rage-pip active-purple"></div>
+            <div class="rage-pip active-purple"></div><div class="rage-pip active-purple"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">SOPHISTICATION</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip active-teal" style="background:var(--teal)"></div>
+            <div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">CAPS / RAGE BRUTE</div>
+          <div class="rage-meter">
+            <div class="rage-pip active-red"></div><div class="rage-pip active-red"></div>
+            <div class="rage-pip active-red"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div><div class="rage-pip"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div>
+            <div class="rage-pip"></div><div class="rage-pip"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.5;">
+          Mode favori : ironie au scalpel + émoji <em>chancla</em> + statistiques sorties de nulle part.
+        </div>
+      </div>
+
+      <!-- Expressions signature -->
+      <div class="card">
+        <div class="card-title">💬 Expressions signature</div>
+        <div class="expr-list">
+          <span class="expr-chip">brocken</span>
+          <span class="expr-chip">les termes</span>
+          <span class="expr-chip">:ronaldin:</span>
+          <span class="expr-chip">:chancla:</span>
+          <span class="expr-chip">hopital finlandais</span>
+          <span class="expr-chip">exa</span>
+          <span class="expr-chip">ahi</span>
+          <span class="expr-chip">sah quel plaisir</span>
+          <span class="expr-chip">trkl</span>
+          <span class="expr-chip">c'est guez</span>
+          <span class="expr-chip">nsm</span>
+          <span class="expr-chip">perso</span>
+          <span class="expr-chip">je débunk</span>
+          <span class="expr-chip">go finlande</span>
+          <span class="expr-chip">délu af</span>
+          <span class="expr-chip">unlucky</span>
+          <span class="expr-chip">argue refusé</span>
+        </div>
+      </div>
+
+      <!-- Moments mémorables -->
+      <div class="card">
+        <div class="card-title">⚡ Citations mémorables</div>
+
+        <div class="moment">
+          <div class="quote">« Nique le rework de syndra, il est où mon lane bully brocken ? Je veux jouer bagarre pas kassa range moi nsm »</div>
+          <div class="meta">Jan 2023 · premier message après 440 jours d'absence</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« liste des counters de malphite : -fin de la liste »</div>
+          <div class="meta">Avr 2023 · format économique parfait</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« n'importe qui ne jouant pas toplane devrait diffamer et insulter ces individus jusqu'à l'hôpital finlandais »</div>
+          <div class="meta">Juin 2023 · frustration topgap exprimée</div>
+        </div>
+        <div class="moment">
+          <div class="quote">« syndra je suis otp je connais mini 5 builds, tous sont AP »</div>
+          <div class="meta">Juil 2023 · auto-présentation en passant</div>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+    <!-- Prose sections -->
+    <div class="prose-sections">
+
+      <div class="prose-block">
+        <h3>🧠 Personnalité sur le canal</h3>
+        <p>Ce midlaner anonyme arrive sur le canal après un hiatus de plus d'un an (440 jours de silence entre octobre 2021 et janvier 2023), et son retour est immédiat et sans cérémonie : <em>« Nique le rework de syndra »</em>. Son style est radicalement différent de celui qui dominait le canal avant lui — là où Ransberg explosait en CAPSLOCK, lui découpe ses arguments au scalpel. Il parle moins mais dit généralement plus. Ses interventions ressemblent parfois à des conférences de presse — structurées, référencées (il cite des winrates, des données lolalytics), souvent ponctuées d'un <em>:chancla:</em> ou d'un <em>:ronaldin:</em> comme signature de clôture du dossier.</p>
+        <p>Il est clairement inséré dans une communauté plus large (il parle d'une académie compétitive, de tournois JISC, cite des noms comme Konno, GK, Merko, Doppel) et apporte dans le canal une perspective plus "scène compétitive" que pure soloQ. Ses échanges avec les autres membres révèlent une position de relative autorité — il distribue les jugements avec la désinvolture de quelqu'un qui pense avoir raison structurellement. <em>« Sois meilleur, espèce de boosted »</em> lancé avec un :ronaldin: dit tout sur son rapport aux tiers.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>📊 Niveau et rapport aux performances</h3>
+        <p>Ce profil joue en Platine/Émeraude en soloQ avec Syndra comme champion principal (OTP revendiqué, 5 builds maîtrisés, tous AP). Il évoque avoir atteint Master à un moment donné ou être proche — d'autres membres le taquinent sur ce sujet. Sa façon de parler de ses performances est analytique : il ne rage pas sur ses défaites, il les autopsie. <em>« Kassa mid → twitch mid → fizz mid (2%) → syndra ban (2%) → autofill »</em> suivi d'un décompte froid des probabilités : c'est quelqu'un qui gère son tilt via la rationalisation statistique. Le problème, c'est que cette rationalisation le mène parfois à conclure qu'il a juste une incroyable malchance structurelle — ce qui n'est pas si différent du mécanisme de Ransberg, juste mieux habillé.</p>
+        <p>Il parle d'un elo "Émeraude / Diamant" et s'implique dans une ligue compétitive amateur (académie JISC) où il joue mid. Ses prises de position sur la balance sont généralement défendables mais teintées d'un biais pro-mages prévisible pour un OTP Syndra. Il sait reconnaître quand il a tort — chose rare dans ce corpus — mais avec une élégance qui suggère que l'humilité est aussi une stratégie rhétorique.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>👿 Têtes de turc & bêtes noires</h3>
+        <p>Sa bête noire principale est structurelle : <strong>la méta</strong> qui ne convient pas aux mages purs, et plus précisément <strong>Fizz</strong> (counter direct de Syndra, apparu 2 fois à 2% de pick rate dans ses lobbies d'affilée — une coïncidence qui le rend fou). Il a une aversion particulière pour les <strong>toplanes</strong> qui viennent voler sa mid après avoir perdu leur lane, pour les <strong>ADCs qui ragequit</strong> après deux morts, et pour les <strong>jungleurs</strong> qui gank sans prio et flame ensuite. Sa rancœur envers la jungle est philosophique : il ne s'y plaint pas au coup par coup mais comme d'un problème systémique.</p>
+        <p>Côté personnages récurrents : <strong>Konno</strong> est clairement son souffre-douleur favori — il le cite régulièrement pour l'étriller sur ses prises de position balance (notamment sur les assassins). <em>« Konno est convaincu que les assassins sont injouables à cause des mages »</em>, délivré avec un <em>:sueur:</em>, résume le running gag. <strong>GK</strong> est un autre sujet — un membre apparemment actif sur la scène dont les opinions sur le balance font hurler notre Midlaner. Il ménage ses critiques des smurfs avec la précision d'un avocat.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>🎭 Humour et style dans ce contexte</h3>
+        <p>Son humour est son meilleur atout. Il excelle dans l'ironie au premier degré assumée — <em>« liste des counters de malphite : / -fin de la liste »</em> est un chef-d'œuvre de concision. Il utilise les émojis comme signature de jugement : <em>:chancla:</em> pour l'absurde, <em>:ronaldin:</em> pour le sarcasme, <em>:philippot:</em> (qu'on imagine pour le personnage politique) pour les takes qui font honte. Ses rares moments de caps (JE HURLE, C'EST 4 SECONDES) ont un impact précisément parce qu'ils sont rares — l'inverse de Ransberg.</p>
+        <p>Il a un vocabulaire distinctif qui lui appartient en propre : <em>brocken</em> (sa faute d'orthographe signature de "broken"), <em>hopital finlandais</em> (sa façon élégante de dire "va te faire soigner"), <em>go finlande</em>, <em>exa</em> et <em>ahi</em> comme interjections d'accord dubitatif. Son argot mélange du verlan, du vocabulaire LoL standard et un certain registre lycéen/étudiant parisien (IDF) qu'on peut détecter dans ses références géographiques et ses mentions de transport en commun et d'écoles.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>🌍 Sujets hors LoL</h3>
+        <p>Beaucoup plus présent hors-LoL que Ransberg. Il parle de <strong>Parcoursup</strong> et de ses choix d'études supérieures avec une franchise désarmante (<em>« je suis en looserQ sur parcoursup »</em>, mai 2024). Il évoque avoir vécu au <strong>Danemark</strong>, ce qui contextualise ses références au froid, à la bouffe danoise qu'il trouve dégueu, aux lycées scandinaves. Il habite en région <strong>parisienne</strong> (IDF, proches du périphérique côté ouest) et prend le RER A ou la ligne 14 avec dégoût assumé. Il parle de son expérience dans un <strong>resto traditionnel danois</strong> et compare les cultures alimentaires avec opiniatreté.</p>
+        <p>Il mentionne des <strong>examens oraux</strong> et des <strong>concours d'admission</strong> (université danoise et française en parallèle), suggérant une trajectoire d'études supérieures ambitieuse. Sa mention d'un oncle joueur d'échecs à 2400 Elo dans les années 70 révèle un background familial avec des lettres. Il parle d'écoles de commerce avec un mépris affiché et juste (<em>« Jean-Michel EDC »</em>), ce qui positionne ses valeurs assez clairement.</p>
+      </div>
+
+      <div class="prose-block">
+        <h3>⚖️ Évaluation : rageur chronique ou joueur zen ?</h3>
+        <p>Ni l'un ni l'autre complètement : il est un <em>rageur intellectualisé</em>, ce qui est peut-être la forme la plus insidieuse. Il ne tilt pas brutalement, il construit un dossier d'accusation contre Riot, le matchmaking, ses coéquipiers, la méta — dossier qui tient la route sur le fond mais dont la fonction est exactement la même que le CAPSLOCK de Ransberg : externaliser la responsabilité de ses défaites. Sa lucidité analytique masque un biais de confirmation solide. Il est plus fair-play que Ransberg in-game (il se mute plutôt que d'insulter), mais ses jugements post-game sur les autres peuvent être cinglants. Sa toxicité est de la catégorie "condescendance bienveillante" — il n'insulte pas vraiment, il vous explique que vous êtes objectivement inférieur, émoji à l'appui.</p>
+      </div>
+
+    </div><!-- /prose-sections -->
+
+    <!-- Psy Report -->
+    <div class="psy-report">
+      <div class="psy-header">
+        <h4>🩺 Cabinet de Psychiatrie Virtuelle · Dossier Confidentiel</h4>
+        <p>Rapport clinique fictif à usage humoristique — Dr. Jung-du-Platine-3</p>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Diagnostic Principal</div>
+        <div class="psy-value"><strong>F60.7 — Personnalité Analytique Décompensée avec Syndrome de l'Expert Non Reconnu (PADSN)</strong><br>
+        Associé à : Maladie de la Stat-Sélective, Trouble du Spectre de l'Ironie Permanente, et Syndrome OTP-Identitaire ("Si Syndra est nerfée, je n'existe plus").</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Déclencheurs Principaux</div>
+        <div class="psy-value">1° Fizz en mid (probabilité 2% = il l'a face 3 fois de suite). 2° Quelqu'un qui cite des stats sans préciser le tier et la région. 3° Un toplaner qui quitte sa lane pour venir "aider" mid. 4° Konno qui publie une tierlist. 5° Le rework de Syndra.</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Mécanismes de Défense Identifiés</div>
+        <div class="psy-value">Intellectualisation systématique (transformer la rage en conférence), Ironie défensive (le :chancla: comme bouclier), Humour comme distanciation, et — subtil — une humilité ostensible qui fonctionne comme argument d'autorité ("je reconnais mes erreurs, donc j'ai encore plus raison là").</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Points Positifs Cliniques</div>
+        <div class="psy-value">Excellent calibrage rhétorique. Culture LoL profonde et genuinement utile. Capable d'empathie sélective (il reconnaît les bons junglers, félicite les bonnes prises de position). Capacité à sortir du jeu sans crise existentielle — 3 mois sans jouer en 2024, aucun trauma apparent.</div>
+      </div>
+
+      <div class="psy-field">
+        <div class="psy-label">Pronostic de Guérison</div>
+        <div class="psy-value">Modérément favorable. La guérison complète requiert l'acceptation que Konno a peut-être raison sur un seul point. Estimé impossible dans cette vie.</div>
+      </div>
+
+      <div class="psy-ordonnance">
+        <h5>💊 Ordonnance Recommandée</h5>
+        <div class="psy-rx-item">Rx1 — Antidote à la Stat-Sélective : lire les données défavorables à voix haute avant chaque débat. Posologie : jusqu'à ce que le :chancla: devienne sincère.</div>
+        <div class="psy-rx-item">Rx2 — Thérapie d'Humilité Forcée : Jouer Rengar jungle 5 games. Résultat attendu : compréhension que les assassins sont parfois injouables.</div>
+        <div class="psy-rx-item">Rx3 — Inhibiteurs d'Hôpital Finlandais : Trouver une métaphore géographique de substitution. La Finlande a de bons médecins et mérite mieux.</div>
+        <div class="psy-rx-item">Rx4 — Exposition Contrôlée à Konno : Lire un message de Konno par jour sans répondre. Objectif : 30 jours. Succès attendu : 3 jours.</div>
+        <div class="psy-rx-item">Rx5 — Acceptation : Syndra sera reworkée encore une fois. C'est acceptable. La vie continue. Les sphères ne sont pas définitives.</div>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="verdict-block">
+      <div class="verdict-label">🔮 Verdict Midlaner</div>
+      <div class="verdict-text">
+        Le Midlaner Sans Nom est le contrepoids sophistiqué au chaos brut de Ransberg. Il parle moins, vise mieux, et embrasse l'ironie là où son prédécesseur embrassait les majuscules. OTP Syndra jusqu'à l'os, il a transformé la midlane en tribune et le qq-only en extension de sa conférence de presse personnelle. Sa disparition après décembre 2024 laisse un vide analytique dans le canal — personne d'autre ne citera Lolalytics en format débat contradictoire avec autant de désinvolture.
+      </div>
+    </div>
+
+  </div><!-- /profile-body -->
+</section>
+</div><!-- /container -->
+
+<!-- ============================= -->
+<!-- SYNTHÈSE COMPARATIVE           -->
+<!-- ============================= -->
+<div class="container">
+<section class="comparative">
+  <h2>Synthèse Comparative</h2>
+  <div class="comp-sub">Ce qui distingue, ce qui rassemble, qui gagne quoi</div>
+
+  <table class="compare-table">
+    <tr>
+      <th>Critère</th>
+      <th>🗡️ Ransberg</th>
+      <th>🔮 Le Midlaner</th>
+    </tr>
+    <tr>
+      <td>VOLUME</td>
+      <td>~19 705 messages (91%)</td>
+      <td>~1 811 messages (9%)</td>
+    </tr>
+    <tr>
+      <td>RÔLE</td>
+      <td>Toplane (Trynda/Garen/Xin)</td>
+      <td>Mid (Syndra/Kassadin OTP)</td>
+    </tr>
+    <tr>
+      <td>RAGE</td>
+      <td>CAPSLOCK brutal, explosif, direct</td>
+      <td>Ironie glaciale, statistiques, :chancla:</td>
+    </tr>
+    <tr>
+      <td>ORTHOGRAPHE SIGNATURE</td>
+      <td>"broken", "c'ets", "vriament", "fdp"</td>
+      <td>"brocken", "exa", "ahi", "trkl"</td>
+    </tr>
+    <tr>
+      <td>ENNEMI JEU</td>
+      <td>Malphite, Phase Rush, rangeds top</td>
+      <td>Fizz, rework Syndra, méta sans mages</td>
+    </tr>
+    <tr>
+      <td>STYLE HRS-LoL</td>
+      <td>Minimal, études, amis IRL</td>
+      <td>Riche : Danemark, parcoursup, bouffe, Île-de-France</td>
+    </tr>
+    <tr>
+      <td>HORAIRE</td>
+      <td>Actif 14h-17h + nuits (0h-1h)</td>
+      <td>Actif 10h-13h, peu la nuit</td>
+    </tr>
+    <tr>
+      <td>ÉMOJIS PHARES</td>
+      <td>:iiiii: :renaldo: :risiboulbe:</td>
+      <td>:chancla: :ronaldin: :philippot:</td>
+    </tr>
+    <tr>
+      <td>ATTITUDE vs. COÉQUIPIERS</td>
+      <td>Flamer direct, blame immédiat</td>
+      <td>Analyse froide, mépris bienveillant</td>
+    </tr>
+    <tr>
+      <td>TOXICITÉ</td>
+      <td>Haute mais transparente</td>
+      <td>Subtile mais réelle</td>
+    </tr>
+    <tr>
+      <td>LUCIDITÉ SUR SOI</td>
+      <td>Rare, mais spectaculaire quand présente</td>
+      <td>Fréquente mais stratégique</td>
+    </tr>
+  </table>
+
+  <div class="podiums">
+    <div class="podium-card">
+      <div class="podium-label">🔥 Le plus rageur</div>
+      <div class="podium-winner" style="color:var(--red)">Ransberg</div>
+      <div class="podium-reason">19 705 messages, 13% en CAPS, "MASTER 150LP ALL DOGS" répété 40 fois d'affilée. Sans discussion.</div>
+    </div>
+    <div class="podium-card">
+      <div class="podium-label">😂 Le plus drôle</div>
+      <div class="podium-winner" style="color:var(--gold)">Le Midlaner</div>
+      <div class="podium-reason">"liste des counters de malphite : / -fin de la liste" + "hôpital finlandais" + ironie statistique. Régularité de qualité supérieure.</div>
+    </div>
+    <div class="podium-card">
+      <div class="podium-label">☠️ Le plus toxique</div>
+      <div class="podium-winner" style="color:var(--purple-glow)">Ransberg (ex aequo)</div>
+      <div class="podium-reason">Ransberg est brut mais direct. Le Midlaner est moins brut mais la condescendance soutenue a ses propres méfaits. Verdict partagé.</div>
+    </div>
+    <div class="podium-card">
+      <div class="podium-label">🧠 Le meilleur analyste</div>
+      <div class="podium-winner" style="color:var(--teal)">Le Midlaner</div>
+      <div class="podium-reason">Il cite les sources, ajuste ses positions, connaît les mécaniques. Ransberg est brillant mais son biais rend ses analyses unreliable sous tilt.</div>
+    </div>
+    <div class="podium-card">
+      <div class="podium-label">❤️ Le plus attachant</div>
+      <div class="podium-winner" style="color:var(--red)">Ransberg</div>
+      <div class="podium-reason">L'authenticité brute de sa rage, son attachement indéfectible à Tryndamere malgré tout, et "dans 400 games je suis grand master".</div>
+    </div>
+    <div class="podium-card">
+      <div class="podium-label">🌍 Le plus complexe</div>
+      <div class="podium-winner" style="color:var(--purple-glow)">Le Midlaner</div>
+      <div class="podium-reason">Danemark, Parcoursup, bouffe, scène compétitive amateur, chess Elo, politique intégrée dans l'argot. Personnage multidimensionnel.</div>
+    </div>
+  </div>
+
+  <div class="common-ground">
+    <h4>🤝 Ce qu'ils ont en commun</h4>
+    <p>
+      Malgré leurs différences de style radical, les deux partagent une conviction fondamentale : <strong>leur élo ne reflète pas leur vrai niveau</strong>. Ransberg pense être Diamant quand il est Plat, le Midlaner pense mériter Master quand il est Émeraude. Les deux externalisent leurs défaites avec la même architecture psychologique — seul le packaging change. Ils partagent aussi une vraie passion pour le jeu qui n'est pas feinte, une culture LoL profonde, et une appartenance à la même communauté de joueurs francophones qu'ils alimentent et critiquent simultanément. Enfin, ils ont tous les deux supprimé leur compte Discord — ce qui, dans leur univers, équivaut à une mort symbolique.<br><br>
+      <strong>Différence fondamentale :</strong> Ransberg est une flamme — spectaculaire, consommatrice, visible à des kilomètres. Le Midlaner est un laser — discret, précis, et tout aussi capable de brûler.
+    </p>
+  </div>
+
+</section>
+
+<!-- ===== FINAL VERDICT ===== -->
+<div class="final-verdict">
+  <h2>Verdict Final</h2>
+  <div class="verdict-body">
+    Le canal #qq-only a accueilli <em>deux âmes perdues</em> distinctes derrière le masque unifié du "Deleted User". <strong>Ransberg</strong>, architecte du canal, toplaner tryndamérien irréductible, a déposé 91% des messages en trois ans d'une rage totale, honnête et spectaculaire — un monument de passion non filtrée qui fait du qq-only son journal intime involontaire. <em>Le Midlaner Sans Nom</em>, son successeur temporel, est arrivé plus tard, plus petit en volume mais plus aiguisé en précision, transformant la même souffrance soloQ en conférence permanente armée de Lolalytics. Ce que ces dossiers révèlent, au fond, c'est que <strong>peu importe le style, le vecteur ou l'émoji signature</strong> : tous les joueurs qui arrivent sur un canal qq-only cherchent exactement la même chose — quelqu'un qui comprend que oui, leur jungleur était vraiment une catastrophe, et que non, <em>ce n'était vraiment pas leur faute</em>.
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer class="footer">
+  <div class="container">
+    Analysé avec amour, ironie et un peu de Lolalytics · <span>#qq-only</span> · 2019–2024<br>
+    <em>Tous les diagnostics psychiatriques sont fictifs. Sauf peut-être un ou deux.</em>
+  </div>
+</footer>
+
+</body>
+</html>
