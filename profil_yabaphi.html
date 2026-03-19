@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 24px;
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border-radius: 16px;
+    border: 1px solid #533483;
+  }
+  .username {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e94560;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    color: #a0a0c0;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #e9456015;
+    color: #e94560;
+    border: 1px solid #e9456040;
+  }
+  .badge.purple { background: #53348315; color: #a380f0; border-color: #53348340; }
+  .badge.green  { background: #1a4a2a15; color: #60c080; border-color: #1a4a2a40; }
+  .badge.blue   { background: #0f346015; color: #60a0e9; border-color: #0f346040; }
+  .badge.orange { background: #4a2a0015; color: #e09060; border-color: #e0906040; }
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e94560;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #8080a0;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .card {
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card.full { grid-column: span 2; }
+  .card-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #533483;
+    font-weight: 700;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2a2a4a;
+    padding-bottom: 8px;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .tag.red    { background: #e9456020; color: #e94560; border: 1px solid #e9456040; }
+  .tag.purple { background: #53348320; color: #a380f0; border: 1px solid #53348340; }
+  .tag.blue   { background: #0f346020; color: #60a0e9; border: 1px solid #0f346040; }
+  .tag.green  { background: #1a4a2a20; color: #60c080; border: 1px solid #1a4a2a40; }
+  .tag.orange { background: #4a2a0020; color: #e09060; border: 1px solid #e0906040; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 0.8rem; color: #a0a0c0; width: 160px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: #2a2a4a; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { font-size: 0.75rem; color: #6060a0; width: 35px; text-align: right; }
+  .quote {
+    background: #0f1a2e;
+    border-left: 3px solid #533483;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.83rem;
+    color: #c0c0d8;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .quote .meta { color: #533483; font-size: 0.72rem; font-style: normal; margin-top: 5px; }
+  .meter { margin-bottom: 12px; }
+  .meter-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .meter-name { font-size: 0.82rem; color: #c0c0d8; }
+  .meter-score { font-size: 0.82rem; font-weight: 700; color: #e94560; }
+  .meter-track { height: 10px; background: #2a2a4a; border-radius: 5px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 5px; }
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e, #2a0a3e);
+    border: 1px solid #e94560;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .verdict-label { font-size: 0.75rem; color: #e94560; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .verdict-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.5; }
+  .verdict-sub { font-size: 0.82rem; color: #a080b0; margin-top: 8px; }
+  .hour-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; margin-top: 8px; }
+  .hour-bar { flex: 1; border-radius: 2px 2px 0 0; min-height: 2px; position: relative; }
+  .hour-bar:hover::after {
+    content: attr(data-h) 'h';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .hour-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .hour-lbl { font-size: 0.65rem; color: #6060a0; }
+  .evo-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px; }
+  .evo-year { font-size: 0.78rem; color: #8080a0; width: 35px; flex-shrink: 0; padding-top: 2px; }
+  .evo-text { font-size: 0.8rem; color: #c0c0d8; flex: 1; line-height: 1.5; }
+  .evo-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .paradox-box {
+    background: #0f1a2e;
+    border: 1px solid #533483;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: #c0c0d8;
+    line-height: 1.6;
+  }
+  .paradox-box strong { color: #a380f0; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .mini-card {
+    background: #0f1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: #a0a0c0;
+    line-height: 1.5;
+  }
+  .mini-card strong { color: #60c080; display: block; margin-bottom: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+  .mini-card.warn strong { color: #e09060; }
+  .mini-card.danger strong { color: #e94560; }
+  .alert-box {
+    background: #2a0a0a;
+    border: 1px solid #e9456060;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.8rem;
+    color: #e0a0a0;
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+  .alert-box strong { color: #e94560; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="username">yabaphi</div>
+  <div class="subtitle">Profil Discord · Serveur privé francophone · Déc. 2021 – Mars 2026</div>
+  <div class="badge-row">
+    <span class="badge">🌶️ Droite dure identitaire</span>
+    <span class="badge purple">🌊 Sudiste-béarnais revendiqué</span>
+    <span class="badge green">🎭 Complotiste lucide assumé</span>
+    <span class="badge blue">⚖️ Justice procédurale</span>
+    <span class="badge orange">🔞 Obsédé Jack Lang / réseaux pédos</span>
+    <span class="badge">🧠 Analyse froide situations absurdes</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num">4 657</div>
+    <div class="stat-label">Messages totaux</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">168</div>
+    <div class="stat-label">Liens partagés</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">14</div>
+    <div class="stat-label">Tirades &gt; 300c</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">18h</div>
+    <div class="stat-label">Pic d'activité</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">35%</div>
+    <div class="stat-label">Messages 2025</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">224×</div>
+    <div class="stat-label">Usages de "ahi"</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- Personnalité -->
+  <div class="card">
+    <div class="card-title">🧠 Traits de personnalité</div>
+    <div class="tag-row">
+      <span class="tag red">Réactif immédiat</span>
+      <span class="tag red">Franc-tireur identitaire</span>
+      <span class="tag purple">Complotiste assumé</span>
+      <span class="tag purple">Obsessionnel thématique</span>
+      <span class="tag blue">Sens de l'absurde</span>
+      <span class="tag blue">Justice procédurale</span>
+      <span class="tag green">Classe populaire revendiquée</span>
+      <span class="tag orange">Sporadic ragebait</span>
+    </div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;margin-top:8px;">
+      yabaphi est un réacteur de premier ordre : son style est oral, brut, souvent en capslock dans les moments d'excitation (<em style="color:#c0c0d8;">"CETTE GO M'A TUEE / ASSASINNEE"</em>). Il pense à voix haute, par salves de messages courts. Pas de construction argumentative minutieuse comme un Kaspei — ici, c'est l'instinct et le ressenti, pas la bibliothèque. Son intelligence est contextuelle, narrative et sociologique plutôt que technique.
+    </p>
+  </div>
+
+  <!-- Sujets de prédilection -->
+  <div class="card">
+    <div class="card-title">📊 Sujets de prédilection</div>
+    <div class="bar-row"><div class="bar-label">Politique française / RN</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:#e94560;"></div></div><div class="bar-val">★★★★★</div></div>
+    <div class="bar-row"><div class="bar-label">Justice / faits divers</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#a380f0;"></div></div><div class="bar-val">★★★★★</div></div>
+    <div class="bar-row"><div class="bar-label">Réseaux pédo / affaires</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#e94560;"></div></div><div class="bar-val">★★★★☆</div></div>
+    <div class="bar-row"><div class="bar-label">Identité / immigration</div><div class="bar-track"><div class="bar-fill" style="width:65%;background:#60a0e9;"></div></div><div class="bar-val">★★★★☆</div></div>
+    <div class="bar-row"><div class="bar-label">Vie quotidienne / social</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#60c080;"></div></div><div class="bar-val">★★★★☆</div></div>
+    <div class="bar-row"><div class="bar-label">IA / tech / futur</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:#e09060;"></div></div><div class="bar-val">★★★☆☆</div></div>
+    <div class="bar-row"><div class="bar-label">Sport / culture pop</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:#533483;"></div></div><div class="bar-val">★★☆☆☆</div></div>
+  </div>
+
+  <!-- Heure d'activité -->
+  <div class="card">
+    <div class="card-title">⏰ Activité par heure</div>
+    <div class="hour-chart" id="hourChart"></div>
+    <div class="hour-labels">
+      <span class="hour-lbl">0h</span>
+      <span class="hour-lbl">6h</span>
+      <span class="hour-lbl">12h</span>
+      <span class="hour-lbl">18h</span>
+      <span class="hour-lbl">23h</span>
+    </div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">Pic marqué à 18h (fin de journée). Présence matinale active 9h–12h. Nuit presque absente. Profil de salarié ou étudiant avec du temps libre en soirée.</p>
+  </div>
+
+  <!-- Activité par année -->
+  <div class="card">
+    <div class="card-title">📈 Activité par année</div>
+    <div class="bar-row"><div class="bar-label">2021 (arrivée)</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:#533483;"></div></div><div class="bar-val">45</div></div>
+    <div class="bar-row"><div class="bar-label">2022 (présidentielle)</div><div class="bar-track"><div class="bar-fill" style="width:86%;background:#e94560;"></div></div><div class="bar-val">1 422</div></div>
+    <div class="bar-row"><div class="bar-label">2023</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#e09060;"></div></div><div class="bar-val">502</div></div>
+    <div class="bar-row"><div class="bar-label">2024</div><div class="bar-track"><div class="bar-fill" style="width:52%;background:#a380f0;"></div></div><div class="bar-val">853</div></div>
+    <div class="bar-row"><div class="bar-label">2025 (retour en force)</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#60a0e9;"></div></div><div class="bar-val">1 652</div></div>
+    <div class="bar-row"><div class="bar-label">2026 (en cours)</div><div class="bar-track"><div class="bar-fill" style="width:11%;background:#60c080;"></div></div><div class="bar-val">183</div></div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">Paradoxe : 2022 (présidentielle) et 2025 sont ses deux grandes années — mais pour des raisons totalement différentes. En 2022 c'est la politique. En 2025 c'est les affaires et le quotidien.</p>
+  </div>
+
+  <!-- Évolution politique -->
+  <div class="card full">
+    <div class="card-title">🗳️ Positions politiques & évolution (2021–2026)</div>
+    <div class="evo-row"><div class="evo-year">2021</div><div class="evo-dot" style="background:#533483;"></div><div class="evo-text">Arrivée fin décembre. Ton immédiatement décontracté, argot lourd. Très vite : soutien implicite à Lassalle (<em>"Lassalle 2022"</em>), humour anti-gouvernement, goût pour le provocateur inconventionnel. Déjà une identité sudiste affirmée (<em>"BEARN INDEPENDANT"</em>). Positionnement anti-woke instinctif avant même d'être thématisé.</div></div>
+    <div class="evo-row"><div class="evo-year">2022</div><div class="evo-dot" style="background:#e94560;"></div><div class="evo-text"><strong style="color:#e94560;">Année la plus dense (1 422 msgs)</strong>. La présidentielle le mobilise massivement. Sympathie Zemmour documentée (21 mentions, souvent comme émoji de réaction positive). Critique de l'immigration avec distinction <em>"vrais migrants qui bossent vs enfants de migrants sans mindset"</em>. Affaire de Callac (Bretagne) suivie comme illustration parfaite de sa thèse. Déjà le réflexe des parenthèses triples sur certains noms. Ton vindicatif mais encore majoritairement humoristique.</div></div>
+    <div class="evo-row"><div class="evo-year">2023</div><div class="evo-dot" style="background:#e09060;"></div><div class="evo-text">Baisse d'activité (502 msgs). Discours plus décomplexé : <em>"ça me fume comment c'est trop facile de troller la gauche quand t'es d'ED"</em> — première auto-identification à l'extrême droite assumée, formulée avec légèreté. Intérêt pour les questions de biologie/sport (domination athlétique selon l'origine, phrasing racial). Premiers grands monologues sur la décadence culturelle bourgeoise.</div></div>
+    <div class="evo-row"><div class="evo-year">2024</div><div class="evo-dot" style="background:#a380f0;"></div><div class="evo-text">Activité modérée (853 msgs) mais terrain se durcit. Bayrou identifié comme opportuniste, suivi de l'affaire pédocriminelle au lycée. Débat viol/justice procédurale : position inattendue — défense du droit de l'accusé même odieux à un procès équitable (<em>"la justice doit être la même pour tous, la morale n'a pas sa place dans un tribunal"</em>). La rigueur juridique comme limite à son identitarisme.</div></div>
+    <div class="evo-row"><div class="evo-year">2025</div><div class="evo-dot" style="background:#60a0e9;"></div><div class="evo-text"><strong style="color:#60a0e9;">Retour en force (1 652 msgs)</strong>. <strong style="color:#e94560;">Glissement le plus marqué.</strong> Jack Lang, Epstein, réseaux pédocriminels : un quasi-leitmotiv. Les parenthèses triples apparaissent de façon récurrente (<em>"(((Rothschild)))"</em>, <em>"(((Lang)))"</em>). Le complotisme n'est plus humoristique — il est sincère et revendiqué. Bayrou comme couverture d'affaires de mœurs. Discours anti-boomer consolidé, critique de la classe bourgeoise culturelle de plus en plus marquée. Identité sudiste toujours présente mais moins revendicative.</div></div>
+    <div class="evo-row"><div class="evo-year">2026</div><div class="evo-dot" style="background:#60c080;"></div><div class="evo-text">Activité maintenue (183 msgs sur 2,5 mois). <em>"Pendaison when pour Jack Lang?"</em> (fév. 2026) — franchissement d'un cap dans l'expression. Les réseaux pédo sont présentés comme une vérité complotiste lucide : <em>"oui il n'y a aucune preuve (ou sont elles cachées?)"</em>. Le Talmud cité dans un contexte antisémite classique (août 2025). La période 2025-2026 marque une radicalisation nette sur les questions identitaires et complotistes, tout en maintenant un vernis de lucidité auto-réflexive.</div></div>
+  </div>
+
+  <!-- Citations représentatives -->
+  <div class="card full">
+    <div class="card-title">💬 Citations représentatives</div>
+    <div class="quote">
+      "CETTE GO M'A TUEE / TUEE / ASSASINNEE"
+      <div class="meta">Déc. 2021 — premier message. Le ton est posé d'emblée : urgent, capslock, oral maximum.</div>
+    </div>
+    <div class="quote">
+      "BEARN INDEPENDANT"
+      <div class="meta">Jan. 2022 — identité sudiste proclamée dès les premiers jours, avec une emphase typique. Pas le Pays Basque, le Béarn — la nuance est revendiquée par ailleurs.</div>
+    </div>
+    <div class="quote">
+      "y'a une différence majeure entre les immigrants italiens et ceux situés entre la méditerannée et les contreforts du sahara"
+      <div class="meta">Jan. 2022 — la thèse identitaire centrale exprimée sobrement, sans enrobage. Le ton factuel qui rend le propos plus efficace que le cri.</div>
+    </div>
+    <div class="quote">
+      "les riches parisiens veulent aider à repeupler la Bretagne en envoyant des migrants / ils envoient leurs migrants en Bretagne, et passent leurs vacances sur la côte basque / bassin d'arcachon"
+      <div class="meta">Sept. 2022 — l'affaire de Callac. La description de classe (bourgeois parisien vs peuple breton) couplée à l'immigration : sa synthèse idéologique en deux phrases.</div>
+    </div>
+    <div class="quote">
+      "ça me fume comment c'est trop facile de troller la gauche quand t'es d'ED"
+      <div class="meta">Mars 2023 — auto-identification à l'extrême droite, dédramatisée, presque joyeuse. Aucune gêne, aucun euphémisme.</div>
+    </div>
+    <div class="quote">
+      "la justice doit être la même pour tous, et doit être pragmatique, la morale n'a pas sa place dans un tribunal"
+      <div class="meta">Jan. 2025 — sa position la plus surprenante : défense du droit d'un violeur sous OQTF à un procès équitable. Cohérence procédurale qui coupe son propre clan.</div>
+    </div>
+    <div class="quote">
+      "Jack Lang est dans tout les bons coups, et n'est entouré que de pédocriminels, oui il n'y a aucune preuve (ou sont elles cachées?) mais bon qu'il aille se faire enculer la tête dans un seau de merde"
+      <div class="meta">Fév. 2026 — la formule complotiste lucide dans toute sa pureté : il concède l'absence de preuves et l'hypothèse conspirationniste dans la même phrase, sans contradiction apparente pour lui.</div>
+    </div>
+    <div class="quote">
+      "Jean Luc (((Benchemoul))) dit Brunel, Ariane de (((Rotschild))), la famille (((Lang))) etc... c'est pas des français?"
+      <div class="meta">Fév. 2026 — usage explicite des parenthèses triples (marqueur antisémite en ligne). Le complotisme culturel s'est cristallisé en référents symboliques précis.</div>
+    </div>
+    <div class="quote">
+      "pendaison when pour Jack Lang?"
+      <div class="meta">Fév. 2026 — franchissement d'un cap expressif. Formulé comme une boutade, mais révélateur d'un durcissement sur la période.</div>
+    </div>
+    <div class="quote">
+      "en vrai violer avec une meuf avec un préservatif c'est encore plus humiliant pour la meuf / le type il te viole, mais en plus il pense que t'es une crasseuse"
+      <div class="meta">Avr. 2025 — son meilleur registre : la description factuelle d'une situation absurde. Pas de morale, pas de filtre — la situation parle d'elle-même et c'est là qu'il est le plus fort.</div>
+    </div>
+  </div>
+
+  <!-- Ragebait-o-mètre -->
+  <div class="card">
+    <div class="card-title">🌡️ Ragebait-o-mètre</div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Ragebait identitaire (conscient)</span><span class="meter-score">7/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:70%;background:linear-gradient(90deg,#533483,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Complotisme sincère (assumé)</span><span class="meter-score">8/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:80%;background:linear-gradient(90deg,#3a1a3a,#a380f0);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Cohérence idéologique</span><span class="meter-score">7.5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:75%;background:linear-gradient(90deg,#1a4a2a,#60c080);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Personnalité clivante</span><span class="meter-score">8/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:80%;background:linear-gradient(90deg,#533483,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Radicalisation 2021→2026</span><span class="meter-score">7/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:70%;background:linear-gradient(90deg,#4a1a0a,#e09060);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Sens de l'absurde / humour</span><span class="meter-score">8.5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:85%;background:linear-gradient(90deg,#0f5460,#60a0e9);"></div></div>
+    </div>
+  </div>
+
+  <!-- Lexique signature -->
+  <div class="card">
+    <div class="card-title">🗣️ Lexique signature</div>
+    <div class="bar-row"><div class="bar-label">"ahi" (rire/réaction)</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#e94560;"></div></div><div class="bar-val">224×</div></div>
+    <div class="bar-row"><div class="bar-label">"mdr"</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:#a380f0;"></div></div><div class="bar-val">46×</div></div>
+    <div class="bar-row"><div class="bar-label">"putain"</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:#e09060;"></div></div><div class="bar-val">42×</div></div>
+    <div class="bar-row"><div class="bar-label">"ngl"</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:#60a0e9;"></div></div><div class="bar-val">19×</div></div>
+    <div class="bar-row"><div class="bar-label">"ayaaa / ayaaaa"</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:#533483;"></div></div><div class="bar-val">~35×</div></div>
+    <div class="bar-row"><div class="bar-label">"atomise / s'atomise"</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:#60c080;"></div></div><div class="bar-val">6×</div></div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">"ahi" est son marqueur absolu — 224 occurrences, bien au-delà de tout autre. Il l'utilise pour rire, pour souligner l'absurde, pour ponctuer. Pas de "goat" ni de vocabulaire techno-enthousiaste : son registre reste populaire-sudiste-ironic.</p>
+  </div>
+
+  <!-- Le complotiste lucide -->
+  <div class="card">
+    <div class="card-title">🔍 Le complotiste lucide</div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;">
+      La posture de yabaphi sur les théories est documentée et cohérente sur toute la période : il assume ses théories <strong style="color:#a380f0;">tout en reconnaissant explicitement leur absence de preuves</strong>. Ce n'est pas de la mauvaise foi — c'est une épistémologie alternative où le <em>"ou sont elles cachées?"</em> remplace la démonstration.
+    </p>
+    <div class="paradox-box">
+      <strong>Sa formule type :</strong> "oui il n'y a aucune preuve (ou sont elles cachées?)"<br><br>
+      <strong>Ce qu'il voit :</strong> des coïncidences de réseau (Epstein, Lang, Brunel, Maxwell) interprétées comme preuves d'un système organisé de protection mutuelle.<br><br>
+      <strong>Ce qui le différencie :</strong> il ne prétend pas avoir des preuves — il dit que leur absence est elle-même suspecte. C'est la logique du secret parfait, imperméable à la réfutation.
+    </div>
+    <div class="alert-box" style="margin-top:10px;">
+      <strong>⚠️ Signal de radicalisation :</strong> Entre 2022 et 2026, le complotisme passe de l'humour distancié (émoji Zemmour, blagues Epstein) à un registre sincère avec marqueurs symboliques explicites (parenthèses triples, citations du Talmud, appels à la pendaison). La lucidité déclarée coexiste avec une sincérité croissante.
+    </div>
+  </div>
+
+  <!-- Identité d'origine -->
+  <div class="card">
+    <div class="card-title">🗻 Identité d'origine : Béarn & Sud-Ouest</div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;">
+      Contrairement au profil attendu d'un <em>"Basque identitaire"</em>, yabaphi est avant tout <strong style="color:#a380f0;">Béarnais</strong> — avec un rapport au Pays Basque voisin parfois ambivalent (<em>"je ne supporte pas déjà bosser avec un basque, un landais, un toy"</em>, déc. 2025). Son identité sudiste est territorialement précise et non romantisée.
+    </p>
+    <div class="quote" style="margin-top:10px;">
+      "personnellement en tant qu'aquitain, je prête toujours allégeance à la couronne d'Angleterre 🇬🇧"
+      <div class="meta">Mars 2022 — humour historique, ancrage identitaire sérieux sous la boutade</div>
+    </div>
+    <div class="quote">
+      "Fier de nos forces de l'ordre béarnaises"
+      <div class="meta">Fév. 2022 — micro-patriotisme local récurrent et sincère</div>
+    </div>
+    <div class="quote">
+      "j'ai bossé dans l'usine orocbat de pâté basque"
+      <div class="meta">Mars 2026 — le terroir comme réalité concrète, pas mythifiée</div>
+    </div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">Sa grand-mère parlait béarnais / gascon comme langue maternelle. Sa langue maternelle à lui : l'argot du Sud-Ouest, des virées dans les fêtes de village et du rugby comme culture commune.</p>
+  </div>
+
+  <!-- Classe sociale -->
+  <div class="card">
+    <div class="card-title">💼 Rapport à la classe sociale</div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;">
+      yabaphi se positionne instinctivement du côté des <strong style="color:#a380f0;">classes populaires contre les bourgeois</strong> — et cette conviction traverse toute son idéologie. L'immigration n'est pas un problème en soi : c'est le fait que les <em>"riches parisiens"</em> l'organisent pour les autres qui lui pose problème. Sa réaction aux offres d'emploi tech absurdes (CDD 6 mois, 5 ans d'exp, avantages : café de qualité) est un exemple parfait de son registre de dérision populaire.
+    </p>
+    <div class="quote" style="margin-top:10px;">
+      "Bourgeois? Moi? Sérieusement? ça faisait longtemps qu'on me l'avait pas sorti celle là, demande à mes potes si je suis bourgeois, tu verras les réponses que tu vas te prendre — rien que la semaine passée j'étais au restau du cœur"
+      <div class="meta">Fév. 2025 — réaction à une accusation de classe. La vérité ou l'hyperbole, peu importe : le positionnement est réel.</div>
+    </div>
+    <div class="two-col" style="margin-top:10px;">
+      <div class="mini-card">
+        <strong>✅ Cohérences fortes</strong>
+        Anti-bobo parisien · Méfiance des élites culturelles · Respect du travail manuel · Méfiance des CSP+ donneurs de leçons
+      </div>
+      <div class="mini-card warn">
+        <strong>⚡ Tensions</strong>
+        Identitarisme qui peut cibler des immigrés aussi populaires que lui · Complotisme qui remplace l'analyse de classe par la théorie du réseau
+      </div>
+    </div>
+  </div>
+
+  <!-- Description détaillée -->
+  <div class="card full" id="description">
+    <div class="card-title">📖 Description détaillée</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <div>
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">① L'oral brut comme style de pensée</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          yabaphi ne rédige pas — il parle. Ses messages sont des successions de fragments courts, souvent sans ponctuation, en capslock quand l'émotion monte. C'est le mode de communication de quelqu'un qui traite l'information à voix haute, en temps réel, sans filtre entre la pensée et l'envoi. Le résultat est une authenticité rare sur Discord : on ne se demande jamais ce qu'il pense vraiment, parce qu'il le dit immédiatement.<br><br>
+          Ce style a une limite structurelle : il est fort dans la réaction, faible dans la démonstration. Quand un Kaspei sort un argumentaire sur 15 messages, yabaphi répond par une intuition qui peut être juste sans jamais être prouvée. Mais son meilleur registre n'est pas l'argumentation — c'est la <strong style="color:#c0c0e0;">description factuelle de situations absurdes</strong>. Là, il est imbattable : pas de morale, pas d'emphase, juste les faits qui parlent d'eux-mêmes et laissent l'interlocuteur faire le chemin.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">② La droite dure non-idéologue</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Il n'y a pas de philosophie politique chez yabaphi au sens systématique. Pas de lectures, pas de références théoriques, pas de programme revendiqué. Ce qu'il y a, c'est une <strong style="color:#c0c0e0;">intuition identitaire très solide</strong> couplée à une méfiance envers les élites culturelles qui transcende toute autre considération. Sa droite dure est viscérale, communautaire, terroire — pas doctrinaire.<br><br>
+          Cela le rend plus sincère que beaucoup de ses homologues sur ce spectre politique, mais aussi plus dangereux dans une certaine mesure : les convictions non théorisées ne se confrontent pas à leurs propres contradictions. Il peut défendre en même temps le droit procédural absolu de tout accusé ET appeler à la pendaison de Jack Lang dans des messages adjacents, sans que la tension lui saute aux yeux.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">③ L'obsession Jack Lang comme cas d'école</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:0;">
+          Jack Lang n'apparaît que 5 fois dans le corpus, mais ces 5 occurrences sont révélatrices de la mécanique complotiste à l'œuvre. En 2026, les mentions sont groupées, intenses et liées à Epstein, Brunel, Maxwell dans un réseau de coïncidences présenté comme preuve d'organisation. La formule <em style="color:#c0c0d8;">"oui il n'y a aucune preuve (ou sont elles cachées?)"</em> est le marqueur linguistique parfait du complotiste lucide : il assume la théorie ET son absence de fondement, ce qui la rend imperméable à toute réfutation. Ce n'est pas de la mauvaise foi — c'est une épistémologie cohérente de l'intérieur.
+        </p>
+      </div>
+
+      <div>
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">④ La radicalisation : chronologie documentée</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Entre 2021 et 2026, la trajectoire est nette. En 2021-2022 : ton d'argot internet, humour à la limite, sympathie Zemmour mais pas de marqueurs militants explicites. Les parenthèses triples apparaissent dès 2022-2023 mais dans des contextes humoristiques ou distanciés.<br><br>
+          En 2025-2026 : <strong style="color:#c0c0e0;">le registre change</strong>. Les parenthèses triples sont utilisées sérieusement sur des personnalités publiques (<em>"(((Rothschild)))"</em>, <em>"(((Lang)))"</em>). Le Talmud est cité dans un contexte clairement antisémite. Les appels à la pendaison se formulent comme boutades mais révèlent une hostilité qui s'est cristallisée. Ce n'est pas une radicalisation soudaine — c'est une drift progressive où chaque année normalise un peu plus ce qui précédait.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">⑤ La surprise : la rigueur procédurale</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Le trait le plus inattendu du corpus est sa défense constante et cohérente de l'égalité procédurale devant la justice. Quand un violeur sous OQTF porte plainte contre son accusatrice, yabaphi défend son droit à le faire — <em>"la justice doit être la même pour tous, la morale n'a pas sa place dans un tribunal."</em> Quand un criminel est déclaré irresponsable pénalement, il explique la logique et la défend avec des exemples concrets.<br><br>
+          Ce n'est pas de la contradiction — c'est une cohérence de droite libérale classique (règle de droit universelle) qui coexiste avec le reste de ses positions. Il sait séparer ce qu'il pense personnellement de ce que les institutions doivent faire. Cette distinction est rare sur le spectre identitaire et mérite d'être notée.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">⑥ Clivant ou fédérateur ?</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:0;">
+          yabaphi est <strong style="color:#c0c0e0;">clivant sur le fond, attachant sur la forme</strong>. Son ton brut, sa franchise sans ornement et son sens de l'absurde en font quelqu'un de difficile à vraiment détester même pour ceux qui ne partagent aucune de ses convictions. Il ne performe pas — il dit ce qu'il pense, c'est tout.<br><br>
+          Le problème est que ses convictions les plus problématiques (antisémitisme codé, appels à la violence symbolique) sont précisément celles qu'il exprime le plus naturellement — sans la distance ironique qui permettrait de les lire autrement. Sur 4 ans, le serveur a appris à lire ses excès comme du ragebait. En 2025-2026, c'est de moins en moins vrai.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="card full verdict">
+    <div class="verdict-label">⚖️ Verdict final</div>
+    <div class="verdict-text">
+      Ragebait conscient sur les marges — sincérité croissante sur le fond.<br>
+      Droite dure viscérale non-idéologue, complotiste lucide en dérive documentée.<br>
+      Personnalité clivante sur le fond, fédératrice sur le ton.
+    </div>
+    <div class="verdict-sub">
+      Son meilleur registre — la description factuelle de l'absurde — est intact sur 4 ans et irremplaçable sur le serveur.<br>
+      Sa trajectoire 2025-2026 marque un durcissement réel qui dépasse le ragebait.<br>
+      Le <strong>complotiste lucide</strong> qui "assume ses théories tout en reconnaissant leurs limites" est une posture stable — mais les limites repoussent d'année en année.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const hourData = [26,11,10,7,1,8,6,19,75,279,339,486,492,362,202,211,329,330,518,295,139,206,164,142];
+const max = Math.max(...hourData);
+const chart = document.getElementById('hourChart');
+hourData.forEach((v, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar';
+  const pct = Math.max(3, Math.round((v / max) * 100));
+  const isDead = i >= 1 && i <= 6;
+  const isPeak = i === 18;
+  const isGood = (i >= 9 && i <= 23) && !isPeak;
+  bar.style.height = pct + '%';
+  bar.style.background = isDead ? '#2a2a4a' : isPeak ? '#e94560' : isGood ? '#533483' : '#e9456060';
+  bar.setAttribute('data-h', i);
+  chart.appendChild(bar);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2833 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Débat simulé — La méritocratie en France</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=gg+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #313338;
+    --bg2: #2b2d31;
+    --bg3: #1e1f22;
+    --sidebar: #2b2d31;
+    --text: #dbdee1;
+    --text2: #b5bac1;
+    --text3: #80848e;
+    --mention: rgba(88,101,242,0.3);
+    --mention-border: #5865f2;
+    --lydd-color: #a78bfa;
+    --mpb-color: #fb923c;
+    --elilos-color: #34d399;
+    --shaars-color: #60a5fa;
+    --caps-color: #f87171;
+    --timestamp: #80848e;
+    --divider: rgba(255,255,255,0.06);
+    --hover: rgba(4,4,5,0.07);
+    --link: #00b0f4;
+    --quote-border: #4e5058;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg3);
+    color: var(--text);
+    font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.375;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .channel-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--bg3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  }
+  .channel-header .hashtag {
+    color: var(--text3);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .channel-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .channel-topic {
+    color: var(--text3);
+    font-size: 13px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--text3);
+  }
+
+  /* BANNER */
+  .debate-banner {
+    background: linear-gradient(135deg, rgba(88,101,242,0.15) 0%, rgba(167,139,250,0.1) 50%, rgba(251,146,60,0.1) 100%);
+    border: 1px solid rgba(88,101,242,0.25);
+    border-radius: 8px;
+    margin: 16px 16px 0;
+    padding: 16px 20px;
+  }
+  .debate-banner h1 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .debate-banner p {
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .debate-banner .meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge-lydd { background: rgba(167,139,250,0.2); color: var(--lydd-color); }
+  .badge-mpb { background: rgba(251,146,60,0.2); color: var(--mpb-color); }
+  .badge-elilos { background: rgba(52,211,153,0.2); color: var(--elilos-color); }
+  .badge-shaars { background: rgba(96,165,250,0.2); color: var(--shaars-color); }
+
+  /* MESSAGES */
+  .messages {
+    padding: 16px 0 40px;
+    flex: 1;
+  }
+
+  .msg-group {
+    padding: 2px 16px;
+    display: flex;
+    gap: 16px;
+    min-height: 28px;
+    position: relative;
+    transition: background 0.05s;
+  }
+  .msg-group:hover {
+    background: var(--hover);
+  }
+  .msg-group.with-avatar {
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-top: 2px;
+  }
+  .avatar-placeholder {
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .avatar-continuation {
+    width: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .avatar-continuation .ts-small {
+    font-size: 10px;
+    color: var(--timestamp);
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .msg-group:hover .ts-small { opacity: 1; }
+
+  .avatar-lydd { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+  .avatar-mpb { background: linear-gradient(135deg, #ea580c, #fb923c); }
+  .avatar-elilos { background: linear-gradient(135deg, #059669, #34d399); }
+  .avatar-shaars { background: linear-gradient(135deg, #2563eb, #60a5fa); }
+
+  .msg-content { flex: 1; min-width: 0; }
+
+  .msg-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .username {
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .username:hover { text-decoration: underline; }
+  .username-lydd { color: var(--lydd-color); }
+  .username-mpb { color: var(--mpb-color); }
+  .username-elilos { color: var(--elilos-color); }
+  .username-shaars { color: var(--shaars-color); }
+
+  .role-tag {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+  .role-marxiste { background: rgba(167,139,250,0.2); color: var(--lydd-color); }
+  .role-prof { background: rgba(251,146,60,0.2); color: var(--mpb-color); }
+  .role-arb { background: rgba(52,211,153,0.15); color: var(--elilos-color); }
+
+  .timestamp {
+    font-size: 11px;
+    color: var(--timestamp);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .msg-text {
+    color: var(--text);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-size: 15px;
+    line-height: 1.375;
+  }
+
+  /* Caps lock styling */
+  .caps-burst {
+    color: var(--caps-color);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* Quote / citation */
+  .discord-quote {
+    border-left: 4px solid var(--quote-border);
+    padding-left: 12px;
+    margin: 4px 0;
+    color: var(--text2);
+    font-size: 14px;
+  }
+
+  /* Embed-like block pour les longs messages */
+  .long-msg {
+    background: rgba(0,0,0,0.1);
+    border-left: 4px solid;
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    margin: 4px 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .long-msg-lydd { border-color: var(--lydd-color); }
+  .long-msg-mpb { border-color: var(--mpb-color); }
+
+  .long-msg p { margin-bottom: 8px; }
+  .long-msg p:last-child { margin-bottom: 0; }
+
+  /* Mention */
+  .mention {
+    background: var(--mention);
+    color: #c9cdfb;
+    border-radius: 3px;
+    padding: 0 2px;
+    font-weight: 500;
+  }
+
+  /* Séparateur de date */
+  .date-divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 16px 8px;
+    gap: 12px;
+  }
+  .date-divider hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--divider);
+  }
+  .date-divider span {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Réactions */
+  .reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .reaction {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 13px;
+    cursor: default;
+    transition: background 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .reaction:hover { background: rgba(255,255,255,0.12); }
+  .reaction .count { color: var(--text2); font-size: 12px; font-weight: 500; }
+
+  /* NOTE narrative */
+  .narrator {
+    margin: 8px 16px;
+    padding: 8px 12px;
+    background: rgba(88,101,242,0.08);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text3);
+    font-style: italic;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .channel-topic { display: none; }
+    .msg-group { padding: 2px 8px; }
+    .msg-group.with-avatar { padding-left: 8px; }
+    .debate-banner { margin: 8px 8px 0; }
+  }
+
+  strong { font-weight: 600; }
+  em { font-style: italic; color: var(--text2); }
+  code {
+    background: rgba(0,0,0,0.3);
+    border-radius: 3px;
+    padding: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #e3e5e8;
+  }
+
+  .system-msg {
+    color: var(--text3);
+    font-size: 13px;
+    padding: 2px 16px 2px 72px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- CHANNEL HEADER -->
+<div class="channel-header">
+  <span class="hashtag">#</span>
+  <span class="channel-name">politique-débat</span>
+  <span class="channel-topic">La méritocratie est-elle un mythe ou une réalité en France ? · Fiction simulée</span>
+</div>
+
+<!-- BANNER -->
+<div class="debate-banner">
+  <h1>⚠️ Débat simulé — Fiction documentée</h1>
+  <p>Ce débat est une simulation fictive construite à partir de l'analyse des profils et archives réelles du serveur. Tous les échanges sont inventés mais calibrés sur les styles documentés.</p>
+  <div class="meta">
+    <span class="badge badge-lydd">lydd · marxiste analytique · étudiant droit notarial</span>
+    <span class="badge badge-mpb">monpotestbon · prof · conservateur sociétal</span>
+    <span class="badge badge-elilos">elilos · arbitre non partisan</span>
+    <span class="badge badge-shaars">shaars · modérateur épistémique</span>
+  </div>
+</div>
+
+<div class="messages">
+
+<div class="date-divider"><hr><span>Vendredi 14 mars 2026</span><hr></div>
+
+<!-- === 23:04 — MPB lance === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="role-tag role-prof">prof</span>
+      <span class="timestamp">Hier à 23:04</span>
+    </div>
+    <div class="msg-text">bon les gars sujet sérieux ce soir</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:04</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la méritocratie en France c'est un mythe ou une réalité</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:04</span></div>
+  <div class="msg-content">
+    <div class="msg-text">parce que j'ai corrigé des copies toute la semaine et je peux vous dire que non c'est pas un mythe</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:05</span></div>
+  <div class="msg-content">
+    <div class="msg-text">les gosses qui bossent ont de meilleures notes que ceux qui bossent pas. revolutionary concept je sais</div>
+    <div class="reactions">
+      <span class="reaction">🔥 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:06 — LYDD répond === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="role-tag role-marxiste">marxiste analytique</span>
+      <span class="timestamp">Hier à 23:06</span>
+    </div>
+    <div class="msg-text">définis méritocratie stp</div>
+  </div>
+</div>
+
+<!-- === 23:06 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:06</span>
+    </div>
+    <div class="msg-text">mdr non</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:06</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est évident</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:07</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tout le monde sait ce que c'est</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:07</span></div>
+  <div class="msg-content">
+    <div class="msg-text">on va pas refaire le dico à chaque fois que t'as pas d'argument de fond lyd</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:07 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:07</span>
+    </div>
+    <div class="msg-text">définis méritocratie stp</div>
+  </div>
+</div>
+
+<!-- === 23:08 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:08</span>
+    </div>
+    <div class="msg-text">non</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:08</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ok la méritocratie c'est le principe selon lequel l'avancement social est conditionné par le mérite individuel — travail, talent, effort — et non par l'origine sociale ou la naissance</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:08</span></div>
+  <div class="msg-content">
+    <div class="msg-text">voilà t'es content</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:08</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est ce qui existe en France</div>
+  </div>
+</div>
+
+<!-- === 23:09 — LYDD développe === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:09</span>
+    </div>
+    <div class="msg-text">ok donc ta définition c'est "l'avancement social est conditionné par le mérite individuel et non par l'origine"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:09</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et tu affirmes que c'est "ce qui existe en France"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:10</span></div>
+  <div class="msg-content">
+    <div class="long-msg long-msg-lydd">
+      <p>bon. donc si on prend ta définition au sérieux — ce que je vais faire pour toi — on peut vérifier empiriquement</p>
+      <p>Bourdieu, <em>La Reproduction</em>, 1970 : corrélation statistique massive entre origine sociale et trajectoire scolaire. Ce n'est pas une opinion, c'est une étude longitudinale sur des décennies de données INSEE.</p>
+      <p>Étude JEEA 2012 (Lefranc, Pistolesi, Trannoy) : en France, le facteur "origine sociale" explique environ 40% de la variance des revenus en fin de carrière. 40%. Ce n'est pas marginal.</p>
+      <p>L'ENA — maintenant INSP — moins de 5% de fils d'ouvrier parmi les admis. Sur un concours supposément ouvert au mérite pur.</p>
+      <p>Donc soit ta définition est correcte et la méritocratie n'existe pas en France. Soit tu défends quelque chose d'autre que tu n'as pas encore nommé.</p>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:11 — MPB rafale === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:11</span>
+    </div>
+    <div class="msg-text">Bourdieu</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:11</span></div>
+  <div class="msg-content">
+    <div class="msg-text">bien sûr</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:11</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le sociologue qui a convaincu 40 ans de gauche française que leurs gosses pouvaient pas réussir</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">résultat : prophétie auto-réalisatrice</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le mec issu du peuple qui internalise "de toute façon j'ai aucune chance" il met pas ses gosses devant les cahiers</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et donc effectivement ils réussissent moins</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:13</span></div>
+  <div class="msg-content">
+    <div class="msg-text">merci Pierre pour ce magnifique cadeau à la classe ouvrière</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:13 — ELILOS arrive === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="role-tag role-arb">arbitre</span>
+      <span class="timestamp">Hier à 23:13</span>
+    </div>
+    <div class="msg-text">attends MPB ta logique est pas con mais t'es en train de confondre cause et symptôme là</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text">Bourdieu observe une corrélation, il dit pas aux prolos "vous pouvez pas réussir" — il dit "les conditions objectives font que statistiquement vous réussissez moins"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est pas pareil</div>
+    <div class="reactions">
+      <span class="reaction">☝️ <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:14 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:14</span>
+    </div>
+    <div class="msg-text">sauf que dans la pratique</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:15</span></div>
+  <div class="msg-content">
+    <div class="msg-text">quand t'as une génération entière de profs de gauche qui disent aux gamins de REP que "le système est contre vous"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:15</span></div>
+  <div class="msg-content">
+    <div class="msg-text">l'effet concret c'est quoi</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:15</span></div>
+  <div class="msg-content">
+    <div class="msg-text">je suis PROF en REP elilos</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:15</span></div>
+  <div class="msg-content">
+    <div class="msg-text">je vois ça tous les jours</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:16</span></div>
+  <div class="msg-content">
+    <div class="msg-text">les gamins qui bossent passent quand même</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:16</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est la méritocratie</div>
+    <div class="reactions">
+      <span class="reaction">🤌 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:16 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:16</span>
+    </div>
+    <div class="msg-text">donc ta preuve empirique de la méritocratie c'est ton ressenti de prof</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:17</span></div>
+  <div class="msg-content">
+    <div class="msg-text">contre une étude économétrique publiée dans le Journal of the European Economic Association</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:17</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ok</div>
+  </div>
+</div>
+
+<!-- === 23:17 — MPB éclate === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:17</span>
+    </div>
+    <div class="msg-text">ah le ressenti</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le mec qui enseigne à 30 gosses par classe depuis 8 ans c'est du "ressenti"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais l'étude de 2012 sur 14 ans de données avec des méthodes que toi t'arrives même pas à lire c'est "la science"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">sérieusement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la méritocratie existe au niveau INDIVIDUEL</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">l'inégalité des chances c'est une chose</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:19</span></div>
+  <div class="msg-content">
+    <div class="msg-text">nier que DANS ce système imparfait le mérite individuel joue un rôle c'en est une autre</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:19</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est pas compliqué</div>
+    <div class="reactions">
+      <span class="reaction">😤 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:19 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:19</span>
+    </div>
+    <div class="msg-text">attends tu viens de changer de position</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">t'es passé de "c'est ce qui existe en France" à "elle existe au niveau individuel dans un système imparfait"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ces deux affirmations sont complètement différentes</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et la deuxième je suis d'accord avec</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais c'est pas pour ça qu'on utilise le mot méritocratie en sociologie</div>
+  </div>
+</div>
+
+<!-- === 23:21 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:21</span>
+    </div>
+    <div class="msg-text">j'ai pas changé de position</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:21</span></div>
+  <div class="msg-content">
+    <div class="msg-text">t'as reformulé ma pensée en la déformant pour ensuite la réfuter</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:21</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est basique comme sophisme</div>
+  </div>
+</div>
+
+<!-- === 23:21 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:21</span>
+    </div>
+    <div class="msg-text">quote le passage où j'ai déformé</div>
+  </div>
+</div>
+
+<!-- === 23:22 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:22</span>
+    </div>
+    <div class="msg-text">quand j'ai dit "c'est ce qui existe en France" je parlais du principe légal</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:22</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la méritocratie comme système de droit, pas comme paradis de l'égalité des chances parfaite</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:22</span></div>
+  <div class="msg-content">
+    <div class="msg-text">évidemment que l'égalité des chances est imparfaite</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais ça c'est différent de dire que la méritocratie est un mythe</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et visiblement personne ici fait cette distinction</div>
+  </div>
+</div>
+
+<!-- === 23:23 — SHAARS ENTRE === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-shaars">sha</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-shaars">shaars</span>
+      <span class="timestamp">Hier à 23:23</span>
+    </div>
+    <div class="msg-text">attends avant d'aller plus loin</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="mention">@.lydd</span> tu as cité une étude de 2012 sur les revenus et l'origine sociale</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:24</span></div>
+  <div class="msg-content">
+    <div class="msg-text">source ? parce que j'arrive pas à retrouver les chiffres exacts que tu cites</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:24</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la charge de la preuve ça marche dans les deux sens hein, surtout quand t'invoques un chiffre précis comme "40%"</div>
+    <div class="reactions">
+      <span class="reaction">👆 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:24 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:24</span>
+    </div>
+    <div class="msg-text">Lefranc A., Pistolesi N., Trannoy A. — "Inequality of Opportunity in France : How Many Dimensions ?" — JEEA 2012 — tu peux chercher sur google scholar</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:25</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le chiffre exact c'est "around one-third to two-fifths of total income inequality" selon les spécifications du modèle</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:25</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'arrondis à 40% pour aller vite mais si tu veux le détail complet je peux</div>
+    <div class="reactions">
+      <span class="reaction">📚 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:25 — SHAARS === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-shaars">sha</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-shaars">shaars</span>
+      <span class="timestamp">Hier à 23:25</span>
+    </div>
+    <div class="msg-text">ok merci</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:25</span></div>
+  <div class="msg-content">
+    <div class="msg-text">je précise aussi : cette étude mesure l'inégalité des chances, pas l'existence ou l'absence de méritocratie comme système légal</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:26</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce que MPB soulève sur la distinction niveau légal / niveau réel c'est pertinent, même si ça arrange pas son argument de fond</div>
+    <div class="reactions">
+      <span class="reaction">🎯 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:26 — MPB sur Bourdieu → tirade === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:26</span>
+    </div>
+    <div class="msg-text">merci shaars</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:26</span></div>
+  <div class="msg-content">
+    <div class="msg-text">bon voilà ce que j'observe au quotidien</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:27</span></div>
+  <div class="msg-content">
+    <div class="long-msg long-msg-mpb">
+      <p>J'ai trois enfants de bourgeois dans ma classe. Ils ont pas de télé dans leur chambre, leurs parents leur font réviser deux heures par soir depuis le CE1, ils ont des cours particuliers d'anglais le mercredi, leurs mères lisent avec eux le week-end.</p>
+      <p>Ces gosses-là "gappent" tout le monde pas parce qu'ils sont bourgeois — ils "gappent" tout le monde parce qu'ils travaillent trois fois plus que les autres depuis l'âge de 6 ans.</p>
+      <p>Appeler ça "reproduction sociale" comme si c'était une fatalité c'est exactement ce que Bourdieu a mis 400 pages à justifier pour finalement dire : les riches réussissent parce qu'ils travaillent plus. Révolutionnaire.</p>
+      <p>La méritocratie ne dit pas que tout le monde part avec les mêmes dés. Elle dit que si tu travailles, tu passes. Et ça, dans mon lycée REP, je le vois arriver.</p>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:28 — LYDD répond sec === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:28</span>
+    </div>
+    <div class="msg-text">donc selon toi la méritocratie c'est un système où le gamin de bourgeois travaille "plus" parce que ses parents l'y forcent depuis 6 ans</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:28</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et ce "travail" qui lui a été inculqué par son capital culturel familial — Bourdieu dirait "habitus" — compte comme du mérite individuel</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:28</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ok</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:29</span></div>
+  <div class="msg-content">
+    <div class="msg-text">donc le "mérite" c'est quelque chose qu'on hérite de ses parents</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:29</span></div>
+  <div class="msg-content">
+    <div class="msg-text">félicitations tu viens de réinventer la thèse de Bourdieu</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">3</span></span>
+      <span class="reaction">🔥 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:29 — ELILOS pique MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Hier à 23:29</span>
+    </div>
+    <div class="msg-text">ouais là MPB faut être honnête</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:30</span></div>
+  <div class="msg-content">
+    <div class="msg-text">si le mérite d'un gamin dépend des conditions familiales dans lesquelles il a grandi, t'es en train de décrire exactement ce que lydd dit — le mérite n'est pas "individuel", il est socialement distribué</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:30</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ton exemple renforce son point là</div>
+    <div class="reactions">
+      <span class="reaction">☝️ <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:30 — MPB rafale === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:30</span>
+    </div>
+    <div class="msg-text">NON</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:30</span></div>
+  <div class="msg-content">
+    <div class="msg-text">y a une différence entre conditions inégales au départ ET système méritocratique</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:31</span></div>
+  <div class="msg-content">
+    <div class="msg-text">les deux peuvent coexister</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:31</span></div>
+  <div class="msg-content">
+    <div class="msg-text">vous faites comme si méritocratie imparfaite = pas de méritocratie</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:31</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est pas la même chose putain</div>
+  </div>
+</div>
+
+<!-- === 23:31 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:31</span>
+    </div>
+    <div class="msg-text">définis "méritocratie imparfaite" stp</div>
+  </div>
+</div>
+
+<!-- === 23:32 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:32</span>
+    </div>
+    <div class="msg-text">sérieusement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:32</span></div>
+  <div class="msg-content">
+    <div class="msg-text">un système où le mérite est récompensé mais où les conditions de départ ne sont pas égales</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:32</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est pas compliqué</div>
+  </div>
+</div>
+
+<!-- === 23:32 — LYDD martèle === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:32</span>
+    </div>
+    <div class="msg-text">mais si le mérite lui-même est une variable dépendante des conditions de départ inégales</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:33</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce que tu viens de démontrer avec ton exemple des gosses de bourgeois</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:33</span></div>
+  <div class="msg-content">
+    <div class="msg-text">alors ton "système où le mérite est récompensé" ne récompense pas le mérite individuel</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:33</span></div>
+  <div class="msg-content">
+    <div class="msg-text">il récompense le capital culturel hérité</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:33</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce n'est pas une "méritocratie imparfaite"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:34</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est une reproduction sociale avec des concours à la fin</div>
+    <div class="reactions">
+      <span class="reaction">🔥 <span class="count">4</span></span>
+      <span class="reaction">💀 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:34 — MPB: Cyrano amorce === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:34</span>
+    </div>
+    <div class="msg-text">t'es en train de me dire qu'aucun gamin d'ouvrier n'a jamais intégré HEC</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:34</span></div>
+  <div class="msg-content">
+    <div class="msg-text">jamais passé l'X</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:35</span></div>
+  <div class="msg-content">
+    <div class="msg-text">jamais décroché un poste qu'il n'aurait "pas dû" avoir selon la sociologie</div>
+  </div>
+</div>
+
+<!-- === 23:35 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:35</span>
+    </div>
+    <div class="msg-text">ouais y'a un SDF qui est devenu PDG</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:35</span></div>
+  <div class="msg-content">
+    <div class="msg-text">sur combien de SDF</div>
+    <div class="reactions">
+      <span class="reaction"><span class="count">☠️</span> 3</span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:35 — MPB — CAPS LOCK 1 === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:35</span>
+    </div>
+    <div class="msg-text"><span class="caps-burst">PERSONNE NE DIT QUE TOUT LE MONDE PART À ÉGALITÉ</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:36</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="caps-burst">LA QUESTION C'EST EST-CE QUE LE MÉRITE JOUE UN RÔLE</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:36</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et la réponse est oui</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:36</span></div>
+  <div class="msg-content">
+    <div class="msg-text">évidemment</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:36 — LYDD martèle ×3 === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:36</span>
+    </div>
+    <div class="msg-text">définis "mérite qui joue un rôle" dans le contexte d'un système où le mérite est lui-même distribué inégalement par les conditions de départ stp</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:37</span></div>
+  <div class="msg-content">
+    <div class="msg-text">définis "mérite qui joue un rôle" dans le contexte d'un système où le mérite est lui-même distribué inégalement par les conditions de départ stp</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:37</span></div>
+  <div class="msg-content">
+    <div class="msg-text">définis "mérite qui joue un rôle" dans le contexte d'un système où le mérite est lui-même distribué inégalement par les conditions de départ stp</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:37</span></div>
+  <div class="msg-content">
+    <div class="msg-text">important</div>
+    <div class="reactions">
+      <span class="reaction">🧱 <span class="count">4</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:38 — ELILOS tape sur lydd === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Hier à 23:38</span>
+    </div>
+    <div class="msg-text">lydd le copier-coller triple c'est bon on a lu la première fois</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:38 — MPB tirade finale argument === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:38</span>
+    </div>
+    <div class="msg-text">ok. je vais te répondre une dernière fois sérieusement parce que tu sembles ne pas comprendre la distinction</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:39</span></div>
+  <div class="msg-content">
+    <div class="long-msg long-msg-mpb">
+      <p>Il y a deux questions distinctes :</p>
+      <p><strong>1/ Est-ce que tout le monde part à égalité en France ?</strong> Evidemment non. Personne de sain d'esprit le prétend.</p>
+      <p><strong>2/ Est-ce que le mérite individuel, DANS le système existant, influence le résultat ?</strong> Oui. Massivement. L'étude JEEA elle-même montre que 60% de la variance des revenus n'est PAS expliquée par l'origine. Ce 60% c'est quoi selon toi ? Uniquement de la chance ? Ou du mérite individuel aussi ?</p>
+      <p>Ce que je conteste c'est l'utilisation de Bourdieu comme argument total qui efface l'agentivité individuelle. Dire "c'est la reproduction sociale" à chaque succès d'un individu c'est lui nier toute responsabilité dans son propre parcours.</p>
+      <p>Les gamins dans ma classe qui bossent passent. Les gamins issus des mêmes conditions qui foutent rien ne passent pas. Le différentiel entre eux c'est du mérite individuel. Appelle ça autrement si tu veux mais c'est ça la réalité.</p>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:40 — LYDD — développement marxiste === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:40</span>
+    </div>
+    <div class="msg-text">ok alors là t'es enfin honnête</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:40</span></div>
+  <div class="msg-content">
+    <div class="long-msg long-msg-lydd">
+      <p>Le 60% "inexpliqué par l'origine" — ton argument — inclut notamment la chance pure (lieu de naissance au sein d'une même classe sociale, réseaux, genre, trajectoire matrimoniale, secteur d'emploi, conjoncture macro). Ce n'est pas tout du mérite.</p>
+      <p>Mais surtout : ton argument des "gamins de ta classe" est une erreur de raisonnement classique. Tu compares des gamins issus de la même classe sociale entre eux. La méritocratie comme concept implique une mobilité <em>entre</em> les classes, pas <em>dans</em> la classe. Si les enfants d'ouvriers qui bossent le plus finissent ouvriers qualifiés pendant que les enfants de bourgeois qui bossent moins finissent cadres sup, le mérite est là — mais il est récompensé différemment selon la classe de départ. Ce n'est plus de la méritocratie. C'est de la différenciation intra-classe.</p>
+      <p>Le Conseil d'État dans son rapport sur l'égalité des chances (2019) l'a dit très clairement : la France a un des taux de mobilité intergénérationnelle parmi les plus faibles de l'OCDE. Ce n'est pas un argument de gauche, c'est un constat institutionnel.</p>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:42 — MPB rafale === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:42</span>
+    </div>
+    <div class="msg-text">le Conseil d'État</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:42</span></div>
+  <div class="msg-content">
+    <div class="msg-text">bravo</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:42</span></div>
+  <div class="msg-content">
+    <div class="msg-text">les institutions françaises qui pontifient sur les inégalités pendant que leurs membres sortent tous de Sciences Po Paris</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:43</span></div>
+  <div class="msg-content">
+    <div class="msg-text">magnifique auto-critique</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:43</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et au passage : faible mobilité intergénérationnelle ≠ absence de méritocratie</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:43</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ça veut juste dire que les gens ne changent pas beaucoup de classe sociale</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:43</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce qui peut très bien être compatible avec une récompense du mérite <em>à l'intérieur</em> de chaque classe</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:44</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai debunk ce point il y a deux semaines mais personne n'a lu</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:44 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:44</span>
+    </div>
+    <div class="msg-text">MPB définis la méritocratie comme récompense du mérite intra-classe stp</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:44</span></div>
+  <div class="msg-content">
+    <div class="msg-text">parce que la définition standard de Young (1958) qui a inventé le terme implique une mobilité sociale ascendante ouverte à tous indépendamment de la naissance</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:44</span></div>
+  <div class="msg-content">
+    <div class="msg-text">si tu redéfinis la méritocratie comme "les méritants de chaque classe avancent dans leur classe" tu es en train de défendre quelque chose qui n'a plus grand chose à voir avec le concept original</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:45</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et en plus tu le fais sans le dire</div>
+  </div>
+</div>
+
+<!-- === 23:45 — ELILOS intervient sur lydd et mpb === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Hier à 23:45</span>
+    </div>
+    <div class="msg-text">lydd t'as raison sur la définition mais arrête de faire semblant que c'est la question posée depuis le début</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:46</span></div>
+  <div class="msg-content">
+    <div class="msg-text">MPB a posé une question sur le ressenti quotidien du fonctionnement du système</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:46</span></div>
+  <div class="msg-content">
+    <div class="msg-text">toi tu réponds sur la définition stricte académique</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:46</span></div>
+  <div class="msg-content">
+    <div class="msg-text">vous répondez pas à la même question depuis 40 minutes</div>
+    <div class="reactions">
+      <span class="reaction">☝️ <span class="count">3</span></span>
+      <span class="reaction">💀 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:46 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:46</span>
+    </div>
+    <div class="msg-text">merci elilos</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:47</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est exactement ça</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:47</span></div>
+  <div class="msg-content">
+    <div class="msg-text">lyd fait de la philosophie analytique en chambre pendant que moi j'enseigne à de vrais gamins</div>
+  </div>
+</div>
+
+<!-- === 23:47 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:47</span>
+    </div>
+    <div class="msg-text">non le problème c'est que si tu poses la question "la méritocratie est-elle un mythe ou une réalité" sans définir les termes</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:47</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tu peux répondre oui ET non simultanément selon ce que tu entends par là</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:48</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce n'est pas de la philosophie en chambre c'est de la rigueur élémentaire</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:48</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et elilos le dit lui-même</div>
+  </div>
+</div>
+
+<!-- === 23:48 — MPB — caps lock 2 montée === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:48</span>
+    </div>
+    <div class="msg-text">t'as utilisé la "rigueur élémentaire" pour esquiver mon argument pendant 45 minutes</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:49</span></div>
+  <div class="msg-content">
+    <div class="msg-text">chaque fois que je disais quelque chose de concret tu revenais avec une définition différente</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:49</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est de la mauvaise foi ou c'est de la mauvaise intelligence</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:49</span></div>
+  <div class="msg-content">
+    <div class="msg-text">dans les deux cas je vois pas l'intérêt de continuer</div>
+  </div>
+</div>
+
+<!-- === 23:49 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:49</span>
+    </div>
+    <div class="msg-text">traduction : j'ai pas répondu à la question alors je me barre en disant que l'autre est de mauvaise foi</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:49</span></div>
+  <div class="msg-content">
+    <div class="msg-text">classique</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:50 — MPB revient === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:50</span>
+    </div>
+    <div class="msg-text">nan je reviens parce que t'as dit une chose fausse</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:50</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai répondu à toutes tes questions</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:50</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est toi qui n'as JAMAIS répondu à la mienne</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:51</span></div>
+  <div class="msg-content">
+    <div class="msg-text">les 60% de variance non expliqués par l'origine dans l'étude que TU as citée</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:51</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est quoi</div>
+  </div>
+</div>
+
+<!-- === 23:51 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:51</span>
+    </div>
+    <div class="msg-text">j'ai répondu à 23:40 — "la chance pure, réseaux, genre, trajectoire matrimoniale, secteur d'emploi, conjoncture macro"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:51</span></div>
+  <div class="msg-content">
+    <div class="msg-text">t'as pas lu</div>
+  </div>
+</div>
+
+<!-- === 23:52 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:52</span>
+    </div>
+    <div class="msg-text">donc selon toi il n'y a AUCUNE part de mérite individuel dans ces 60%</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:52</span></div>
+  <div class="msg-content">
+    <div class="msg-text">aucune</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:52</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est ça ton argument</div>
+  </div>
+</div>
+
+<!-- === 23:52 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:52</span>
+    </div>
+    <div class="msg-text">j'ai pas dit ça</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:53</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai dit que cette part de variance inexpliquée ne peut pas être attribuée en totalité au mérite individuel</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:53</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et que dans tous les cas 40% c'est énorme pour un système qui se prétend méritocratique</div>
+  </div>
+</div>
+
+<!-- === 23:53 — MPB — CLIMAX CAPS === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:53</span>
+    </div>
+    <div class="msg-text"><span class="caps-burst">PERSONNE NE DIT QUE LA FRANCE SE PRÉTEND MÉRITOCRATIQUE À 100%</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:53</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="caps-burst">PERSONNE</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:54</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="caps-burst">NI MOI NI LE SYSTÈME</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:54</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tu débats contre une position que personne ne défend</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:54</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est ça que je te reproche depuis le début</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:54</span></div>
+  <div class="msg-content">
+    <div class="msg-text">t'as construit un homme de paille et tu le démontes depuis une heure</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:55</span></div>
+  <div class="msg-content">
+    <div class="msg-text">bravo</div>
+    <div class="reactions">
+      <span class="reaction">🫡 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:55 — LYDD — grand calme === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:55</span>
+    </div>
+    <div class="msg-text">mais alors quelle position tu défends exactement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:55</span></div>
+  <div class="msg-content">
+    <div class="msg-text">que la méritocratie existe partiellement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:55</span></div>
+  <div class="msg-content">
+    <div class="msg-text">dans un système aux conditions de départ inégales</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:55</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et que nier l'existence de cette part de mérite individuel c'est nier l'agentivité des individus</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:56</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est ça</div>
+  </div>
+</div>
+
+<!-- === 23:56 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:56</span>
+    </div>
+    <div class="msg-text">oui</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:56</span></div>
+  <div class="msg-content">
+    <div class="msg-text">exactement ça</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:56</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est tout ce que je disais</div>
+  </div>
+</div>
+
+<!-- === 23:56 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:56</span>
+    </div>
+    <div class="msg-text">alors on est d'accord que "la méritocratie comme réalité totale en France" c'est un mythe</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:57</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et qu'il existe une part d'agentivité individuelle dans un système structurellement inégal</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:57</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce qui était ma position initiale</div>
+  </div>
+</div>
+
+<!-- === 23:57 — MPB explose === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Hier à 23:57</span>
+    </div>
+    <div class="msg-text">NON</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:57</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'était pas ta position initiale</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:57</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ta position initiale c'était "la méritocratie est un mythe"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:58</span></div>
+  <div class="msg-content">
+    <div class="msg-text">maintenant que j'ai démontré que c'était faux tu glisses vers "oui enfin c'est structurellement inégal"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:58</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est ça la mauvaise foi lyd</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:58</span></div>
+  <div class="msg-content">
+    <div class="msg-text">classic</div>
+    <div class="reactions">
+      <span class="reaction">🐍 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 23:59 — LYDD  === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Hier à 23:59</span>
+    </div>
+    <div class="msg-text">ma position initiale était que la méritocratie comme système opérant à l'échelle macro en France est un mythe compte tenu des données sur la mobilité intergénérationnelle</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:59</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai jamais dit qu'aucun individu n'avait d'agentivité</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">23:59</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ça c'est toi qui me l'as prêté</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:00</span></div>
+  <div class="msg-content">
+    <div class="msg-text">man of straw</div>
+  </div>
+</div>
+
+<div class="date-divider"><hr><span>Samedi 15 mars 2026 — 00h00</span><hr></div>
+
+<!-- === 00:00 — ELILOS tape sur lydd === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Aujourd'hui à 00:00</span>
+    </div>
+    <div class="msg-text">certes lydd mais tu l'as pas formulé comme ça non plus</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:01</span></div>
+  <div class="msg-content">
+    <div class="msg-text">à 23:09 t'as sorti le Bourdieu direct sans préciser que tu parlais de l'échelle macro</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:01</span></div>
+  <div class="msg-content">
+    <div class="msg-text">donc MPB a pas tort de t'avoir lu comme ça</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:01</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et toi tu lui reproches de mal te lire alors que tu t'es mal formulé</div>
+    <div class="reactions">
+      <span class="reaction">☝️ <span class="count">4</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:01 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:01</span>
+    </div>
+    <div class="msg-text">admettons</div>
+  </div>
+</div>
+
+<!-- === 00:01 — MPB repart — CYRANO === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:01</span>
+    </div>
+    <div class="msg-text">c'est déjà quelque chose</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:02</span></div>
+  <div class="msg-content">
+    <div class="msg-text">de toute façon le fond du problème c'est que tu as Bourdieu comme bible et que tout ce que tu ne comprends pas ou qui te dérange tu le passes dans le prisme "reproduction sociale" et voilà c'est réglé</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:02</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tu utilises une théorie comme un outil rhétorique pas comme un outil analytique</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:03</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et quand on te dit ça — "d'extrême gauche ? Ah non, c'est un peu court jeune homme</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:03</span></div>
+  <div class="msg-content">
+    <div class="msg-text">On pouvait dire, bien des choses en somme :</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:03</span></div>
+  <div class="msg-content">
+    <div class="msg-text">En partisan de Bourdieu par exemple, on pouvait dire :</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:04</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><em>"Monsieur, si l'on cherchait le mérite au fond de vos discours,</em><br>
+<em>On n'y trouverait que le capital de vos ancêtres et leurs faubourgs,</em><br>
+<em>Votre talent si vif n'est qu'un héritage en costume,</em><br>
+<em>Et Bourdieu vous dirait que vous confondez l'effort et le bitume !"</em></div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">5</span></span>
+      <span class="reaction">🔥 <span class="count">3</span></span>
+      <span class="reaction">😭 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:05 — ELILOS réaction Cyrano === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Aujourd'hui à 00:05</span>
+    </div>
+    <div class="msg-text">MPB non mais t'as sorti Cyrano à 00h04</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:05</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le débat est officiellement terminé</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">6</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:05 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:05</span>
+    </div>
+    <div class="msg-text">la réfutation par l'alexandrin</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:05</span></div>
+  <div class="msg-content">
+    <div class="msg-text">pic argumentatif de la soirée</div>
+    <div class="reactions">
+      <span class="reaction">🏆 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:06 — MPB !== === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:06</span>
+    </div>
+    <div class="msg-text">c'est valide comme argument si vous voulez mon avis</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:06</span></div>
+  <div class="msg-content">
+    <div class="msg-text">bon</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:06</span></div>
+  <div class="msg-content">
+    <div class="msg-text">en vrai la question de fond reste entière</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:07</span></div>
+  <div class="msg-content">
+    <div class="msg-text">est-ce que nier la méritocratie on enlève aux individus la capacité de changer leur trajectoire</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:07</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et est-ce que c'est moralement acceptable de le faire</div>
+  </div>
+</div>
+
+<!-- === 00:07 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:07</span>
+    </div>
+    <div class="msg-text">non nier la méritocratie comme système macro ne nie pas l'agentivité individuelle</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:08</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ça identifie les structures qui contraignent cette agentivité pour pouvoir les changer</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:08</span></div>
+  <div class="msg-content">
+    <div class="msg-text">c'est même l'inverse qui est fatalement résigné : dire que la méritocratie "fonctionne" c'est dire que les structures actuelles sont légitimes et qu'il n'y a rien à changer</div>
+  </div>
+</div>
+
+<!-- === 00:08 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:08</span>
+    </div>
+    <div class="msg-text">j'ai jamais dit qu'il n'y avait rien à changer</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:09</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais là t'es encore en train de me prêter une position</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:09</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tu fais ça tout le temps</div>
+  </div>
+</div>
+
+<!-- === 00:09 — SHAARS  === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-shaars">sha</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-shaars">shaars</span>
+      <span class="timestamp">Aujourd'hui à 00:09</span>
+    </div>
+    <div class="msg-text">petite étude des origines sociales à l'X : 70% de CSP+ parmi les admis au concours, source DEPP 2023</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:10</span></div>
+  <div class="msg-content">
+    <div class="msg-text">pour contexte CSP+ c'est 25% de la population active</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:10</span></div>
+  <div class="msg-content">
+    <div class="msg-text">beaucoup de mots pour comprendre que naître bien c'est un avantage</div>
+    <div class="reactions">
+      <span class="reaction">📊 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:10 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:10</span>
+    </div>
+    <div class="msg-text">personne nie que naître bien c'est un avantage shaars</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:10</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ça c'est acquis depuis le début</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:11</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la vraie question c'est : dans ce système imparfait, est-ce que le travail individuel change quelque chose</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:11</span></div>
+  <div class="msg-content">
+    <div class="msg-text">réponse : oui</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:11</span></div>
+  <div class="msg-content">
+    <div class="msg-text">fin du débat</div>
+  </div>
+</div>
+
+<!-- === 00:11 — LYDD  === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:11</span>
+    </div>
+    <div class="msg-text">MPB définis "changer quelque chose" stp</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">parce que si "changer quelque chose" c'est passer de fils d'ouvrier à ouvrier qualifié pendant que les bourgeois passent de cadre à très haut cadre</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le travail "change quelque chose" mais ne remet pas en cause la structure</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:12</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ce qui est précisément la définition de la reproduction sociale</div>
+  </div>
+</div>
+
+<!-- === 00:13 — MPB — lâche le morceau final, CAPS === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:13</span>
+    </div>
+    <div class="msg-text">ok.</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:13</span></div>
+  <div class="msg-content">
+    <div class="msg-text">tu sais quoi</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:13</span></div>
+  <div class="msg-content">
+    <div class="msg-text">on peut très bien être TOUS LES DEUX d'accord sur les faits</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:13</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et en désaccord sur ce qu'on en fait</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text">moi je dis : dans un système structurellement inégal, le mérite individuel reste la seule variable que TOIT, maintenant, tu peux modifier</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text">donc moralement, c'est ce sur quoi tu devrais te concentrer si tu veux changer ta trajectoire</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text">pas sur Bourdieu et l'analyse des structures que de toute façon tu changeras pas tout seul</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:14</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="caps-burst">C'EST ÇA LA VRAIE QUESTION MORALE DU DÉBAT</span></div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:15</span></div>
+  <div class="msg-content">
+    <div class="msg-text"><span class="caps-burst">PAS LA DÉFINITION DE YOUNG EN 1958</span></div>
+    <div class="reactions">
+      <span class="reaction">🔥 <span class="count">3</span></span>
+      <span class="reaction">😮 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:15 — ELILOS tape les deux === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Aujourd'hui à 00:15</span>
+    </div>
+    <div class="msg-text">là MPB tu sors quelque chose d'honnête pour la première fois de la soirée</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:16</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais c'est aussi exactement là où tu changes de sujet</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:16</span></div>
+  <div class="msg-content">
+    <div class="msg-text">passer de "la méritocratie existe en France" à "voilà ce sur quoi tu devrais te concentrer moralement" c'est deux débats différents</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:16</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le premier c'est descriptif. le deuxième c'est normatif.</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:17</span></div>
+  <div class="msg-content">
+    <div class="msg-text">lydd t'as gagné le premier. MPB t'as peut-être raison sur le deuxième. et vous avez passé deux heures à ne pas vous en apercevoir</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">5</span></span>
+      <span class="reaction">🎯 <span class="count">4</span></span>
+      <span class="reaction">☝️ <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:17 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:17</span>
+    </div>
+    <div class="msg-text">certes</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais sur le normatif je suis pas d'accord non plus</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">dire "concentre-toi sur ce que tu peux changer individuellement" c'est exactement le discours libéral qui atomise les individus et empêche les luttes collectives</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:18</span></div>
+  <div class="msg-content">
+    <div class="msg-text">pour moi la réponse correcte aux inégalités structurelles c'est l'action collective</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:19</span></div>
+  <div class="msg-content">
+    <div class="msg-text">pas l'optimisation individuelle</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:19</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ironie : moi perso j'optimise individuellement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:19</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais c'est précisément parce que le système m'y contraint que je le fais et non par conviction du mérite</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:20 — MPB === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:20</span>
+    </div>
+    <div class="msg-text">c'est exactement ce que je t'ai toujours reproché</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">t'as une analyse marxiste de situation et une pratique libérale de ta vie personnelle</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:20</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et tu appelles ça de la lucidité</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:21</span></div>
+  <div class="msg-content">
+    <div class="msg-text">moi j'appelle ça de la cohérence inversée</div>
+  </div>
+</div>
+
+<!-- === 00:21 — LYDD === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:21</span>
+    </div>
+    <div class="msg-text">c'est la seule position rationnelle dans un monde capitaliste</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:21</span></div>
+  <div class="msg-content">
+    <div class="msg-text">comprendre le système pour ne pas se faire avoir par lui</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:22</span></div>
+  <div class="msg-content">
+    <div class="msg-text">dans ma tête le prime humain c'est une société communiste</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:22</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais la vie est courte alors je préfère go rentier</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:22</span></div>
+  <div class="msg-content">
+    <div class="msg-text">aucune contradiction</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">4</span></span>
+      <span class="reaction">🤡 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:23 — MPB  === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:23</span>
+    </div>
+    <div class="msg-text">"aucune contradiction"</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text">l'homme qui m'explique que la méritocratie est un mythe</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text">et qui passe ses soirées à optimiser sa SCI pour maximiser son rendement locatif</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:23</span></div>
+  <div class="msg-content">
+    <div class="msg-text">aucune contradiction effectivement</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:24</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le prolétariat appréciera</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">3</span></span>
+      <span class="reaction">🔥 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:24 — LYDD — dernier calme glacial === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:24</span>
+    </div>
+    <div class="msg-text">flemme de servir de chair à canon pour des bourgeois</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:24</span></div>
+  <div class="msg-content">
+    <div class="msg-text">perso je préfère être le bourgeois</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:24</span></div>
+  <div class="msg-content">
+    <div class="msg-text">le pognon c'est littéralement ta liberté de vivre sans dépenser ton temps de vie à travailler pour quelqu'un d'autre</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:25</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai pas dit que c'était moral</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:25</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai dit que c'était rationnel</div>
+    <div class="reactions">
+      <span class="reaction">🧊 <span class="count">4</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:25 — ELILOS final === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Aujourd'hui à 00:25</span>
+    </div>
+    <div class="msg-text">voilà c'est ça en fait la vraie conclusion du débat</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:26</span></div>
+  <div class="msg-content">
+    <div class="msg-text">la méritocratie comme système on s'en fout tous les deux</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:26</span></div>
+  <div class="msg-content">
+    <div class="msg-text">MPB veut que ses gamins y croient parce que sinon ils bossent pas</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:26</span></div>
+  <div class="msg-content">
+    <div class="msg-text">lydd y croit pas parce que ça l'arrange d'y croire pas — il se construit un système alternatif</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:27</span></div>
+  <div class="msg-content">
+    <div class="msg-text">vous débattez pas de la réalité</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:27</span></div>
+  <div class="msg-content">
+    <div class="msg-text">vous débattez de quel récit vous avez besoin pour vivre</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">7</span></span>
+      <span class="reaction">🎯 <span class="count">5</span></span>
+      <span class="reaction">🫂 <span class="count">1</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:28 — MPB FF === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-mpb">mpb</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-mpb">monpotestbon</span>
+      <span class="timestamp">Aujourd'hui à 00:28</span>
+    </div>
+    <div class="msg-text">non elilos là t'as tort</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:28</span></div>
+  <div class="msg-content">
+    <div class="msg-text">je débats pas pour mes gamins</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:28</span></div>
+  <div class="msg-content">
+    <div class="msg-text">je débats parce que je suis de bonne foi et que personne d'autre sur ce serv ne l'est</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:28</span></div>
+  <div class="msg-content">
+    <div class="msg-text">mais bon</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:29</span></div>
+  <div class="msg-content">
+    <div class="msg-text">ff ce soir</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:29</span></div>
+  <div class="msg-content">
+    <div class="msg-text">j'ai cours à 8h</div>
+    <div class="reactions">
+      <span class="reaction">😭 <span class="count">4</span></span>
+      <span class="reaction">👋 <span class="count">2</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="system-msg">monpotestbon est passé hors ligne</div>
+
+<!-- === 00:30 — LYDD dernier mot === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:30</span>
+    </div>
+    <div class="msg-text">il a cours à 8h</div>
+  </div>
+</div>
+
+<div class="msg-group">
+  <div class="avatar-continuation"><span class="ts-small">00:30</span></div>
+  <div class="msg-content">
+    <div class="msg-text">reproduction sociale du temps de sommeil du prolétariat</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">6</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- === 00:31 — ELILOS dernière pique === -->
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-elilos">eli</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-elilos">elilos</span>
+      <span class="timestamp">Aujourd'hui à 00:31</span>
+    </div>
+    <div class="msg-text">et toi t'as cours à rien parce que le temps de vie disponible</div>
+    <div class="reactions">
+      <span class="reaction">💀 <span class="count">8</span></span>
+      <span class="reaction">🔥 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="msg-group with-avatar">
+  <div class="avatar avatar-lydd">lyd</div>
+  <div class="msg-content">
+    <div class="msg-header">
+      <span class="username username-lydd">.lydd</span>
+      <span class="timestamp">Aujourd'hui à 00:31</span>
+    </div>
+    <div class="msg-text">exactement</div>
+    <div class="reactions">
+      <span class="reaction">🧊 <span class="count">3</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="system-msg">.lydd est passé en mode "Ne pas déranger"</div>
+
+<!-- NOTE FINALE -->
+<div class="narrator">
+  ↑ Fin du débat. Durée : 1h27. Victoire : 0. Définitions produites : 3 (dont 1 contestée). Alexandrins : 4. Caps lock : 7 occurrences. Cyrano : 1 invocation. Concession d'elilos : 0. Bonne foi de MPB : non vérifiable. Temps de vie disponible de lydd : préservé.
+</div>
+
+</div><!-- /messages -->
+
+</body>
+</html>

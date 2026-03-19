@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOSSIER MPB — Profil Complet</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --accent: #533483;
+    --red: #e94560;
+    --text: #e0e0e0;
+    --muted: #888;
+    --card: #1e1e3a;
+    --border: #2a2a4a;
+    --gold: #f0a500;
+    --green: #2ecc71;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.7; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 50%, #1a0a2e 100%); padding: 3rem 2rem 2rem; text-align: center; border-bottom: 2px solid var(--accent); position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(83,52,131,0.3) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(233,69,96,0.2) 0%, transparent 60%); }
+  .header h1 { font-size: 3.5rem; font-weight: 900; letter-spacing: 0.1em; color: #fff; text-shadow: 0 0 40px rgba(233,69,96,0.6); position: relative; }
+  .header h1 span { color: var(--red); }
+  .subtitle { font-size: 1rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; position: relative; }
+  .badges { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; position: relative; }
+  .badge { padding: 0.35rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .badge-pol { background: rgba(83,52,131,0.4); border: 1px solid var(--accent); color: #c9b4f0; }
+  .badge-qq { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: #f0a0b0; }
+  .badge-gen { background: rgba(240,165,0,0.15); border: 1px solid var(--gold); color: var(--gold); }
+
+  /* STATS */
+  .stats-section { padding: 2rem; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; max-width: 1200px; margin: 0 auto 2rem; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; text-align: center; }
+  .stat-num { font-size: 2rem; font-weight: 900; color: var(--red); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.3rem; }
+  .chart-wrap { max-width: 1200px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .chart-title { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  canvas { width: 100% !important; }
+
+  /* MAIN */
+  .main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .section { margin-bottom: 4rem; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
+  .section-num { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; flex-shrink: 0; }
+  .num-pol { background: var(--accent); }
+  .num-qq { background: var(--red); }
+  .num-cross { background: linear-gradient(135deg, var(--accent), var(--red)); }
+  .num-time { background: var(--gold); color: #1a1a2e; }
+  .section-title { font-size: 1.8rem; font-weight: 800; }
+  .section-subtitle { font-size: 0.9rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.8rem; margin-bottom: 1.5rem; }
+  .card-title { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .card-title.red { color: var(--red); }
+  .card-title.gold { color: var(--gold); }
+  .card-title::before { content: '▸'; }
+  .card p { color: #c0c0d0; margin-bottom: 0.8rem; font-size: 0.95rem; }
+  .card p:last-child { margin-bottom: 0; }
+  em { color: #e0c0ff; font-style: italic; }
+  .date-tag { font-size: 0.7rem; color: var(--muted); background: rgba(255,255,255,0.05); border-radius: 4px; padding: 0.1rem 0.4rem; margin-left: 0.3rem; vertical-align: middle; }
+  strong { color: #fff; }
+
+  /* DEUX COLONNES */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* VERDICT */
+  .verdict { background: linear-gradient(135deg, rgba(83,52,131,0.3), rgba(233,69,96,0.3)); border: 2px solid var(--red); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 3rem; }
+  .verdict h3 { font-size: 1.4rem; font-weight: 900; color: var(--red); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .verdict p { font-size: 1.05rem; line-height: 1.8; color: #e0d0f0; }
+
+  /* RAPPORT PSY */
+  .psy-report strong { color: #1a1a2e; }
+  .psy-report em { color: #444; font-style: italic; }
+  .psy-report { background: #f5f5f0; color: #1a1a2e; border-radius: 16px; padding: 2rem; font-family: 'Courier New', monospace; }
+  .psy-header { border-bottom: 3px double #333; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .psy-header h3 { font-size: 1rem; text-transform: uppercase; text-align: center; letter-spacing: 0.15em; }
+  .psy-header p { font-size: 0.8rem; text-align: center; color: #555; }
+  .psy-section { margin-bottom: 1.2rem; }
+  .psy-label { font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-bottom: 0.5rem; }
+  .psy-text { font-size: 0.85rem; line-height: 1.7; color: #333; }
+  .psy-ordonnance { background: #fff; border: 2px solid #333; border-radius: 8px; padding: 1rem; margin-top: 1.5rem; }
+  .psy-rx { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+  .psy-drug { margin: 0.4rem 0; font-size: 0.82rem; }
+  .psy-stamp { text-align: right; color: var(--red); font-weight: bold; margin-top: 1rem; font-size: 0.8rem; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--accent), var(--red)); border-radius: 2px; }
+  .tl-item { position: relative; margin-bottom: 2rem; padding-left: 1.5rem; }
+  .tl-dot { position: absolute; left: -2.35rem; top: 0.3rem; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent); background: var(--bg); }
+  .tl-dot.red { border-color: var(--red); }
+  .tl-dot.gold { border-color: var(--gold); }
+  .tl-year { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .tl-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+  .tl-text { font-size: 0.88rem; color: #a0a0c0; }
+
+  /* CHART BARS */
+  .bar-chart { display: flex; align-items: flex-end; gap: 2px; height: 120px; padding-top: 10px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; border-radius: 3px 3px 0 0; transition: opacity 0.2s; }
+  .bar:hover { opacity: 0.8; }
+  .bar-hour { font-size: 0.55rem; color: var(--muted); }
+
+  /* QUOTE HIGHLIGHT */
+  .quote-box { border-left: 3px solid var(--accent); padding: 0.8rem 1rem; background: rgba(83,52,131,0.1); border-radius: 0 8px 8px 0; margin: 0.8rem 0; font-size: 0.9rem; color: #d0c0f0; }
+  .quote-box.red { border-color: var(--red); background: rgba(233,69,96,0.08); color: #f0c0c0; }
+
+  /* PILLS */
+  .pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.72rem; font-weight: 600; margin: 0.15rem; }
+  .pill-purple { background: rgba(83,52,131,0.3); color: #c9b4f0; border: 1px solid var(--accent); }
+  .pill-red { background: rgba(233,69,96,0.2); color: #f0a0b0; border: 1px solid var(--red); }
+  .pill-gold { background: rgba(240,165,0,0.15); color: var(--gold); border: 1px solid var(--gold); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 2rem 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>dossier <span>monpotestbon</span></h1>
+  <div class="subtitle">analyse comportementale complète · 2019–2026 · deux canaux · un seul cas psychiatrique</div>
+  <div class="badges">
+    <span class="badge badge-pol">🏛️ Canal #politique</span>
+    <span class="badge badge-pol">Souverainiste anti-libéral</span>
+    <span class="badge badge-pol">Ragebait philosophique</span>
+    <span class="badge badge-qq">🎮 Canal #qq-only</span>
+    <span class="badge badge-qq">Main Jungle/Support</span>
+    <span class="badge badge-qq">Rageur cyclique</span>
+    <span class="badge badge-gen">📊 32 541 messages analysés</span>
+    <span class="badge badge-gen">⚡ Pic 15h–16h</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">32 541</div>
+      <div class="stat-label">Messages totaux</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">17 428</div>
+      <div class="stat-label">Messages #politique</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">15 113</div>
+      <div class="stat-label">Messages #qq-only</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2019–2026</div>
+      <div class="stat-label">Période d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">15h–16h</div>
+      <div class="stat-label">Pic horaire</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">~18/j</div>
+      <div class="stat-label">Moy. messages/jour (pol)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">~12/j</div>
+      <div class="stat-label">Moy. messages/jour (qq)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2021–22</div>
+      <div class="stat-label">Pic qq-only</div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">🕐 Distribution horaire combinée (nombre de messages par heure)</div>
+    <div class="bar-chart" id="hourChart"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- ======= PARTIE 1 : POLITIQUE ======= -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num num-pol">1</div>
+    <div>
+      <div class="section-title">Profil Canal #politique</div>
+      <div class="section-subtitle">17 428 messages · déc. 2021 – mars 2026 · pic mars 2023 et fév. 2025</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1.1 — Personnalité, style de communication et ton général</div>
+    <p>MPB débarque en décembre 2021 dans le canal politique avec la modestie d'un philosophe qui aurait raté sa vocation et décidé de se rabattre sur Discord. D'emblée, son style se distingue : il écrit vite, frappe fort, et ne recule jamais devant une formulation qui fera hurler. Son registre oscille avec une aisance déconcertante entre <strong>l'argument structuré en quatre points numérotés</strong> et le <em>« va te faire foutre, le gouloum »</em> balancé à 23h sans ciller. Cette dualité n'est pas une incohérence — c'est sa marque de fabrique.</p>
+    <p>Techniquement, MPB est un débatteur compétent. Il sait construire une thèse, répondre point par point, citer des contre-arguments avant de les démolir. On le voit sortir des données sur les salaires des parlementaires au centime près <span class="date-tag">2022-12</span>, décortiquer la logique interne de la gauche marxiste pour mieux la retourner contre ses interlocuteurs <span class="date-tag">2024-09</span>, ou expliquer pendant cinq paragraphes pourquoi comparer nazis et nationaux-socialistes est une escroquerie rhétorique <span class="date-tag">2023-03</span>. Mais ce même MPB est capable, dans la foulée, de conclure : <em>« Sur tous les Dieux et tous mes ancêtres je jure que je n'ai jamais vu quelqu'un aussi limité intellectuellement et logiquement, j'abandonne »</em> <span class="date-tag">2024-04</span>.</p>
+    <p>Son humour est acide, souvent cruel, et fonctionne par l'absurde ou l'exagération caricaturale. Il forge des expressions comme <em>« ⭐ FRENCH DREAMER ⭐ »</em> pour désigner les idéalistes de l'intégration <span class="date-tag">2022-01</span>, invente <em>« commucucks »</em> <span class="date-tag">2024-03</span>, et commente l'actualité avec des mèmes de haute volée — parmi lesquels un gif de Pétain posté en guise d'argument <span class="date-tag">2025-04</span>. L'humour n'est jamais innocent chez lui : il sert à déstabiliser, à prendre de la hauteur feinte, ou à signaler que le débat est terminé à ses yeux alors qu'il continue à parler.</p>
+    <p>Enfin, il y a cette tendance pathologique à se plaindre que <em>« les autres ne veulent pas débattre »</em> — alors que, paradoxe absolu, il est lui-même celui qui ferme les échanges avec une pirouette rhétorique ou une insulte quand l'interlocuteur lui résiste trop longtemps. C'est ce que ses proches appellent sans doute "le syndrome MPB" : vouloir le débat le plus intense possible, tout en se réservant le droit de claquer la porte.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1.2 — Positions politiques détaillées</div>
+    <p>MPB défie les cases. Il est <strong>économiquement de gauche</strong> et l'assume sans ambiguïté : <em>« Je suis très socialiste dans l'âme, mais pour un socialisme dur, un socialisme où les gens qui touchent l'aide de la solidarité nationale ont des devoirs en plus de leurs droits »</em> <span class="date-tag">2024-01</span>. Il défend la protection des travailleurs, critique l'extractivisme patronal du capitalisme, et comprend Marx mieux que certains qui se disent de gauche sur son serveur.</p>
+    <p>Mais MPB est aussi <strong>souverainiste et culturellement conservateur</strong>. Il vote entre RN et lignes souverainistes de gauche selon les élections <span class="date-tag">2024-09</span>, considère la sortie de l'UE comme <em>« la question politique la plus importante »</em> <span class="date-tag">2024-09</span>, et estime que l'appartenance nationale, l'histoire et les mœurs communes sont des valeurs qui transcendent la seule question économique. Il revendique une vision <strong>assimilationniste</strong> et non racialiste de la nation — <em>« Le mec le plus facho qu'on ait en France est un assimilationniste »</em> <span class="date-tag">2024-03</span> — tout en considérant que l'immigration non assimilée représente un problème structurel.</p>
+    <p>Il est <strong>anti-libéral économique</strong> virulent, ce qui l'amène à critiquer autant les macronistes que les libertariens. Sa critique de l'immigration est d'ailleurs formulée dans des termes anti-capitalistes : il dénonce le recours aux travailleurs précaires étrangers comme outil patronal de pression salariale <span class="date-tag">2024-09</span>. Sur l'écologie, il est <strong>jancoviciste convaincu</strong> — il cite Jancovici comme référence absolue <span class="date-tag">2023-03</span> — et va jusqu'à écrire qu'une <em>« dictature écologiste basée sur la science et la physique »</em> lui semblerait une bonne idée <span class="date-tag">2023-03</span>. Ce n'est pas une position anodine.</p>
+    <p>Sur la religion, c'est un <strong>athée convaincu</strong> qui distingue soigneusement les critiques qu'il adresse aux différentes religions — beaucoup plus sévère envers l'islam institutionnel qu'envers le catholicisme, qu'il juge avoir mieux digéré la sécularisation <span class="date-tag">2024-02</span>. Il ne s'en cache pas : c'est une position assumée, pas un réflexe xénophobe selon lui. Sur l'éducation, <strong>professeur des écoles lui-même</strong>, il développe des positions très élaborées : défense du redoublement, critique de l'affaiblissement de l'autorité enseignante, soutien à Nicole Belloubet <span class="date-tag">2024-01</span>, condamnation du nivellement par le bas.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">1.3 — Sujets de prédilection</div>
+      <p><span class="pill pill-purple">Immigration & assimilation</span> <span class="pill pill-purple">Éducation nationale</span> <span class="pill pill-purple">Laïcité & islam</span> <span class="pill pill-purple">Souveraineté vs UE</span> <span class="pill pill-purple">Retraites & travail</span> <span class="pill pill-purple">Écologie jancoviciste</span> <span class="pill pill-purple">Sociologie des classes</span> <span class="pill pill-purple">Rhétorique débatteur</span> <span class="pill pill-purple">RN & gauche souverainiste</span></p>
+      <p style="margin-top:1rem;">MPB revient <em>toujours</em> à quelques obsessions fondatrices : la délégitimation des abstentionnistes qui se plaignent sans voter, la critique de la gauche culturelle qui ne comprend pas les classes populaires, et la distinction entre patriotisme culturel et racialisme qu'il juge infranchissable. Ces sujets déclenchent ses interventions les plus longues et les plus virulentes.</p>
+    </div>
+    <div class="card">
+      <div class="card-title red">1.4 — Ragebait : conscient ou inconscient ?</div>
+      <p>La réponse est : <strong>les deux, en fonction du contexte</strong>. MPB pratique un ragebait <em>conscient et assumé</em> quand il veut secouer un débat qui s'enlise — sortir une formulation provocante pour forcer l'autre à défendre sa position. Mais il tombe aussi dans un ragebait <em>inconscient</em> lorsque ses certitudes sont attaquées sur leurs angles morts : son ton devient alors tranchant, ses conclusions plus définitives, ses insultes moins calculées.</p>
+      <p>Il est <strong>clivant dans les formes, fédérateur sur certains fonds</strong> : ses analyses sur l'éducation nationale recueillent souvent l'assentiment, sa critique du libéralisme économique aussi. C'est sur les questions culturelles et identitaires que les lignes de fracture apparaissent le plus clairement.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1.5 — Citations représentatives du canal politique</div>
+    <div class="quote-box"><em>« Désolé hein, mais si tu travailles jusqu'à 19h tous les jours et que t'es toujours smicard, c'est que la sélection est tout bonnement naturelle. »</em> <span class="date-tag">2023-03</span></div>
+    <div class="quote-box"><em>« J'ai toujours été économiquement de gauche, mais penser que le système de retraites actuel est juste c'est être delu. »</em> <span class="date-tag">2023-03</span></div>
+    <div class="quote-box"><em>« Refuser de critiquer l'Islam, c'est considérer que les musulmans ne sont pas assez matures pour voir leurs croyances rationnellement critiquées. C'est l'expression manifeste d'un racisme refoulé — el famoso racisme de gauche. »</em> <span class="date-tag">2024-04</span></div>
+    <div class="quote-box"><em>« Rappel que mon objectif quand je parle n'est pas de convaincre les autres mais d'exprimer ma pensée pour qu'on puisse m'apposer des arguments me permettant d'avoir potentiellement tort. »</em> <span class="date-tag">2024-09</span></div>
+    <div class="quote-box"><em>« La mondialisation décompose l'humain. »</em> <span class="date-tag">2025-04</span></div>
+  </div>
+</div>
+
+<!-- ======= PARTIE 2 : QQ-ONLY ======= -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num num-qq">2</div>
+    <div>
+      <div class="section-title">Profil Canal #qq-only</div>
+      <div class="section-subtitle">15 113 messages · mai 2019 – fév. 2026 · pic absolu fév–mars 2021</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title red">2.1 — Personnalité sur ce canal : comment il rage, comment il célèbre</div>
+    <p>Sur qq-only, MPB se déshabile intellectuellement. Plus de thèses, plus de paragraphes numérotés — on est dans le vif du sujet, souvent entre guillemets inexistants. Son registre de rage est spectaculaire dans sa variété : il y a la rage froide et clinique (<em>« Saute d'un pont »</em> <span class="date-tag">2021-06</span>), la rage absurde et lyrique (<em>« Hihi je vais run down parce que ma mère est une pute et que je suis pas désiré »</em> <span class="date-tag">2021-06</span> — ironique évidemment), la rage philologique (<em>« 5RYHDHJ »</em> <span class="date-tag">2022-01</span> — pur surchauffe cognitive), et la rage institutionnelle (<em>« NTM MEE6 DE MES COUILLES »</em> <span class="date-tag">2023-06</span>).</p>
+    <p>Il célèbre avec la même intensité qu'il rage, mais avec une durée de vie nettement plus courte. Un <em>« win is win »</em> <span class="date-tag">2025-01</span> ou un <em>« gg on est trop fort sa mère »</em> <span class="date-tag">2021-04</span> sont symptomatiques : la victoire est actée, le compteur repart. MPB ne savoure pas — il passe à autre chose. En revanche, les défaites, elles, l'occupent bien plus longtemps. C'est un profil de joueur qui apprend mieux de ses défaites que de ses victoires, mais qui paie ce savoir d'une santé mentale légèrement entamée.</p>
+    <p>Son rapport au jeu est celui d'un <strong>analyste qui sait exactement ce qu'il aurait dû faire</strong> — ce qui rend ses défaites encore plus insupportables que pour le commun des mortels. Quand Ransberg joue mal, MPB le tolère. Quand lui-même joue mal, la catharsis verbale est proportionnelle à la dissonance cognitive.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title red">2.2 — Niveau apparent et performances</div>
+      <p>MPB est un joueur <strong>Diamant/Master boundary</strong>, avec des ambitions vers Master qu'il évoque directement : <em>« Je crois que si je veux passer master j'ai pas le choix »</em> <span class="date-tag">2023-02</span>. Il atteint D3 après être repassé jungle <span class="date-tag">2023-12</span>. Son auto-évaluation est généralement lucide — il admet ses erreurs en lane, reconnaît ses mauvais matchup picks — mais elle est toujours légèrement tempérée par l'excuse structurelle : la méta, le rôle, les coéquipiers, l'algorithme de matchmaking.</p>
+      <p>Il a visiblement une excellente compréhension théorique du jeu — ses analyses de picks, de wave management, de power spikes sont souvent justes — mais son jeu mécanique semble parfois ne pas suivre. C'est un coach excellent piégé dans le corps d'un joueur D2.</p>
+    </div>
+    <div class="card">
+      <div class="card-title red">2.3 — Têtes de turc récurrentes</div>
+      <p><span class="pill pill-red">Joueurs ADC en général</span> <span class="pill pill-red">Tryndamere mains</span> <span class="pill pill-red">Junglers autofill</span> <span class="pill pill-red">Mid role en général</span> <span class="pill pill-red">La méta</span> <span class="pill pill-red">Ransberg (rival interne)</span> <span class="pill pill-red">Riot Games</span></p>
+      <p style="margin-top:0.8rem;">Les ADC occupent une place à part dans sa cosmogonie de la haine : <em>« niquez vos mères les adc »</em> <span class="date-tag">2019-08</span>, <em>« les adc sautez d'un pont »</em> <span class="date-tag">2023-06</span>. Sa formule la plus brillante : <em>« Les cheminots c'est les adc de LoL »</em> <span class="date-tag">2023-03</span> — critique sociale et gaming fusionnés en un seul aphorisme.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title red">2.4 — Expressions signature et argot LoL personnel</div>
+    <p>MPB a développé un dialecte gaming distinct, fait de néologismes, d'emprunts transformés et de constructions syntaxiques uniques :</p>
+    <p><span class="pill pill-red">« PAZed »</span> — se faire détruire/humilier en lane. <span class="pill pill-red">« JOAT »</span> — Jack Of All Trades, surnom attribué avec respect ou ironie. <span class="pill pill-red">« tipar »</span> — contraction de "tip top" + approbation absolue. <span class="pill pill-red">« goatesque »</span> — adjectif superlatif de qualité (<em>« Golden retriever goatesque »</em>). <span class="pill pill-red">« les palabras »</span> — expression espagnolisée qu'il utilise pour "les discours" ou "les arguments". <span class="pill pill-red">« VG »</span> — très courant, probablement "vé gé" / validation générale. <span class="pill pill-red">« weak side god »</span> <span class="date-tag">2023-09</span> — auto-description quand il joue passif mais impactant.</p>
+    <p>Il forge aussi des comparaisons conceptuelles mémorables : <em>« T'es la version Monoprix du Joat, c'est carré »</em> <span class="date-tag">2022-01</span>. L'insulte comparative par rapport à une version premium d'un autre joueur est son truc signature.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title red">2.5 — Sujets hors LoL récurrents</div>
+      <p>Le canal qq-only n'est pas exempt de digressions. On trouve régulièrement des discussions sur <strong>la théorie du jeu et le coaching</strong> (il était assistant coach d'une équipe semi-pro, le "Y" <span class="date-tag">2022-01</span>), des <strong>micro-débats sur l'éducation</strong> qui débordent du politique, et des <strong>references cinématographiques/culturelles</strong> posées comme récompenses entre les parties. Il parle aussi parfois de sa <strong>vie quotidienne de prof</strong> — ses journées, ses élèves — sans jamais vraiment couper le contact avec le jeu dans ces moments-là.</p>
+    </div>
+    <div class="card">
+      <div class="card-title red">2.6 — Rageur ou zen ? Toxic ou fair-play ?</div>
+      <p>MPB est un <strong>rageur cyclique</strong>, pas chronique. Il a des pics de violence verbale clairement liés aux périodes de grind intense (2021 notamment) et des phases plus sereines. Sur le fair-play, c'est ambigu : il déteste les toxics mais l'exprime lui-même avec une toxicité de forme différente — plus analytique, plus cérébrale. Il ne flame pas les inconnus in-game ; il flamme ses amis avec une précision chirurgicale basée sur leurs statistiques.</p>
+    </div>
+  </div>
+
+  <!-- PSY REPORT -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="background: linear-gradient(135deg, var(--accent), #2a1a6e); padding: 1rem 1.8rem; border-bottom: 1px solid var(--border);">
+      <div class="card-title" style="margin-bottom:0; color:#fff;">⚕️ 2.7 — Évaluation psychiatrique (second degré)</div>
+    </div>
+    <div class="psy-report">
+      <div class="psy-header">
+        <h3>CENTRE HOSPITALO-UNIVERSITAIRE DE DISCORD-PSYCHIATRIE<br>Service de Pathologie des Joueurs Soloqueue Chroniques</h3>
+        <p>Dossier n° 2024-LoL-MPB-001 · Médecin référent : Dr. Elohell · Confidentiel patient</p>
+      </div>
+
+      <div class="psy-section">
+        <div class="psy-label">I. Identité du patient</div>
+        <div class="psy-text">Patient se présentant sous le pseudonyme "monpotestbon" (MPB), sexe masculin, profession déclarée : enseignant des écoles, activité secondaire : philosophe de soirée tardive et jungler Diamond. Se dit lui-même "très socialiste dans l'âme" tout en votant RN selon les saisons. Orienté en consultation par ses proches qui "ne voulaient plus débattre".</div>
+      </div>
+
+      <div class="psy-section">
+        <div class="psy-label">II. Diagnostics retenus (classification DSM-DISCORD-V)</div>
+        <div class="psy-text">
+          <strong>F60.0 — Trouble de la personnalité Contradictoire-Cohérente (TPC)</strong> : Le patient présente une capacité remarquable à tenir simultanément des positions contradictoires qu'il juge parfaitement cohérentes dans son paradigme. Exemple clinique : défend les travailleurs exploités tout en estimant que ceux qui travaillent trop peu méritent leur sort via "sélection naturelle". Cette contradiction n'est pas perçue par le sujet.<br><br>
+          <strong>F60.81 — Syndrome du Débatteur Abandonné (SDA)</strong> : Besoin compulsif d'initier des débats couplé à une intolérance aux interlocuteurs qui ne répondent pas conformément à ses attentes dialectiques. Observation : <em>"je ne fais que je perds mon temps"</em> (répété 47 fois sur la période d'étude) suivi de la continuation du débat pendant 3 heures supplémentaires.<br><br>
+          <strong>F50.2 — Complexe du Coach Piégé</strong> : Le patient sait exactement ce qu'il faudrait faire au niveau Master, mais joue en Diamond. Cet écart génère une frustration chronique projetée sur ses coéquipiers, les ADC, et Riot Games dans cet ordre.<br><br>
+          <strong>F90.0 — THADA (Trouble Hyperattentionnel aux Débats Atardés)</strong> : Incapacité à laisser passer une assertion incorrecte sans intervention, même à 2h du matin, même si l'interlocuteur est manifestement de mauvaise foi.
+        </div>
+      </div>
+
+      <div class="psy-section">
+        <div class="psy-label">III. Observations cliniques notables</div>
+        <div class="psy-text">
+          Le patient présente des épisodes dissociatifs remarquables entre ses deux états : en mode "politique", il argumente sur la dignité des travailleurs et la nécessité d'une société juste ; en mode "LoL", il encourage ses coéquipiers à <em>"sauter d'un pont"</em> pour avoir mal CSé à 15 minutes. Cette alternance n'est pas vécue comme contradictoire.<br><br>
+          Observation clinique majeure : le patient a écrit un message de 8 lignes expliquant pourquoi il "abandonne" le débat, puis a envoyé 12 messages supplémentaires dans la même session. Le déni est complet et structurel.
+        </div>
+      </div>
+
+      <div class="psy-section">
+        <div class="psy-label">IV. Mécanismes de défense identifiés</div>
+        <div class="psy-text">
+          <strong>Intellectualisation</strong> : Transforme toute agression en problème philosophique. Perd une game de ranked → analyse immédiatement l'impact systémique du rôle jungle sur la dynamique de la mid lane.<br>
+          <strong>Rationalisation post-hoc</strong> : Chaque défaite est objectivement explicable par des facteurs extérieurs ; chaque victoire est le produit de son génie individuel.<br>
+          <strong>Projection pédagogique</strong> : Traite ses interlocuteurs Discord comme des élèves récalcitrants, avec la même patience — c'est-à-dire très peu.
+        </div>
+      </div>
+
+      <div class="psy-section">
+        <div class="psy-label">V. Pronostic</div>
+        <div class="psy-text">Réservé. Le patient présente une conscience suffisante de ses contradictions (<em>"Rappel que mon objectif quand je parle n'est pas de convaincre"</em> <span style="background:#eee; padding:0 3px; border-radius:3px; font-size:0.75rem;">2024-09</span>) pour que le pronostic ne soit pas totalement sombre, mais une confiance en soi structurellement imperméable aux contre-arguments réels. Il ne guérira pas ; il affinera.</div>
+      </div>
+
+      <div class="psy-ordonnance">
+        <div class="psy-rx">℞ Ordonnance</div>
+        <div class="psy-drug">• <strong>Humilité Compound 200mg</strong> — 3 prises/jour, de préférence avant d'ouvrir Discord (observance attendue : nulle)</div>
+        <div class="psy-drug">• <strong>ADC-Tolérance 50mg</strong> — à prendre après chaque défaite attribuée au rôle (posologie augmentable selon saison)</div>
+        <div class="psy-drug">• <strong>Vitamines Cohérence Idéologique 1000mg</strong> — pour réconcilier le MPB socialiste et le MPB qui vote RN selon les vents</div>
+        <div class="psy-drug">• <strong>Sirop Détente Soloqueue 30ml</strong> — à avaler avant chaque ranked (contre-indiqué avec la pensée analytique)</div>
+        <div class="psy-drug">• <strong>Comprimés Fin de Débat 10mg</strong> — à croquer quand on dit qu'on arrête le débat (usage prévu : 0 fois)</div>
+        <div class="psy-stamp">Signé : Dr. Elohell, Psychiatre des Eaux Profondes — Soloqueue Hospital ™</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= PARTIE 3 : CONFRONTATION ======= -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num num-cross">3</div>
+    <div>
+      <div class="section-title">Confrontation des deux canaux</div>
+      <div class="section-subtitle">Le même MPB ou deux personnes différentes ?</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3.1 — Est-ce le même MPB sur les deux canaux ?</div>
+    <p>Oui — et cette continuité est précisément ce qui le rend fascinant. MPB ne joue pas de personnage selon le canal ; il <em>module</em>. Sur #politique, il met le costume du débatteur structuré, mais les mêmes pulsions sous-jacentes sont visibles : l'impatience face à l'interlocuteur jugé insuffisant, la tentation de la formule cinglante, le refus de l'approximation. Sur #qq-only, il se libère des contraintes formelles mais reproduit exactement les mêmes patterns : analyse d'abord, émotion ensuite (parfois inversé dans les grosses défaites), et toujours ce besoin de <em>nommer</em> le problème pour en reprendre le contrôle.</p>
+    <p>La preuve la plus flagrante : sur les deux canaux, MPB clôt ses interventions par des formules définitives. En politique : <em>« j'abandonne »</em> suivi de douze messages. En LoL : <em>« je supporte plus »</em> suivi d'une nouvelle game. La structure psychologique est identique — seul le vocabulaire change.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">3.2 — Les positions politiques se reflètent dans le jeu ?</div>
+      <p>Absolument. Son anti-libéralisme se traduit in-game par une <strong>hostilité viscérale envers les passagers clandestins</strong> — les joueurs qui "profitent" du système sans contribuer, exactement comme les assistés sociaux qui "vivent sur le dos des autres" selon son analyse politique. Sa vision souverainiste (le groupe prime sur l'individu) se retrouve dans ses analyses LoL : il critique les joueurs qui "jouent pour eux" plutôt que pour la team, les ADC qui refusent de peel, etc.</p>
+      <p>Plus subtil : son <em>« Oui, c'est également cette logique qui me pousse à run down les games de mecs qui sont toxics dans la victoire »</em> <span class="date-tag">2024-04</span> révèle un sens de la justice punitive qui traverse ses deux univers.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">3.3 — Sur quel canal est-il le plus lui-même ?</div>
+      <p>Sur <strong>#qq-only</strong>, sans hésitation. Le politique-MPB est brillant mais construit — il sait qu'il est en représentation, qu'il "débat". Le qq-MPB est brut : ses réactions sont immédiates, ses formules non calculées, ses accès de joie ou de rage non filtrés. C'est là qu'on voit vraiment comment il traite les gens qu'il aime (en les insultant affectueusement), comment il gère l'échec (pas bien, mais avec lucidité post-mortem), et quelle est sa vitesse de récupération émotionnelle (élevée).</p>
+      <p>Le politique donne la <em>façade</em>. Le qq-only donne <em>l'infrastructure</em>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3.4 — Mécanismes de ragebait : mêmes dans les deux contextes ?</div>
+    <p>Le ragebait politique de MPB repose sur <strong>l'affirmation provocante posée comme évidence</strong> puis défendue avec des arguments — ce qui oblige l'interlocuteur à réfuter une position qu'il n'attendait pas. Son ragebait LoL repose sur <strong>le diagnostic cinglant et définitif</strong> : <em>« Je pense que tu es le point commun entre toutes tes défaites »</em> <span class="date-tag">2021-02</span>. Dans les deux cas, le mécanisme est identique : MPB prend une position forte, impose le terrain du débat, et laisse l'autre réagir. La différence est que sur LoL, il ne cherche pas réellement à convaincre — il libère une pression. En politique, il cherche parfois genuinement à débattre, ce qui rend ses dérapages vers le ragebait pur d'autant plus révélateurs.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3.5 — Citations croisées : quand les deux facettes se rejoignent</div>
+    <div class="quote-box"><em>Canal qq-only :</em> <em>« Les cheminots c'est les adc de LoL »</em> <span class="date-tag">2023-03</span> — la grève des retraites comparée au rôle le plus protégé et le moins contributif du jeu. Toute la pensée politique de MPB en une formule gaming.</div>
+    <div class="quote-box"><em>Canal politique :</em> <em>« Je vois rien d'anti démocratique au 49.3, si vous vouliez des motions de censures fallait pas voter LR et LREM »</em> <span class="date-tag">2023-03</span> — même énergie que quand il dit "t'avais qu'à jouer Janna si tu voulais du peel".</div>
+    <div class="quote-box red"><em>Canal qq-only :</em> <em>« POV : Tu gagnes la game en jungle en sécurisant 6 grubs, 4 drakes à 0, l'herald, Atakhan, le Nashor et l'Elder »</em> <span class="date-tag">2025-01</span> — énergie identique à son canal politique quand il liste point par point ses arguments avant l'attaque finale.</div>
+  </div>
+</div>
+
+<!-- ======= PARTIE 4 : ÉVOLUTION ======= -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num num-time">4</div>
+    <div>
+      <div class="section-title">Évolution dans le temps</div>
+      <div class="section-subtitle">Le MPB de 2026 est-il le même qu'en 2019 ?</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2019–2020 · Genèse</div>
+      <div class="tl-title">Le Joueur Brut</div>
+      <div class="tl-text">MPB n'existe encore que sur qq-only. Ses messages sont courts, réactifs, purement gaming. Il joue support et jungle, rage sobrement contre les ADC, et n'a pas encore développé la philosophie verbale qui le caractérisera. C'est déjà lui — la colère est là — mais le verbe n'est pas encore aussi articulé. Volume modéré : ~300 messages en 2019.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2021 · L'Explosion</div>
+      <div class="tl-title">8197 messages sur qq-only — Pic historique absolu</div>
+      <div class="tl-text">L'année 2021 est l'annus horribilis du joueur et l'annus mirabilis du rageur. Avec 8197 messages sur qq-only en une seule année (dont 1942 en février seul — soit ~70/jour), MPB atteint un état de transe gaming. Il grind jour et nuit, développe ses positions théoriques sur le jeu, instaure des débats de fond sur le rôle jungle/support, et peaufine son répertoire d'insultes. Le canal politique n'existe pas encore — toute l'énergie passe par le jeu.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-year">Décembre 2021 · Bifurcation</div>
+      <div class="tl-title">Entrée sur #politique — le philosophe naît</div>
+      <div class="tl-text">Son premier message politique est <em>« Les boomers sont des fils de pute sah »</em> — annonce de couleur. L'énergie commence à se déplacer vers le canal politique. L'activité qq-only entame une décroissance progressive (1722 messages en 2022 vs 8197 en 2021). MPB ne quitte pas le jeu, mais il trouve une nouvelle scène pour ses besoins de confrontation intellectuelle.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2022–2023 · La Montée en Puissance Politique</div>
+      <div class="tl-title">Le Débatteur Structuré émerge</div>
+      <div class="tl-text">MPB devient progressivement la figure dominante de #politique. Ses messages s'allongent considérablement : il passe d'interventions réactives à de vraies thèses développées. Mars 2023 est son pic absolu sur politique (1361 messages) — coïncidant avec la contestation de la réforme des retraites, sujet qu'il suivra avec passion. Sa position s'affine : ni droite pure ni gauche classique, mais un souverainisme économique-gauche / culturel-droite assumé. Il commence aussi à mentionner son métier de professeur, ce qui ancre ses prises de position dans une expérience concrète.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-year">2023–2024 · Consolidation</div>
+      <div class="tl-title">Le MPB "mature" — mais pas assagi</div>
+      <div class="tl-text">Les positions se stabilisent sans s'adoucir. MPB sait désormais très bien où il se situe, cite Jancovici comme référence écologique, Mélenchon/Ruffin pour la gauche souverainiste, et n'hésite plus à affirmer qu'il vote RN par pragmatisme tout en restant économiquement à gauche. Sur LoL, le retour à la jungle en 2023 signe une renaissance : D3, puis ambitions Master. L'activité qq-only remonte légèrement (2108 messages en 2023 vs 1722 en 2022) grâce à une saison de ranked intensive.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-year">2025 · Affinage et Apaisement relatif</div>
+      <div class="tl-title">Le Professeur-Philosophe</div>
+      <div class="tl-text">2025 est l'année de la maturité relative. Sur politique, ses messages les plus longs révèlent une pensée plus nuancée sur l'éducation (il parle de ses classes avec une affection authentique), une critique plus subtile de l'islam (il distingue les croyants des institutions), et des moments rares de doute : <em>« encore une idée brillante qui émerge de mon cerveau sans avoir besoin de lire »</em> <span class="date-tag">2026-01</span> — l'auto-ironie arrive. Sur LoL, l'activité qq-only chute à 705 messages en 2025 : le jeu prend moins de place. Le MPB de 2025 rage moins, mais plus précisément.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-year">2026 · Snapshot</div>
+      <div class="tl-title">En orbite stable — pour l'instant</div>
+      <div class="tl-text">Les données de début 2026 montrent un MPB qui continue sur politique au rythme soutenu (561 messages en 3 mois, soit un rythme annuel similaire aux années précédentes), mais dont l'activité LoL est quasi nulle (37 messages). Le philosophe a mangé le joueur. Pour combien de temps ?</div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col" style="margin-top: 2rem;">
+    <div class="card">
+      <div class="card-title gold">Positions politiques : radicalisation ou affinage ?</div>
+      <p>MPB ne s'est pas radicalisé — il s'est <strong>précisé</strong>. Le MPB de 2022 avait des positions similaires mais moins articulées, moins sourçées, et plus réactives. Le MPB de 2025 sait exactement pourquoi il pense ce qu'il pense, peut distinguer les nuances dans son propre camp, et reconnaît (parfois) ses angles morts. Il est devenu plus difficile à battre en débat, ce qui est une bonne ou une mauvaise nouvelle selon qu'on partage ou non ses vues.</p>
+    </div>
+    <div class="card">
+      <div class="card-title gold">Projection à 5 ans</div>
+      <p>Sur le plan politique : MPB sera probablement un <strong>commentateur politique local</strong> — peut-être élu municipal, sûrement actif dans une association de parents d'élèves ou un syndicat d'enseignants atypique. Son souverainisme s'affirmera encore, ses positions sur l'éducation deviendront le cœur de son identité publique.</p>
+      <p>Sur LoL : il aura <strong>"arrêté définitivement"</strong> au moins trois fois, rechute garantie à chaque nouvelle saison. Il n'atteindra probablement jamais Master mais continuera d'en parler comme d'un objectif raisonnable et imminent.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT FINAL -->
+<div class="verdict">
+  <h3>⚡ Verdict Final — MPB dans sa globalité</h3>
+  <p>
+    MPB est un <strong>intellectuel populiste du bas-Empire Discord</strong> : il a la rigueur rhétorique d'un débatteur de prépa, le vocabulaire d'un joueur de cité en rage, et l'idéologie hybride de quelqu'un qui a lu suffisamment pour ne plus être récupérable par aucun camp. Il est profondément sincère dans ses convictions — ce qui le rend d'autant plus frustrant pour ses interlocuteurs — et profondément incapable d'accepter qu'on lui résiste sans qu'il y voie une question de mauvaise foi ou de limite intellectuelle. 
+  </p>
+  <p style="margin-top:1rem;">
+    Son vrai talent est d'être <strong>le même partout</strong> : que ce soit en train de défendre l'assimilation républicaine contre les postcolonialistes ou en train d'expliquer pourquoi les ADC sont structurellement en tort, MPB mobilise la même énergie, la même méthode, le même acharnement. Il ne change pas de personnalité — il change de terrain. Et c'est précisément pour ça qu'au fond, tout le monde l'aime bien.
+  </p>
+</div>
+
+</div><!-- /main -->
+
+<div style="text-align:center; padding: 2rem; color: var(--muted); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 2rem;">
+  Analyse générée à partir de 32 541 messages Discord · canal #politique (déc 2021–mars 2026) & #qq-only (mai 2019–fév 2026) · Toutes les citations sont authentiques et datées
+</div>
+
+<script>
+// Hourly chart
+const polHours = {"0":425,"1":371,"2":189,"3":15,"4":4,"5":17,"6":50,"7":98,"8":333,"9":503,"10":822,"11":1011,"12":994,"13":1262,"14":1538,"15":1645,"16":1282,"17":1388,"18":1278,"19":936,"20":1253,"21":829,"22":706,"23":479};
+const qqHours = {"0":771,"1":470,"2":387,"3":290,"4":24,"5":6,"6":32,"7":62,"8":79,"9":214,"10":400,"11":550,"12":693,"13":1025,"14":991,"15":934,"16":1416,"17":1124,"18":999,"19":797,"20":864,"21":791,"22":1050,"23":1144};
+
+const container = document.getElementById('hourChart');
+const maxVal = Math.max(...Object.keys(polHours).map(h => (polHours[h]||0)+(qqHours[h]||0)));
+
+for(let h=0; h<24; h++){
+  const pol = polHours[h] || 0;
+  const qq = qqHours[h] || 0;
+  const total = pol + qq;
+  const pct = (total / maxVal) * 100;
+  const polPct = total > 0 ? (pol / total) * 100 : 0;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'bar-wrap';
+  
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  bar.style.height = pct + '%';
+  bar.style.background = `linear-gradient(to bottom, #533483 ${polPct}%, #e94560 ${polPct}%)`;
+  bar.title = `${h}h — Pol: ${pol}, QQ: ${qq}`;
+  
+  const label = document.createElement('div');
+  label.className = 'bar-hour';
+  label.textContent = h;
+  
+  wrap.appendChild(bar);
+  wrap.appendChild(label);
+  container.appendChild(wrap);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 24px;
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border-radius: 16px;
+    border: 1px solid #533483;
+  }
+  .username {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e94560;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    color: #a0a0c0;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #e9456015;
+    color: #e94560;
+    border: 1px solid #e9456040;
+  }
+  .badge.purple { background: #53348315; color: #a380f0; border-color: #53348340; }
+  .badge.green  { background: #1a4a2a15; color: #60c080; border-color: #1a4a2a40; }
+  .badge.blue   { background: #0f346015; color: #60a0e9; border-color: #0f346040; }
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e94560;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #8080a0;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .card {
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card.full { grid-column: span 2; }
+  .card-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #533483;
+    font-weight: 700;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2a2a4a;
+    padding-bottom: 8px;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .tag.red    { background: #e9456020; color: #e94560; border: 1px solid #e9456040; }
+  .tag.purple { background: #53348320; color: #a380f0; border: 1px solid #53348340; }
+  .tag.blue   { background: #0f346020; color: #60a0e9; border: 1px solid #0f346040; }
+  .tag.green  { background: #1a4a2a20; color: #60c080; border: 1px solid #1a4a2a40; }
+  .tag.orange { background: #4a2a0020; color: #e09060; border: 1px solid #e0906040; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 0.8rem; color: #a0a0c0; width: 160px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: #2a2a4a; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { font-size: 0.75rem; color: #6060a0; width: 35px; text-align: right; }
+  .quote {
+    background: #0f1a2e;
+    border-left: 3px solid #533483;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.83rem;
+    color: #c0c0d8;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .quote .meta { color: #533483; font-size: 0.72rem; font-style: normal; margin-top: 5px; }
+  .meter { margin-bottom: 12px; }
+  .meter-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .meter-name { font-size: 0.82rem; color: #c0c0d8; }
+  .meter-score { font-size: 0.82rem; font-weight: 700; color: #e94560; }
+  .meter-track { height: 10px; background: #2a2a4a; border-radius: 5px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 5px; }
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e, #2a0a3e);
+    border: 1px solid #e94560;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .verdict-label { font-size: 0.75rem; color: #e94560; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .verdict-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.5; }
+  .verdict-sub { font-size: 0.82rem; color: #a080b0; margin-top: 8px; }
+  .hour-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; margin-top: 8px; }
+  .hour-bar { flex: 1; border-radius: 2px 2px 0 0; min-height: 2px; position: relative; }
+  .hour-bar:hover::after {
+    content: attr(data-h) 'h';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .hour-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .hour-lbl { font-size: 0.65rem; color: #6060a0; }
+  .evo-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px; }
+  .evo-year { font-size: 0.78rem; color: #8080a0; width: 35px; flex-shrink: 0; padding-top: 2px; }
+  .evo-text { font-size: 0.8rem; color: #c0c0d8; flex: 1; line-height: 1.5; }
+  .evo-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+
+  .paradox-box {
+    background: #0f1a2e;
+    border: 1px solid #533483;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: #c0c0d8;
+    line-height: 1.6;
+  }
+  .paradox-box strong { color: #a380f0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .mini-card {
+    background: #0f1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: #a0a0c0;
+    line-height: 1.5;
+  }
+  .mini-card strong { color: #60c080; display: block; margin-bottom: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+  .mini-card.warn strong { color: #e09060; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="username">Kaspei</div>
+  <div class="subtitle">alias tiisolz · Profil Discord · Serveur privé francophone · 2021–2026</div>
+  <div class="badge-row">
+    <span class="badge">🏛 Libéral économique</span>
+    <span class="badge purple">⚛️ Pro-nucléaire</span>
+    <span class="badge green">🇫🇷 Breton revendiqué</span>
+    <span class="badge blue">🕵️ L'infiltré du public</span>
+    <span class="badge">🏓 Ragebait ping pong</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num">3 571</div>
+    <div class="stat-label">Messages totaux</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">433</div>
+    <div class="stat-label">Liens partagés</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">166</div>
+    <div class="stat-label">Tirades &gt; 300c</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">15h</div>
+    <div class="stat-label">Pic d'activité</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">54%</div>
+    <div class="stat-label">Messages 2022</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">33</div>
+    <div class="stat-label">Usages de "goat"</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- Personnalité -->
+  <div class="card">
+    <div class="card-title">🧠 Traits de personnalité</div>
+    <div class="tag-row">
+      <span class="tag red">Pédagogue compulsif</span>
+      <span class="tag purple">Données-dépendant</span>
+      <span class="tag blue">Troll calibré</span>
+      <span class="tag orange">Cohérence de fer</span>
+      <span class="tag green">Autodérision ponctuelle</span>
+    </div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;margin-top:8px;">
+      Profil du <em>pédagogue qui ne peut pas s'arrêter</em> : il entre dans un débat avec un plan, des sources et un argumentaire structuré, et ne repart que quand il a fermé tous les angles. Grande confiance dans la qualité de sa préparation — justifiée la plupart du temps. Ses pics de frustration sont rares mais caractéristiques : <em>"ça m'extermine"</em>, <em>"j'ai envie de me jeter par la fenêtre"</em>, jamais de caps lock ni de perte de contrôle.
+    </p>
+  </div>
+
+  <!-- Style de communication -->
+  <div class="card">
+    <div class="card-title">✍️ Style de communication</div>
+    <div class="bar-row"><div class="bar-label">Oral transcrit / relax</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:#e94560;"></div></div><div class="bar-val">55%</div></div>
+    <div class="bar-row"><div class="bar-label">Prose argumentée</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#533483;"></div></div><div class="bar-val">30%</div></div>
+    <div class="bar-row"><div class="bar-label">Données & chiffres</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#60a0e9;"></div></div><div class="bar-val">20%</div></div>
+    <div class="bar-row"><div class="bar-label">Ton professoral</div><div class="bar-track"><div class="bar-fill" style="width:45%;background:#e09060;"></div></div><div class="bar-val">45%</div></div>
+    <div class="bar-row"><div class="bar-label">Réactions courtes</div><div class="bar-track"><div class="bar-fill" style="width:46%;background:#60c080;"></div></div><div class="bar-val">46%</div></div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">46% de messages &lt;50c. Les 4% longs (&gt;300c) concentrent l'essentiel de la substance intellectuelle. Utilise "bah" (75×), "putain" (27×), "mdr" (39×) — il reste familier même dans ses argumentaires les plus denses.</p>
+  </div>
+
+  <!-- Rythme d'activité -->
+  <div class="card">
+    <div class="card-title">🕐 Rythme d'activité</div>
+    <div class="hour-chart" id="hourChart"></div>
+    <div class="hour-labels">
+      <span class="hour-lbl">0h</span>
+      <span class="hour-lbl">6h</span>
+      <span class="hour-lbl">12h</span>
+      <span class="hour-lbl">18h</span>
+      <span class="hour-lbl">23h</span>
+    </div>
+    <p style="font-size:0.78rem;color:#8080a0;margin-top:10px;">Pic net à <strong style="color:#e94560;">15h</strong> (422 msgs) — profil diurne, actif dès 11h, plateau 11h–23h. Quasi-absent après minuit (139 msgs nocturnes 0–3h). Contraste fort avec MPB. <strong style="color:#e94560;">Pic d'activité absolu : mars–avril 2022</strong> (présidentielle, 836 msgs en 2 mois).</p>
+  </div>
+
+  <!-- Sujets -->
+  <div class="card">
+    <div class="card-title">📌 Sujets de prédilection</div>
+    <div class="bar-row"><div class="bar-label">Économie & libéralisme</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:#e94560;"></div></div><div class="bar-val">264</div></div>
+    <div class="bar-row"><div class="bar-label">Politique française</div><div class="bar-track"><div class="bar-fill" style="width:88%;background:#533483;"></div></div><div class="bar-val">253</div></div>
+    <div class="bar-row"><div class="bar-label">Ukraine & géopolitique</div><div class="bar-track"><div class="bar-fill" style="width:45%;background:#60a0e9;"></div></div><div class="bar-val">93</div></div>
+    <div class="bar-row"><div class="bar-label">Nucléaire & énergie</div><div class="bar-track"><div class="bar-fill" style="width:38%;background:#a380f0;"></div></div><div class="bar-val">72</div></div>
+    <div class="bar-row"><div class="bar-label">Gaming / culture</div><div class="bar-track"><div class="bar-fill" style="width:28%;background:#e09060;"></div></div><div class="bar-val">70</div></div>
+    <div class="bar-row"><div class="bar-label">Immo & démographie</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:#60c080;"></div></div><div class="bar-val">59</div></div>
+    <div class="bar-row"><div class="bar-label">Fonctionnaire & travail</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:#e9b060;"></div></div><div class="bar-val">45</div></div>
+    <div class="bar-row"><div class="bar-label">Ping pong (trolling)</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:#e94560;"></div></div><div class="bar-val">15</div></div>
+  </div>
+
+  <!-- Évolution politique -->
+  <div class="card full">
+    <div class="card-title">🗳️ Positions politiques & évolution (2021–2026)</div>
+    <div class="evo-row"><div class="evo-year">2021</div><div class="evo-dot" style="background:#533483;"></div><div class="evo-text">Arrivée sur le serveur fin décembre. Sceptique assumé sur le pass sanitaire — pas anti-vax (<em>"triple dosé"</em>), mais critique la logique d'efficacité : le vaccin ne bloque pas la transmission à 90% comme promis, donc le pass est inutile. Capitalisme défendu sans gêne, communisme rejeté avec emphase. Macron pas encore une conviction, Zemmour jugé sans prestance présidentielle.</div></div>
+    <div class="evo-row"><div class="evo-year">2022</div><div class="evo-dot" style="background:#e94560;"></div><div class="evo-text"><strong style="color:#e94560;">Année la plus dense du corpus (1 936 msgs, 54%)</strong>. La présidentielle le mobilise entièrement mars–avril. Vote Macron au 2e tour par sélection de programme, pas par adhésion. Liste ses convergences : nucléaire, souveraineté industrielle, défense européenne, 30 Mds investissement. Corrige méticuleusement les amalgames Lepen/Mélenchon sur le serveur. Constitutionnaliste amateur passionné : cite l'article 8, la loi du 3 juin 1958, les conventions de la cohabitation.</div></div>
+    <div class="evo-row"><div class="evo-year">2023</div><div class="evo-dot" style="background:#e09060;"></div><div class="evo-text">Activité en baisse (851 msgs). Consolidation du positionnement libéral. Prédit dès mars 2023 une victoire RN aux présidentielles suivantes — lucidité froide, pas de panique morale. Commence à s'intéresser à Lisnard via son programme 2021 (<em>"j'aime : retraite à 62 ans + capitalisation"</em>). Énergie : défense du nucléaire en contexte crise ukrainienne, critiques précises sur EDF et le problème de main-d'œuvre de maintenance.</div></div>
+    <div class="evo-row"><div class="evo-year">2024</div><div class="evo-dot" style="background:#a380f0;"></div><div class="evo-text">Très faible activité (183 msgs). Analyse froide du contexte post-législatives : Macron coincé, Barnier comme seule issue, RN en position d'arbitre provisoire. Suit l'immobilier et la démographie (données décennales précises sur les prix/taux). Premier intérêt explicite pour les questions de SMIC vs salaire — distinction cotisations/impôts vulgarisée pour le serveur.</div></div>
+    <div class="evo-row"><div class="evo-year">2025</div><div class="evo-dot" style="background:#60a0e9;"></div><div class="evo-text">Retour en force (383 msgs). <strong style="color:#60a0e9;">Radicalisation libérale documentée.</strong> Grands débats sur taxe Zucman (argumentation technique très dense : liquidité des parts, décote forcée, dividendes vs réinvestissement). Fuite des millionnaires UK post-non-dom suivie en temps réel. Lisnard devient la référence explicite. Installe le leitmotiv "boomers bloquent tout" (retraites, immo, réformes). Fonctionnaire à la DGFIP — insider qui critique le système de l'intérieur.</div></div>
+    <div class="evo-row"><div class="evo-year">2026</div><div class="evo-dot" style="background:#60c080;"></div><div class="evo-text">Activité soutenue (196 msgs sur 2,5 mois). Lisnard omniprésent comme horizon 2027 (<em>"j'attends son score de dictateur africain"</em>). Attractivité française / IDE avec chiffres précis (0,5% entreprises = 13% emplois = 21,1% CA). Analyse de la perception internationale dégradée de la France. Ping pong assumé comme ragebait pur, dit textuellement en février 2026.</div></div>
+  </div>
+
+  <!-- Citations -->
+  <div class="card full">
+    <div class="card-title">💬 Citations représentatives</div>
+    <div class="quote">
+      "Je suis un golem, j'ai ma 3ème dose, j'attends ma 4ème dose prévue pour le 21 mars afin de continuer ma vie d'avant."
+      <div class="meta">Déc. 2021 — sarcasme sur le pass sanitaire, dès son arrivée sur le serveur. Le ton est posé d'emblée.</div>
+    </div>
+    <div class="quote">
+      "Le fait est qu'aujourd'hui on vit dans une société capitaliste (qui moi ne me dérange pas) avec ses qualités et ses défauts (je préfère mourir que de vivre dans une société communiste), et qu'aujourd'hui on a besoin d'avoir une classe sociale composée de pauvres pour que le système tienne."
+      <div class="meta">Jan. 2022 — libéralisme sans ornements, avec une lucidité systémique qui surprend</div>
+    </div>
+    <div class="quote">
+      "Comme j'ai dit, c'est pas un vote de conviction profond que j'ai envers Macron, mais c'est là où j'ai mes idées qui s'y ressemblent le plus : constructions de nouveaux réacteurs nucléaires, volonté d'investir massivement dans l'indépendance agricole et industrielle de la France, pro européen, investissement de 30 milliards dans les secteurs stratégiques."
+      <div class="meta">Avr. 2022 — le vote rationnel par liste de convergences, pas par adhésion</div>
+    </div>
+    <div class="quote">
+      "Ce qu'essaie encore une fois de faire MPB, c'est de combler son ennui en provoquant des débats houleux afin de satisfaire son plaisir personnel, je vous invite donc à l'ignorer."
+      <div class="meta">Mars 2022 — diagnostic de MPB, dit deux fois à la suite. Lucide sur les autres, moins sur lui-même.</div>
+    </div>
+    <div class="quote">
+      "Mais quel système libéral en France ? 57% de notre PIB part dans les dépenses publiques, on est encore plus socialiste que la Chine qui se revendique elle même comme 'un État socialiste de dictature démocratique populaire' (57% vs 33%)."
+      <div class="meta">Sept. 2025 — l'argument choc favori, sorti comme conclusion de débat</div>
+    </div>
+    <div class="quote">
+      "Les entreprises étrangères installées en France représentent 0,5% des entreprises en France mais elles représentent pourtant 13% des employés en France [...] Ces mêmes entreprises étrangères réalisent 21,1% du chiffre d'affaires total en France."
+      <div class="meta">Fév. 2026 — chiffres IDE sortis de mémoire, dans un débat sur l'attractivité. Typique du style 2025-2026.</div>
+    </div>
+    <div class="quote">
+      "Après moi je trashtalk le ping pong parce que ça me fait rire de ragebait Zoller, mais en réalité je m'en branle complet, juste j'arrive pas à prendre ce sport au sérieux."
+      <div class="meta">Fév. 2026 — méta-transparence absolue sur son propre ragebait. Une rareté.</div>
+    </div>
+    <div class="quote">
+      "Aujourd'hui on m'a dit que j'avais rien à faire dans la fonction publique, que je m'étais perdu, que j'avais largement plus un profil dans le privé, j'ai presque pleuré de joie je vais pas mentir."
+      <div class="meta">Fév. 2026 — l'identité de l'infiltré, condensée en une phrase. Autodérision et fierté mélangées.</div>
+    </div>
+  </div>
+
+  <!-- Ragebait-o-mètre -->
+  <div class="card">
+    <div class="card-title">🌡️ Ragebait-o-mètre</div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Ragebait conscient (ping pong)</span><span class="meter-score">10/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:100%;background:linear-gradient(90deg,#533483,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Ragebait politique (involontaire)</span><span class="meter-score">4/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:40%;background:linear-gradient(90deg,#0f5460,#60a0e9);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Volonté d'avoir raison</span><span class="meter-score">8.5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:85%;background:linear-gradient(90deg,#e09060,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Qualité argumentative réelle</span><span class="meter-score">8/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:80%;background:linear-gradient(90deg,#1a4a2a,#60c080);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Cohérence idéologique (4 ans)</span><span class="meter-score">9/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:90%;background:linear-gradient(90deg,#4a1a4a,#a380f0);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Personnalité clivante</span><span class="meter-score">6/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:60%;background:linear-gradient(90deg,#533483,#a380f0);"></div></div>
+    </div>
+  </div>
+
+  <!-- Le paradoxe de l'infiltré -->
+  <div class="card">
+    <div class="card-title">🕵️ Le paradoxe de l'infiltré</div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;">
+      Fonctionnaire à la <strong style="color:#a380f0;">DGFIP (Direction des Finances Publiques)</strong>, il milite pour moins de fonctionnaires, des concours plus sélectifs et une rémunération concentrée sur les "cracks". Il juge "aberrant" le logement social fonctionnaire parisien à loyer divisé par 3 — dont il bénéficie probablement.
+    </p>
+    <div class="paradox-box">
+      <strong>Ce qu'il dit :</strong> "Personnellement je suis pour la suppression de postes afin d'être mieux payé — il y a trop de parasites qui servent à rien." <em style="color:#6060a0;">(juil. 2025)</em>
+      <br><br>
+      <strong>Ce qu'il est :</strong> Fonctionnaire de catégorie A qui connaît les grilles, les concours internes, les logements de fonctionnaires et les avantages du statut de l'intérieur.
+      <br><br>
+      <strong>Sa réponse :</strong> Il est conscient de la contradiction, ne la fuit pas, et s'en amuse. C'est le propre de l'infiltré — pas un imposteur, un libéral qui fait le job mieux que les autres en attendant que le système change.
+    </div>
+
+    <div class="two-col" style="margin-top:12px;">
+      <div class="mini-card">
+        <strong>✅ Cohérences fortes</strong>
+        Nucléaire · IDE & attractivité · Anti-taxe Zucman · Décentralisation · Retraite capitalisation · Lisnard
+      </div>
+      <div class="mini-card warn">
+        <strong>⚡ Tensions internes</strong>
+        Fonctionnaire vs anti-fonctionnaires · Macroniste → désillusionné · Bénéficiaire du système qu'il critique
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamiques relationnelles -->
+  <div class="card full">
+    <div class="card-title">🤝 Dynamiques relationnelles sur le serveur</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="quote" style="margin:0;">
+        <strong style="color:#e94560;font-style:normal;font-size:0.75rem;">VS MPB</strong><br>
+        Rapport de miroir inversé. Kaspei diagnostique MPB comme "comblant son ennui par des débats houleux" — puis fait exactement la même chose avec le ping pong. Respect mutuel implicite entre les deux producteurs de débats du serveur.
+        <div class="meta">Déc. 2022 : "MPB est très fort pour nous inciter à lui répondre, le meilleur dans son domaine"</div>
+      </div>
+      <div class="quote" style="margin:0;">
+        <strong style="color:#a380f0;font-style:normal;font-size:0.75rem;">VS ZOLLER</strong><br>
+        La cible désignée du ping pong. Relation purement ludique, assumée comme telle. Kaspei provoque, Zoller rage, tout le monde est satisfait. Aucune animosité réelle — c'est du théâtre relationnel revendiqué.
+        <div class="meta">"Je trashtalk le ping pong parce que ça me fait rire de ragebait Zoller" — fév. 2026</div>
+      </div>
+      <div class="quote" style="margin:0;">
+        <strong style="color:#60c080;font-style:normal;font-size:0.75rem;">VS RANSBERG (11 mentions)</strong><br>
+        Le plus souvent cité. Rapport de débat direct et récurrent. Kaspei reformule, recadre, cite des articles de Constitution. Ransberg semble être son interlocuteur principal sur le fond.
+        <div class="meta">Cité dans des discussions droit constitutionnel, écologie, immigration</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bretagne -->
+  <div class="card">
+    <div class="card-title">🌊 Identité bretonne</div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;">
+      La Bretagne n'est pas qu'une origine géographique — c'est une identité mobilisée ponctuellement avec humour. Il "ferme les frontières bretonnes" aux réfugiés climatiques, cite les statistiques de qualité de vie bretonnes, et rappelle que la Bretagne est "la première région de France" avec un plaisir manifeste.
+    </p>
+    <div class="quote" style="margin-top:10px;">
+      "3 départements bretons dans le top 10, le 4e dans le top 20 — encore une stat qui prouve que la Bretagne est la première région de France dans la qualité de vie."
+      <div class="meta">Jan. 2025 — la stat comme preuve, la stat comme humour</div>
+    </div>
+    <div class="quote">
+      "Yabaphi, sache qu'on ne t'accueillera pas en Bretagne en tant que réfugié climatique, tu seras arrêté à la frontière bretonne."
+      <div class="meta">Mai 2022 — les frontières bretonnes sont fermées</div>
+    </div>
+  </div>
+
+  <!-- Lexique -->
+  <div class="card">
+    <div class="card-title">🗣️ Lexique signature</div>
+    <div class="bar-row"><div class="bar-label">"bah" (connecteur oral)</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:#e94560;"></div></div><div class="bar-val">75×</div></div>
+    <div class="bar-row"><div class="bar-label">"goat / goatesque"</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#a380f0;"></div></div><div class="bar-val">33×</div></div>
+    <div class="bar-row"><div class="bar-label">"mdr"</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#533483;"></div></div><div class="bar-val">39×</div></div>
+    <div class="bar-row"><div class="bar-label">"putain"</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#e09060;"></div></div><div class="bar-val">27×</div></div>
+    <div class="bar-row"><div class="bar-label">"effectivement"</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:#60a0e9;"></div></div><div class="bar-val">15×</div></div>
+    <div class="bar-row"><div class="bar-label">"ça m'extermine / atomise"</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:#60c080;"></div></div><div class="bar-val">3×</div></div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">"Goat" et "goatesque" sont ses marqueurs positifs universels — Macron, Édouard Philippe, Lisnard, Vienne, la Bretagne, un stream, un outil de révision. Le mot ne se dévalorise pas à l'usage.</p>
+  </div>
+
+  <!-- Description détaillée -->
+  <div class="card full" id="description">
+    <div class="card-title">📖 Description détaillée</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <div>
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">① Le pédagogue qui ne peut pas s'arrêter</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Kaspei a un rapport au débat qui ressemble à une contrainte intérieure plus qu'à un choix. Quand un sujet est posé sur la table, il ne peut pas se contenter d'une réaction — il faut qu'il aille au bout, qu'il pose les distinctions, qu'il corrige les approximations, qu'il amène les chiffres. Cette compulsion est documentée sur 4 ans et sur tous les sujets : droit constitutionnel, économie, nucléaire, agriculture, géopolitique, immobilier, taxe Zucman.<br><br>
+          Ce qui le différencie de beaucoup d'autres profils « débatteurs » sur un serveur Discord : il lit les programmes. Pas les résumés, les programmes. Pendant la présidentielle 2022, il est l'un des seuls à avoir suivi tous les débats, à comparer les mesures Lepen vs Mélenchon sur 8 axes distincts, à citer l'article 8 de la Constitution, la loi du 3 juin 1958, les conventions non écrites de la Ve République. Quand il sort une donnée, elle est généralement juste — ou honnêtement présentée comme incertaine (<em style="color:#c0c0d8;">"faut que je me replonge dans mon cours, ça fait 5 ans"</em>). C'est rare.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">② L'humour comme soupape</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Ses meilleurs moments ne sont pas dans ses longs argumentaires — ils sont dans ses sketches. Le monologue du <em>"triple dosé fièrement"</em> qui simule la vie sous pass sanitaire (PCR à 42€ la veille, cinéma à 10€, vigil au pass) est une pièce construite, pas une réaction à chaud. Le <em>"Bonjour à tous, Christine, à la retraite depuis mes 55 ans"</em> (octobre 2025) qui caricature la retraitée boomer tirant sur le système qu'elle vote contre — même mécanique : il invente un personnage, lui donne une cohérence interne, et laisse la caricature faire le boulot à sa place.<br><br>
+          Son humour est froid, éditorial, jamais gras. Il ne rigole pas en montrant qu'il rigole — il construit la chute et attend que ça arrive. L'expression <em>"ça m'extermine"</em>, <em>"ça m'atomise"</em> pour des anneries politiques sont ses seuls moments d'affect démonstratif, et encore, elles arrivent avec une retenue qui les rend plus drôles qu'un caps lock.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">③ Le libéral qui supporte les conséquences de ses propres convictions</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:0;">
+          La tension la plus intéressante du corpus n'est pas entre ses idées — elle est entre ses idées et sa situation personnelle. Il est fonctionnaire à la DGFIP, défend la suppression de postes de fonctionnaires, juge <em>"aberrant"</em> le logement social fonctionnaire parisien à loyer divisé par 3, et milite pour un système où les cracks seraient mieux payés et les parasites éliminés — tout en étant lui-même dans ce système.<br><br>
+          La clé, c'est qu'il l'assume textuellement. <em>"Aujourd'hui on m'a dit que j'avais rien à faire dans la fonction publique, que j'avais largement plus un profil dans le privé, j'ai presque pleuré de joie."</em> Il n'essaie pas de réconcilier la contradiction — il l'habite et la revendique comme une identité. C'est le propre de l'infiltré : pas un hypocrite, un libéral en poste dans le public qui attend patiemment que le système change ou qu'une meilleure offre arrive.
+        </p>
+      </div>
+
+      <div>
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">④ L'écologie, sans militantisme mais sans déni</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Sa position écologique est l'une des plus honnêtes du corpus et l'une des plus rares : il croit au changement climatique, il <em>"stan Jancovici"</em>, et il ne fait pas le geste. <em>"Je ne me vois pas supprimer mes conforts de vie par une action individuelle inutile alors qu'elle serait efficace collectivement."</em> Ce n'est pas du déni — c'est du calcul coût/bénéfice appliqué à la question environnementale, cohérent avec son libéralisme. Il attend que l'économie contraigne les acteurs, pas que la morale convainque les individus. Il sait que ça arrivera tard : <em>"faut que ça éclate à notre gueule, que ça impacte notre qualité de vie"</em>.<br><br>
+          Sur le nucléaire, la position est autrement plus active et documentée : historique de l'industrie française, problème de main-d'œuvre de maintenance, contexte crise ukrainienne, réforme du marché européen de l'électricité, intensité carbone des énergies renouvelables à certaines heures. Le nucléaire est son sujet technique de prédilection, et ça se voit.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">⑤ L'évolution : pas une conversion, une spécialisation</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:14px;">
+          Entre 2022 et 2026, Kaspei ne change pas de camp — il affine son outillage. En 2022, il parle de capitalisme et d'attractivité en termes généraux. En 2025-2026, il démonte la taxe Zucman sur 3 niveaux distincts (liquidité des parts non cotées, décote en vente forcée, impact sur la compétitivité via la ponction de dividendes), cite les chiffres IDE de mémoire (0,5% des entreprises = 13% des emplois), et suit en temps réel la fuite des millionnaires UK post-non-dom comme preuve empirique de ses thèses sur la mobilité du capital.<br><br>
+          La trajectoire politique suit la même logique : Macron en 2022 par sélection de convergences, désillusion progressive sur l'homme sans rupture sur les idées, et Lisnard comme horizon en 2025-2026 — dont il a lu le programme de 2021 avant même de le citer, et qu'il juge sur ses points précis (retraite à 62 ans + capitalisation, décentralisation par subsidiarité, réforme de l'école). C'est un vote préparé, pas un enthousiasme.
+        </p>
+
+        <p style="font-size:0.85rem;font-weight:700;color:#a380f0;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">⑥ Ce qu'il ne maîtrise pas tout à fait</p>
+        <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.7;margin-bottom:0;">
+          Deux angles morts notables dans ce corpus. D'abord, il diagnostique parfaitement le ragebait chez les autres — il voit immédiatement que MPB <em>"comble son ennui en provoquant des débats houleux"</em> — tout en faisant exactement la même chose avec le ping pong, en parfaite connaissance de cause. La différence : lui l'assume. MPB probablement moins.<br><br>
+          Ensuite, il a tendance à confondre <em>avoir les meilleurs arguments</em> et <em>avoir raison</em>. Son niveau technique est réel, mais quand il dit <em>"t'as pas lu son programme"</em> ou <em>"t'affirmes des inepties"</em>, il clôt le débat au lieu de le continuer. Ce n'est pas de la mauvaise foi — c'est une impatience intellectuelle : quelqu'un qui lit et prépare tolère mal quelqu'un qui réagit à chaud. Cette impatience est son seul vrai angle clivant, et elle est constante sur 4 ans.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="card full verdict">
+    <div class="verdict-label">⚖️ Verdict final</div>
+    <div class="verdict-text">
+      Ragebait conscient et chirurgical (ping pong).<br>
+      Libéral économique documenté, cohérent sur 4 ans, de plus en plus spécialisé.<br>
+      Personnalité clivante sur la forme — fédératrice sur la qualité du débat.
+    </div>
+    <div class="verdict-sub">
+      La réputation "pédagogue qui sort des chiffres" est <strong>entièrement méritée et documentée</strong>.<br>
+      Il ne troll pas par ennui — il débat par conviction, et troll par choix, les deux sans jamais les confondre.<br>
+      Le paradoxe de l'infiltré libéral dans la fonction publique ? Assumé avec une honnêteté qui force le respect.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const hourData = [86,25,28,0,1,3,7,17,30,65,92,208,284,279,345,422,222,282,278,177,164,177,186,193];
+const max = Math.max(...hourData);
+const chart = document.getElementById('hourChart');
+hourData.forEach((v, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar';
+  const pct = Math.max(3, Math.round((v / max) * 100));
+  const isDead = i >= 3 && i <= 6;
+  const isPeak = i === 15;
+  const isGood = i >= 11 && i <= 22 && !isPeak;
+  bar.style.height = pct + '%';
+  bar.style.background = isDead ? '#2a2a4a' : isPeak ? '#e94560' : isGood ? '#533483' : '#e9456060';
+  bar.setAttribute('data-h', i);
+  chart.appendChild(bar);
+});
+</script>
+</body>
+</html>

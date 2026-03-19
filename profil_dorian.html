@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — Dorian</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --red: #e94560;
+    --purple-light: #7b52ab;
+    --red-light: #ff6b81;
+    --text: #e0e0e0;
+    --text-muted: #9a9ab0;
+    --card-bg: #1e1e3a;
+    --card-border: #2a2a4a;
+    --accent: #a855f7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0f0f24 0%, #1a1a3e 40%, #2a1040 70%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--purple);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(83,52,131,0.35) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,69,96,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+  .header-top { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; }
+  .avatar-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 900; color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(83,52,131,0.5), 0 0 24px rgba(233,69,96,0.25);
+  }
+  .header-info { flex: 1; }
+  .pseudo {
+    font-size: 38px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, #c8b3f5 60%, var(--red-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1.1; margin-bottom: 6px;
+  }
+  .pseudo-tag { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 12px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .badge {
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .badge-purple { background: rgba(83,52,131,0.35); border: 1px solid var(--purple); color: #c8b3f5; }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: #ff8fa0; }
+  .badge-blue { background: rgba(15,52,96,0.6); border: 1px solid #2a6099; color: #90c8f0; }
+  .badge-green { background: rgba(20,80,40,0.4); border: 1px solid #2a8050; color: #80d8a0; }
+  .badge-gray { background: rgba(60,60,80,0.5); border: 1px solid #505070; color: #b0b0c8; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--card-border);
+    padding: 20px 40px;
+  }
+  .stats-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .stat-item { display: flex; flex-direction: column; align-items: center; min-width: 100px; }
+  .stat-val { font-size: 26px; font-weight: 800; color: var(--red-light); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+  .stat-sep { width: 1px; height: 40px; background: var(--card-border); }
+
+  /* MAIN CONTENT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 36px 40px 60px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--purple-light); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::before {
+    content: ''; display: inline-block;
+    width: 3px; height: 14px; border-radius: 2px;
+    background: linear-gradient(to bottom, var(--purple), var(--red));
+  }
+
+  /* PROGRESS BARS */
+  .progress-item { margin-bottom: 13px; }
+  .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+  .progress-label span:first-child { color: var(--text); }
+  .progress-label span:last-child { color: var(--text-muted); font-size: 12px; }
+  .progress-bar { height: 7px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+
+  /* QUOTES */
+  .quote-item {
+    background: rgba(83,52,131,0.12);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+  .quote-text { font-style: italic; color: #d0d0e8; font-size: 14px; line-height: 1.5; }
+  .quote-meta { margin-top: 6px; font-size: 11px; color: var(--text-muted); }
+  .quote-date { color: var(--red); font-weight: 600; }
+
+  /* LEXIQUE */
+  .lexique-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lex-item {
+    background: rgba(83,52,131,0.2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lex-word { color: #c8b3f5; font-weight: 600; }
+  .lex-count {
+    color: var(--red);
+    font-size: 10px; font-weight: 700;
+    background: rgba(233,69,96,0.15);
+    padding: 1px 6px; border-radius: 10px;
+  }
+
+  /* CHART */
+  canvas { display: block; }
+
+  /* SECTION PROSE */
+  .section-prose { margin-top: 32px; }
+  .section-title {
+    font-size: 22px; font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+    position: relative;
+  }
+  .section-title::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0;
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+  .subsection { margin-bottom: 32px; }
+  .sub-title {
+    font-size: 16px; font-weight: 700;
+    color: #c8b3f5;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sub-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .prose { color: #ccc; font-size: 14.5px; line-height: 1.75; }
+  .prose em { color: #e0b0ff; font-style: italic; }
+  .prose strong { color: #fff; }
+
+  /* VERDICT */
+  .verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.25), rgba(233,69,96,0.15));
+    border: 1px solid rgba(233,69,96,0.35);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 32px;
+  }
+  .verdict-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--red-light); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .verdict-text { color: #e0d0f8; font-size: 15.5px; line-height: 1.75; font-style: italic; }
+
+  /* POLITICAL GAUGE */
+  .pol-axis {
+    display: flex; align-items: center; gap: 0;
+    height: 28px; border-radius: 14px; overflow: hidden;
+    margin-top: 12px; position: relative;
+  }
+  .pol-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .pol-marker {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; border: 3px solid #1a1a2e;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    z-index: 2;
+  }
+
+  /* RELATIONS */
+  .relation-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .relation-item:last-child { border-bottom: none; }
+  .rel-name { font-weight: 700; color: var(--accent); font-size: 13px; min-width: 90px; }
+  .rel-desc { font-size: 13px; color: var(--text-muted); }
+
+  /* SECTION SPACER */
+  .spacer { margin-top: 32px; }
+
+  @media (max-width: 768px) {
+    .header { padding: 32px 20px 24px; }
+    .container { padding: 20px 20px 40px; }
+    .stats-bar { padding: 16px 20px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .col-span-2, .col-span-3 { grid-column: span 1; }
+    .pseudo { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="avatar-circle">D</div>
+      <div class="header-info">
+        <div class="pseudo">Dorian</div>
+        <div class="pseudo-tag">dosinge · Serveur privé francophone · Avr. 2022 – Mars 2026</div>
+        <div class="badges">
+          <span class="badge badge-purple">Observateur lucide</span>
+          <span class="badge badge-red">Droite sociétale soft</span>
+          <span class="badge badge-blue">Anti-système pragmatique</span>
+          <span class="badge badge-green">One-liner specialist</span>
+          <span class="badge badge-gray">Présence intermittente</span>
+          <span class="badge badge-gray">Background pharmacie/IT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-val">1 481</span>
+      <span class="stat-lbl">Messages</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">~4 ans</span>
+      <span class="stat-lbl">Période</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">1.04</span>
+      <span class="stat-lbl">Msg / jour</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">72 car.</span>
+      <span class="stat-lbl">Longueur moy.</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">17h</span>
+      <span class="stat-lbl">Pic d'activité</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">28%</span>
+      <span class="stat-lbl">Msgs courts (&lt;30c)</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-val">Juin '24</span>
+      <span class="stat-lbl">Mois le + actif</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- ROW 1 : CHART + SUJETS + POLITIQUE -->
+  <div class="grid-3">
+
+    <!-- ACTIVITÉ HORAIRE -->
+    <div class="card col-span-2">
+      <div class="card-title">Activité horaire (24h)</div>
+      <canvas id="hourChart" height="120"></canvas>
+    </div>
+
+    <!-- ORIENTATION POLITIQUE -->
+    <div class="card">
+      <div class="card-title">Orientation politique</div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Positionnement estimé sur les grandes lignes</p>
+
+      <div class="progress-item">
+        <div class="progress-label"><span>Sécuritaire / Ordre</span><span>Fort ✓</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Souverainisme éco.</span><span>Modéré</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Conservatisme sociétal</span><span>Présent</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Anti-woke / Anti-idéologie</span><span>Marqué ✓</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Méfiance médias mainstream</span><span>Forte ✓</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Libéralisme économique</span><span>Faible</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:28%"></div></div>
+      </div>
+
+      <div style="margin-top:16px;padding:10px;background:rgba(83,52,131,0.15);border-radius:8px;font-size:12px;color:var(--text-muted);">
+        🧭 Droite populiste pragmatique — ni idéologue, ni militan. La posture est celle d'un observateur agacé par le système, pas d'un activiste.
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 : SUJETS + STYLE + LEXIQUE -->
+  <div class="grid-3 spacer">
+
+    <!-- SUJETS FAVORIS -->
+    <div class="card">
+      <div class="card-title">Sujets de prédilection</div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🇫🇷 Politique / Société française</span><span>Dominant</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🤖 IA & marché du travail</span><span>En hausse</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🏥 Santé / système médical</span><span>Récurrent</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🎓 Éducation & par cœur</span><span>Conviction</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🕹️ Gaming (LoL / TFT)</span><span>Régulier</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🧗 Escalade / Sport</span><span>Ancré</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>🌍 Géopolitique (Ukraine, etc.)</span><span>Occasionnel</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:38%"></div></div>
+      </div>
+    </div>
+
+    <!-- STYLE DE COMMUNICATION -->
+    <div class="card">
+      <div class="card-title">Style de communication</div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:600;color:#c8b3f5;margin-bottom:8px;">Format des messages</div>
+        <div class="progress-item">
+          <div class="progress-label"><span>One-liners / réponses sèches</span><span>55%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Partage de liens + commentaire</span><span>28%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:28%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Développements argumentés</span><span>17%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:17%"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="font-size:13px;font-weight:600;color:#c8b3f5;margin-bottom:8px;">Traits stylistiques</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+          <div>✓ <span style="color:#d0d0e8;">Ironie sèche sans marquage explicite</span></div>
+          <div>✓ <span style="color:#d0d0e8;">Vocabulaire JVC / argot 2010s intégré</span></div>
+          <div>✓ <span style="color:#d0d0e8;">Absence d'emojis émotionnels (sauf issou)</span></div>
+          <div>✓ <span style="color:#d0d0e8;">Économie de mots, densité d'info</span></div>
+          <div>✓ <span style="color:#d0d0e8;">Sources factuelles citées ponctuellement</span></div>
+          <div>✗ <span style="color:#907090;">Rarement en position de leader du débat</span></div>
+          <div>✗ <span style="color:#907090;">Pas de grands discours idéologiques</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEXIQUE SIGNATURE -->
+    <div class="card">
+      <div class="card-title">Lexique signature</div>
+      <div class="lexique-grid">
+        <div class="lex-item"><span class="lex-word">issou</span><span class="lex-count">×59</span></div>
+        <div class="lex-item"><span class="lex-word">ahi</span><span class="lex-count">×54</span></div>
+        <div class="lex-item"><span class="lex-word">bah</span><span class="lex-count">×58</span></div>
+        <div class="lex-item"><span class="lex-word">perso</span><span class="lex-count">×54</span></div>
+        <div class="lex-item"><span class="lex-word">bordel</span><span class="lex-count">×40</span></div>
+        <div class="lex-item"><span class="lex-word">ouai</span><span class="lex-count">×37</span></div>
+        <div class="lex-item"><span class="lex-word">putain</span><span class="lex-count">×31</span></div>
+        <div class="lex-item"><span class="lex-word">chaud</span><span class="lex-count">×21</span></div>
+        <div class="lex-item"><span class="lex-word">golmon</span><span class="lex-count">×13</span></div>
+        <div class="lex-item"><span class="lex-word">facon</span><span class="lex-count">×16</span></div>
+        <div class="lex-item"><span class="lex-word">imo</span><span class="lex-count">×9</span></div>
+        <div class="lex-item"><span class="lex-word">finito</span><span class="lex-count">×3</span></div>
+        <div class="lex-item"><span class="lex-word">aya</span><span class="lex-count">×12</span></div>
+        <div class="lex-item"><span class="lex-word">dinguerie</span><span class="lex-count">×fréq.</span></div>
+        <div class="lex-item"><span class="lex-word">c'est grave</span><span class="lex-count">×4+</span></div>
+        <div class="lex-item"><span class="lex-word">golem</span><span class="lex-count">×rec.</span></div>
+        <div class="lex-item"><span class="lex-word">doomed</span><span class="lex-count">×rec.</span></div>
+        <div class="lex-item"><span class="lex-word">ff</span><span class="lex-count">×rec.</span></div>
+        <div class="lex-item"><span class="lex-word">GR (se faire)</span><span class="lex-count">×rec.</span></div>
+        <div class="lex-item"><span class="lex-word">turbo-</span><span class="lex-count">×préfixe</span></div>
+        <div class="lex-item"><span class="lex-word">gros pb</span><span class="lex-count">×rec.</span></div>
+        <div class="lex-item"><span class="lex-word">yep</span><span class="lex-count">×rec.</span></div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--text-muted);border-top:1px solid var(--card-border);padding-top:10px;">
+        Vocabulaire révélateur : ancré dans le lexique JVC/jeuxvideo.com des années 2010-2020, avec une absorption totale de l'argot de forums. <em style="color:#c8b3f5;">issou</em> comme réaction émoji unique, <em style="color:#c8b3f5;">golmon/golem</em> pour les personnes naïves, <em style="color:#c8b3f5;">finito</em> pour les situations sans issue.
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3 : CITATIONS + RELATIONS -->
+  <div class="grid-2 spacer">
+
+    <!-- CITATIONS MARQUANTES -->
+    <div class="card">
+      <div class="card-title">Citations représentatives</div>
+
+      <div class="quote-item">
+        <div class="quote-text">« T'as le droit de faire ce que tu veux quand c'est "le camp du bien" »</div>
+        <div class="quote-meta"><span class="quote-date">22 avr. 2022</span> · Contexte : élection présidentielle, double standard médiatique</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Traduction => Info qui ne va pas dans mon sens »</div>
+        <div class="quote-meta"><span class="quote-date">27 avr. 2022</span> · Sous un topic sur la "désinformation" — définition ironique</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Le pire c'est que facon y a rien à faire meme sans immigration c'est déjà finito »</div>
+        <div class="quote-meta"><span class="quote-date">18 juin 2024</span> · Nihilisme froid sur la situation française</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Je vois pas comment tu peux dire ca et envisager un instant de voter Macron »</div>
+        <div class="quote-meta"><span class="quote-date">29 juin 2024</span> · Suite à une prise de position cohérente mais contradictoire d'un membre</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Je pense que la culture/religion est un frein aussi, les descendants d'immigrés européens bizarrement sont bien intégrés eux. »</div>
+        <div class="quote-meta"><span class="quote-date">1 juil. 2024</span> · L'un de ses rares messages développés sur l'intégration — nuancé mais clair</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Déjà à notre époque c'est ouf le nb de trucs de golmons qu'on nous a fait apprendre par coeur et qu'on oublie dix ans après »</div>
+        <div class="quote-meta"><span class="quote-date">7 fév. 2026</span> · Sur l'école et l'inutilité du par cœur — conviction réelle</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« On vit la même merde avec l'IA, on va te l'interdire pendant l'apprentissage tu vas arriver en entreprise tu vas quasi forcément t'en servir »</div>
+        <div class="quote-meta"><span class="quote-date">7 fév. 2026</span> · Sur l'IA à l'école — son take le plus articulé de toute la période</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">« Le dernier truc en date qui m'a détruit c'est l'op de la dernière saison de jujutsu kaisen c'est quoi cette merde c'est irregardable »</div>
+        <div class="quote-meta"><span class="quote-date">28 jan. 2026</span> · Référence à l'opening épileptiforme de JJK — détresse sincère</div>
+      </div>
+    </div>
+
+    <!-- RELATIONS + ACTIVITÉ MENSUELLE -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div class="card">
+        <div class="card-title">Relations avec les membres</div>
+        <div class="relation-item">
+          <span class="rel-name">RATS / SHAars</span>
+          <span class="rel-desc">Le plus actif du serveur (gendarme). Dorian ne l'affronte que rarement, interactions plutôt neutres ou de validation ponctuelle.</span>
+        </div>
+        <div class="relation-item">
+          <span class="rel-name">Lyd</span>
+          <span class="rel-desc">Cible de moqueries douces : <em>« Contenu de 100% des posts de Lyd »</em> en 2025, se moque de son ego chronique et de son besoin d'avoir le dernier mot.</span>
+        </div>
+        <div class="relation-item">
+          <span class="rel-name">Zoller</span>
+          <span class="rel-desc">Profil proche idéologiquement (centre-droit pragmatique). Dorian se retrouve souvent dans ses takes sans le verbaliser.</span>
+        </div>
+        <div class="relation-item">
+          <span class="rel-name">yoob</span>
+          <span class="rel-desc">Parcours similaire (études longues inutiles, marché bouché). Empathie implicite, surtout sur les débats emploi/IA.</span>
+        </div>
+        <div class="relation-item">
+          <span class="rel-name">Sacha</span>
+          <span class="rel-desc">Respect discret. Les positions cathos atypiques de Sacha ne font pas l'objet de moqueries de Dorian — il choisit de ne pas entrer dans ce terrain.</span>
+        </div>
+        <div class="relation-item">
+          <span class="rel-name">monpotestbon</span>
+          <span class="rel-desc">Amusement distant. Les sorties provocatrices du personnage lui servent de spectacle, pas de modèle.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Activité mensuelle</div>
+        <canvas id="monthChart" height="130"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION PROSE -->
+  <div class="section-prose spacer">
+    <div class="section-title">Analyse approfondie — Profil complet</div>
+
+    <!-- 1 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">1</span>Personnalité, style de communication et ton général</div>
+      <div class="prose">
+        Dorian est, dans la dynamique de ce serveur, ce qu'on pourrait appeler un <strong>spectateur actif à intervention chirurgicale</strong>. Sa moyenne de 1,04 message par jour sur quatre ans résume parfaitement sa philosophie de présence : il est là, mais il ne surcharge jamais le canal. Là où d'autres membres comme RATS (1 530 messages) ou Zoller (1 350 messages) occupent l'espace conversationnel de façon continue, Dorian entre, pose sa ligne, et sort. La longueur médiane de ses messages — 48 caractères — confirme une préférence structurelle pour la concision. Près de 28 % de ses interventions font moins de 30 caractères, ce qui signifie qu'un message sur quatre est une réaction, un mot, ou une ponctuation sociale (<em>« issou »</em>, <em>« ahi »</em>, <em>« chaud »</em>).
+
+        Son humour est systématiquement <strong>sec et délicat</strong> — il joue sur l'implicite plutôt que sur l'explicite. Il ne rit jamais à gorge déployée dans ses messages, ne met presque jamais d'emojis rieurs, et ses blagues les plus efficaces passent souvent inaperçues au premier regard. Le <em>« Les terroristes du péage les bougs »</em> sur les Italiens aux péages, mentionné dans son profil auto-généré par le serveur, est emblématique : une image absurde, un registre familier, zéro mise en scène. Cette économie de moyens n'est pas paresse — c'est une compétence. Les membres qui réussissent à être drôles sans effort apparent dans des conversations écrites sont rares, et Dorian a clairement ce registre.
+
+        Son ton général oscille entre le <strong>flegme désabusé</strong> et la pointe d'agacement contenu. Il ne s'emporte que très rarement, et quand il le fait, ça se lit dans une accumulation de messages courts successifs plutôt que dans un pavé d'une seule traite. Le vocabulaire JVC est profondément intégré — <em>golem</em>, <em>golmon</em>, <em>issou</em>, <em>ahi</em>, <em>finito</em>, <em>GR</em> — sans être posé comme un signe d'appartenance. Il ne cite pas les mèmes, il les vit.
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">2</span>Positions politiques — structure et profondeur réelle</div>
+      <div class="prose">
+        Dorian n'est jamais en position de leader idéologique sur ce serveur. Il ne développe pas de grands cadres analytiques, ne cite pas de penseurs, ne défend pas de ligne programmatique. Et pourtant, en retraçant l'ensemble de ses interventions politiques, un positionnement cohérent émerge, d'une remarquable stabilité sur la période : <strong>droite populiste pragmatique, anti-idéologie de gauche, méfiant envers les médias mainstream, sensible aux questions de sécurité et d'identité nationale.</strong>
+
+        Sa méfiance des médias est probablement le trait le plus constant. Dès avril 2022, il rebaptise sans hésitation le mot "désinformation" avec la formulation <em>« Traduction => Info qui ne va pas dans mon sens »</em> (27 avr. 2022). En 2022 encore, il parle de <em>« propagande médiatique digne d'un régime bolchevique »</em> (28 avr. 2022). Le mot "circulez" revient régulièrement dans ses messages pour signifier qu'un sujet est systématiquement sous-traité ou occulté. Ce n'est pas du conspirationnisme — c'est un sentiment structurel de défiance envers le cadrage officiel.
+
+        Sur l'immigration, il n'est pas dans la surenchère mais dans la conviction calme. Sa formulation la plus développée date du 1er juillet 2024 : <em>« les descendants d'immigrés européens bizarrement sont bien intégrés eux. Par exemple j'ai une partie de ma famille qui était polonaise et une autre hongroise à la base qui sont venus en France à cause de la guerre. Et aujourd'hui t'as aucun moyen de te dire de qui que ce soit de ma famille qu'on a des origines immigrées »</em> — un argument culturaliste classique, exposé sans virulence, étayé par l'expérience personnelle. Il est nettement anti-Macron (<em>« Je vois pas comment tu peux dire ça et envisager un instant de voter Macron »</em>, juin 2024) mais sans enthousiasme identifié pour le RN non plus — il cite des liens RN sans jamais exprimer d'appartenance.
+
+        Sujet tabou récurrent : la démographie et la charia. En juin-juillet 2024, il formule à plusieurs reprises une inquiétude sur la composition religieuse future de la France avec une froideur quasi actuarielle — <em>« dans 40-50 ans en france, quand la population musulmane sera majoritaire »</em> (18 juin 2024). C'est son terrain le plus délicat, celui où la conviction profonde affleure derrière le détachement habituel.
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">3</span>Rapport à l'IA, au travail et à l'éducation — sa conviction la plus construite</div>
+      <div class="prose">
+        Si Dorian a une zone de conviction réellement intellectuelle — un domaine où il développe, source, et argumente au-delà du one-liner — c'est bien <strong>l'impact de l'IA sur le marché du travail et le problème structurel de l'éducation</strong>. Cette thématique monte très fortement à partir de 2025, probablement corrélée à sa situation personnelle : il a lui-même travaillé comme développeur pendant deux ans et demi avant une coupure due à des problèmes de santé, et se retrouve en octobre 2025 à chercher une alternance dans un marché totalement bouché (<em>« Je cherche une alternance depuis trois mois c'est vide. L'année dernière j'ai eu quelques entretiens au moins là j'en ai eu un seul »</em>, octobre 2025).
+
+        Son diagnostic sur l'IA est lucide et précoce. En février 2025, il identifie que l'IA europénne est en retard (<em>« Par contre sur l'IA je suis désolé mais ils merdent totalement »</em>), anticipe la réduction des emplois tertiaires de façon systématique (<em>« Tout le tertiaire est doomed »</em>, octobre 2025), et partage des sources concrètes sur la chute de l'embauche de jeunes diplômés de 25% en 2024. Son argument le plus fort reste celui de février 2026 : <em>« On vit la même merde avec l'IA, on va te l'interdire pendant l'apprentissage tu vas arriver en entreprise tu vas quasi forcément t'en servir »</em> — une analogie directe entre le débat sur l'IA à l'école et l'inutilité du par cœur qu'il dénonce depuis toujours.
+
+        Sur l'éducation, sa position est constante : l'école enseigne des choses inutiles de façon inutile. <em>« C'est ouf le nb de trucs de golmons qu'on nous a fait apprendre par coeur et qu'on oublie dix ans après alors qu'en 2 secondes on avait l'info sur internet »</em> (7 fév. 2026). Il n'est pas anti-école — il est anti-ritualisme pédagogique. La conviction est pragmatique, pas idéologique : si une connaissance n'est pas activement mobilisée, la faire mémoriser est une perte d'énergie. L'IA, dans ce cadre, est pour lui un outil évident qui devrait être enseigné comme tel, pas interdit.
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">4</span>Ragebait conscient ou inconscient ? Évaluation honnête</div>
+      <div class="prose">
+        La question mérite d'être posée sérieusement, parce que plusieurs de ses contributions sont objectivement inflammatoires dans leur forme — lien JVC sur la gare de Saint-Denis en 2022, commentaires sur la démographie musulmane, réactions sèches sur la délinquance dans les grandes villes. <strong>La réponse est : ni l'un ni l'autre</strong> — ou plus précisément, c'est un profil trop peu prolixe pour que le ragebait soit une stratégie délibérée.
+
+        Un ragebait conscient cherche la réaction, construit des sorties pour maximiser l'engagement, et prospère dans les affrontements. Dorian, lui, pose une ligne et disparaît. Il ne surfe pas sur l'émotion collective, ne relance pas les discussions enflammées, et ne s'investit pas dans le suivi de ses propres provocations. Les rares fois où il développe — sur l'intégration, la démographie, l'IA — il le fait avec des données et de la nuance, pas avec de l'outrance.
+
+        L'inconscient est plus plausible par défaut, mais même ça, c'est trop fort. La formulation la plus exacte serait : <strong>Dorian dit ce qu'il pense, avec les mots qu'il a, sans trop se demander l'effet que ça produit</strong>. L'absence de filtre n'est pas de la provocation — c'est de l'indifférence à la perception. Il ne cherche pas à choquer, il ne cherche pas non plus à ménager. Il constate. Que ça passe pour du ragebait dans certains échanges est un effet collatéral, pas un objectif. La phrase <em>« J'ai envie de dire des trucs mais pas envie d'avoir Gilbert chez moi »</em> (23 avr. 2022 — "Gilbert" référant aux services) révèle d'ailleurs qu'il autocensure certaines convictions, ce qui invalide la thèse du ragebaiteur compulsif : il mesure, il dose, il retient.
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">5</span>Personnalité clivante ou fédératrice ?</div>
+      <div class="prose">
+        Ni vraiment l'un, ni vraiment l'autre — et c'est précisément ce qui définit sa place dans le groupe. Dorian n'a pas le profil du personnage polarisant qui divise le serveur. Il ne génère pas de longues discussions conflictuelles à son sujet, ne devient jamais le point focal d'une dispute, et aucun des autres membres ne semble lui vouer une animosité particulière. Sa présence est trop intermittente et ses interventions trop courtes pour constituer une cible.
+
+        Sa nature <strong>fédératrice est partielle et situationnelle</strong>. Il fédère implicitement les membres du serveur qui partagent une sensibilité proche de la sienne — Zoller, et dans une moindre mesure d'autres — non pas en prenant la tête des discussions mais en validant ponctuellement leurs takes avec un <em>« ouai »</em>, un <em>« bah »</em>, ou un lien qui illustre leur point. Il joue parfois le rôle de caution factuelle pour des positions qui auraient sinon l'air trop tranchées.
+
+        Sa tendance clivante est surtout visible dans les positions qu'il exprime sur l'immigration, la démographie et les médias — positions qui, dans un groupe plus hétérogène, pourraient générer des frictions. Mais dans ce serveur spécifique, composé majoritairement de jeunes hommes au profil centre-droit ou droitisant, ses prises de position ne sortent pas du cadre partagé. <strong>Il n'est clivant que hors-contexte.</strong> Dans ce groupe, il est l'un des membres les moins provocateurs de fait, même si ses contenus seraient perçus différemment dans un espace plus large. La moquerie de Lyd en mai 2025 (<em>« Contenu de 100% des posts de Lyd »</em>) montre qu'il est capable de distance critique envers les autres membres — une position d'observateur qui lui évite d'être lui-même une cible permanente.
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="subsection">
+      <div class="sub-title"><span class="sub-num">6</span>Évolution 2022–2026 : le détachement cache-t-il des convictions plus profondes ?</div>
+      <div class="prose">
+        L'évolution la plus visible entre 2022 et 2026 n'est pas politique — elle est <strong>personnelle et contextuelle</strong>. En 2022, Dorian est dans une posture de commentateur distancié de l'actualité — élections, Covid, guerre en Ukraine. Ses contributions sont surtout réactives, souvent humoristiques. Le ratio lien / commentaire substantiel est bas.
+
+        En 2024-2025, quelque chose change. La période juin-juillet 2024 est, de loin, la plus active de l'historique (256 et 198 messages en deux mois — pic absolu). Ces deux mois correspondent aux élections législatives françaises. Dorian, d'habitude en retrait, devient nettement plus présent et plus développé. C'est là qu'il formule ses prises de position les plus claires sur l'immigration, la démographie, la politique. Le détachement habituel cède la place à une implication réelle.
+
+        À partir de 2025-2026, le registre se recentre sur la vie personnelle et professionnelle — difficultés à retrouver du travail, problèmes de santé, alternance bouchée, impact de l'IA. Le ton se fait plus grave, moins ironique. <em>« LA verite c'est que tout va mal et qu'à part les metiers indispensable pour faire tourner le pays la majorité des trucs tu peux pas savoir si dans 3-5 ans ca sera pas bouché »</em> (fév. 2025) n'est pas une blague. C'est un constat d'angoisse réelle formulé comme constat — la marque de fabrique de quelqu'un qui exprime son inquiétude par le biais du réalisme clinique plutôt que de la plainte émotionnelle.
+
+        La réponse à la question posée en introduction est donc : <strong>oui, le détachement apparent cache des convictions plus profondes, mais elles ne se sont pas construites sur la période — elles étaient là dès 2022.</strong> Ce qui a changé, c'est la surface d'expression : en 2024, le contexte électoral lui a fourni un prétexte pour les verbaliser plus complètement. Et depuis 2025, sa situation personnelle précaire lui a fourni un autre prétexte — l'emploi et l'IA — pour les articuler de façon cohérente. Le Dorian de mars 2026 n'a pas évolué idéologiquement : il a simplement trouvé davantage de raisons concrètes de verbaliser ce qu'il pensait déjà.
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="verdict-title">⚡ Verdict final</div>
+    <div class="verdict-text">
+      Dorian est l'archétype du membre qu'on sous-estime parce qu'il parle peu et frappe court — mais sur quatre ans, sa cohérence idéologique est plus nette que celle de membres dix fois plus prolixes. Le détachement n'est pas du vide : c'est une interface. Derrière les <em>issou</em> et les one-liners, il y a un pessimisme structurel sur la France, une conviction réelle sur l'IA et l'éducation, et une lucidité froide sur sa propre situation professionnelle. Il ne ragebait pas — il observe, et ce qu'il voit l'a progressivement convaincu que le système est fondamentalement cassé. La période 2025-2026 est la première où cette conviction cesse d'être théorique pour devenir personnelle. Il n'a pas changé — la réalité a confirmé ce qu'il pressentait déjà.
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// === HOUR CHART ===
+(function() {
+  const canvas = document.getElementById('hourChart');
+  const ctx = canvas.getContext('2d');
+  const data = [3, 0, 0, 0, 0, 0, 8, 23, 84, 132, 67, 98, 123, 97, 80, 40, 64, 145, 135, 99, 104, 89, 71, 19];
+  const labels = Array.from({length:24}, (_,i) => i + 'h');
+  const W = canvas.parentElement.clientWidth - 48 || 600;
+  const H = 120;
+  canvas.width = W; canvas.height = H;
+
+  const max = Math.max(...data);
+  const barW = (W - 40) / 24;
+  const padL = 20, padB = 22, padT = 10;
+  const chartH = H - padB - padT;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + chartH - (i / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - 10, y); ctx.stroke();
+  }
+
+  // Bars
+  data.forEach((val, i) => {
+    const x = padL + i * barW + 2;
+    const bh = (val / max) * chartH;
+    const y = padT + chartH - bh;
+    const grad = ctx.createLinearGradient(0, y, 0, padT + chartH);
+    grad.addColorStop(0, i === 17 ? '#e94560' : '#7b52ab');
+    grad.addColorStop(1, i === 17 ? 'rgba(233,69,96,0.2)' : 'rgba(83,52,131,0.2)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, barW - 3, bh, [3, 3, 0, 0]) : ctx.rect(x, y, barW - 3, bh);
+    ctx.fill();
+  });
+
+  // Labels (every 3h)
+  ctx.fillStyle = 'rgba(154,154,176,0.8)';
+  ctx.font = '10px system-ui';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < 24; i += 3) {
+    ctx.fillText(i + 'h', padL + i * barW + barW / 2, H - 5);
+  }
+
+  // Peak label
+  ctx.fillStyle = '#e94560';
+  ctx.font = 'bold 11px system-ui';
+  ctx.fillText('▲ 17h', padL + 17 * barW + barW / 2, padT + chartH - (data[17] / max) * chartH - 5);
+})();
+
+// === MONTH CHART ===
+(function() {
+  const canvas = document.getElementById('monthChart');
+  const ctx = canvas.getContext('2d');
+
+  const monthly = {
+    '2022-04':32,'2022-05':13,'2022-06':36,'2022-07':2,'2022-08':14,'2022-09':28,'2022-10':8,'2022-11':26,'2022-12':6,
+    '2023-03':23,'2023-04':42,'2023-05':4,'2023-06':30,
+    '2024-03':15,'2024-06':256,'2024-07':198,'2024-09':3,'2024-10':24,'2024-11':28,'2024-12':7,
+    '2025-02':97,'2025-03':32,'2025-04':4,'2025-05':14,'2025-06':2,'2025-07':8,'2025-08':8,'2025-09':43,'2025-10':81,'2025-11':5,'2025-12':65,
+    '2026-01':36,'2026-02':152,'2026-03':139
+  };
+
+  const keys = Object.keys(monthly);
+  const vals = Object.values(monthly);
+  const W = canvas.parentElement.clientWidth - 48 || 400;
+  const H = 130;
+  canvas.width = W; canvas.height = H;
+
+  const max = Math.max(...vals);
+  const padL = 8, padR = 8, padB = 20, padT = 8;
+  const chartW = W - padL - padR;
+  const chartH = H - padB - padT;
+  const barW = chartW / keys.length;
+
+  // Area chart
+  ctx.beginPath();
+  ctx.moveTo(padL, padT + chartH);
+  keys.forEach((k, i) => {
+    const x = padL + i * barW + barW / 2;
+    const y = padT + chartH - (vals[i] / max) * chartH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  const lastX = padL + (keys.length - 1) * barW + barW / 2;
+  ctx.lineTo(lastX, padT + chartH);
+  ctx.lineTo(padL + barW / 2, padT + chartH);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+  grad.addColorStop(0, 'rgba(233,69,96,0.4)');
+  grad.addColorStop(1, 'rgba(233,69,96,0.02)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  keys.forEach((k, i) => {
+    const x = padL + i * barW + barW / 2;
+    const y = padT + chartH - (vals[i] / max) * chartH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#e94560';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Year labels
+  ctx.fillStyle = 'rgba(154,154,176,0.7)';
+  ctx.font = '9px system-ui';
+  ctx.textAlign = 'center';
+  const years = ['2022','2023','2024','2025','2026'];
+  const yearStarts = [0, 9, 13, 20, 31];
+  years.forEach((yr, yi) => {
+    const i = yearStarts[yi];
+    const x = padL + i * barW + barW / 2;
+    ctx.fillStyle = 'rgba(154,154,176,0.5)';
+    ctx.fillText(yr, x + 20, H - 5);
+  });
+
+  // Peak annotation
+  const peakIdx = vals.indexOf(max);
+  const px = padL + peakIdx * barW + barW / 2;
+  const py = padT + chartH - (max / max) * chartH;
+  ctx.fillStyle = '#e94560';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Juin \'24 (256)', px, py - 5);
+})();
+</script>
+</body>
+</html>

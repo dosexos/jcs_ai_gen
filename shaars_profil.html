@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — RATS | SHAars</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161d;
+    --bg3: #1a1e28;
+    --bg4: #212636;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #3a9fff;
+    --accent2: #3dffc0;
+    --accent3: #ff6b6b;
+    --accent4: #ffc947;
+    --text: #e8eaf0;
+    --text2: #9098b0;
+    --text3: #5a6070;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    padding: 32px 20px 60px;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 36px 24px 28px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 160px;
+    background: radial-gradient(ellipse, rgba(58,159,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-name {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .header-name span { color: var(--accent); }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text2);
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    background: rgba(58,159,255,0.1);
+    border: 1px solid rgba(58,159,255,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 8px 12px;
+    text-align: center;
+  }
+  .stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .stat-val.accent { color: var(--accent); }
+  .stat-val.green { color: var(--accent2); }
+  .stat-val.red { color: var(--accent3); }
+  .stat-val.gold { color: var(--accent4); }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--mono);
+  }
+
+  /* 2-col grid */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .card-title .dot.green { background: var(--accent2); }
+  .card-title .dot.gold { background: var(--accent4); }
+  .card-title .dot.red { background: var(--accent3); }
+  .card-title .dot.ping { background: #b48cff; }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .tag-blue { background: rgba(58,159,255,0.12); color: #7db8ff; border-color: rgba(58,159,255,0.25); }
+  .tag-green { background: rgba(61,255,192,0.10); color: #3dffc0; border-color: rgba(61,255,192,0.2); }
+  .tag-gold { background: rgba(255,201,71,0.10); color: #ffd67a; border-color: rgba(255,201,71,0.2); }
+  .tag-red { background: rgba(255,107,107,0.10); color: #ff8f8f; border-color: rgba(255,107,107,0.2); }
+  .tag-gray { background: rgba(255,255,255,0.05); color: var(--text2); border-color: var(--border); }
+  .tag-ping { background: rgba(180,140,255,0.10); color: #c9a8ff; border-color: rgba(180,140,255,0.2); }
+
+  .bio {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* BAR */
+  .bar-row { margin-bottom: 10px; }
+  .bar-label-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; margin-bottom: 4px;
+  }
+  .bar-label { color: var(--text2); }
+  .bar-val { color: var(--text); font-weight: 500; font-family: var(--mono); font-size: 11px; }
+  .bar-track {
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 0.4s;
+  }
+  .bar-fill.green { background: var(--accent2); }
+  .bar-fill.gold { background: var(--accent4); }
+  .bar-fill.red { background: var(--accent3); }
+  .bar-fill.mixed {
+    background: linear-gradient(90deg, var(--accent), var(--accent4));
+  }
+  .bar-fill.ping { background: #b48cff; }
+
+  /* ACTIVITE CHART */
+  .act-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 64px;
+    margin-bottom: 10px;
+  }
+  .act-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .act-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+  .act-yr {
+    font-size: 10px;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-top: 4px;
+  }
+  .act-yr.peak { color: var(--accent); font-weight: 600; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 6px; bottom: 6px;
+    width: 1px;
+    background: var(--border2);
+  }
+  .tl-item { position: relative; margin-bottom: 16px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -16px; top: 5px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--accent);
+  }
+  .tl-dot.green { border-color: var(--accent2); }
+  .tl-dot.gold { border-color: var(--accent4); }
+  .tl-dot.red { border-color: var(--accent3); }
+  .tl-yr {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .tl-yr.green { color: var(--accent2); }
+  .tl-yr.gold { color: var(--accent4); }
+  .tl-yr.red { color: var(--accent3); }
+  .tl-text {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* CITATIONS */
+  .citation {
+    background: var(--bg3);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .citation:last-child { margin-bottom: 0; }
+  .citation.green { border-left-color: var(--accent2); }
+  .citation.gold { border-left-color: var(--accent4); }
+  .citation.red { border-left-color: var(--accent3); }
+  .citation.ping { border-left-color: #b48cff; }
+  .citation-text {
+    font-size: 12px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.65;
+    margin-bottom: 5px;
+  }
+  .citation-meta {
+    font-size: 10px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* SUJETS */
+  .subject-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+  }
+  .subject-name {
+    font-size: 12px;
+    color: var(--text2);
+    width: 140px;
+    flex-shrink: 0;
+  }
+  .subject-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .subject-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  /* RAGEBAIT */
+  .rage-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .rage-label { font-size: 12px; color: var(--text2); flex: 1; }
+  .rage-score {
+    font-size: 12px;
+    font-family: var(--mono);
+    font-weight: 600;
+    color: #fff;
+    min-width: 36px;
+    text-align: right;
+  }
+  .rage-dots { display: flex; gap: 3px; }
+  .rage-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+  }
+  .rage-dot.on-blue { background: var(--accent); }
+  .rage-dot.on-green { background: var(--accent2); }
+  .rage-dot.on-gold { background: var(--accent4); }
+  .rage-dot.on-red { background: var(--accent3); }
+  .rage-dot.on-ping { background: #b48cff; }
+
+  /* GENDARME SPECIAL */
+  .gd-box {
+    background: linear-gradient(135deg, rgba(58,159,255,0.08), rgba(61,255,192,0.04));
+    border: 1px solid rgba(58,159,255,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .gd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .gd-title {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .gd-badge {
+    font-size: 10px;
+    font-family: var(--mono);
+    background: rgba(58,159,255,0.15);
+    border: 1px solid rgba(58,159,255,0.3);
+    color: #7db8ff;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .gd-verdict {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .gd-verdict strong { color: #7db8ff; }
+
+  /* VERDICT */
+  .verdict {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .verdict::before {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 50%; transform: translateX(-50%);
+    width: 260px; height: 120px;
+    background: radial-gradient(ellipse, rgba(58,159,255,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .verdict-icon { font-size: 22px; margin-bottom: 8px; }
+  .verdict-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .verdict-title .hi { color: var(--accent); }
+  .verdict-sub {
+    font-size: 13px;
+    color: var(--accent4);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .verdict-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.65;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .source-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .source-pill {
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .source-pill .n { color: var(--accent); font-weight: 600; }
+
+  .full-card { margin-bottom: 16px; }
+
+  /* EVOLUTION ROLE */
+  .role-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .role-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 12px;
+  }
+  .role-yr {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 36px;
+    padding-top: 1px;
+  }
+  .role-text { color: var(--text2); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-name">RATS | <span>SHAars</span></div>
+  <div class="header-sub">Profil Discord · Serveur privé francophone · 2022–2026</div>
+  <div class="header-badge">⚖️ Avocat du peuple · 🎖️ Officier de gendarmerie · 📸 Archiviste compulsif</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-val accent">11 255</div>
+    <div class="stat-label">Messages</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val gold">113</div>
+    <div class="stat-label">Tirades &gt;250c</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val" style="color:#7db8ff">151</div>
+    <div class="stat-label">Msgs armée/gend.</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val peak" style="color:var(--accent)">2024</div>
+    <div class="stat-label">Pic activité</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val red">4 ans</div>
+    <div class="stat-label">Période</div>
+  </div>
+</div>
+
+<!-- PERSO + STYLE -->
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>Traits de personnalité</div>
+    <div class="tags">
+      <span class="tag tag-blue">Gaulliste étatiste</span>
+      <span class="tag tag-red">Anticapitaliste libéral</span>
+      <span class="tag tag-gold">Sourceur compulsif</span>
+      <span class="tag tag-green">Socratique de Discord</span>
+      <span class="tag tag-gray">Futur officier capitaine</span>
+      <span class="tag tag-ping">Rotarien assumé</span>
+    </div>
+    <div class="bio">Débatteur acharné, pédagogue malgré lui. Ne lâche pas un argument sans demander une source, et ne donne jamais raison facilement — mais concède quand c'est factuel. Classe les gens (« teubé », « premier degré », « sophiste ») avec une précision quasi taxonomique. Intelligence réelle, mais incapable de résister à un mauvais débat. Se perçoit comme gaulliste de gauche, est perçu comme chiant par les autres.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot green"></span>Style de communication</div>
+    <div class="bar-row">
+      <div class="bar-label-row"><span class="bar-label">Demande de sources</span><span class="bar-val">95%</span></div>
+      <div class="bar-track"><div class="bar-fill green" style="width:95%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label-row"><span class="bar-label">Tirades structurées</span><span class="bar-val">55%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:55%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label-row"><span class="bar-label">Condescendance assumée</span><span class="bar-val">70%</span></div>
+      <div class="bar-track"><div class="bar-fill red" style="width:70%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label-row"><span class="bar-label">Screenshots / preuves</span><span class="bar-val">60%</span></div>
+      <div class="bar-track"><div class="bar-fill gold" style="width:60%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label-row"><span class="bar-label">Concession honnête</span><span class="bar-val">50%</span></div>
+      <div class="bar-track"><div class="bar-fill mixed" style="width:50%"></div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px">Chancla · Philippot · Risiboulbe : troïka GIF. Mauvaise foi détectée immédiatement. Sophisme nommé systématiquement. Encyclopédie Wikipedia passeport standard.</div>
+  </div>
+</div>
+
+<!-- ACTIVITE + SUJETS -->
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot gold"></span>Rythme d'activité</div>
+    <div class="act-chart">
+      <div class="act-col">
+        <div class="act-bar" style="height:2px;background:var(--text3)"></div>
+        <div class="act-yr">2022</div>
+      </div>
+      <div class="act-col">
+        <div class="act-bar" style="height:64px;background:var(--accent);opacity:1"></div>
+        <div class="act-yr peak">2024</div>
+      </div>
+      <div class="act-col">
+        <div class="act-bar" style="height:52px"></div>
+        <div class="act-yr">2025</div>
+      </div>
+      <div class="act-col">
+        <div class="act-bar" style="height:34px;background:var(--accent4)"></div>
+        <div class="act-yr" style="color:var(--accent4)">2026*</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:12px">Pic 2024 : 4 086 msgs · Juil. 2024 seul = 2 469 msgs<br>*2026 partiel (T1 seulement)</div>
+    <div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Sources partagées</div>
+      <div class="source-pills">
+        <span class="source-pill">Wikipedia <span class="n">·∞</span></span>
+        <span class="source-pill">YouTube <span class="n">·++</span></span>
+        <span class="source-pill">tenor.com <span class="n">·++</span></span>
+        <span class="source-pill">Études INSEE <span class="n">·5+</span></span>
+        <span class="source-pill">Cour de cass. <span class="n">·2</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>Sujets de prédilection</div>
+    <div class="subject-row">
+      <div class="subject-name">Économie / Capitalisme</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:95%;background:var(--accent3)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Politique française</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:88%;background:var(--accent)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Immobilier / Pierre</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:78%;background:var(--accent4)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Armée / Gendarmerie</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:68%;background:var(--accent2)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Grandes Écoles / Mérite</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:60%;background:var(--accent4)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Extrême droite (critique)</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:50%;background:var(--accent3)"></div></div>
+    </div>
+    <div class="subject-row">
+      <div class="subject-name">Gaming (LoL)</div>
+      <div class="subject-bar"><div class="subject-fill" style="width:30%;background:#b48cff"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE POLITIQUE -->
+<div class="card full-card">
+  <div class="card-title"><span class="dot gold"></span>Positions politiques &amp; évolution (2022–2026)</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--text3)"></div>
+      <div class="tl-yr" style="color:var(--text3)">2022</div>
+      <div class="tl-text">2 messages seulement. Contexte géopolitique (Ukraine, portée de missiles). Pas de positionnement politique visible encore. Présence fantôme.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-yr">2024 — explosion</div>
+      <div class="tl-text">Arrivée massive et immédiate : 2 469 messages en juillet seul. Positionnement gaulliste-étatiste mais anticapitaliste. Défense du public contre le privé, critique virulente des grandes écoles de commerce, hostilité aux milliardaires. Se dit "de gauche sur l'économie" mais refuse l'étiquette. Critique simultanée du RN ("le parti le plus libéral après Macron") et de LFI. Vote blanc revendiqué. Viscéralement attaché à la méritocratie via les concours — qu'il a lui-même passés.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--accent3)"></div>
+      <div class="tl-yr red">2024 fin — nuances</div>
+      <div class="tl-text">Paradoxes qui s'installent : anticapitaliste de principe mais investi en bourse (135k€ déclarés), futur bailleur, famille avec appart en location. "Je suis pauvre" dit-il, et donne l'adresse d'une maison en vente. Gaulliste mais rotarien. Contre les grandes écoles mais fils d'ancien officier. La contradiction est vécue et nommée, jamais résolue.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-yr green">2025</div>
+      <div class="tl-text">Stabilisation du corpus idéologique. Renforcement des positions anti-RN (Bardella "stage de 3ème chez son père"), critique du "gaullisme de façade" des LR. Réflexion sur la retraite, l'héritage, l'école publique vs privée — toujours avec une lucidité sur sa propre situation. "Je suis l'exemple le plus réel du gaullisme en France." Accent croissant sur la fraude fiscale des grandes entreprises (cum-cum, IKEA, UBS). Intégration de l'armée, début de vie d'officier.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--accent4)"></div>
+      <div class="tl-yr gold">2026</div>
+      <div class="tl-text">Trajectoire stable. Officier de gendarmerie en poste, perspective de maintien de l'ordre. Investissement immobilier en cours ("je vais voir pour ouvrir un commerce à Paris"). Assume pleinement la contradiction entre ses convictions redistributives et sa trajectoire ascendante. Toujours vote blanc. Moins de grands débats idéologiques purs, plus d'analyses sectorielles (Norvège fiscale, dollar pétrole, dette US). Le modérateur laisse parfois place au provocateur fatigué.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CITATIONS -->
+<div class="card full-card">
+  <div class="card-title"><span class="dot green"></span>Citations représentatives</div>
+  <div class="citation">
+    <div class="citation-text">"Contrairement à certain ici je donne les sources."</div>
+    <div class="citation-meta">Juil. 2024 · Autopromotion épistémique · Récurrente à l'infini</div>
+  </div>
+  <div class="citation gold">
+    <div class="citation-text">"J'ai passé deux semaines à débattre avec quelqu'un qui n'a cité aucune source. Insulte et fait du sophisme à chaque contradiction."</div>
+    <div class="citation-meta">Juil. 2024 · Bilan de guerre · Rare moment de lassitude</div>
+  </div>
+  <div class="citation red">
+    <div class="citation-text">"Vous vous faites voler depuis 30 ans mais vous êtes content parce que vous avez une pomme croquée sur votre téléphone."</div>
+    <div class="citation-meta">Juil. 2024 · Pamphlet anticonsumériste · pleine sincérité</div>
+  </div>
+  <div class="citation green">
+    <div class="citation-text">"Je suis toujours l'exemple le plus réel du gaullisme en France mais tu n'es pas prêt pour ce débat."</div>
+    <div class="citation-meta">Déc. 2025 · Autoportrait politique · second degré probable à 40%</div>
+  </div>
+  <div class="citation">
+    <div class="citation-text">"Quand je vais vouloir mon accréditation niveau 5 du secret et que ça va fouiller mon histo Discord."</div>
+    <div class="citation-meta">Juil. 2025 · Lucidité soudaine · Puis a continué à débattre</div>
+  </div>
+  <div class="citation ping">
+    <div class="citation-text">"Hâte d'être capitaine de gendarmerie et venir te chercher sinnoh."</div>
+    <div class="citation-meta">Fév. 2025 · Menace affectueuse · Score intimidation : 2/10</div>
+  </div>
+  <div class="citation red">
+    <div class="citation-text">"De rien maintenant au travail, tu n'as pas le temps de finir ton steak. Et pense à faire des enfants. On aura encore besoin de pauvre méritocrate dans le futur."</div>
+    <div class="citation-meta">Juil. 2025 · Cynisme de classe · Probablement le meilleur de lui</div>
+  </div>
+</div>
+
+<!-- GENDARME DOSSIER + RAGEBAIT -->
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>Dossier spécial 🎖️ Officier</div>
+    <div class="gd-box">
+      <div class="gd-header">
+        <div class="gd-title">Rôle de modérateur</div>
+        <div class="gd-badge">ÉVOLUTIF</div>
+      </div>
+      <div class="gd-verdict">
+        <strong>2024 (civil) :</strong> modérateur naturel — demande de sources, détection de sophismes, encadrement des débats qui partent en fumée. Fait autorité par la rigueur, pas par le grade.<br><br>
+        <strong>2025 (intégration) :</strong> le rôle se fissure. Lui-même provoque, abandonne parfois le rôle de "juge" pour prendre parti fort. La lassitude face aux mauvaise fois répétées se lit.<br><br>
+        <strong>2026 (officier en poste) :</strong> invoque désormais son statut légalement ("diffamation officier = 45 000€"), plus d'humilité institutionnelle. <strong>Modérateur de fait devenu arbitre intermittent.</strong>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">A consulté sa promo d'officiers en direct · 1 mention "accréditation niveau 5" · 0 signalement confirmé</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>Ragebait-o-mètre</div>
+    <div class="rage-row">
+      <div class="rage-label">Sujets allume-feu</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot on-red"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+      </div>
+      <div class="rage-score">8/10</div>
+    </div>
+    <div class="rage-row">
+      <div class="rage-label">Conscience du ragebait</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot on-gold"></div><div class="rage-dot"></div>
+      </div>
+      <div class="rage-score">9/10</div>
+    </div>
+    <div class="rage-row">
+      <div class="rage-label">Volonté d'"avoir raison"</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div><div class="rage-dot on-blue"></div>
+      </div>
+      <div class="rage-score">10/10</div>
+    </div>
+    <div class="rage-row">
+      <div class="rage-label">Qualité argumentative</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+      </div>
+      <div class="rage-score">8/10</div>
+    </div>
+    <div class="rage-row">
+      <div class="rage-label">Cohérence sur 4 ans</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div><div class="rage-dot on-green"></div>
+      </div>
+      <div class="rage-score">10/10</div>
+    </div>
+    <div class="rage-row">
+      <div class="rage-label">Autodérision sur contradiction</div>
+      <div class="rage-dots">
+        <div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot on-ping"></div><div class="rage-dot"></div>
+      </div>
+      <div class="rage-score">9/10</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFIL INTELLECTUEL -->
+<div class="card full-card">
+  <div class="card-title"><span class="dot"></span>Profil intellectuel</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div>
+      <div class="bar-row">
+        <div class="bar-label-row"><span class="bar-label">Rigueur épistémique</span><span class="bar-val">★★★★★</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label-row"><span class="bar-label">Condescendance</span><span class="bar-val">★★★★☆</span></div>
+        <div class="bar-track"><div class="bar-fill red" style="width:78%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label-row"><span class="bar-label">Capacité à concéder</span><span class="bar-val">★★★★☆</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:72%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label-row"><span class="bar-label">Contradiction interne</span><span class="bar-val">★★★★★</span></div>
+        <div class="bar-track"><div class="bar-fill gold" style="width:95%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label-row"><span class="bar-label">Cohérence idéologique</span><span class="bar-val">★★★★★</span></div>
+        <div class="bar-track"><div class="bar-fill mixed" style="width:92%"></div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Références récurrentes</div>
+      <div class="tags" style="margin-bottom:0">
+        <span class="tag tag-gray">De Gaulle</span>
+        <span class="tag tag-gray">Adam Smith (débunké)</span>
+        <span class="tag tag-gray">Courbe de Laffer</span>
+        <span class="tag tag-blue">Méritocratie concours</span>
+        <span class="tag tag-gold">Fraude fiscale cum-cum</span>
+        <span class="tag tag-red">Bardella/Zemmour (contre)</span>
+        <span class="tag tag-gray">Rotary Club</span>
+        <span class="tag tag-ping">Fermat à 10 ans</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="verdict-icon">⚖️</div>
+  <div class="verdict-title">Ragebait <span class="hi">pleinement conscient.</span></div>
+  <div class="verdict-sub">Gaulliste étatiste clivant à contradictions assumées.</div>
+  <div class="verdict-desc">Sait exactement ce qu'il fait — et exige que ses interlocuteurs le sachent aussi. La demande de source est une arme autant qu'une méthode. Détecte le sophisme en temps réel, le nomme, et recommence le lendemain avec le même interlocuteur. Politiquement non-catégorisable de l'extérieur : anticapitaliste qui investit en bourse, anti-élite sorti de prépa, gaulliste rotarien. Modérateur naturel des débats jusqu'en 2024, arbitre de plus en plus intermittent ensuite — la lassitude face à la mauvaise foi chronique s'accumule. Son rôle d'officier finit par teinter le discours : autorité institutionnelle mobilisée stratégiquement, conscience croissante de la surveillance possible. <strong>Personnalité clivante</strong> mais pour des raisons intellectuelles — pas idéologiques. Ce n'est pas ce qu'il dit qui choque, c'est qu'il demande à ce qu'on le prouve.</div>
+</div>
+
+</body>
+</html>

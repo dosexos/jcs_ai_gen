@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — merk0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+  :root {
+    --bg: #0f0f1a;
+    --bg2: #13131f;
+    --bg3: #1a1a2e;
+    --card: #1e1e30;
+    --card2: #242438;
+    --border: #2e2e4a;
+    --purple: #533483;
+    --purple-light: #7b52cc;
+    --purple-bright: #9b7aff;
+    --red: #e94560;
+    --red-dark: #c73450;
+    --red-glow: rgba(233, 69, 96, 0.15);
+    --gold: #f0a500;
+    --teal: #2de2e6;
+    --text: #e8e8f0;
+    --text-dim: #8888aa;
+    --text-muted: #555570;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ========= HEADER ========= */
+  .header {
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-banner {
+    height: 6px;
+    background: linear-gradient(90deg, var(--purple) 0%, var(--red) 50%, var(--purple-bright) 100%);
+  }
+
+  .header-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 36px 48px 32px;
+    position: relative;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--red) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px var(--bg2), 0 0 0 5px var(--red), 0 8px 32px rgba(233,69,96,0.35);
+    position: relative;
+  }
+
+  .avatar::after {
+    content: '●';
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: 14px;
+    color: #43b581;
+    background: var(--bg2);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 6px #43b581;
+  }
+
+  .header-meta {
+    flex: 1;
+  }
+
+  .pseudo {
+    font-family: 'Syne', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--purple-bright) 60%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .pseudo-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .badge-red { background: rgba(233,69,96,0.12); border-color: rgba(233,69,96,0.4); color: #f07085; }
+  .badge-purple { background: rgba(83,52,131,0.2); border-color: rgba(155,122,255,0.4); color: var(--purple-bright); }
+  .badge-gold { background: rgba(240,165,0,0.1); border-color: rgba(240,165,0,0.4); color: var(--gold); }
+  .badge-teal { background: rgba(45,226,230,0.08); border-color: rgba(45,226,230,0.35); color: var(--teal); }
+
+  /* ========= STATS BAR ========= */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .stat-item {
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ========= MAIN LAYOUT ========= */
+  .main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+
+  /* ========= CARD ========= */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple) 0%, var(--red) 100%);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ========= PROGRESS BARS ========= */
+  .topic-item {
+    margin-bottom: 12px;
+  }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 13px;
+  }
+
+  .topic-name { color: var(--text); font-weight: 500; }
+  .topic-pct { color: var(--text-dim); font-family: 'Space Mono', monospace; font-size: 11px; }
+
+  .topic-bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .topic-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--purple-light), var(--red));
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ========= POLITICAL POSITIONS ========= */
+  .position-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .position-item:last-child { border-bottom: none; }
+
+  .position-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .position-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .position-text strong { color: var(--red); }
+
+  /* ========= CITATIONS ========= */
+  .citation {
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    background: rgba(233,69,96,0.05);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+  }
+
+  .citation-text {
+    font-style: italic;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .citation-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ========= LEXIQUE ========= */
+  .lexique-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .lex-item {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .lex-word { color: var(--purple-bright); }
+  .lex-count { color: var(--text-muted); margin-left: 6px; }
+
+  /* ========= STYLE COMM ========= */
+  .style-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .style-item {
+    background: var(--card2);
+    border-radius: 6px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .style-emoji { font-size: 20px; margin-bottom: 6px; }
+  .style-name { font-size: 12px; font-weight: 600; color: var(--purple-bright); margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+  .style-desc { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+
+  /* ========= CHART ========= */
+  canvas {
+    max-height: 160px;
+  }
+
+  /* ========= RELATIONS ========= */
+  .relation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .relation-item:last-child { border-bottom: none; }
+
+  .relation-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  .relation-name { font-size: 13px; font-weight: 600; color: var(--purple-bright); margin-bottom: 2px; }
+  .relation-desc { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+
+  .rel-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .tag-rival { background: rgba(233,69,96,0.15); color: var(--red); }
+  .tag-cible { background: rgba(240,165,0,0.12); color: var(--gold); }
+  .tag-allié { background: rgba(45,226,230,0.1); color: var(--teal); }
+
+  /* ========= PROSE SECTION ========= */
+  .section-full {
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title span {
+    color: var(--red);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  .prose-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prose-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple) 0%, var(--red) 100%);
+  }
+
+  .sub-section {
+    margin-bottom: 32px;
+  }
+
+  .sub-section:last-child { margin-bottom: 0; }
+
+  .sub-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--purple-bright);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sub-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    background: rgba(233,69,96,0.1);
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid rgba(233,69,96,0.25);
+  }
+
+  .prose-text {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: #bbbbd0;
+  }
+
+  .prose-text em {
+    color: var(--text);
+    font-style: italic;
+    background: rgba(155,122,255,0.07);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  .prose-text strong { color: var(--text); font-weight: 600; }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 28px 0;
+  }
+
+  /* ========= VERDICT ========= */
+  .verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.15) 0%, rgba(233,69,96,0.1) 100%);
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict::before {
+    content: 'VERDICT';
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+  }
+
+  .verdict::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(233,69,96,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .verdict-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  .verdict-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .verdict-text strong {
+    color: var(--purple-bright);
+    font-weight: 600;
+  }
+
+  /* ========= HOUR CHART ========= */
+  .chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 150px;
+  }
+
+  /* ========= RESPONSIVE ========= */
+  @media (max-width: 900px) {
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .col-span-3 { grid-column: span 2; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .header-content { padding: 24px; }
+  }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .col-span-2, .col-span-3 { grid-column: span 1; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .pseudo { font-size: 26px; }
+    .style-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Animated accent glow */
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  .glow-accent {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-banner"></div>
+  <div class="header-content">
+    <div class="avatar">M</div>
+    <div class="header-meta">
+      <div class="pseudo">merk0</div>
+      <div class="pseudo-sub">Discord · Serveur privé francophone · Oct. 2022 — Juin 2025</div>
+      <div class="badges">
+        <span class="badge badge-red">⚡ Pamphlétaire de service</span>
+        <span class="badge badge-purple">◈ Gauche anti-libérale</span>
+        <span class="badge badge-gold">★ Contradicteur compulsif</span>
+        <span class="badge badge-teal">↯ Actif horaires bureau</span>
+        <span class="badge badge-red">🎮 Gamer LoL / Elden Ring</span>
+        <span class="badge badge-purple">⚖ Réformiste institutionnel</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value">2 535</div>
+    <div class="stat-label">Messages totaux</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">975</div>
+    <div class="stat-label">Jours de présence</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">2,6</div>
+    <div class="stat-label">Messages / jour (moy.)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">11h–12h</div>
+    <div class="stat-label">Pic d'activité</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ROW 1 -->
+  <div class="grid-3">
+
+    <!-- SUJETS FAVORIS -->
+    <div class="card">
+      <div class="card-title">Sujets de prédilection</div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Politique française & sociale</span><span class="topic-pct">38%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:38%"></div></div>
+      </div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Économie & inégalités</span><span class="topic-pct">22%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:22%"></div></div>
+      </div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Société & conflits générationnels</span><span class="topic-pct">17%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:17%"></div></div>
+      </div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Gaming & culture internet</span><span class="topic-pct">11%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:11%"></div></div>
+      </div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Vie quotidienne & réflexions perso</span><span class="topic-pct">8%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:8%"></div></div>
+      </div>
+      <div class="topic-item">
+        <div class="topic-header"><span class="topic-name">Éducation & mobilité sociale</span><span class="topic-pct">4%</span></div>
+        <div class="topic-bar"><div class="topic-fill" style="width:4%"></div></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITÉ PAR HEURE -->
+    <div class="card">
+      <div class="card-title">Activité par heure (UTC+1)</div>
+      <div class="chart-wrapper">
+        <canvas id="hourChart"></canvas>
+      </div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:8px; font-family:'Space Mono',monospace;">
+        Profil → bureau / work hours. Silence nocturne quasi-total. Pic 9h–12h.
+      </div>
+    </div>
+
+    <!-- POSITIONS POLITIQUES -->
+    <div class="card">
+      <div class="card-title">Positions politiques</div>
+      <div class="position-item">
+        <div class="position-label">Économie</div>
+        <div class="position-text"><strong>Anti-libéral déclaré</strong>. Contempteur d'Adam Smith et de l'École de Chicago. Favorable à Piketty, revenu universel, taxation des superprofits.</div>
+      </div>
+      <div class="position-item">
+        <div class="position-label">Institutions</div>
+        <div class="position-text">Réformiste radical : <strong>VIe République</strong>, vote blanc comptabilisé, septennat, refonte du financement des campagnes.</div>
+      </div>
+      <div class="position-item">
+        <div class="position-label">Vote</div>
+        <div class="position-text">Vote blanc au 2e tour 2022. <strong>Abstentionniste critique</strong>, pas apolitique — refuse le vote "contre".</div>
+      </div>
+      <div class="position-item">
+        <div class="position-label">Conflits sociaux</div>
+        <div class="position-text">Soutien aux grèves de 2023. Justifie la <strong>radicalité des manifs</strong>, historiquement informé sur la violence sociale.</div>
+      </div>
+      <div class="position-item">
+        <div class="position-label">Police</div>
+        <div class="position-text">Forte défiance. <strong>"Les keufs, et dieu sait que je ne les porte pas dans mon coeur"</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 -->
+  <div class="grid-3">
+
+    <!-- STYLE DE COMMUNICATION -->
+    <div class="card">
+      <div class="card-title">Style de communication</div>
+      <div class="style-grid">
+        <div class="style-item">
+          <div class="style-emoji">🎯</div>
+          <div class="style-name">Assertif / tranchant</div>
+          <div class="style-desc">Rarement de "peut-être". Affirme, puis justifie. Supporte mal la demi-mesure.</div>
+        </div>
+        <div class="style-item">
+          <div class="style-emoji">🔁</div>
+          <div class="style-name">Relance-débat</div>
+          <div class="style-desc">Lance souvent le sujet, attend la contradiction, puis développe vraiment sa pensée en réponse.</div>
+        </div>
+        <div class="style-item">
+          <div class="style-emoji">🧠</div>
+          <div class="style-name">Référencement argumenté</div>
+          <div class="style-desc">Piketty, déterminisme social, keynésianisme. Ancre ses opinions dans des cadres théoriques.</div>
+        </div>
+        <div class="style-item">
+          <div class="style-emoji">🔥</div>
+          <div class="style-name">Ironie grinçante</div>
+          <div class="style-desc">Emoji 🙂 post-sarcasme systématique. Formules "bien sûr", "absolument pas archaïque" etc.</div>
+        </div>
+        <div class="style-item">
+          <div class="style-emoji">🗡</div>
+          <div class="style-name">Attaque ad hominem ciblée</div>
+          <div class="style-desc">Quand agacé, sort des attaques personnelles contextualisées (statut social, cohérence politique).</div>
+        </div>
+        <div class="style-item">
+          <div class="style-emoji">💡</div>
+          <div class="style-name">Auto-disclosure</div>
+          <div class="style-desc">Utilise sa famille, son parcours, ses expériences pour valider ses arguments. Intime mais stratégique.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CITATIONS MARQUANTES -->
+    <div class="card col-span-2">
+      <div class="card-title">Citations marquantes</div>
+
+      <div class="citation">
+        <div class="citation-text">"Je suis profondément anti libéral. Je chie à la gueule d'Adam Smith si jms. Et de l'École de Chicago."</div>
+        <div class="citation-meta">21 mars 2023 · Débat retraites · Positionnement idéologique le plus clair du corpus</div>
+      </div>
+
+      <div class="citation">
+        <div class="citation-text">"800 000 manifestants à Paris, probablement 1000 casseurs — je pense que les 799 000 auraient dû éviter de venir pour ne pas qu'on les associe aux casseurs."</div>
+        <div class="citation-meta">24 mars 2023 · En réponse à un membre qui focalisait sur les violences de manifestants</div>
+      </div>
+
+      <div class="citation">
+        <div class="citation-text">"Je voudrais juste que mon ministre de l'agriculture ait vu une vache autre part que dans un salon ou un manuel."</div>
+        <div class="citation-meta">24 mars 2023 · Sur la déconnexion de la classe politique</div>
+      </div>
+
+      <div class="citation">
+        <div class="citation-text">"Mpb t'es prof, tu bosses en 20h semaine, tu vas probablement vivre de la rente plus tard — t'es pas invité à donner ton avis sur des revendications sociales."</div>
+        <div class="citation-meta">24 mars 2023 · Attaque directe, ton caractéristique quand la patience est épuisée</div>
+      </div>
+
+      <div class="citation">
+        <div class="citation-text">"Ma retraite est trop basse ça fait 30 ans que j'ai pas contribué à la société en dehors de louer des placards à des étudiants fauchés."</div>
+        <div class="citation-meta">Fév. 2025 · Pastiche d'un "RP boomer" · Ironie au sommet de son art</div>
+      </div>
+
+      <div class="citation">
+        <div class="citation-text">"Les jeunes de 20 ans cherchent déjà à dissocier leurs revenus de leur travail. On dirait qu'ils ont déjà compris que le travail ne rend pas riche. Bizarre."</div>
+        <div class="citation-meta">21 mars 2023 · Analyse générationnelle, ton faussement naïf caractéristique</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3 -->
+  <div class="grid-2">
+
+    <!-- RELATIONS MEMBRES -->
+    <div class="card">
+      <div class="card-title">Relations avec les membres</div>
+
+      <div class="relation-item">
+        <div class="relation-avatar">mpb</div>
+        <div>
+          <div class="relation-name">mpb <span class="rel-tag tag-rival">Rival principal</span></div>
+          <div class="relation-desc">Cible numéro 1. Incarne tout ce que Merko conteste : positionnement macroniste assumé, statut de prof vu comme privilégié. 24 mentions directes, souvent pour démolir ses arguments ("HOLY COPIUM", "le macronix du discord"). Tension récurrente mais le débat reste.</div>
+        </div>
+      </div>
+
+      <div class="relation-item">
+        <div class="relation-avatar">ray</div>
+        <div>
+          <div class="relation-name">raydo <span class="rel-tag tag-cible">Cible secondaire</span></div>
+          <div class="relation-desc">12 mentions, souvent présenté comme "hors sol" et "teubé". Merko l'utilise comme repoussoir lorsqu'il cherche à délégitimer une position adverse. Moins d'affection que pour mpb, plus de mépris pur.</div>
+        </div>
+      </div>
+
+      <div class="relation-item">
+        <div class="relation-avatar">rans</div>
+        <div>
+          <div class="relation-name">ransberg <span class="rel-tag tag-cible">Souffre-douleur</span></div>
+          <div class="relation-desc">10 mentions. Merko lui sort des attaques percutantes sur sa cohérence ("si ransberg est d'accord avec toi, c'est souvent le signe que c'est soit très nauséabond soit complètement con"). Rôle de thermomètre inversé.</div>
+        </div>
+      </div>
+
+      <div class="relation-item">
+        <div class="relation-avatar">zol</div>
+        <div>
+          <div class="relation-name">zoller <span class="rel-tag tag-allié">Allié / père spirituel</span></div>
+          <div class="relation-desc">Moins fréquent mais traité avec respect notable. "Vrai soldat tout terrain Zoller" (mars 2025). Personnalité à laquelle Merko semble s'identifier ou faire appel pour légitimer une position.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEXIQUE SIGNATURE -->
+    <div class="card">
+      <div class="card-title">Lexique signature & expressions récurrentes</div>
+      <div class="lexique-grid">
+        <div class="lex-item"><span class="lex-word">littéralement</span><span class="lex-count">×23</span></div>
+        <div class="lex-item"><span class="lex-word">:^)</span><span class="lex-count">×18+</span></div>
+        <div class="lex-item"><span class="lex-word">chancla 🥿</span><span class="lex-count">×28</span></div>
+        <div class="lex-item"><span class="lex-word">vrmt</span><span class="lex-count">×31</span></div>
+        <div class="lex-item"><span class="lex-word">pck</span><span class="lex-count">×23</span></div>
+        <div class="lex-item"><span class="lex-word">mdr</span><span class="lex-count">×42</span></div>
+        <div class="lex-item"><span class="lex-word">persoent</span><span class="lex-count">×10</span></div>
+        <div class="lex-item"><span class="lex-word">putain</span><span class="lex-count">×30</span></div>
+        <div class="lex-item"><span class="lex-word">droitardé</span><span class="lex-count">×3</span></div>
+        <div class="lex-item"><span class="lex-word">prolo</span><span class="lex-count">×6</span></div>
+        <div class="lex-item"><span class="lex-word">profondément</span><span class="lex-count">×8</span></div>
+        <div class="lex-item"><span class="lex-word">boomer</span><span class="lex-count">×15+</span></div>
+        <div class="lex-item"><span class="lex-word">mpb</span><span class="lex-count">×24</span></div>
+        <div class="lex-item"><span class="lex-word">copium</span><span class="lex-count">rare mais fort</span></div>
+        <div class="lex-item"><span class="lex-word">gueule</span><span class="lex-count">×23</span></div>
+        <div class="lex-item"><span class="lex-word">imo</span><span class="lex-count">×8</span></div>
+        <div class="lex-item"><span class="lex-word">starter pack</span><span class="lex-count">formule choc</span></div>
+        <div class="lex-item"><span class="lex-word">hamdoullah</span><span class="lex-count">×3</span></div>
+        <div class="lex-item"><span class="lex-word">gueux / prolo</span><span class="lex-count">appel à la solidarité</span></div>
+        <div class="lex-item"><span class="lex-word">🙂 (post-ironie)</span><span class="lex-count">systématique</span></div>
+      </div>
+      <div style="margin-top:14px; font-size:12px; color:var(--text-muted); line-height:1.5;">
+        L'émoji <strong style="color:var(--text)">:^)</strong> et le <strong style="color:var(--text)">🙂</strong> sont sa signature d'ironie distante. La chancla 🥿 est son emote "lol irl", signe d'appartenance au groupe plus que politiquement chargé. <em style="color:var(--text-dim)">Pck / vrmt / persoent</em> = économie cognitive à l'écrit, non relâchement intellectuel.
+      </div>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION LONGUE -->
+  <div class="section-full">
+    <div class="section-title">Analyse détaillée <span>// 6 sections</span></div>
+    <div class="prose-card">
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">01</span> Personnalité & posture sur le serveur</div>
+        <div class="prose-text">
+          Merko s'impose dès ses premières interventions significatives (mars 2023, lors des débats sur la réforme des retraites) comme la voix la plus politiquement engagée et la moins conciliante du serveur. Il n'arrive pas dans un débat pour explorer : il arrive avec une thèse, la défend sous pression, et ne lâche que sur les détails. Cette posture ne relève pas de l'arrogance gratuite — il y a une vraie cohérence interne dans ses positions, nourrie de lectures (Piketty mentionné, sociologie du déterminisme social) et d'expériences personnelles mobilisées en arguments. Son père qui a voulu intégrer un parti libéral et s'est vu réclamer 50 000 euros de capital, sa mère aux urgences depuis 15 ans, son propre parcours en L3 écogestion : <em>l'intime devient preuve</em>, et cette technique argumentative est constante sur toute la période.
+          <br><br>
+          Ce qui distingue Merko d'un simple polémiste, c'est sa capacité à <strong>auto-iriser sur lui-même</strong> avec la même intensité qu'il dirige vers les autres. Il admet avoir "niqué son adolescence" à cause du gaming, raconte que son père a fini par lui reconnaître qu'il aurait été accro à Elden Ring lui aussi s'il était né plus tard. Ces moments de concession personnelle contrebalancent une posture de surface souvent très sure d'elle. Il est clivant sur le fond, rarement inhumain dans la forme — ce qui lui vaut probablement de rester dans le groupe sans générer d'exclusion.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">02</span> Positionnement politique & évolution idéologique</div>
+        <div class="prose-text">
+          La ligne idéologique de Merko est stable sur toute la période, mais son <strong>degré d'élaboration et de véhémence fluctue selon l'actualité</strong>. En 2022, les rares messages sont lapidaires : partage de liens, commentaires courts, ironie au premier degré (<em>"Tout va bien en France"</em>, nov. 2022). L'explosion de mars 2023, centrée sur la réforme des retraites et les manifestations, révèle un personnage pleinement formé : anti-libéral déclaré, favorisant l'impôt sur les successions pour les grandes fortunes (pas pour "le prolo qui veut léguer ce qu'il a accumulé"), partisan d'une VIe République, de la comptabilisation du vote blanc, d'un septennat, et d'une refonte totale du financement des partis pour arrêter <em>"de n'y mettre que des riches à côté de la plaque"</em>.
+          <br><br>
+          Sa cible récurrente n'est pas la droite en tant que telle, mais le <strong>macronisme spécifiquement</strong> — perçu comme une trahison du gaullisme, une politique du cynisme institutionnel instrumentalisé au profit des actionnaires. L'usage du 49.3, la "courbe de Laffer", la méritocratie : il identifie ces arguments comme le "starter pack du droitardé" et les démonte méthodiquement. En 2024, lors des législatives anticipées, la colère reste intacte mais le registre monte d'un cran sur la question générationnelle : les boomers deviennent un archétype satirique à part entière, <em>"nés avant la honte"</em>, vivant de rentes immobilières tout en se plaignant de retraites insuffisantes. Ce glissement de la critique structurelle vers une cible générationnelle est la principale évolution visible sur la période.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">03</span> Humour, ironie & rapport au ragebait</div>
+        <div class="prose-text">
+          Le sens de l'humour de Merko est <strong>profondément structuré par l'ironie distante</strong>. Son emoji de prédilection — le :^) et le 🙂 utilisé post-affirmation acide — signale systématiquement au lecteur qu'il sait pertinemment ce qu'il dit, qu'il anticipe l'objection, et qu'il la juge insuffisante. Ce n'est pas du ragebait inconscient : c'est une technique rhétorique maîtrisée. Son pastiches de dialogue boomer (<em>"au dîner avec Bernard et Chantal c'était plutôt 'oh putain Nicolas va encore me payer ma croisière Costa annuelle'"</em>, février 2025) atteignent un degré de finesse satirique qui dépasse clairement le simple lâcher de bile.
+          <br><br>
+          Il y a cependant des moments de <strong>ragebait conscient</strong> — notamment quand il interpelle directement des membres par leur pseudo pour les placer en porte-à-faux. <em>"Tu feras gaffe en général si ransberg est d'accord avec toi c'est souvent le signe que c'est soit très nauséabond soit complètement con"</em> (mars 2023) — cette formule ne cherche pas à convaincre ransberg, elle cherche à le discréditer aux yeux du reste du serveur. La distinction entre son ironie de fond (authentique, réflexive) et son ironie de crise (ad hominem, tribale) est nette et constitue la ligne de fracture entre Merko le penseur et Merko l'énervé.
+          <br><br>
+          La chancla 🥿 mérite un paragraphe à elle seule : utilisée 28 fois, c'est l'emote du groupe par excellence, présente dans les moments de complicité et de légèreté totale, complètement détachée de ses combats politiques. Elle rappelle qu'il y a un Merko hors-débat, détendu, qui envoie des liens TikTok et commente les scores League of Legends — et que ce personnage existe bel et bien.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">04</span> Rapport au travail, aux générations & à l'argent</div>
+        <div class="prose-text">
+          La question économique chez Merko n'est pas abstraite : elle est <strong>viscéralement ancrée dans une lecture du quotidien</strong>. Il s'indigne que 25 000 euros brut annuel soit un seuil fiscal présenté comme significatif (<em>"c'est tellement rien 25k à l'année sa mère"</em>, fév. 2025), qu'un grand-père parti à 55 ans soit grassement payé tout en admettant lui-même n'avoir pas besoin de cet argent, que les retraités aient désormais un niveau de vie moyen supérieur à celui des actifs. Ces constats ne sont pas originaux en soi — mais la manière dont il les articule, en mêlant données macro (Piketty, statistiques de répartition) et récit intime (sa famille élargie, les galères de sa génération), leur donne une texture particulière.
+          <br><br>
+          Son rapport au travail est paradoxal : il est critique du culte du travail comme voie d'émancipation (<em>"le travail ne rend pas riche"</em>), mais il est aussi franchement <strong>hostile à la posture victimaire non méritée</strong>. Les médecins qui choisissent cette profession par appât du gain alors qu'il existe des métiers mieux rémunérés, les boomers qui n'ont pas travaillé depuis 35 ans mais "ont travaillé toute leur vie à les entendre" — il n'a pas de mansuétude pour les hypocrisies du discours social, quelle que soit leur origine politique. En juillet 2024, il cherche une alternance en développement commercial et mentionne cette galère sans dramatisation excessive — le signe d'une lucidité sur sa propre situation qui tempère son penchant à la grande théorie.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">05</span> Dynamiques relationnelles & rôle dans le groupe</div>
+        <div class="prose-text">
+          Merko occupe la position du <strong>contradicteur institutionnalisé</strong> — celui dont tout le monde attend la réaction politique sur l'actu, et qui n'hésite pas à retourner l'argument d'en face sur lui-même. Sa relation avec mpb est la plus documentée et la plus révélatrice : mpb incarne pour Merko le libéral de bonne famille, prof à temps partiel, macroniste sans classe populaire derrière lui, et cette cible concentre tout le mépris de classe qu'il exprime rarement par ailleurs sous cette forme aussi directe. <em>"Jure mpb le macronix du discord ?"</em> (mars 2023) dit tout : mpb est à la fois l'adversaire et presque un faire-valoir nécessaire.
+          <br><br>
+          Ce qui est frappant, c'est que malgré son agressivité ciblée, Merko n'est pas exclusif dans ses alliances. Il défend des positions nuancées sur des sujets sensibles (religion : <em>"tu peux très bien être pratiquant parce que la famille mais ne pas avoir la foi"</em>, fév. 2025), reconnaît les bons points même à ses adversaires, et recadre ses propres positions quand elles sont mal comprises. Il joue le jeu du débat long, ce qui est différent d'un posteur de ragebait pur qui disparaît après l'allumage de la mèche. Sur la question de l'éducation parentale et du gaming (mars 2025), on voit un Merko presque pédagogique, qui réfléchit à voix haute à ce qu'il ferait avec ses propres enfants — <strong>un registre complètement absent du Merko politique de 2023</strong>, et qui marque une vraie maturation de ton.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <div class="sub-title"><span class="sub-num">06</span> Évolution 2022–2025 : du pamphlet à la nuance</div>
+        <div class="prose-text">
+          Le corpus couvre trois phases distinctes. <strong>Phase 1 (oct. 2022 – fév. 2023)</strong> : présence sporadique, Merko est à peine visible — quelques liens partagés, commentaires lapidaires. Le personnage n'est pas encore installé. <strong>Phase 2 (mars–juin 2023)</strong> : explosion quantitative et qualitative. Plus de 1 500 messages sur cette seule période, portée par l'actualité des retraites et des manifestations. C'est là que sa rhétorique se cristallise, que ses cibles se fixent, et que le "Merko politique" prend toute sa dimension. Les journées du 21 mars (159 msgs), 24 mars (233 msgs), 22 mai (203 msgs) sont ses pics absolus — des marathons de débat qui durent des heures.
+          <br><br>
+          <strong>Phase 3 (2024–2025)</strong> : nette décélération du volume (887 msgs en tout 2024, 110 en 2025), mais la qualité des interventions se consolide. Il est moins en croisade permanente, plus sélectif dans ses engagements. La colère de fond reste — les boomers, les inégalités, l'immobilisme institutionnel — mais elle est mise en scène avec plus de distance, plus d'humour, moins de frontalité à chaud. Les messages de 2025 sur l'éducation de ses enfants (hypothétiques ou réels), sur les livrets scolaires, sur les médecins révèlent un homme qui pense maintenant à moyen terme plutôt qu'à l'immédiateté du combat politique. Le registre du <em>père qui réfléchit</em> émerge clairement là où n'existait que le <em>militant qui s'énerve</em>. C'est la maturation la plus significative observable sur l'ensemble de la période.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="verdict-title">Verdict final</div>
+    <div class="verdict-text">
+      Merko est un <strong>ragebaiteur conscient et sélectif</strong> — il allume les feux qu'il sait maîtriser, mais ne part jamais sans extincteur. Sa posture politique est authentique, pas performative : la cohérence idéologique tient sur trois ans sans contradiction majeure, ancrée dans un vécu de classe populaire cultivée qui donne du poids à ses arguments là où d'autres n'auraient que de la rhétorique. <strong>Clivant, oui — mais informé</strong>. Il est la voix du serveur qu'on lit avec un léger soupir quand il commence, et qu'on finit par ne plus trop pouvoir contredire parce qu'il a eu le temps de construire. Entre 2023 et 2025, quelque chose s'est posé : la colère est toujours là, mais elle commence à être <strong>au service d'une pensée plutôt que l'inverse</strong>.
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  // Hour chart data
+  const hourData = [62,1,0,0,0,0,15,33,84,307,224,367,369,204,213,129,164,68,70,114,84,9,6,12];
+  const labels = Array.from({length:24}, (_,i) => i+'h');
+
+  const ctx = document.getElementById('hourChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: hourData,
+        backgroundColor: hourData.map(v => {
+          if (v >= 300) return 'rgba(233,69,96,0.85)';
+          if (v >= 150) return 'rgba(155,122,255,0.7)';
+          if (v >= 50) return 'rgba(83,52,131,0.6)';
+          return 'rgba(46,46,70,0.8)';
+        }),
+        borderColor: 'transparent',
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e30',
+          borderColor: '#2e2e4a',
+          borderWidth: 1,
+          titleColor: '#9b7aff',
+          bodyColor: '#e8e8f0',
+          callbacks: {
+            label: ctx => ` ${ctx.raw} messages`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(46,46,74,0.4)' },
+          ticks: { color: '#555570', font: { family: 'Space Mono', size: 9 } }
+        },
+        y: {
+          grid: { color: 'rgba(46,46,74,0.4)' },
+          ticks: { color: '#555570', font: { family: 'Space Mono', size: 9 } }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — Raydo</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52ab;
+    --red: #e94560;
+    --red-light: #ff6b81;
+    --text: #e0e0e0;
+    --text-dim: #9a9ab0;
+    --card: #1e2040;
+    --card-border: #2e3060;
+    --accent: #c084fc;
+    --gold: #f5a623;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0f0f2a 0%, #1a1a3e 40%, #2a1040 70%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(83,52,131,0.35) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 20%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(233,69,96,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+  .avatar-row { display: flex; align-items: center; gap: 28px; margin-bottom: 20px; }
+  .avatar {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--red) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; font-weight: 900; color: white;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 24px rgba(233,69,96,0.4);
+    flex-shrink: 0;
+  }
+  .pseudo { font-size: 42px; font-weight: 900; letter-spacing: -1px; }
+  .pseudo span { color: var(--red); }
+  .tag { font-size: 13px; color: var(--text-dim); }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .badge {
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    letter-spacing: .5px; text-transform: uppercase;
+  }
+  .badge-purple { background: rgba(83,52,131,0.5); border: 1px solid var(--purple-light); color: var(--accent); }
+  .badge-red    { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red-light); }
+  .badge-gold   { background: rgba(245,166,35,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-grey   { background: rgba(255,255,255,0.06); border: 1px solid #444; color: var(--text-dim); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--card-border);
+    padding: 24px 40px;
+  }
+  .stats-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px;
+  }
+  .stat-item { text-align: center; }
+  .stat-value { font-size: 28px; font-weight: 900; color: var(--red); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* ── CHART ── */
+  .chart-container {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 40px 32px;
+  }
+  .chart-title { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .hour-chart { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+  .hour-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .hour-bar {
+    width: 100%; border-radius: 3px 3px 0 0;
+    background: linear-gradient(to top, var(--purple), var(--red));
+    min-height: 2px;
+    transition: opacity .2s;
+    cursor: default;
+  }
+  .hour-bar:hover { opacity: .7; }
+  .hour-label { font-size: 9px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ── MAIN GRID ── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 40px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .grid-full { margin-bottom: 24px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--red); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--red); border-radius: 2px; }
+
+  /* ── PROGRESS BARS ── */
+  .topic-row { margin-bottom: 12px; }
+  .topic-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+  .topic-label span:last-child { color: var(--text-dim); font-size: 12px; }
+  .bar-track { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--purple), var(--red)); }
+
+  /* ── LEXIQUE ── */
+  .lexique { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lex-item {
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: rgba(83,52,131,0.25); border: 1px solid rgba(83,52,131,0.5); color: var(--accent);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lex-freq { font-size: 10px; color: var(--text-dim); }
+
+  /* ── CITATIONS ── */
+  .quote-block {
+    border-left: 3px solid var(--purple);
+    padding: 12px 16px;
+    background: rgba(83,52,131,0.1);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 14px;
+  }
+  .quote-text { font-style: italic; color: var(--text); font-size: 13.5px; line-height: 1.6; }
+  .quote-meta { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .quote-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+    margin-left: 8px; background: rgba(233,69,96,0.2); color: var(--red-light);
+  }
+
+  /* ── POLITIQUE ── */
+  .pol-spectrum {
+    margin: 16px 0;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+  }
+  .spectrum-track {
+    height: 8px; border-radius: 4px;
+    background: linear-gradient(90deg, #e53e3e 0%, #dd6b20 25%, #d69e2e 50%, #38a169 75%, #3182ce 100%);
+    position: relative; margin: 10px 0;
+  }
+  .spectrum-marker {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 16px; height: 16px; border-radius: 50%;
+    background: white; border: 3px solid var(--red);
+    box-shadow: 0 0 8px rgba(233,69,96,0.6);
+  }
+  .spectrum-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); }
+
+  /* ── RELATIONS ── */
+  .relation-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .relation-row:last-child { border-bottom: none; }
+  .rel-name { font-weight: 700; font-size: 13px; min-width: 80px; }
+  .rel-desc { font-size: 12px; color: var(--text-dim); }
+  .rel-emoji { font-size: 18px; }
+
+  /* ── PROSE ── */
+  .prose-section { margin-bottom: 32px; }
+  .prose-section h3 {
+    font-size: 15px; font-weight: 800; color: var(--accent);
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(192,132,252,0.2);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .prose-section h3 .num {
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    color: white; width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0;
+  }
+  .prose-section p { font-size: 14.5px; line-height: 1.8; color: #c8c8d8; margin-bottom: 10px; }
+  .prose-section p em { color: #e8c4f0; font-style: italic; }
+
+  /* ── VERDICT ── */
+  .verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.3) 0%, rgba(233,69,96,0.2) 100%);
+    border: 1px solid var(--red);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  .verdict-title {
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .verdict p { font-size: 15px; line-height: 1.8; font-weight: 500; }
+  .verdict strong { color: var(--red-light); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:linear-gradient(to bottom, var(--purple),var(--red)); }
+  .tl-item { position: relative; margin-bottom: 18px; }
+  .tl-item::before {
+    content:''; position:absolute; left:-24px; top:5px;
+    width:8px; height:8px; border-radius:50%; background:var(--red);
+    box-shadow: 0 0 6px rgba(233,69,96,0.6);
+  }
+  .tl-date { font-size: 11px; color: var(--red); font-weight: 700; margin-bottom: 3px; }
+  .tl-text { font-size: 13px; color: var(--text-dim); }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header { padding: 32px 20px; }
+    .main { padding: 24px 16px; }
+    .stats-bar { padding: 16px 20px; }
+    .chart-container { padding: 0 20px 24px; }
+    .pseudo { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="avatar-row">
+      <div class="avatar">R</div>
+      <div>
+        <div class="pseudo">Ray<span>Do</span></div>
+        <div class="tag">raydo7139 · Discord · Nov 2022 – Jan 2026</div>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-purple">🧠 Idéologue du groupe</span>
+      <span class="badge badge-red">🔥 Provoca&shy;teur conscient</span>
+      <span class="badge badge-gold">⚔️ Nationaliste / Souverainiste</span>
+      <span class="badge badge-grey">🎮 Gamer occasionnel</span>
+      <span class="badge badge-purple">📖 Lecteur passionné</span>
+      <span class="badge badge-red">🕌 Croyant pratiquant</span>
+      <span class="badge badge-grey">💊 Preneur de « pilules »</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ STATS ══════════ -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-value">2 116</div>
+      <div class="stat-label">Messages totaux</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">38</div>
+      <div class="stat-label">Mois couverts</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">~55</div>
+      <div class="stat-label">Msg/jour (pic 2023)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">15h</div>
+      <div class="stat-label">Pic horaire</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">83%</div>
+      <div class="stat-label">Activité en 2023</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">Mai–Juin</div>
+      <div class="stat-label">Mois record (1 228 msg)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ GRAPHIQUE HORAIRE ══════════ -->
+<div class="stats-bar" style="background:var(--bg); border-bottom:1px solid var(--card-border);">
+  <div class="chart-container" style="padding:24px 40px;">
+    <div class="chart-title">Répartition horaire des messages (heure de Paris)</div>
+    <div class="hour-chart" id="hourChart"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+      <span style="font-size:10px;color:var(--text-dim)">Minuit</span>
+      <span style="font-size:10px;color:var(--text-dim)">6h</span>
+      <span style="font-size:10px;color:var(--text-dim)">Midi</span>
+      <span style="font-size:10px;color:var(--text-dim)">18h</span>
+      <span style="font-size:10px;color:var(--text-dim)">23h</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ GRILLE CARDS ══════════ -->
+<div class="main">
+
+  <!-- Sujets favoris + politique -->
+  <div class="grid-2">
+    <!-- SUJETS -->
+    <div class="card">
+      <div class="card-title">Sujets de prédilection</div>
+      <div class="topic-row">
+        <div class="topic-label"><span>🇫🇷 Politique française / UE</span><span>████ 40%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>🌍 Géopolitique / Ukraine / Russie</span><span>████ 18%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>♂️ Masculinité / Société / Féminisme</span><span>███ 14%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:14%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>🍎 Nutrition / Santé / Mode de vie</span><span>██ 10%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>🎮 Gaming / League of Legends</span><span>██ 8%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:8%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>🤖 IA / Techno / Internet</span><span>█ 5%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%"></div></div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-label"><span>✝️ Religion / Spiritualité</span><span>█ 5%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%"></div></div>
+      </div>
+    </div>
+
+    <!-- POSITIONS POLITIQUES -->
+    <div class="card">
+      <div class="card-title">Positions politiques</div>
+      <div class="pol-spectrum">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:6px;">Positionnement sur l'axe gauche–droite</div>
+        <div class="spectrum-track">
+          <div class="spectrum-marker" style="left: 18%"></div>
+        </div>
+        <div class="spectrum-labels">
+          <span>Extrême gauche</span>
+          <span>Centre</span>
+          <span>Extrême droite</span>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="topic-row">
+          <div class="topic-label"><span>🛡️ Souverainisme / Sortie UE</span><span>Ferme</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🌊 Anti-immigration de masse</span><span>Ferme</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🔫 Pro-armes / Auto-défense</span><span>Fort</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>⛪ Catholicisme / Valeurs trad.</span><span>Fort</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🤝 Trump / Poutine (pragmatisme)</span><span>Modéré</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>📉 Anti-macronisme viscéral</span><span>Maximal</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:99%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Style de communication + lexique -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Style de communication</div>
+      <div style="margin-bottom:14px;">
+        <div class="topic-row">
+          <div class="topic-label"><span>🔊 Assertivité / conviction</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>😂 Humour / ironie</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>📚 Références intellectuelles</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🌶️ Provocation / troll conscient</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🎭 Dramaturgie / majuscules</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:72%"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-label"><span>🤝 Écoute / révision d'opinion</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-dim);line-height:1.6;">Mélange de rants capslockés pour la galerie et de développements argumentés longs. L'émoji <strong style="color:var(--accent)">Zemmour</strong> sert de ponctuation ironique/semi-sérieuse quasi-systématique.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Lexique signature</div>
+      <div class="lexique">
+        <div class="lex-item">golem <span class="lex-freq">×11</span></div>
+        <div class="lex-item">prbl <span class="lex-freq">×18</span></div>
+        <div class="lex-item">pcq <span class="lex-freq">×40+</span></div>
+        <div class="lex-item">aujd <span class="lex-freq">×15</span></div>
+        <div class="lex-item">p-t <span class="lex-freq">×20</span></div>
+        <div class="lex-item">take <span class="lex-freq">×25</span></div>
+        <div class="lex-item">bref <span class="lex-freq">×20</span></div>
+        <div class="lex-item">dégénérescence <span class="lex-freq">×6</span></div>
+        <div class="lex-item">ménaïte <span class="lex-freq">×5</span></div>
+        <div class="lex-item">cheaté <span class="lex-freq">×8</span></div>
+        <div class="lex-item">hédonisme <span class="lex-freq">×5</span></div>
+        <div class="lex-item">Etat profond <span class="lex-freq">×4</span></div>
+        <div class="lex-item">planche à billets <span class="lex-freq">×4</span></div>
+        <div class="lex-item">introllable <span class="lex-freq">×3</span></div>
+        <div class="lex-item">morbide <span class="lex-freq">×3</span></div>
+        <div class="lex-item">souillé <span class="lex-freq">×3</span></div>
+        <div class="lex-item">seigneur protecteur <span class="lex-freq">×2</span></div>
+        <div class="lex-item">peuple de golems <span class="lex-freq">×4</span></div>
+        <div class="lex-item">on sort de l'Histoire <span class="lex-freq">×5</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Citations marquantes -->
+  <div class="card grid-full">
+    <div class="card-title">Citations marquantes</div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div>
+        <div class="quote-block">
+          <div class="quote-text">« Si on trouve que nos hommes politiques puent la merde c'est pcq on pue la merde en tant que peuple, ils ne sont que notre reflet. »</div>
+          <div class="quote-meta">11 mai 2023 <span class="quote-tag">Théorie décliniste</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« Le macronisme c'est la dégénérescence de l'intelligence mise au service de la destruction, c'est un nazisme à la française. »</div>
+          <div class="quote-meta">16 juin 2023 <span class="quote-tag">Provocation max</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« Mon take c'est que si l'homme avait trouvé comment se passer de la femme il y a belle lurette que nous habiterions sur Mars. »</div>
+          <div class="quote-meta">22 juin 2023 <span class="quote-tag">Ironie misogyne</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« Je prends le tramway quotidiennement, je vois la France chauve et célibataire d'un côté, et la 'France' avec une mère et cinq enfants. »</div>
+          <div class="quote-meta">26 juin 2023 <span class="quote-tag">Grand remplacement</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="quote-block">
+          <div class="quote-text">« Je pense qu'il faut : une arme à feu, des boîtes de conserve, et un objet sentimental qu'on pourra serrer contre soi le soir dans notre caverne. »</div>
+          <div class="quote-meta">2 juin 2023 <span class="quote-tag">Humour survivaliste</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« Rappel des faits : RayDo dit qu'il trouve un champ faible, le serveur dit que RayDo trolle. Patch suivant Riot buff le champ. RayDo évoque une thèse géopolitique, le serveur dit que RayDo trolle. Deux semaines après un journal mainstream fait un article sur la thèse. »</div>
+          <div class="quote-meta">28 juin 2023 <span class="quote-tag">Auto-mythification</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« Disons qu'entre une période où j'ai une assez grande liberté propre, un toit, une famille, un Dieu en qui croire et un seigneur protecteur en qui j'ai confiance, et la vie 'moderne'… le choix n'est pas si aisé. »</div>
+          <div class="quote-meta">16 oct. 2024 <span class="quote-tag">Nostalgie médiévale</span></div>
+        </div>
+        <div class="quote-block">
+          <div class="quote-text">« RENDEZ-NOUS LE ROI ET NOTRE SEIGNEUR JÉSUS-CHRIST. RAS-LE-CUL DE CETTE DÉMOCRATIE DE MERDE. »</div>
+          <div class="quote-meta">6 oct. 2025 <span class="quote-tag">Réaction pure</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Relations + timeline -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Relations avec les membres</div>
+      <div class="relation-row">
+        <div class="rel-emoji">⚔️</div>
+        <div>
+          <div class="rel-name">GK / Elilos</div>
+          <div class="rel-desc">Interlocuteurs privilégiés sur la géopolitique. Débats tendus, Raydo les accuse d'être «&nbsp;trop modérés&nbsp;» ou «&nbsp;macronistes&nbsp;». Respect de fond.</div>
+        </div>
+      </div>
+      <div class="relation-row">
+        <div class="rel-emoji">🤝</div>
+        <div>
+          <div class="rel-name">Zoller</div>
+          <div class="rel-desc">Allié idéologique. Partagent les mêmes positions sur les armes, la justice, le déclin. Validation mutuelle fréquente.</div>
+        </div>
+      </div>
+      <div class="relation-row">
+        <div class="rel-emoji">😏</div>
+        <div>
+          <div class="rel-name">Risto</div>
+          <div class="rel-desc">Tête de turc affectueuse. Raydo le définit comme «&nbsp;l'athée célibataire défait&nbsp;» qui incarne tout ce qu'il critique sur la modernité masculine.</div>
+        </div>
+      </div>
+      <div class="relation-row">
+        <div class="rel-emoji">🧐</div>
+        <div>
+          <div class="rel-name">Shaars / Caps</div>
+          <div class="rel-desc">Estimés intellectuellement («&nbsp;5head du serveur&nbsp;»). Raydo se montre plus humble et curieux avec eux.</div>
+        </div>
+      </div>
+      <div class="relation-row">
+        <div class="rel-emoji">🎭</div>
+        <div>
+          <div class="rel-name">Le groupe (général)</div>
+          <div class="rel-desc">Raydo s'auto-positionne comme prophète incompris («&nbsp;vous direz que je trolle&nbsp;»). Cherche validation via des polls et des «&nbsp;faites tourner&nbsp;».</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Timeline de l'évolution</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">Nov–Déc 2022</div>
+          <div class="tl-text">Arrivée discrète. Curiosité pour l'IA générative, blagues sur les «&nbsp;filles asiatiques&nbsp;». Émoji Zemmour déjà omniprésent comme signe d'appartenance.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Janv–Avr 2023</div>
+          <div class="tl-text">Montée en puissance progressive. Premiers débats longs sur nutrition, masculinité, modèle suisse. Style argumentatif se structure.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Mai–Juil 2023 (PEAK)</div>
+          <div class="tl-text">Hyperactivité maximale (1 600+ messages). Théorisations intenses : déclin français, anti-UE, théorie du Grand Remplacement, géopolitique Ukraine. Provocations calibrées.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Août 2023</div>
+          <div class="tl-text">Début du reflux. Même qualité argumentative mais fréquence en baisse. Citations de Cioran, Todd, Gave. Registre plus livresque.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2024</div>
+          <div class="tl-text">Retour ponctuel pour l'élection Trump. Positions anti-Ukraine renforcées. Tournant spirituel plus marqué : références à Dieu, protection divine, Moyen Âge idéalisé.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2025–2026</div>
+          <div class="tl-text">Présence fantomatique. Seuls quelques messages explosifs : appel au Roi et au Christ, critique des Boomers, curiosité professionnelle sincère. Réenchantement médiéval assumé.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PROSE LONGUE ══════════ -->
+  <div class="card grid-full" style="margin-bottom:24px;">
+    <div class="card-title">Analyse approfondie</div>
+
+    <div class="prose-section">
+      <h3><span class="num">1</span> Personnalité & moteur psychologique</h3>
+      <p>Raydo est avant tout un homme à opinions, dans l'acception la plus littérale et la plus théâtrale du terme. Sa présence sur le serveur n'est jamais neutre : chaque connexion débouche sur un développement thématique, une provocation calibrée ou un rant capslockné. Sa personnalité de base est celle d'un intellectuel autodidacte en friction permanente avec le monde tel qu'il va. Il se nourrit de lectures (Todd, Gave, Cioran sont cités explicitement), en extrait des thèses qu'il ré-injecte ensuite dans la conversation avec une immédiateté parfois abrupte, comme si le délai entre la pensée et l'énonciation était réduit à néant.</p>
+      <p>Son moteur psychologique profond semble être le sentiment d'incompréhension aristocratique : <em>«&nbsp;le serveur dit que RayDo trolle, deux semaines après un journal mainstream fait un article sur la thèse&nbsp;»</em> (28 juin 2023) — cette auto-citation est particulièrement révélatrice. Il se vit comme un Cassandre lucide dans un groupe de semi-aveugles, ce qui lui procure à la fois une posture confortable et un carburant permanent pour continuer à provoquer. La frustration de n'être pas toujours pris au sérieux alimente ses relances, pas son silence.</p>
+      <p>Sur le plan émotionnel, Raydo oscille sans prévenir entre l'analyse froide et structurée (<em>«&nbsp;bref mon take c'est que…&nbsp;»</em>) et l'indignation tribale en majuscules. Ce double registre n'est pas une contradiction : c'est une technique rhétorique consciente, le passage au capslock servant de signal au groupe que le moment est grave, ou ironique, ou les deux à la fois. Il est capable de nuance — il révise parfois son opinion en direct, comme sur la question de l'UE (<em>«&nbsp;en fait tu m'as convaincu qu'en soi c'est pas l'UE le prbl…&nbsp;»</em>, juin 2023) — mais ces rectifications restent minoritaires et souvent tactiques.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">2</span> Style de communication & humour</h3>
+      <p>Le style de Raydo est immédiatement reconnaissable. Il mélange une syntaxe châtiée et une orthographe délibérément abrégée (pcq, aujd, p-t, prbl) comme pour signifier qu'il pense vite et que la forme est au service du fond, jamais l'inverse. Ses messages longs (souvent 5 à 10 lignes consécutives en rafale) ont une structure argumentative réelle : thèse, exemple historique, contre-objection anticipée, conclusion lapidaire. C'est du débat oral mis en texte, avec tout ce que cela implique de saillies et d'approximations assumées.</p>
+      <p>L'humour est sa couverture favorite. L'ironie est son mode opératoire principal, souvent signalée par l'émoji Zemmour utilisé en ponctuation — tantôt pour dire «&nbsp;je rigole à moitié&nbsp;», tantôt pour indiquer «&nbsp;je suis sérieux mais je vous laisse choisir&nbsp;». Ce flou permanent entre le premier et le second degré lui offre une sortie de secours idéale si une position se révèle trop extrême : il peut toujours invoquer l'ironie. <em>«&nbsp;Macron jusqu'en 2032 les amis 😄&nbsp;»</em> (22 juin 2023) ou <em>«&nbsp;vite le troisième mandat de notre dieu Macron&nbsp;»</em> (17 mai 2023) sont des exemples typiques de cette rhétorique ambiguë où l'inversion sarcastique est maximale.</p>
+      <p>La dramaturgie des majuscules est un outil assumé : <em>«&nbsp;BALAYONS LA RACAILLE QUI NOUS GOUVERNE&nbsp;»</em>, <em>«&nbsp;SUPPRIMEZ LES PARTIS POLITIQUES&nbsp;»</em>, <em>«&nbsp;RENDEZ-NOUS LE ROI ET NOTRE SEIGNEUR JÉSUS-CHRIST&nbsp;»</em>. Ces éruptions en capitales ont une fonction performative plutôt que persuasive — elles marquent l'appartenance à un ethos de la révolte, même lorsque la révolte en question est verbale et sans lendemain. Il ne faut pas les lire comme de véritables appels à l'action.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">3</span> Positions politiques & cohérence idéologique</h3>
+      <p>Raydo occupe un espace idéologique que l'on pourrait situer à la droite nationale-catholique, avec des emprunts au souverainisme gaullien, à la droite décliniste à la Zemmour/Asselineau, et une sympathie pragmatique pour des figures comme Trump ou Poutine non pas par admiration aveugle mais par calcul géopolitique : ce sont, à ses yeux, les seuls acteurs capables de résister à l'hégémonie américano-libérale qu'il déteste. Son anti-macronisme est viscéral et quasi-obsessionnel : <em>«&nbsp;je ne vois pas comment on peut être ET intelligent ET macroniste&nbsp;»</em> (16 juin 2023) illustre une posture où l'adversaire politique est intégré dans une catégorie morale inférieure.</p>
+      <p>Sa vision de la France est profondément décliniste. Le peuple français a, selon lui, <em>«&nbsp;voulu sortir de l'Histoire et vivre jusqu'à la fin de ses jours dans le confort et l'hédonisme&nbsp;»</em> (11 mai 2023), ce qui explique à la fois la médiocrité de sa classe politique et son incapacité à se révolter efficacement. Cette thèse du peuple-miroir de ses dirigeants est cohérente et répétée : Raydo refuse le confort intellectuel du bouc émissaire unique. Son nationalisme n'est pas naïf.</p>
+      <p>Sur l'immigration, son discours est explicitement identitaire. Il parle de <em>«&nbsp;deux France dans le tramway&nbsp;»</em>, utilise les marqueurs du Grand Remplacement sans toujours les nommer, et propose des solutions fantasques (importation de «&nbsp;ménaïtes&nbsp;», interdiction des apps de rencontre) avec un mélange de sérieux et d'ironie difficile à démêler. En 2024-2025, sa pensée évolue vers un réactionnaire plus assumé : nostalgie médiévale sincère, appels à la royauté, méfiance croissante envers la démocratie représentative. Ce glissement est notable et progressif.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">4</span> Rapports au corps, à la masculinité & à la féminité</h3>
+      <p>Un des fils rouges les plus constants dans les messages de Raydo — et souvent le moins commenté — est sa vision des rapports hommes-femmes, qu'il articule autour d'un conservatisme virile explicite. Il croit à la complémentarité des sexes dans une hiérarchie fonctionnelle, déplore la <em>«&nbsp;féminisation de la société avec la modernité&nbsp;»</em> (juillet 2023), et considère que le célibat masculin laïcisé mène à une forme de <em>«&nbsp;faiblesse terrible&nbsp;»</em>. À ses yeux, l'homme catholique marié avec enfants est le modèle de référence — pas par moralisme abstrait, mais parce qu'il «&nbsp;a une famille à protéger&nbsp;», ce qui crée selon lui une vitalité et une clarté politique absentes chez le célibataire déraciné.</p>
+      <p>Ses remarques sur les femmes sont ambivalentes : il les traite parfois avec une légèreté misogyne de registre locker room (les comparaisons sexuelles, les blagues sur les «&nbsp;ménaïtes à 95C&nbsp;»), tout en maintenant un discours respectueux envers la maternité et une réelle valorisation de la femme dans son rôle «&nbsp;naturel&nbsp;». Cette tension n'est pas résolue dans ses messages et semble refléter un rapport personnel non stabilisé plutôt qu'une idéologie cohérente.</p>
+      <p>Sur la nutrition et le corps, il se montre un expert amateur sérieux et assez cohérent : discours anti-sédentarité, promotion du jeûne et des protéines naturelles, critique du lobby agroalimentaire. Ces positions s'inscrivent dans la même logique biopolitique que ses autres convictions : le corps est un territoire à reconquérir contre la modernité dégénérescente.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">5</span> Ragebait conscient ou conviction sincère ?</h3>
+      <p>La question est centrale et la réponse est : les deux, savamment entrelacés. Raydo est clairement conscient de son effet sur le groupe. Il sait que certaines formulations (<em>«&nbsp;la gauche est RACISTE&nbsp;»</em>, les comparaisons macronisme/nazisme) vont provoquer une réaction vive et il les choisit précisément pour ça. La preuve : quand personne ne réagit, il relance, précise, exagère. Il y a un plaisir évident dans l'animation rhétorique de la conversation.</p>
+      <p>Mais réduire Raydo au simple troll serait une erreur analytique. Derrière les formulations chocs, il y a un cadre de pensée cohérent et assez sophistiqué. Ses développements sur la Suisse démocratique (référendum, responsabilité citoyenne, subsidiarité), sur la faiblesse industrielle de l'Allemagne post-sanctions, ou sur la corrélation entre vitalité culturelle et qualité politique sont des analyses que l'on retrouve dans des ouvrages sérieux qu'il cite effectivement. Il a lu Todd, il a lu Gave, il cite Camus contre Sartre avec une pertinence réelle. Le troll et l'intellectuel coexistent, et c'est précisément cette coexistence qui le rend difficile à classer — et donc à réfuter.</p>
+      <p>La distinction ragebait/sincérité varie selon les sujets : il est sincère à 100% sur le déclin français, la souveraineté, la spiritualité. Il ragebait sciemment sur le genre, les comparaisons nazisme/macronisme, la «&nbsp;height pill&nbsp;». Les deux registres se contaminent, et c'est probablement l'effet recherché.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">6</span> Évolution 2022→2026 : le réactionnaire qui se radicalise</h3>
+      <p>L'arc narratif de Raydo sur la période est celui d'un droitier culturel qui se structure en véritable réactionnaire. En 2022, il est un internaute réactif, curieux, joueur, dont les opinions politiques filtrent mais ne dominent pas encore. En 2023 — son année de grâce — il développe un système de pensée complet, à raison de dizaines de messages par jour, dans un état d'excitation intellectuelle palpable. C'est le Raydo à son meilleur et à son plus intense.</p>
+      <p>Le tournant 2024 marque une intériorisation. Il revient avec moins de volume mais plus de densité spirituelle : l'éloge du Moyen Âge n'est plus une provocation, c'est une conviction qui se cherche un cadre théologique. <em>«&nbsp;Un toit, une famille, un Dieu en qui croire et un seigneur protecteur en qui j'ai confiance&nbsp;»</em> (oct. 2024) — cette phrase n'est pas de l'ironie. C'est le programme de vie qu'il appelle de ses vœux.</p>
+      <p>En 2025-2026, il ne reste plus que les éclats : le cri pour le Roi et le Christ, la critique des Boomers cannibales, une curiosité sincère pour le métier d'enseignant d'un camarade. La radicalisation rhétorique est maximale mais la présence s'effondre. Raydo semble avoir trouvé, ou cherche hors du serveur, le cadre communautaire qu'il appelait de ses vœux. La conversion de l'acteur en spectateur est en soi une donnée biographique significative.</p>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="verdict-title">⚖️ Verdict — Synthèse finale</div>
+    <p>Raydo est <strong>l'idéologue clivant par excellence</strong> : trop structuré pour être un simple troll, trop provocateur pour être un débatteur sérieux, trop sincère pour être un performeur cynique. Il a rendu le serveur plus vivant et plus inconfortable en parts égales, occupant l'espace intellectuel d'une manière qui force chaque membre à se positionner. <strong>Sa trajectoire est celle d'un réactionnaire en formation</strong> qui a commencé par tester des provocations et terminé par construire une vision du monde médiévo-catholique cohérente, radicalement anti-moderne, assumée comme telle. Son désengagement progressif à partir de 2024 suggère moins un abandon de ses idées qu'une <strong>quête de cohérence entre le discours et la vie</strong> — la vraie mesure de sa sincérité. Dans dix ans, on saura si Raydo était un symptôme de son époque ou un de ses acteurs.</p>
+  </div>
+
+</div><!-- /main -->
+
+<div style="text-align:center;padding:24px;color:#444;font-size:11px;border-top:1px solid #222;">
+  Profil généré à partir de 2 116 messages · Nov 2022 – Jan 2026 · Données issues d'un serveur Discord privé
+</div>
+
+<script>
+  // Hourly chart data
+  const hourData = [32,24,0,0,0,0,2,16,79,84,248,178,146,152,180,314,60,75,122,88,82,186,45,3];
+  const max = Math.max(...hourData);
+  const chart = document.getElementById('hourChart');
+  hourData.forEach((val, h) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'hour-bar-wrap';
+    wrap.title = `${String(h).padStart(2,'0')}h : ${val} messages`;
+    const bar = document.createElement('div');
+    bar.className = 'hour-bar';
+    bar.style.height = (val / max * 100) + '%';
+    // Highlight peak
+    if (val === max) bar.style.background = 'linear-gradient(to top, #e94560, #ff9f43)';
+    wrap.appendChild(bar);
+    chart.appendChild(wrap);
+  });
+</script>
+</body>
+</html>

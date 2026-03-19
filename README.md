@@ -1,1 +1,1 @@
-# jcs_ai_gen
+# jcs-ai-gen

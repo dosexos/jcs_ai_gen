@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>elilos — Profil qq-only</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52b5;
+    --red: #e94560;
+    --red-dark: #c73652;
+    --gold: #f5a623;
+    --text: #e0e0e0;
+    --muted: #8a8a9a;
+    --card-bg: #1e1e3a;
+    --card-border: #2d2d5a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.65; min-height: 100vh; }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a40 40%, #2d1b5a 70%, #1a0a20 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(83,52,131,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(233,69,96,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+  .header-top { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; }
+  .avatar {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--red) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 900; color: white;
+    border: 3px solid var(--red); flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(233,69,96,0.4);
+  }
+  .header-info h1 { font-size: 2.6rem; font-weight: 900; color: white; letter-spacing: -1px; line-height: 1; }
+  .header-info .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  .channel-tag { display: inline-block; background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red); padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .badge {
+    padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red); }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple-light); color: var(--purple-light); }
+  .badge-gold { background: rgba(245,166,35,0.2); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-blue { background: rgba(47,100,200,0.2); border: 1px solid #4a80d4; color: #4a80d4; }
+
+  /* === LAYOUT === */
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .full-width { grid-column: 1 / -1; }
+  .section-title {
+    font-size: 1.3rem; font-weight: 800; color: var(--red);
+    margin: 40px 0 16px; text-transform: uppercase; letter-spacing: 1px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--red), transparent); }
+
+  /* === CARDS === */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 20px;
+  }
+  .card h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .card .big-number { font-size: 2.4rem; font-weight: 900; color: white; line-height: 1; }
+  .card .big-number span { font-size: 1rem; font-weight: 400; color: var(--muted); margin-left: 6px; }
+  .card .sub { color: var(--muted); font-size: 0.82rem; margin-top: 4px; }
+
+  /* === PROGRESS BARS === */
+  .bar-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; }
+  .bar-label .name { color: var(--text); font-weight: 600; }
+  .bar-label .count { color: var(--muted); }
+  .bar-outer { background: rgba(255,255,255,0.07); border-radius: 4px; height: 8px; margin-bottom: 12px; overflow: hidden; }
+  .bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(to right, var(--purple), var(--red)); }
+
+  /* === CHART === */
+  #hourChart { width: 100%; height: 160px; }
+
+  /* === QUOTES === */
+  .quote-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-left: 3px solid var(--red); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .quote-card .quote-text { font-size: 0.95rem; color: var(--text); font-style: italic; line-height: 1.55; }
+  .quote-card .quote-meta { font-size: 0.75rem; color: var(--muted); margin-top: 10px; }
+  .quote-card.purple { border-left-color: var(--purple-light); }
+  .quote-card.gold { border-left-color: var(--gold); }
+
+  /* === RAGE METER === */
+  .rage-meter { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+  .rage-label { font-size: 0.82rem; color: var(--muted); min-width: 80px; }
+  .rage-bar-outer { flex: 1; background: rgba(255,255,255,0.07); border-radius: 6px; height: 12px; overflow: hidden; }
+  .rage-bar-inner { height: 100%; border-radius: 6px; }
+  .rage-bar-red { background: linear-gradient(to right, #e94560, #ff6b6b); }
+  .rage-bar-purple { background: linear-gradient(to right, #533483, #7b52b5); }
+  .rage-bar-gold { background: linear-gradient(to right, #c97d00, #f5a623); }
+  .rage-value { font-weight: 700; font-size: 0.85rem; min-width: 36px; text-align: right; }
+
+  /* === EXPRESSION CHIPS === */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip {
+    background: rgba(83,52,131,0.25); border: 1px solid rgba(123,82,181,0.4);
+    color: var(--purple-light); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+  }
+  .chip.hot { background: rgba(233,69,96,0.2); border-color: rgba(233,69,96,0.5); color: var(--red); }
+  .chip.gold { background: rgba(245,166,35,0.15); border-color: rgba(245,166,35,0.4); color: var(--gold); }
+
+  /* === PROSE SECTION === */
+  .prose { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 28px 32px; }
+  .prose h2 {
+    font-size: 1.4rem; font-weight: 900; color: white; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--card-border);
+  }
+  .prose-section { margin-bottom: 32px; }
+  .prose-section h3 {
+    font-size: 1rem; font-weight: 800; color: var(--red); text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .prose-section h3 .num {
+    background: var(--red); color: white; width: 22px; height: 22px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 900; flex-shrink: 0;
+  }
+  .prose-section p { color: var(--text); font-size: 0.93rem; margin-bottom: 10px; text-align: justify; }
+  .prose-section p em { color: #c0a8f0; font-style: italic; }
+
+  /* === VERDICT === */
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1040 50%, #1a0a2e 100%);
+    border: 2px solid var(--red); border-radius: 16px; padding: 28px 32px;
+    margin-top: 40px; position: relative; overflow: hidden;
+  }
+  .verdict::before {
+    content: '⚖️'; position: absolute; top: -20px; right: 30px;
+    font-size: 100px; opacity: 0.06;
+  }
+  .verdict h2 { font-size: 1.2rem; font-weight: 900; color: var(--red); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+  .verdict p { color: var(--text); font-size: 1rem; line-height: 1.7; margin-bottom: 8px; }
+  .verdict strong { color: var(--red); }
+  .verdict em { color: var(--gold); font-style: normal; font-weight: 700; }
+
+  /* === TIMELINE === */
+  .timeline-item { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+  .tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); margin-top: 6px; flex-shrink: 0; box-shadow: 0 0 8px rgba(233,69,96,0.6); }
+  .tl-date { font-size: 0.75rem; color: var(--muted); min-width: 70px; margin-top: 2px; }
+  .tl-text { font-size: 0.88rem; color: var(--text); }
+  .tl-line { width: 1px; background: var(--card-border); margin-left: 4px; height: 14px; margin-bottom: -4px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .header { padding: 28px 20px 24px; }
+    .header-info h1 { font-size: 2rem; }
+    .prose { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="avatar">E</div>
+      <div class="header-info">
+        <h1>elilos</h1>
+        <div class="subtitle">Profil Discord — Analyse comportementale & gaming</div>
+        <div class="channel-tag"># qq-only</div>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-red">🔥 Rageur Chronique</span>
+      <span class="badge badge-purple">🎯 Main Kai'Sa AP</span>
+      <span class="badge badge-gold">🧠 Analyste Malgré Lui</span>
+      <span class="badge badge-blue">🦉 Joueur Noctambule</span>
+      <span class="badge badge-red">⚔️ ADC Puriste</span>
+      <span class="badge badge-purple">📊 Théoricien du Méta</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- STATS GRID -->
+  <div class="section-title">📊 Statistiques</div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>Messages totaux</h3>
+      <div class="big-number">27 575</div>
+      <div class="sub">Sur ce canal uniquement</div>
+    </div>
+    <div class="card">
+      <h3>Période d'activité</h3>
+      <div class="big-number" style="font-size:1.6rem">Mars 2019<br><span style="font-size:1rem;color:var(--muted)">→</span> Sept 2024</div>
+      <div class="sub">~5 ans et demi</div>
+    </div>
+    <div class="card">
+      <h3>Moyenne / jour</h3>
+      <div class="big-number">13,7 <span>msgs</span></div>
+      <div class="sub">Pic 2021 : 42,7 msgs/jour</div>
+    </div>
+    <div class="card">
+      <h3>Pic d'activité global</h3>
+      <div class="big-number">21h<span>-22h</span></div>
+      <div class="sub">Gaming session prime time</div>
+    </div>
+    <div class="card">
+      <h3>Record journalier</h3>
+      <div class="big-number">578 <span>msgs</span></div>
+      <div class="sub">23 septembre 2021 🔥</div>
+    </div>
+    <div class="card">
+      <h3>Messages après minuit</h3>
+      <div class="big-number">21,2<span>%</span></div>
+      <div class="sub">5 838 msgs entre 0h et 6h</div>
+    </div>
+  </div>
+
+  <!-- HOURLY CHART -->
+  <div class="section-title">🕐 Distribution horaire</div>
+  <div class="card">
+    <h3>Nombre de messages par heure (toutes années confondues)</h3>
+    <canvas id="hourChart"></canvas>
+  </div>
+
+  <!-- YEARLY CHART -->
+  <div class="section-title">📅 Évolution annuelle</div>
+  <div class="card">
+    <h3>Messages par année</h3>
+    <canvas id="yearChart" style="width:100%;height:120px;"></canvas>
+  </div>
+
+  <!-- CHAMPIONS & SUBJECTS -->
+  <div class="section-title">🏆 Champions & Sujets les plus mentionnés</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Champions mentionnés (messages)</h3>
+      <div style="margin-top:8px;">
+        <div class="bar-label"><span class="name">Kai'Sa</span><span class="count">820</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:100%"></div></div>
+        <div class="bar-label"><span class="name">Cassiopeia</span><span class="count">123</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:15%"></div></div>
+        <div class="bar-label"><span class="name">Twitch</span><span class="count">101</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:12.3%"></div></div>
+        <div class="bar-label"><span class="name">Jinx</span><span class="count">70</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:8.5%"></div></div>
+        <div class="bar-label"><span class="name">Vayne</span><span class="count">62</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:7.6%"></div></div>
+        <div class="bar-label"><span class="name">Camille</span><span class="count">71</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:8.7%"></div></div>
+        <div class="bar-label"><span class="name">Samira</span><span class="count">54</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:6.6%"></div></div>
+        <div class="bar-label"><span class="name">Yasuo</span><span class="count">53</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:6.5%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Termes clés (occurrences)</h3>
+      <div style="margin-top:8px;">
+        <div class="bar-label"><span class="name">OP / Broken / Abusé</span><span class="count">1 410+</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:100%"></div></div>
+        <div class="bar-label"><span class="name">DC / AFK</span><span class="count">763</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:54%"></div></div>
+        <div class="bar-label"><span class="name">EZ</span><span class="count">655</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:46%"></div></div>
+        <div class="bar-label"><span class="name">INT / Inting</span><span class="count">483</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:34%"></div></div>
+        <div class="bar-label"><span class="name">Merde / Putain / PTN</span><span class="count">~800</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:57%"></div></div>
+        <div class="bar-label"><span class="name">Riot (souvent suivi d'insultes)</span><span class="count">256</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:18%"></div></div>
+        <div class="bar-label"><span class="name">Smurf</span><span class="count">151</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:11%"></div></div>
+        <div class="bar-label"><span class="name">Diff / Gap</span><span class="count">186</span></div>
+        <div class="bar-outer"><div class="bar-inner" style="width:13%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAGE METERS -->
+  <div class="section-title">🌡️ Jauges comportementales</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Profil de rage</h3>
+      <div class="rage-meter">
+        <div class="rage-label">Intensité</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-red" style="width:92%"></div></div>
+        <div class="rage-value" style="color:var(--red)">9.2</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Fréquence</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-red" style="width:85%"></div></div>
+        <div class="rage-value" style="color:var(--red)">8.5</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Durée</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-purple" style="width:65%"></div></div>
+        <div class="rage-value" style="color:var(--purple-light)">6.5</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Toxicité IRL</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-red" style="width:78%"></div></div>
+        <div class="rage-value" style="color:var(--red)">7.8</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Récupération</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-gold" style="width:70%"></div></div>
+        <div class="rage-value" style="color:var(--gold)">7.0</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Profil de jeu</h3>
+      <div class="rage-meter">
+        <div class="rage-label">Carry drive</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-gold" style="width:95%"></div></div>
+        <div class="rage-value" style="color:var(--gold)">9.5</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Analyse méta</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-purple" style="width:85%"></div></div>
+        <div class="rage-value" style="color:var(--purple-light)">8.5</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Esprit d'équipe</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-red" style="width:30%"></div></div>
+        <div class="rage-value" style="color:var(--red)">3.0</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Patience</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-red" style="width:20%"></div></div>
+        <div class="rage-value" style="color:var(--red)">2.0</div>
+      </div>
+      <div class="rage-meter">
+        <div class="rage-label">Consistance</div>
+        <div class="rage-bar-outer"><div class="rage-bar-inner rage-bar-gold" style="width:60%"></div></div>
+        <div class="rage-value" style="color:var(--gold)">6.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPRESSIONS SIGNATURE -->
+  <div class="section-title">🗣️ Expressions signature</div>
+  <div class="card">
+    <h3>Lexique personnel — argot LoL & expressions récurrentes</h3>
+    <div class="chips">
+      <span class="chip hot">je veux mourir (×59)</span>
+      <span class="chip hot">OP / broken (×1410+)</span>
+      <span class="chip hot">INT / inting (×483)</span>
+      <span class="chip hot">fils de pute (×154)</span>
+      <span class="chip">diff (×172)</span>
+      <span class="chip">doomed (×46)</span>
+      <span class="chip">soloQ (×136)</span>
+      <span class="chip gold">zemel</span>
+      <span class="chip">genre / en mode</span>
+      <span class="chip">carry (×106)</span>
+      <span class="chip">giga / ultra / mega</span>
+      <span class="chip">bref (×76)</span>
+      <span class="chip">smurf (×151)</span>
+      <span class="chip hot">PUTAIN / PTN (×464)</span>
+      <span class="chip">comportement de fdp</span>
+      <span class="chip">ez (×655)</span>
+      <span class="chip gold">ravagé par la soloQ</span>
+      <span class="chip gold">marabouté</span>
+      <span class="chip">clairement / franchement</span>
+      <span class="chip hot">MERDE (×338)</span>
+      <span class="chip">team diff</span>
+      <span class="chip gold">littéralement (×51)</span>
+    </div>
+  </div>
+
+  <!-- MOMENTS MEMORABLES -->
+  <div class="section-title">💥 Moments mémorables</div>
+  <div>
+    <div class="quote-card">
+      <div class="quote-text">« BORDEL JAI Q'UNE SEULE ENVIE C'EST QUE CE MEC LA VOLE UN AVION ET VIENNE SE CRASHER SUR VOTRE PUTAIN DE CENTRE D'HEBERGEMENTS DE TRISOMIQUES »</div>
+      <div class="quote-meta">📅 19 mai 2019 — Rage classique suite à un feeding de botlane. Introduction en fanfare dans ce canal.</div>
+    </div>
+    <div class="quote-card gold">
+      <div class="quote-text">« JE VEUX MOURIRJE VEUX MOURIRJE VEUX MOURIRJE VEUX MOURIR... » — répété en boucle sur une seule ligne, sans espace, vraisemblablement tapé à la vitesse de la désespérance.</div>
+      <div class="quote-meta">📅 22 février 2021 — Son record personnel de désespoir compressé. Certainement post-défaite en série.</div>
+    </div>
+    <div class="quote-card purple">
+      <div class="quote-text">« Hier soir, vers 6h comme à mon habitude j'ai ragé en tapant comme un débile sur mon bureau et en ragant vocalement. Sachant que quand je rage, je dis exactement la même chose que ce que j'écris sur le qq... »</div>
+      <div class="quote-meta">📅 15 janvier 2022 — Rare moment de lucidité méta sur sa propre condition de rageur. Admet consciemment que ses logs Discord sont un transcript fidèle de ses crises vocales.</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« Perso marabouté c'est genre je suis marabouté par la soloQ en mode ça m'a retourné le cerveau »</div>
+      <div class="quote-meta">📅 27 janvier 2021 — Autodiagnostic. Probablement le terme le plus précis qu'il ait jamais utilisé pour se décrire.</div>
+    </div>
+    <div class="quote-card gold">
+      <div class="quote-text">« gagner sans difficulté c'est un comportement de zemel »</div>
+      <div class="quote-meta">📅 5 mars 2023 — Introduction d'un néologisme personnel. "Zemel" désigne quelqu'un qui joue de manière déshonorante, profitant d'avantages mécaniques sans mérite réel.</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« SA MERE LA PUTE IMPOSSIBLE DE CARRY MA BOTLANE FAIT DU 1 MORT PAR MINUTE »</div>
+      <div class="quote-meta">📅 19 mai 2019 — La botlane comme bouc-émissaire éternel. Une constante qui traverse toutes les années.</div>
+    </div>
+    <div class="quote-card purple">
+      <div class="quote-text">Partage d'un log de ses propres messages en jeu depuis son smurf : « i go ap ez / i want fun :/ / can we ff fast please / idc it s my smurf / open mid »</div>
+      <div class="quote-meta">📅 2 novembre 2019 — Elilos archive ses propres comportements en jeu et les partage fièrement. Absence totale de honte.</div>
+    </div>
+  </div>
+
+  <!-- SECTION PROSE -->
+  <div class="section-title">📖 Analyse complète</div>
+  <div class="prose">
+    <h2>Profil comportemental & psychologique — elilos sur #qq-only</h2>
+
+    <div class="prose-section">
+      <h3><span class="num">1</span> La mécanique de la rage : structure, intensité et récurrence</h3>
+      <p>Elilos n'est pas simplement un joueur qui rage. Il est un système de rage avec sa propre grammaire, son propre cycle et ses propres invariants. Dès le premier message de ce canal — <em>« AHHHHHHHHHHHHHHH »</em> suivi trois secondes après de <em>« PUTAIN MA VIE »</em> (17 mars 2019) — le ton est donné : les explosions arrivent vite, fort, et sans préambule. Les majuscules constituent le mode verbal de crise, et il les utilise avec une constance remarquable sur toute la période. Les crises suivent un pattern en trois temps : l'explosion initiale (souvent une seule ligne en caps), la narration de la game catastrophique qui vient de se produire, puis parfois un retour analytique à froid. Ce cycle peut durer quelques minutes ou plusieurs heures selon la gravité de la défaite. Le pic absolu est atteint le 22 février 2021 avec un message unique composé de "JE VEUX MOURIR" répété en boucle sans espace ni ponctuation, sur une longueur telle qu'il remplit plusieurs écrans — une performance ragiste au sens littéral du terme. En 2022, il admet lui-même que ses rageries ne restent pas confinées au Discord : <em>« j'ai ragé en tapant comme un débile sur mon bureau et en ragant vocalement »</em> (15 janvier 2022), ajoutant que le qq-only est un transcript fidèle de ce qui sort de sa bouche en vocal. La rage est donc authentique, totale, physique, et le canal n'est que sa surface textuelle.</p>
+      <p>La fréquence des crises est elle-même un indicateur : "je veux mourir" apparaît 59 fois sur 5 ans, soit en moyenne une fois par mois — mais avec une concentration massive en 2021, son année la plus active avec 15 615 messages. L'expression n'est évidemment jamais sérieuse ; elle est purement cathartico-ludique, une façon de dramatiser l'absurdité d'une défaite pour en extraire la substance comique. Ce qui distingue elilos d'un simple rageur de soloQ, c'est la conscience qu'il a de ce processus : il décrit, catalogue, et parfois s'amuse rétrospectivement de sa propre condition.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">2</span> Kai'Sa : l'obsession au long cours</h3>
+      <p>Kai'Sa n'est pas juste son champion principal. Elle est une philosophie, un projet, presque une identité. Avec 820 messages contenant son nom sur cinq ans et demi — quand le deuxième champion le plus mentionné (Cassiopeia, souvent en tant qu'adversaire ou sujet d'analyse méta) ne dépasse pas 123 mentions — l'écart dit tout. Elilos ne joue pas Kai'Sa, il l'étudie. Il a théorisé sa viabilité en AP bien avant que ce build ne devienne populaire, compilé des calculs de dégâts (<em>« Q 787 / Q a 1228 / Q aaa 1835 »</em>, janvier 2022, sur mannequin à 40 armure avec différents builds), débattu de son positionnement dans la meta ADC, et justifié longuement pourquoi son manque de range est compensé par son self-peel intrinsèque.</p>
+      <p>Ce n'est pas de la passion aveugle. Elilos défend Kai'Sa contre ceux qui la considèrent "always broken" (<em>« je réfute que les gens disent que kai'sa a TOUJOURS été broken en soloQ »</em>, 29 janvier 2021), nuançant en historisant sa puissance relative selon les patches. En fin de parcours, en septembre 2024, l'une de ses dernières apparitions sur le canal est pour partager qu'il ne joue plus Kai'Sa que full AP : <em>« je n'ai plus joué que kai'sa full ap »</em> — une cohérence six ans dans la making. Son rapport à ce champion est le seul domaine où sa rigueur analytique dépasse systématiquement sa rage émotionnelle.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">3</span> Les têtes de turc : qui mérite la déportation cette semaine ?</h3>
+      <p>Elilos a un besoin structurel de bouc-émissaire et dispose d'un répertoire rotatif pour les nourrir. En premier lieu, ses coéquipiers — et plus particulièrement le support et le jungler. Le support est traité avec un mélange de mépris condescendant et de résignation totale : <em>« Perdre en support »</em> est présenté comme une honte incompréhensible, et le sujet des "supports qui se mettent devant" revient comme une litanie. La botlane en général, lui inclus parfois, est la source d'au moins un tiers des défaites qu'il mentionne. Les inters (joueurs qui "feed" intentionnellement ou par incompétence) cumulent plus de 483 mentions du terme "INT" et ses dérivés, souvent accompagnés d'une demande de report et d'un diagnostique en temps réel : <em>« BOTLANE FAIT DU 1 MORT PAR MINUTE »</em>.</p>
+      <p>Ensuite viennent les smurfs, deuxième grande injustice cosmique selon elilos. Avec 151 mentions, c'est une préoccupation constante — et un aveu indirect que ses propres smurf adventures (documentées en novembre 2019, où il partage les logs de son compte secondaire en train d'y demander le "open mid") contribuent au même problème qu'il déplore. Troisième cible : Riot Games elle-même, citée 256 fois, rarement pour des compliments. Les expressions "<em>j'espère que tous les employés de Riot vont crever</em>" (2020) illustrent une relation amour-haine typique : on se plaint du jeu mais on ne le quitte pas. Enfin, les "zemels" — terme qu'il a inventé ou importé — désignent une catégorie morale à part : les joueurs qui jouent des champions avec des matchups systématiquement favorables, qui dodge, qui jouent Malphite top. Une honte comportementale.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">4</span> Le profil analytique : le rageur qui fait des maths</h3>
+      <p>Ce qui rend elilos atypique dans le paysage du rageur de soloQ, c'est sa capacité à basculer entre deux registres en quelques messages. La minute d'après un "SUICDEO" (sic, 6 octobre 2021, probablement tapé dans l'urgence de la colère), il peut rédiger un paragraphe de trois cents mots sur pourquoi Kai'Sa a toujours eu besoin d'un certain seuil de range pour maximiser son passive. Il a partagé des tests de dégâts sur mannequin avec des configurations de stuff précises, des analyses de pourquoi le rapport range/self-peel explique mécaniquement la conception des ADC modernes, ou encore une théorie sur les "winner queues" de Riot (<em>« ils te font une winner Q tu gagne 100 lp, t'es là en mode "ouais je suis passé gold 1"... comme ça t'es content et tu continue de jouer car t'as la sensation de monter en elo »</em>, décembre 2021).</p>
+      <p>Cette dimension analytique est authentique mais rarement dépourvue d'une charge émotionnelle. Ses analyses servent souvent à justifier une défaite (la meta était contre lui, le champ adverse était OP sur ce patch), mais elles montrent une compréhension réelle des systèmes de jeu. Il a également des convictions profondes sur l'éthique du jeu compétitif : comparer League à un sport où "tu peux pas quitter le terrain" (le FF n'existe pas au foot), défendre l'idée que l'inting est déviant au sens sociologique. C'est un joueur sérieux qui se prend très au sérieux — ce qui rend ses explosions d'autant plus comiques.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">5</span> Noctambulisme, rythme et pic de 2021</h3>
+      <p>Le graphique horaire d'elilos est celui d'un vrai joueur du soir. 33% de ses messages sont émis entre 20h et 23h — le pic culminant à 21h avec plus de 2 540 messages sur la période complète. Mais ce qui est plus révélateur : 21,2% de ses messages (5 838 messages) sont envoyés après minuit. Il n'est pas rare qu'il joue jusqu'à 3h ou 4h du matin, ce qui explique une partie de la férocité de certaines rages nocturnes : la fatigue amplifie tout. Son record journalier de 578 messages le 23 septembre 2021 correspond à cette période d'activité maximale où il postait en moyenne plus de 42 fois par jour sur ce seul canal.</p>
+      <p>L'année 2021 est clairement son apex : 15 615 messages sur 12 mois, soit 57% de son activité totale sur 5 ans. Les mois de mars, mai et avril 2021 sont ses trois mois les plus actifs de toute la période. Cela coïncide probablement avec une phase de jeu intense, peut-être un confinement ou une période sans contraintes professionnelles/scolaires majeures. La chute en 2022 (4 796 messages) puis la relative stabilité en 2023 (4 477) avant la quasi-disparition en 2024 (29 messages) dessinent une trajectoire naturelle : moins de temps, moins de jeu, moins de rage à vider. Mais même en fin de course, son dernier message — <em>« mdr, c'était vraiment les 2 gameplay opposés »</em> (24 septembre 2024) — reste un commentaire de game. Jusqu'au bout.</p>
+    </div>
+
+    <div class="prose-section">
+      <h3><span class="num">6</span> Hors-LoL : fragments d'une vie derrière la rage</h3>
+      <p>Le qq-only est un canal de défouloir, mais elilos y glisse régulièrement des bribes de vie réelle. Les mentions de la vie quotidienne (boulot, cours, fac) cumulent près de 500 références, indiquant qu'il utilise ce canal comme point de contact social global, pas uniquement gaming. Il évoque la musique plus de 200 fois — sans qu'un artiste précis se dégage suffisamment pour qu'on puisse lui coller une obsession musicale claire. Le football sert souvent d'analogie pour expliquer des concepts de jeu (l'intégrité compétitive, l'esprit d'équipe, l'impossibilité de "quitter le terrain"), ce qui suggère une familiarité avec ce sport.</p>
+      <p>Son humour hors-game est absurde, parfois provocateur jusqu'au malaise, et repose beaucoup sur l'escalade : il ne se content pas d'une blague, il la pousse jusqu'au territoire inconfortable pour voir où ça casse. La mention de ses crises nocturnes (<em>« si je crie trop fort je réveille tout l'immeuble »</em>, décembre 2020) ancre le personnage dans une réalité physique et sociale — il vit en appartement, rage à voix haute, et en est conscient et légèrement gêné. Il y a un fond de lucidité constante chez elilos : il se sait rageur, il sait que la soloQ l'a "marabouté", il documente ses propres comportements avec une distance amusée qui empêche de le prendre tout à fait au sérieux — même quand lui le fait.</p>
+    </div>
+
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <h2>⚖️ Verdict Final</h2>
+    <p>Elilos est un <strong>rageur de haute intensité et de longue durée</strong> — pas le type qui flamme ses coéquipiers en game (au moins sur le paper), mais celui qui rentre chez lui, lance le Discord et déverse l'intégralité de sa session en majuscules dans un canal dédié à ça. <em>27 575 messages en 5 ans</em>, c'est une thérapie qui n'a jamais pris fin.</p>
+    <p>Derrière le rageur, il y a un <strong>vrai analyste du jeu</strong> qui a compris la mécanique de Kai'Sa AP avant que ce soit mainstream, qui théorise sur les systèmes de matchmaking et l'éthique compétitive — le tout entre deux "FILS DE PUTE" et un "JE VEUX MOURIR".</p>
+    <p>Son rapport à LoL est celui d'un amour toxique : il déteste le jeu, il déteste Riot, il déteste ses coéquipiers — et il revient jouer chaque soir à 21h jusqu'à 3h du matin. <em>Marabouté par la soloQ</em>, de son propre aveu. La description la plus précise qu'il ait jamais donnée de lui-même.</p>
+    <p>Verdict catégoriel : <strong>Rageur Chronique Conscient & Articulé</strong>. Ni zen, ni toxique in-game au sens strict — juste quelqu'un dont le canal Discord est le défouloir le plus honnête qu'on puisse trouver.</p>
+  </div>
+
+</div>
+
+<!-- CHART JS INLINE -->
+<script>
+// Minimal bar chart renderer — no external dependencies
+
+function drawBarChart(canvasId, labels, data, options) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth;
+  const H = canvas.offsetHeight || 160;
+  canvas.width = W * window.devicePixelRatio;
+  canvas.height = H * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  
+  const pad = { top: 10, right: 10, bottom: 28, left: 36 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  const maxVal = Math.max(...data);
+  const barW = chartW / labels.length;
+  
+  ctx.clearRect(0, 0, W, H);
+  
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH - (i / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + chartW, y); ctx.stroke();
+  }
+  
+  // Bars
+  data.forEach((val, i) => {
+    const barH = (val / maxVal) * chartH;
+    const x = pad.left + i * barW + barW * 0.15;
+    const y = pad.top + chartH - barH;
+    const bw = barW * 0.70;
+    
+    const grad = ctx.createLinearGradient(x, y, x, y + barH);
+    const isHot = options && options.hotIndex && i === options.hotIndex;
+    grad.addColorStop(0, isHot ? '#ff6b6b' : '#7b52b5');
+    grad.addColorStop(1, isHot ? '#e94560' : '#533483');
+    
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, bw, barH, 2) : ctx.rect(x, y, bw, barH);
+    ctx.fill();
+    
+    // Label
+    ctx.fillStyle = 'rgba(140,140,160,0.9)';
+    ctx.font = `${barW > 25 ? 10 : 8}px Segoe UI, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(labels[i], pad.left + i * barW + barW / 2, H - 8);
+  });
+  
+  // Y axis labels
+  ctx.fillStyle = 'rgba(140,140,160,0.7)';
+  ctx.font = '9px Segoe UI, sans-serif';
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= 4; i++) {
+    const val = Math.round((i / 4) * maxVal);
+    const y = pad.top + chartH - (i / 4) * chartH + 3;
+    ctx.fillText(val, pad.left - 4, y);
+  }
+}
+
+// Hour chart
+const hourData = {
+  0:2052,1:1775,2:966,3:665,4:234,5:146,6:55,7:94,8:268,9:144,10:177,11:282,
+  12:814,13:735,14:1264,15:1116,16:1919,17:1806,18:2120,19:1815,20:2346,21:2540,22:2323,23:1919
+};
+const hourLabels = Array.from({length:24}, (_,i) => i + 'h');
+const hourVals = Array.from({length:24}, (_,i) => hourData[i]);
+
+// Year chart data
+const yearData = {2019:657, 2020:2001, 2021:15615, 2022:4796, 2023:4477, 2024:29};
+
+window.addEventListener('load', () => {
+  // Draw hour chart
+  const hc = document.getElementById('hourChart');
+  if (hc) {
+    hc.style.height = '160px';
+    hc.height = 160;
+    drawBarChart('hourChart', hourLabels, hourVals, {hotIndex: 21});
+  }
+  
+  // Draw year chart
+  const yc = document.getElementById('yearChart');
+  if (yc) {
+    yc.style.height = '120px';
+    yc.height = 120;
+    drawBarChart('yearChart', Object.keys(yearData), Object.values(yearData), {hotIndex: 2});
+  }
+});
+
+window.addEventListener('resize', () => {
+  drawBarChart('hourChart', hourLabels, hourVals, {hotIndex: 21});
+  drawBarChart('yearChart', Object.keys(yearData), Object.values(yearData), {hotIndex: 2});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossiers Discord — Sommaire</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --card: #1e1e3a;
+    --border: #2a2a4a;
+    --accent: #533483;
+    --red: #e94560;
+    --text: #e0e0e0;
+    --muted: #888;
+    --gold: #f0a500;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  .header {
+    background: linear-gradient(135deg, var(--bg2) 0%, #0f3460 50%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(83,52,131,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(233,69,96,0.2) 0%, transparent 60%);
+  }
+  .header h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(233,69,96,0.5);
+    position: relative;
+  }
+  .header h1 span { color: var(--red); }
+  .header p {
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .main {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(83,52,131,0.3);
+  }
+  .card-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .card-name span { color: var(--red); }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .card-tag {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: rgba(83,52,131,0.25);
+    border: 1px solid var(--accent);
+    color: #c9b4f0;
+    width: fit-content;
+  }
+  .card-tag.red {
+    background: rgba(233,69,96,0.15);
+    border-color: var(--red);
+    color: #f0a0b0;
+  }
+  .card-tag.gold {
+    background: rgba(240,165,0,0.12);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin: 2.5rem 0 1rem;
+    border-left: 3px solid var(--accent);
+    padding-left: 0.6rem;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>dossiers <span>discord</span></h1>
+  <p>profils · analyses · cartographies · serveur privé</p>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Profils individuels</div>
+  <div class="grid">
+
+    <a class="card" href="raydo_profil.html">
+      <div class="card-name"><span>#</span> Raydo</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="arok_profil.html">
+      <div class="card-name"><span>#</span> Arok</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="profil_yabaphi.html">
+      <div class="card-name"><span>#</span> Yabaphi</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="profil_kaspei.html">
+      <div class="card-name"><span>#</span> Kaspei</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="foudulabo_profil.html">
+      <div class="card-name"><span>#</span> Foudulabo</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="sinnoh_profil.html">
+      <div class="card-name"><span>#</span> Sinnoh</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="yoob_profil.html">
+      <div class="card-name"><span>#</span> Yoob</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="profil_monpotestbon.html">
+      <div class="card-name"><span>#</span> Monpotestbon</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="lydd_profil.html">
+      <div class="card-name"><span>#</span> Lydd</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="shaars_profil.html">
+      <div class="card-name"><span>#</span> Shaars</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="zoller_profil.html">
+      <div class="card-name"><span>#</span> Zoller</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="profil_dorian.html">
+      <div class="card-name"><span>#</span> Dorian</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="maw_lotov_profil.html">
+      <div class="card-name"><span>#</span> Maw Lotov</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="merko_profile.html">
+      <div class="card-name"><span>#</span> Merko</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+    <a class="card" href="udf_profile.html">
+      <div class="card-name"><span>#</span> UDF</div>
+      <div class="card-desc">Profil complet — personnalité, style, positions</div>
+      <div class="card-tag">Profil</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Profils multi-canaux & analyses LoL</div>
+  <div class="grid">
+
+    <a class="card" href="mpb_profile.html">
+      <div class="card-name"><span>#</span> MPB — Politique & SoloQ</div>
+      <div class="card-desc">Analyse croisée canal politique + qq-only · 32 541 messages · 2019–2026</div>
+      <div class="card-tag red">Multi-canal</div>
+    </a>
+
+    <a class="card" href="eilos_qq_profile.html">
+      <div class="card-name"><span>#</span> Elilos — SoloQ (profil)</div>
+      <div class="card-desc">Profil canal qq-only — rage, performances, style de jeu</div>
+      <div class="card-tag red">LoL / SoloQ</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Analyses collectives & cartographies</div>
+  <div class="grid">
+
+    <a class="card" href="debat_merito_discord.html">
+      <div class="card-name"><span>#</span> Débat Méritocratie</div>
+      <div class="card-desc">Analyse d'un débat collectif sur la méritocratie — positions, arguments, dynamiques</div>
+      <div class="card-tag gold">Débat</div>
+    </a>
+
+    <a class="card" href="discord_relations (1).html">
+      <div class="card-name"><span>#</span> Relations Discord v1</div>
+      <div class="card-desc">Cartographie des relations entre membres du serveur</div>
+      <div class="card-tag gold">Cartographie</div>
+    </a>
+
+    <a class="card" href="discord_relations.html">
+      <div class="card-name"><span>#</span> Relations Discord v2</div>
+      <div class="card-desc">Cartographie des relations — version mise à jour</div>
+      <div class="card-tag gold">Cartographie</div>
+    </a>
+
+    <a class="card" href="organigramme_relations_discord.html">
+      <div class="card-name"><span>#</span> Organigramme des relations</div>
+      <div class="card-desc">Représentation hiérarchique et structurelle des liens entre membres</div>
+      <div class="card-tag gold">Cartographie</div>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  Analyses générées à partir de données Discord · Serveur privé
+</div>
+
+</body>
+</html>

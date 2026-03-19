@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartographie Sociale — Serveur Discord Privé 2021–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a3e;
+    --card: #141428;
+    --border: #2a2a5a;
+    --violet: #533483;
+    --violet-l: #7b52c4;
+    --red: #e94560;
+    --red-l: #ff6b82;
+    --green: #2ecc71;
+    --yellow: #f39c12;
+    --purple: #9b59b6;
+    --text: #c8c8e8;
+    --text-dim: #7878a8;
+    --text-bright: #eeeeff;
+    --glow-v: rgba(83,52,131,0.4);
+    --glow-r: rgba(233,69,96,0.4);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:9999;
+    opacity:0.5;
+  }
+
+  /* HEADER */
+  .site-header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--violet), var(--red), transparent);
+  }
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(83,52,131,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(233,69,96,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--violet-l); }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .meta-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  /* LEGEND */
+  .legend-bar {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 16px 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-line {
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* GRAPH */
+  #graph-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    background: radial-gradient(ellipse at center, #111130 0%, var(--bg) 70%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  #graph-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+  #graph-svg:active { cursor: grabbing; }
+
+  .graph-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ctrl-btn {
+    width: 32px; height: 32px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { border-color: var(--violet); color: var(--violet-l); }
+
+  .graph-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  /* TOOLTIP */
+  #tooltip {
+    position: fixed;
+    background: rgba(20, 20, 40, 0.97);
+    border: 1px solid var(--violet);
+    border-radius: 6px;
+    padding: 14px 18px;
+    max-width: 320px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(83,52,131,0.4);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  #tooltip.visible { opacity: 1; }
+  .tt-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .tt-msgs { color: var(--violet-l); font-size: 11px; margin-bottom: 6px; }
+  .tt-role { color: var(--text-dim); font-size: 11px; }
+  .tt-politic {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    background: rgba(83,52,131,0.3);
+    border-radius: 3px;
+    font-size: 10px;
+    color: var(--violet-l);
+    letter-spacing: 1px;
+  }
+  .tt-sep { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+  .tt-rel-type { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .tt-rel-desc { font-size: 11px; color: var(--text); }
+  .tt-anec { font-style: italic; color: var(--text-dim); font-size: 11px; margin-top: 6px; }
+
+  /* MAIN CONTENT */
+  .content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 80px;
+    height: 1px;
+    background: var(--red);
+  }
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  section { margin-bottom: 72px; }
+
+  /* CLUSTERS */
+  .clusters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+  .cluster-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .cluster-card:hover { border-color: var(--violet); }
+  .cluster-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .cluster-card.c1::before { background: var(--violet); }
+  .cluster-card.c2::before { background: var(--red); }
+  .cluster-card.c3::before { background: var(--green); }
+  .cluster-card.c4::before { background: var(--yellow); }
+  .cluster-card.c5::before { background: var(--purple); }
+  .cluster-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+  }
+  .cluster-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .member-tag {
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: rgba(83,52,131,0.25);
+    color: var(--violet-l);
+    border: 1px solid rgba(83,52,131,0.4);
+  }
+  .cluster-desc { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+
+  /* INFLUENCE RANKING */
+  .influence-list { display: flex; flex-direction: column; gap: 12px; }
+  .influence-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .influence-item:hover { border-color: var(--violet); transform: translateX(4px); }
+  .rank-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--violet-l);
+    opacity: 0.5;
+    text-align: center;
+  }
+  .influence-item:nth-child(1) .rank-num { opacity: 1; color: var(--red); }
+  .influence-item:nth-child(2) .rank-num { opacity: 0.9; }
+  .influence-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+  .influence-role { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .inf-badge {
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .inf-initiator { background: rgba(233,69,96,0.2); color: var(--red); border: 1px solid rgba(233,69,96,0.4); }
+  .inf-reactor { background: rgba(83,52,131,0.2); color: var(--violet-l); border: 1px solid rgba(83,52,131,0.4); }
+  .inf-bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+  .inf-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--red));
+  }
+
+  /* RIVALRY / AFFINITY CARDS */
+  .rivalry-grid, .affinity-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .rivalry-card, .affinity-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .rivalry-card { border-left: 3px solid var(--red); }
+  .affinity-card { border-left: 3px solid var(--green); }
+  .rivalry-card:hover { border-color: var(--red); }
+  .affinity-card:hover { border-color: var(--green); }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .versus {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-bright);
+  }
+  .vs-sep {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    color: var(--red);
+    padding: 0 4px;
+  }
+  .vs-sep.aff { color: var(--green); }
+  .intensity-badge {
+    margin-left: auto;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: rgba(233,69,96,0.15);
+    color: var(--red-l);
+    border: 1px solid rgba(233,69,96,0.3);
+  }
+  .intensity-badge.aff {
+    background: rgba(46,204,113,0.15);
+    color: var(--green);
+    border-color: rgba(46,204,113,0.3);
+  }
+
+  .card-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .subject-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+
+  .card-prose {
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .card-prose cite {
+    display: block;
+    font-style: italic;
+    color: var(--violet-l);
+    border-left: 2px solid var(--violet);
+    padding-left: 12px;
+    margin: 10px 0;
+    font-size: 12px;
+  }
+  .card-prose cite .cite-date {
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .card-verdict {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(233,69,96,0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(233,69,96,0.15);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+  .card-verdict span { color: var(--red-l); font-weight: 700; }
+  .card-verdict.aff {
+    background: rgba(46,204,113,0.05);
+    border-color: rgba(46,204,113,0.15);
+  }
+  .card-verdict.aff span { color: var(--green); }
+
+  /* SATELLITES */
+  .satellites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .satellite-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px;
+    position: relative;
+  }
+  .satellite-card::after {
+    content: '◎';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 18px;
+    color: var(--text-dim);
+    opacity: 0.3;
+  }
+  .sat-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .sat-msgs { font-size: 11px; color: var(--text-dim); margin-bottom: 10px; }
+  .sat-desc { font-size: 12px; color: var(--text); line-height: 1.7; }
+
+  /* EVOLUTION */
+  .evolution-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 32px;
+  }
+  .evolution-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--violet) 0%, var(--red) 100%);
+  }
+  .evo-item {
+    padding: 20px 0 20px 24px;
+    position: relative;
+    border-bottom: 1px solid rgba(42,42,90,0.5);
+  }
+  .evo-item:last-child { border-bottom: none; }
+  .evo-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 28px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--violet-l);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 8px var(--glow-v);
+  }
+  .evo-period {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--violet-l);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .evo-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+  .evo-desc { font-size: 12px; color: var(--text-dim); line-height: 1.8; }
+  .evo-desc em { color: var(--text); font-style: italic; }
+
+  /* FOOTER */
+  .site-footer {
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    background: var(--bg2);
+  }
+  .footer-note { font-size: 11px; color: var(--text-dim); }
+
+  /* GRAPH STYLES */
+  .node circle {
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  .node circle:hover { filter: brightness(1.3); }
+  .node text {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    fill: #eeeeff;
+    pointer-events: none;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .link {
+    stroke-opacity: 0.6;
+    transition: stroke-opacity 0.2s;
+  }
+  .link:hover { stroke-opacity: 1; }
+
+  @media (max-width: 768px) {
+    .site-header, .content { padding: 32px 20px; }
+    .legend-bar { padding: 12px 20px; }
+    h1 { font-size: 26px; }
+    .header-meta { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-bg"></div>
+  <div class="header-tag">Analyse Sociale · Discord Privé Francophone · 2021–2026</div>
+  <h1>Cartographie des <span>Relations</span><br>& Dynamiques de Groupe</h1>
+  <p style="color:var(--text-dim);max-width:640px;font-size:12px;line-height:1.8;">
+    Organigramme interactif généré à partir de <strong style="color:var(--text)">17 601 messages</strong> (oct.–nov. 2024 + fév. 2025) 
+    croisés avec 15 profils analytiques détaillés. Chaque nœud, lien et description est documenté sur les échanges réels.
+  </p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Membres actifs</span>
+      <span class="meta-value">18</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Messages analysés</span>
+      <span class="meta-value">17 601</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Période serveur</span>
+      <span class="meta-value">2021–2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Top actif</span>
+      <span class="meta-value" style="color:var(--red)">lydd · 3131</span>
+    </div>
+  </div>
+</header>
+
+<div class="legend-bar">
+  <div class="legend-item"><div class="legend-line" style="background:var(--red)"></div> Conflit / Tension récurrente</div>
+  <div class="legend-item"><div class="legend-line" style="background:var(--green)"></div> Affinité / Alliance intellectuelle</div>
+  <div class="legend-item"><div class="legend-line" style="background:var(--yellow)"></div> Relation neutre / occasionnelle</div>
+  <div class="legend-item"><div class="legend-line" style="background:var(--purple)"></div> Ragebait ciblé</div>
+  <div style="margin-left:auto;font-size:11px;color:var(--text-dim)">Taille nœud ∝ volume messages · Survol pour détails</div>
+</div>
+
+<!-- GRAPH -->
+<div id="graph-container">
+  <svg id="graph-svg"></svg>
+  <div class="graph-controls">
+    <button class="ctrl-btn" id="zoom-in" title="Zoom +">+</button>
+    <button class="ctrl-btn" id="zoom-out" title="Zoom −">−</button>
+    <button class="ctrl-btn" id="zoom-reset" title="Reset">⌂</button>
+  </div>
+  <div class="graph-hint">← Glisser pour déplacer · Scroll pour zoomer · Cliquer un nœud pour fixer</div>
+</div>
+<div id="tooltip"></div>
+
+<div class="content">
+
+  <!-- CLUSTERS -->
+  <section id="clusters">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Clusters & Sous-groupes Naturels</span>
+    </div>
+    <div class="clusters-grid">
+
+      <div class="cluster-card c1">
+        <div class="cluster-name">⚡ Le Noyau Dur — Moteurs du Serveur</div>
+        <div class="cluster-members">
+          <span class="member-tag">lydd</span>
+          <span class="member-tag">elilos</span>
+          <span class="member-tag">mpb</span>
+          <span class="member-tag">gk</span>
+          <span class="member-tag">sinnoh</span>
+        </div>
+        <div class="cluster-desc">Les cinq membres qui produisent plus de 60 % du volume total sur les périodes analysées. lydd (3131 msgs), elilos (2516) et mpb (2186) forment un triangle central hyperdense. Leurs échanges sont les plus chargés doctrinalement — droit, économie, politique — avec une capacité à maintenir des débats de plusieurs centaines de messages sans rupture. gk (1135) et sinnoh (784) complètent le noyau : le premier par sa constance polémique, le second par sa rigueur argumentative décalée. C'est dans ce cluster que naissent les guerres de friction les plus documentées du serveur.</div>
+      </div>
+
+      <div class="cluster-card c2">
+        <div class="cluster-name">🔴 Le Bloc Droite — Libéraux & Déclinistes</div>
+        <div class="cluster-members">
+          <span class="member-tag">zoller</span>
+          <span class="member-tag">shaars</span>
+          <span class="member-tag">forandos</span>
+          <span class="member-tag">yoob</span>
+          <span class="member-tag">dorian</span>
+        </div>
+        <div class="cluster-desc">Zoller (1568) et shaars (1160) constituent l'axe central de ce bloc — droite libérale à gaulliste étatiste, hostiles au RN comme à LFI, critique de la fiscalité et de l'immigration depuis des angles différents. forandos (806) joue un rôle d'organisateur logistique et observateur pragmatique. yoob (225) apporte l'autorité empirique du commerçant terrain. dorian (149) intervient en one-liners chirurgicaux qui valident souvent ce bloc. Alliance de fait sur les débats économiques, divisée ponctuellement sur le gaullisme vs libéralisme.</div>
+      </div>
+
+      <div class="cluster-card c3">
+        <div class="cluster-name">🟢 L'Aile Gauche — Analysts & Anti-capitalistes</div>
+        <div class="cluster-members">
+          <span class="member-tag">foudulabo</span>
+          <span class="member-tag">merko</span>
+          <span class="member-tag">mawlotov</span>
+        </div>
+        <div class="cluster-desc">Petit bloc cohérent à gauche économique, formé tardivement (foudulabo rejoint en jan. 2025). foudulabo (1544) est le plus radical — gauche de classe, chercheur précaire, absurdiste ritualisé. merko (92) est parti début-mi 2024 mais laisse une empreinte forte (anti-libéral, anti-mpb systématique, satire générationnelle des boomers). mawlotov (238) joue le rôle de la gauche ironique — ironie droitarde de façade sur convictions de gauche réelles. Ce cluster manque de masse critique mais est idéologiquement le plus cohérent du serveur sur le plan économique.</div>
+      </div>
+
+      <div class="cluster-card c4">
+        <div class="cluster-name">🟡 Les Identitaires — Droite Dure & Souverainisme</div>
+        <div class="cluster-members">
+          <span class="member-tag">yabaphi</span>
+          <span class="member-tag">raydo</span>
+          <span class="member-tag">arok</span>
+        </div>
+        <div class="cluster-desc">Cluster le moins homogène de tous — ses membres ne s'allient que ponctuellement. raydo (225) est le seul vrai idéologue nationaliste-catholique décliniste. yabaphi (337) est identitaire instinctif, anti-bobo populaire, sans doctrine formelle. arok (40 msgs dans le CSV mais 4392 total sur 4 ans) joue le libéral-conservateur analytique. Leur point de convergence : critique de l'immigration, méfiance du macronisme, hostilité à la gauche culturelle. Mais leur méthode diverge totalement — raydo théorise, yabaphi réagit, arok débunke.</div>
+      </div>
+
+      <div class="cluster-card c5">
+        <div class="cluster-name">🟣 Les Technocrates — Libéraux Données</div>
+        <div class="cluster-members">
+          <span class="member-tag">kaspei</span>
+          <span class="member-tag">egide</span>
+        </div>
+        <div class="cluster-desc">kaspei (tiisolz, 19 msgs dans le CSV mais 3571 total) incarne le libéral fonctionnaire — chiffres, nucléaire, Lisnard, Bretagne. egide (547) reste le membre le plus mystérieux du corpus : présent, réactif, peu profilé dans les HTML, mais visible dans les échanges d'octobre 2024 comme commentateur sèche sur les faits divers. Ce micro-cluster est davantage une affinité stylistique (rationalisme froid, sources citées) qu'une vraie coalition politique.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INFLUENCE -->
+  <section id="influence">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Hiérarchie d'Influence</span>
+    </div>
+    <div class="influence-list">
+
+      <div class="influence-item">
+        <div class="rank-num">1</div>
+        <div>
+          <div class="influence-name">lydd</div>
+          <div class="influence-role">Dialecticien dominant · Marxiste analytique · Futur rentier · 3 131 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:100%"></div></div>
+        </div>
+        <span class="inf-badge inf-initiator">Initiateur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">2</div>
+        <div>
+          <div class="influence-name">elilos</div>
+          <div class="influence-role">Arbitre central · Centriste critique · Pivot des débats · 2 516 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:90%"></div></div>
+        </div>
+        <span class="inf-badge inf-reactor">Réacteur-clé</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">3</div>
+        <div>
+          <div class="influence-name">mpb</div>
+          <div class="influence-role">Débat-starter compulsif · Conservateur sociétal · 2 186 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:82%"></div></div>
+        </div>
+        <span class="inf-badge inf-initiator">Initiateur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">4</div>
+        <div>
+          <div class="influence-name">gk</div>
+          <div class="influence-role">Polémiste direct · Centriste pragmatique · 1 135 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:68%"></div></div>
+        </div>
+        <span class="inf-badge inf-reactor">Réacteur-clé</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">5</div>
+        <div>
+          <div class="influence-name">zoller</div>
+          <div class="influence-role">Droite libérale affirmée · Classifieur compulsif · 1 568 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:72%"></div></div>
+        </div>
+        <span class="inf-badge inf-initiator">Initiateur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">6</div>
+        <div>
+          <div class="influence-name">shaars</div>
+          <div class="influence-role">Modérateur épistémique · Gaulliste étatiste · Officier gendarmerie · 1 160 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:62%"></div></div>
+        </div>
+        <span class="inf-badge inf-reactor">Modérateur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">7</div>
+        <div>
+          <div class="influence-name">foudulabo</div>
+          <div class="influence-role">Gauche de classe · Absurdiste ritualisé · Chercheur précaire · 1 544 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:58%"></div></div>
+        </div>
+        <span class="inf-badge inf-initiator">Initiateur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">8</div>
+        <div>
+          <div class="influence-name">sinnoh</div>
+          <div class="influence-role">Libéral monarchiste · Catholique doctrinal · Caustique calculé · 784 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:50%"></div></div>
+        </div>
+        <span class="inf-badge inf-reactor">Réacteur-clé</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">9</div>
+        <div>
+          <div class="influence-name">forandos</div>
+          <div class="influence-role">Organisateur logistique · Pragmatique · Observe plus qu'il ne dirige · 806 msgs CSV</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:40%"></div></div>
+        </div>
+        <span class="inf-badge inf-reactor">Réacteur</span>
+      </div>
+
+      <div class="influence-item">
+        <div class="rank-num">10</div>
+        <div>
+          <div class="influence-name">yabaphi / raydo / mawlotov</div>
+          <div class="influence-role">Satellites actifs — présence forte sur niches thématiques, faible ancrage général</div>
+          <div class="inf-bar-wrap"><div class="inf-bar" style="width:28%"></div></div>
+        </div>
+        <span class="inf-badge inf-initiator">Satellites</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RIVALRIES -->
+  <section id="rivalries">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Top 5 Rivalités les Plus Intenses</span>
+    </div>
+    <div class="rivalry-grid">
+
+      <div class="rivalry-card">
+        <div class="card-top">
+          <div class="versus">lydd <span class="vs-sep">⚔</span> mpb</div>
+          <span class="intensity-badge">Rivalité #1 · 636 échanges consécutifs</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Classes sociales</span><span class="subject-tag">Méritocratie</span><span class="subject-tag">Immigration</span><span class="subject-tag">Bourgeoisie</span><span class="subject-tag">Nuit du 30 nov. 2024</span>
+        </div>
+        <div class="card-prose">
+          La rivalité principale du serveur, documentée sur 4 ans. Elle oppose deux intelligences incompatibles sur la forme autant que sur le fond : lydd, marxiste analytique qui débunke au Conseil d'État et à Bourdieu, face à mpb, hyperrationaliste nationaliste qui considère la méritocratie comme un fait sociologique indéniable. La confrontation atteint son paroxysme lors de la nuit du 30 novembre 2024 — 378 messages nocturnes, débutés après minuit, sur la bourgeoisie, la mobilité sociale et la définition du capitalisme. Lydd structure ses arguments en arborescences, demande systématiquement à mpb de définir ses termes avant de les démonter. Mpb répond qu'il a "debunké la chose il y a deux semaines" et que l'autre n'a pas lu.
+          <cite>
+            « average droitardé prolo mais soutiens son bourreau comme si c'était son père, quel plaisir d'être le bourreau »
+            <span class="cite-date">lydd, 07/10/2024 — en réponse indirecte à mpb</span>
+          </cite>
+          <cite>
+            « PERSONNE NE DIT CA PUTAIN »
+            <span class="cite-date">mpb, 30/11/2024 01:06 — climax de la nuit la plus longue du corpus</span>
+          </cite>
+          La dynamique est cyclique : lydd démonte un argument en 15 lignes, mpb cite Cyrano de Bergerac en alexandrins pour répondre à une accusation d'extrême droite, lydd revient avec une étude OCDE. Le ton oscille entre le mépris affiché et une complicité intellectuelle réelle — ils sont l'un des rares duos où l'adversaire est traité comme un interlocuteur sérieux. elilos sert régulièrement d'arbitre entre les deux, refusant de valider l'un ou l'autre systématiquement.
+        </div>
+        <div class="card-verdict"><span>Qui a le dessus ?</span> &nbsp;lydd sur le plan rhétorique et factuel — mpb gagne sur l'endurance et la dramaturgie.</div>
+      </div>
+
+      <div class="rivalry-card">
+        <div class="card-top">
+          <div class="versus">elilos <span class="vs-sep">⚔</span> mpb</div>
+          <span class="intensity-badge">Rivalité #2 · 352 échanges consécutifs</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Médias / CNews</span><span class="subject-tag">Affaire Le Pen inéligibilité</span><span class="subject-tag">RN</span><span class="subject-tag">Logique politique</span>
+        </div>
+        <div class="card-prose">
+          Rivalité plus nuancée que lydd/mpb : elilos reconnaît la logique de mpb ("autant avec MPB on a des désaccords mais au moins il est logique") mais le retrouve sur presque tous les sujets d'actualité pour lui opposer un angle différent. Le débat de novembre 2024 sur l'inéligibilité de Marine Le Pen est emblématique : mpb défend le principe (pas d'inéligibilité automatique pour la démocratie), elilos lui oppose que c'est simplement incohérent avec ses autres positions. lydd est appelé à la rescousse par elilos pour confirmer, mais elilos refuse de le suivre quand lydd dérape dans la condescendance.
+          <cite>
+            « Autant avec MPB on a des désaccords mais au moins il est logique autant Lyd t'es full delu »
+            <span class="cite-date">elilos, 14/11/2024 — arbitrage impromptu</span>
+          </cite>
+          <cite>
+            « Mdr, gk et "pas assez riche" dans le même message c'est comme MPB et "je n'ai jamais eu de rapports sexuels avec des mineurs" dans la même phrase »
+            <span class="cite-date">elilos, 03/10/2024 — la vanne la plus documentée du corpus</span>
+          </cite>
+        </div>
+        <div class="card-verdict"><span>Qui a le dessus ?</span> &nbsp;Elilos — il reste neutre et cohérent là où mpb finit par se contredire sur son propre terrain.</div>
+      </div>
+
+      <div class="rivalry-card">
+        <div class="card-top">
+          <div class="versus">shaars <span class="vs-sep">⚔</span> lydd</div>
+          <span class="intensity-badge">Rivalité #3 · 222 échanges consécutifs</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Capitalisme / Sources</span><span class="subject-tag">Gaullisme vs marxisme</span><span class="subject-tag">Grandes écoles</span><span class="subject-tag">Immobilier</span>
+        </div>
+        <div class="card-prose">
+          Deux sourceurs compulsifs qui ne se font aucun cadeau. Shaars demande des sources, lydd en sort avec Bourdieu et le Conseil d'État. Mais shaars a ses propres références (Wikipedia, INSEE, jurisprudences) et ses propres contradictions internes (anticapitaliste investi en bourse, anti-élite sorti de prépa) que lydd soulève systématiquement. La rivalité est intéressante parce qu'ils sont d'accord sur beaucoup de constats (redistribution, fraude fiscale des grandes entreprises, hostilité au RN) mais divergent sur les solutions — shaars reste dans un gaullisme institutionnel, lydd veut démolir les fondations.
+          <cite>
+            « Hâte d'être capitaine de gendarmerie et venir te chercher sinnoh. »
+            <span class="cite-date">shaars, fév. 2025 — menace affectueuse · score intimidation : 2/10</span>
+          </cite>
+        </div>
+        <div class="card-verdict"><span>Résultat ?</span> &nbsp;Match nul — chacun sur son terrain, aucun ne convainc l'autre, mais le respect de fond est réel.</div>
+      </div>
+
+      <div class="rivalry-card">
+        <div class="card-top">
+          <div class="versus">merko <span class="vs-sep">⚔</span> mpb</div>
+          <span class="intensity-badge">Rivalité #4 · 24 mentions directes</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Retraites 2023</span><span class="subject-tag">Macronisme</span><span class="subject-tag">Statut de prof</span><span class="subject-tag">Anti-libéralisme</span>
+        </div>
+        <div class="card-prose">
+          La rivalité la plus asymétrique : merko cible explicitement mpb comme "le macronix du discord", "HOLY COPIUM", et utilise son statut de professeur comme argument ad hominem de premier ordre. L'attaque la plus célèbre du corpus merko : "Mpb t'es prof, tu bosses en 20h semaine, tu vas probablement vivre de la rente plus tard — t'es pas invité à donner ton avis sur des revendications sociales." Mpb répond sur le fond mais l'attaque personnelle a percé. Merko quitte le serveur au printemps 2024, privant mpb de son contradicteur idéologique le plus virulent.
+          <cite>
+            « Mpb t'es prof, tu bosses en 20h semaine, tu vas probablement vivre de la rente plus tard — t'es pas invité à donner ton avis sur des revendications sociales. »
+            <span class="cite-date">merko, 24/03/2023 — lors des débats sur la réforme des retraites</span>
+          </cite>
+        </div>
+        <div class="card-verdict"><span>Qui gagne ?</span> &nbsp;Merko — la formule sur le statut de prof de mpb reste dans l'inconscient collectif du serveur.</div>
+      </div>
+
+      <div class="rivalry-card">
+        <div class="card-top">
+          <div class="versus">kaspei <span class="vs-sep">🟣</span> zoller</div>
+          <span class="intensity-badge">Ragebait institutionnalisé</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Ping pong</span><span class="subject-tag">Ragebait conscient</span><span class="subject-tag">Sport vs non-sport</span>
+        </div>
+        <div class="card-prose">
+          La seule rivalité du serveur qui soit entièrement et explicitement déclarée comme du ragebait des deux côtés. Kaspei "trashtalk le ping pong parce que ça me fait rire de ragebait Zoller, mais en réalité je m'en branle complet." Zoller défend le tennis de table avec une sincérité absolue et totalement imperméable à l'ironie — 22 mentions, parle de son futur fils pongiste, décrit les entraînements chinois comme "de l'ASMR". Cette asymétrie (ragebaiteur conscient vs cible sincère) crée une dynamique ludique unique sur le serveur, souvent suivie avec délectation par les autres membres. C'est le seul conflit où tout le monde rit, y compris (parfois) zoller.
+          <cite>
+            « Après moi je trashtalk le ping pong parce que ça me fait rire de ragebait Zoller, mais en réalité je m'en branle complet, juste j'arrive pas à prendre ce sport au sérieux. »
+            <span class="cite-date">kaspei, fév. 2026 — méta-transparence absolue</span>
+          </cite>
+          <cite>
+            « Je considère le ping pong comme un art en plus d'être un sport. »
+            <span class="cite-date">zoller, fév. 2026 — réponse en toute sincérité</span>
+          </cite>
+        </div>
+        <div class="card-verdict"><span>Résultat ?</span> &nbsp;Kaspei gagne chaque round. Zoller gagne la guerre — sa passion survit à toutes les moqueries.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AFFINITIES -->
+  <section id="affinities">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Top 5 Affinités les Plus Solides</span>
+    </div>
+    <div class="affinity-grid">
+
+      <div class="affinity-card">
+        <div class="card-top">
+          <div class="versus">lydd <span class="vs-sep aff">♦</span> sinnoh</div>
+          <span class="intensity-badge aff">Alliance paradoxale · 300 échanges</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Critique du suffrage universel</span><span class="subject-tag">Anti-démocratie formelle</span><span class="subject-tag">Philosophie politique</span>
+        </div>
+        <div class="card-prose">
+          L'alliance la plus intellectuellement fascinante du serveur : un marxiste anticapitaliste et un monarchiste libéral catholique qui se trouvent régulièrement du même côté. Leur point de convergence paradoxal : un mépris partagé du suffrage universel en l'état, une conviction que la démocratie formelle est une coquille vide au service des dominants. Lydd cite Bourdieu, sinnoh cite Platon et Hoppe — ils arrivent au même endroit par des chemins opposés. Ils s'allient également sur la critique des boomers propriétaires et sur une certaine conception de la rigueur argumentative : tous deux exigent que les termes soient définis avant le débat. Leurs échanges sont les plus denses du serveur sur le plan philosophique pur.
+          <cite>
+            « Si la démocratie c'est de laisser aux débilos le soin de choisir les lois qui me sont appliquées, alors je ne suis pas démocrate. »
+            <span class="cite-date">lydd, jan. 2026</span>
+          </cite>
+        </div>
+        <div class="card-verdict aff"><span>Ce qui les unit :</span> &nbsp;La conviction que les structures politiques réelles ne correspondent pas à leur habillage rhétorique — et le plaisir commun à le démontrer.</div>
+      </div>
+
+      <div class="affinity-card">
+        <div class="card-top">
+          <div class="versus">elilos <span class="vs-sep aff">♦</span> lydd</div>
+          <span class="intensity-badge aff">Duo dominant · 879 échanges consécutifs</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Géopolitique</span><span class="subject-tag">Médias</span><span class="subject-tag">Politique française</span><span class="subject-tag">Arbitrage de débats</span>
+        </div>
+        <div class="card-prose">
+          Le duo le plus productif du serveur en volume pur — 879 échanges consécutifs sur les périodes analysées. Elilos et lydd partagent une approche analytique commune (demander des définitions, sourcer, décomposer les arguments) et se retrouvent souvent alliés contre les positions de mpb ou de yabaphi. Mais leur affinité n'est pas monolithique : elilos refuse régulièrement de suivre lydd quand il devient condescendant, et lydd reconnaît parfois la logique d'elilos sur des points factuels. Ce couple est le véritable backbone argumentatif du serveur sur les questions de politique française et de géopolitique.
+          <cite>
+            « Autant avec MPB on a des désaccords mais au moins il est logique autant Lyd t'es full delu »
+            <span class="cite-date">elilos, 14/11/2024 — même elilos tape sur lydd quand nécessaire</span>
+          </cite>
+        </div>
+        <div class="card-verdict aff"><span>Ce qui les unit :</span> &nbsp;La rigueur analytique et le refus de la mauvaise foi — même s'ils la définissent différemment.</div>
+      </div>
+
+      <div class="affinity-card">
+        <div class="card-top">
+          <div class="versus">zoller <span class="vs-sep aff">♦</span> shaars</div>
+          <span class="intensity-badge aff">Alliance pragmatique · 159 échanges</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Immobilier</span><span class="subject-tag">Patrimonial</span><span class="subject-tag">Critique de LFI</span><span class="subject-tag">Finance personnelle</span>
+        </div>
+        <div class="card-prose">
+          Alliance entre deux membres qui sont pourtant idéologiquement décalés (zoller libéral décliniste, shaars gaulliste étatiste anticapitaliste) mais qui se retrouvent sur la pratique : l'immobilier, la stratégie patrimoniale, la critique du système fiscal. Shaars (135k€ en bourse, appart en location) et zoller (futur "favorisé", achat de maison en cours) partagent la même lucidité sur leur trajectoire ascendante et ne s'en excusent pas. La confiance mutuelle se manifeste dans les débats quand l'un cite l'autre comme référence ou arbitre.
+        </div>
+        <div class="card-verdict aff"><span>Ce qui les unit :</span> &nbsp;La lucidité sur leur propre position de classe — assumée, documentée, sans fausse modestie.</div>
+      </div>
+
+      <div class="affinity-card">
+        <div class="card-top">
+          <div class="versus">foudulabo <span class="vs-sep aff">♦</span> sinnoh</div>
+          <span class="intensity-badge aff">Alliance de forme · 211 échanges</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Absurde partagé</span><span class="subject-tag">Critique du système</span><span class="subject-tag">Anti-pragmatisme politique</span>
+        </div>
+        <div class="card-prose">
+          Alliance stylistique plus qu'idéologique — foudulabo (gauche de classe radicale) et sinnoh (monarchiste libéral catholique) sont aux antipodes politiques mais partagent un registre commun : l'humour noir, la formule qui sidère plutôt que la formule qui convainc, et un certain mépris des discussions trop conformistes. Foudulabo apprécie que sinnoh ne triche jamais sur ses positions ("Continue les insultes igo" est reconnu dans le groupe comme une marque de caractère), et sinnoh voit dans le pattern absurde de foudulabo un refus de la rhétorique sérieuse qu'il partage à sa manière. Leur affinité se manifeste plus dans les réactions partagées aux sorties des autres que dans des échanges directs.
+        </div>
+        <div class="card-verdict aff"><span>Ce qui les unit :</span> &nbsp;La conviction que l'humour dit plus de vérités que l'argumentation formelle.</div>
+      </div>
+
+      <div class="affinity-card">
+        <div class="card-top">
+          <div class="versus">yoob <span class="vs-sep aff">♦</span> forandos</div>
+          <span class="intensity-badge aff">Duo terrain · 115 échanges</span>
+        </div>
+        <div class="card-subjects">
+          <span class="subject-tag">Économie réelle</span><span class="subject-tag">Immobilier</span><span class="subject-tag">Vie pratique</span><span class="subject-tag">Pragmatisme</span>
+        </div>
+        <div class="card-prose">
+          L'affinité la plus discrète mais la plus concrète du serveur. Deux membres ancrés dans la réalité économique quotidienne — yoob boucher à Belleville avec ses données de Rungis, forandos gestionnaire de biens immobiliers en Lorraine. Ils sont les deux seuls membres dont l'autorité vient exclusivement du vécu terrain, pas de lectures théoriques. Forandos propose des maisons de 150m² pour 800€/mois à 40 minutes de Nancy, yoob commente le marché de l'immobilier parisien. Ils ne débattent pas — ils renseignent, et cette complémentarité crée un lien implicite de reconnaissance mutuelle.
+          <cite>
+            « Si voulez j'ai des maisons de 150m² pour 800€ par mois à vous proposer, seulement 40mn de Nancy »
+            <span class="cite-date">forandos, 03/10/2024 — l'intervention terrain la plus emblématique</span>
+          </cite>
+        </div>
+        <div class="card-verdict aff"><span>Ce qui les unit :</span> &nbsp;L'autorité du concret dans un serveur dominé par la théorie.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SATELLITES -->
+  <section id="satellites">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Membres Satellites — Présences Périphériques</span>
+    </div>
+    <div class="satellites-grid">
+
+      <div class="satellite-card">
+        <div class="sat-name">raydo</div>
+        <div class="sat-msgs">225 msgs CSV · 2 116 totaux · actif 2022–2023 puis fantôme</div>
+        <div class="sat-desc">Satellite par désintégration progressive. Raydo était au cœur du serveur en 2023 (83% de son activité totale en une seule année), avec des théorisations déclinistes intenses sur le nationalisme catholique, le grand remplacement, la géopolitique. Après cet hyperactivité, il décroche quasi-totalement. En 2024-2026, il revient sporadiquement avec des messages explosifs ("RENDEZ-NOUS LE ROI ET NOTRE SEIGNEUR JÉSUS-CHRIST") qui ont tout du performatif d'une présence fantôme. Sa contribution est mémorable mais n'influence plus les débats en cours — il arrive après les batailles et pose un drapeau que personne ne lit.</div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-name">mawlotov</div>
+        <div class="sat-msgs">238 msgs CSV · 2 147 totaux · prof à Brest · irrégulier</div>
+        <div class="sat-desc">Satellite par intermittence structurée. Mawlotov est profondément intégré au groupe sur le plan des blagues et de l'atmosphère (son émoji macronlunettes est une institution), mais son activité est tellement irrégulière qu'il manque souvent les grands débats. Ses interventions les plus significatives — l'ironie droitarde, les trolls ciblant Risto, les posts EN sur ses conditions d'enseignant — sont appréciées mais ne structurent aucune alliance durable. Il cataly­se des réactions sans suivre les échanges qu'il provoque. Son rôle est celui d'un électron libre affectueux.</div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-name">merko</div>
+        <div class="sat-msgs">92 msgs CSV · 2 535 totaux · parti ~mi-2024</div>
+        <div class="sat-desc">Satellite par départ. Merko a eu une présence massive en 2023 (débats retraites) mais sa faible activité dans le CSV (92 msgs) confirme son retrait progressif après le printemps 2024. Il reste une référence dans les débats ("vrai soldat tout terrain" selon zoller) et ses formules circulent encore, mais il n'est plus là pour les défendre. Un "fantôme actif" — cité souvent, présent peu.</div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-name">arok</div>
+        <div class="sat-msgs">40 msgs CSV · 4 392 totaux · Banquier · Actif surtout 2022–2023</div>
+        <div class="sat-desc">Satellite par retrait progressif. Arok est l'un des membres les plus analytiquement sophistiqués du serveur (pic mars 2023, 727 messages) mais son activité s'est effondrée après. Dans le CSV des pics d'activité, il n'apparaît qu'en filigrane. Son rôle historique est celui du libéral-conservateur analytique qui contredisait mpb depuis la droite — une voix qui manque au dispositif d'opposition interne.</div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-name">yoob</div>
+        <div class="sat-msgs">225 msgs CSV · 7 929 totaux · retrait fort 2025-2026</div>
+        <div class="sat-desc">Satellite par choix de vie. Yoob a été très actif en 2024 (3555 messages) mais son retrait en 2025-2026 est délibéré — "la politique devient un commentaire de fond plutôt qu'un sujet central." Il reste très apprécié dans le groupe comme voix du terrain, mais intervient de moins en moins. Sa présence quand il poste est toujours à forte valeur ajoutée (données Rungis, dynamiques Belleville) — ce qui rend son absence d'autant plus visible.</div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-name">dorian (dosinge)</div>
+        <div class="sat-msgs">149 msgs CSV · 1 481 totaux · 1.04 msg/jour sur 4 ans</div>
+        <div class="sat-desc">Satellite permanent par philosophie. Dorian est le spectateur actif à intervention chirurgicale par excellence — il ne cherche pas à occuper l'espace, arrive avec une formule sèche ("Le pire c'est que facon y a rien à faire meme sans immigration c'est déjà finito"), et repart. Son influence ponctuelle est réelle (il valide souvent zoller et yoob) mais sa présence ne structure aucune dynamique. C'est peut-être la définition la plus pure d'un satellite : gravitation constante, impact délibérément minimal.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EVOLUTION -->
+  <section id="evolution">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Évolution des Relations — 2021 à 2026</span>
+    </div>
+    <div class="evolution-timeline">
+
+      <div class="evo-item">
+        <div class="evo-period">2021–2022 · Fondation</div>
+        <div class="evo-title">Le serveur se constitue — Les identités se posent</div>
+        <div class="evo-desc">Les membres fondateurs — mpb, arok, sinnoh, yoob, mawlotov — établissent les dynamiques de base. Arok et mpb sont déjà en opposition dialectique. Raydo arrive fin 2022 et impose immédiatement une présence idéologique forte à droite nationale. Les blocs ne sont pas encore formés — c'est la période de découverte mutuelle, où chacun teste ses positions sans en faire des lignes fixes. <em>mawlotov vote Jadot, mpb vote Zemmour, sinnoh vote Le Pen par rejet, arok était en phase souverainiste.</em></div>
+      </div>
+
+      <div class="evo-item">
+        <div class="evo-period">2023 · Cristallisation</div>
+        <div class="evo-title">La réforme des retraites comme révélateur — Merko et raydo en apogée</div>
+        <div class="evo-desc">La réforme des retraites (mars 2023) est le premier grand événement fédérateur ET diviseur. Merko explose en volume et produit ses attaques les plus mémorables contre mpb. Raydo est à son pic absolu. Arok clarifie sa ligne libérale. Shaars arrive en 2022 mais n'explose qu'en juillet 2024. Cette période voit la <em>formation des camps stables</em> : gauche économique (merko, foudulabo absent), droite libérale (arok, zoller), nationaliste (raydo, yabaphi), centre-droit (mpb, sinnoh). Lydd est encore en 2022-2023 en phase de "trou quasi-total" (2 messages en 2023).</div>
+      </div>
+
+      <div class="evo-item">
+        <div class="evo-period">2024 · Explosion et Reconfigurations</div>
+        <div class="evo-title">Shaars et zoller montent — merko et raydo décrochent — Lydd explose</div>
+        <div class="evo-desc">Juillet 2024 voit l'arrivée massive de shaars (2 469 messages en un seul mois) qui reconfigure l'équilibre : un nouveau modérateur épistémique, plus sourcé que mpb mais moins intransigeant que lydd. Zoller atteint son pic. Lydd revient en force. Merko se retire progressivement après le printemps. <em>Les législatives anticipées cristallisent les positions :</em> mpb défend la non-inéligibilité de Le Pen, lydd s'y oppose, elilos arbitre. Yoob vote souverainiste, sinnoh attend "celui qui promettra l'annihilation des retraites et de l'avortement." Aucun vainqueur à ce stade.</div>
+      </div>
+
+      <div class="evo-item">
+        <div class="evo-period">Fév. 2025 · Pic Absolu</div>
+        <div class="evo-title">Lydd, foudulabo et mpb au sommet — foudulabo rejoint le serveur</div>
+        <div class="evo-desc">Février 2025 est le mois record : lydd (2097), elilos (1147), mpb (1185), zoller (928), foudulabo (1544). L'arrivée de foudulabo reconfigure l'aile gauche : pour la première fois, il y a une gauche de classe radicale et cohérente en face du bloc droite-libérale. La dynamique lydd/foudulabo crée un axe gauche nouveau — foudulabo apporte la rigueur scientifique là où lydd apporte le droit. <em>La nuit du 30 novembre 2024 avait déjà posé les bases : le serveur est désormais capable de discussions de plusieurs centaines de messages sans perdre son fil.</em></div>
+      </div>
+
+      <div class="evo-item">
+        <div class="evo-period">2025–2026 · Stabilisation & Maturité</div>
+        <div class="evo-title">Aucun changement de camp — mais des distances qui s'installent</div>
+        <div class="evo-desc">Aucun membre ne change de positionnement politique fondamental entre 2021 et 2026 — c'est frappant. Les évolutions sont de degré, pas de nature : yabaphi se radicalise sur le complotisme, sinnoh affine sa synthèse libéro-catholique, lydd consolide sa doctrine rentier, mpb devient moins partisan et plus sceptique institutionnel. <em>Ce qui change, c'est la participation :</em> yoob, arok et raydo gravitent vers la périphérie. Foudulabo et shaars deviennent des piliers. Et certaines rivalités (lydd/mpb, elilos/mpb) semblent aussi inévitables qu'inconfortables — ni l'un ni l'autre ne peut partir, les deux se nourrissent de l'autre.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-note">
+    Données : 17 601 messages · Oct–Nov 2024 & Fév 2025 · 15 profils analytiques · Serveur Discord privé francophone 2021–2026
+  </div>
+  <div class="footer-note" style="color:var(--violet-l)">
+    « Deleted User » = gk dans le CSV
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const members = [
+  { id: "lydd",      label: "lydd",      msgs: 3131, role: "Dialecticien dominant · Marxiste analytique",   politic: "Marxiste · Capitaliste pragmatique",     x: 0.5,  y: 0.3  },
+  { id: "elilos",    label: "elilos",    msgs: 2516, role: "Arbitre central · Centriste critique",           politic: "Centre analytique",                     x: 0.45, y: 0.45 },
+  { id: "mpb",       label: "mpb",       msgs: 2186, role: "Débat-starter · Conservateur sociétal",          politic: "Nationaliste conservateur",             x: 0.55, y: 0.55 },
+  { id: "zoller",    label: "zoller",    msgs: 1568, role: "Droite libérale · Pongiste évangéliste",          politic: "Droite libérale décliniste",            x: 0.7,  y: 0.4  },
+  { id: "foudulabo", label: "foudulabo", msgs: 1544, role: "Gauche de classe · Chercheur précaire",           politic: "Extrême gauche économique",             x: 0.28, y: 0.35 },
+  { id: "shaars",    label: "shaars",    msgs: 1160, role: "Modérateur épistémique · Officier gendarme",      politic: "Gaulliste étatiste",                    x: 0.72, y: 0.6  },
+  { id: "gk",        label: "gk",        msgs: 1135, role: "Polémiste direct · Centriste pragmatique",        politic: "Centre-droit pragmatique",              x: 0.5,  y: 0.65 },
+  { id: "forandos",  label: "forandos",  msgs:  806, role: "Organisateur · Propriétaire terrien pragmatique", politic: "Centre pragmatique",                    x: 0.78, y: 0.5  },
+  { id: "sinnoh",    label: "sinnoh",    msgs:  784, role: "Libéral monarchiste · Catholique doctrinal",      politic: "Libéral monarchiste anti-démocratie",   x: 0.36, y: 0.62 },
+  { id: "egide",     label: "egide",     msgs:  547, role: "Commentateur sèche · Observateur réactif",        politic: "Non-identifié clairement",              x: 0.62, y: 0.72 },
+  { id: "yabaphi",   label: "yabaphi",   msgs:  337, role: "Identitaire instinctif · Béarnais revendiqué",    politic: "Droite dure populaire",                 x: 0.22, y: 0.55 },
+  { id: "mawlotov",  label: "mawlotov",  msgs:  238, role: "Ironiste droitard de gauche · Prof à Brest",      politic: "Gauche masquée en droite ironique",     x: 0.2,  y: 0.4  },
+  { id: "raydo",     label: "raydo",     msgs:  225, role: "Idéologue décliniste · Natio-catholique",          politic: "Nationalisme catholique souverainiste", x: 0.15, y: 0.65 },
+  { id: "yoob",      label: "yoob",      msgs:  225, role: "Boucher · Souverainiste pragmatique",              politic: "Souverainisme terrain",                 x: 0.8,  y: 0.32 },
+  { id: "dorian",    label: "dorian",    msgs:  149, role: "Spectateur actif · One-liner specialist",          politic: "Droite populiste pragmatique",          x: 0.88, y: 0.6  },
+  { id: "merko",     label: "merko",     msgs:   92, role: "Anti-libéral virulent · Gauche anti-boomers",      politic: "Gauche économique radicale",            x: 0.3,  y: 0.75 },
+  { id: "arok",      label: "arok",      msgs:   40, role: "Libéral-conservateur analytique · Banquier",       politic: "Libéral-conservateur",                  x: 0.6,  y: 0.2  },
+  { id: "kaspei",    label: "kaspei",    msgs:   19, role: "Libéral fonctionnaire · Pédagogue compulsif",      politic: "Libéral classique (Lisnard)",           x: 0.82, y: 0.22 },
+];
+
+// rel types: conflict, affinity, neutral, ragebait
+const relationships = [
+  // CONFLICTS (red)
+  { source:"lydd",      target:"mpb",      type:"conflict",  weight:8,  desc:"Rivalité principale du serveur", tooltip:"Débat perpétuel sur classes sociales, méritocratie, immigration. Nuit du 30/11/2024 : 378 messages nocturnes. Lydd démonte au Conseil d'État, mpb cite Cyrano.", anec:"«PERSONNE NE DIT CA PUTAIN» — mpb, 01:06 du matin" },
+  { source:"elilos",    target:"mpb",      type:"conflict",  weight:6,  desc:"Tension récurrente mais respectueuse", tooltip:"Elilos arbitre et contredit mpb sur les médias, l'inéligibilité de Le Pen, la logique politique. Reconnaît sa logique mais refuse ses conclusions.", anec:"«Autant avec MPB on a des désaccords mais au moins il est logique»" },
+  { source:"shaars",    target:"lydd",     type:"conflict",  weight:5,  desc:"Deux sourceurs qui ne capitulent jamais", tooltip:"Gaulliste étatiste vs marxiste analytique. Sources opposées, contradictions internes mutuellement relevées. Respect de fond.", anec:"«Contrairement à certain ici je donne les sources.» — shaars" },
+  { source:"merko",     target:"mpb",      type:"conflict",  weight:5,  desc:"Hostilité idéologique explicite", tooltip:"Merko cible mpb comme 'le macronix du discord'. L'attaque sur le statut de prof reste mémorable.", anec:"«Mpb t'es prof, tu bosses en 20h semaine — t'es pas invité à donner ton avis»" },
+  { source:"elilos",    target:"raydo",    type:"conflict",  weight:4,  desc:"Elilos traite raydo de 'trop modéré' selon lui", tooltip:"Raydo accuse elilos d'être macroniste, elilos lui oppose les faits. Respect intellectuel mais désaccord profond.", anec:"Raydo se définit comme Cassandre incompris" },
+  { source:"lydd",      target:"zoller",   type:"conflict",  weight:3,  desc:"Confrontation économique récurrente", tooltip:"Zoller libéral assumé, lydd marxiste analytique. Débats sur l'immobilier et les classes sociales.", anec:"Zoller assume être 'futur favorisé'" },
+  { source:"foudulabo", target:"mpb",      type:"conflict",  weight:4,  desc:"Gauche radicale vs conservateur", tooltip:"foudulabo représente la gauche de classe que mpb conteste. Échanges denses sur la précarité et le rôle de l'État.", anec:"«speedrun smic any%» — foudulabo" },
+  { source:"sinnoh",    target:"mpb",      type:"conflict",  weight:3,  desc:"Anti-démocratie vs nationalisme", tooltip:"Sinnoh et mpb divergent sur la démocratie formelle — sinnoh la rejette doctrinalement, mpb la défend quand ça l'arrange.", anec:"«Continue les insultes igo.» — sinnoh" },
+  { source:"merko",     target:"raydo",    type:"conflict",  weight:3,  desc:"Mépris de classe", tooltip:"Merko utilise raydo comme repoussoir ('hors sol', 'teubé') pour délégitimer les positions adverses.", anec:"«si ransberg est d'accord avec toi c'est souvent le signe que c'est très nauséabond»" },
+  { source:"mawlotov",  target:"lydd",     type:"conflict",  weight:2,  desc:"Lassitude affichée", tooltip:"«Te fatigues pas Lyd je vais pas lire» — mawlotov clôt les débats trop longs avec l'émoji macronlunettes.", anec:"Mawlotov préfère l'ironie à la lecture des tirades de lydd" },
+  { source:"yabaphi",   target:"foudulabo",type:"conflict",  weight:3,  desc:"Droite dure vs gauche radicale", tooltip:"Yabaphi identitaire populaire, foudulabo gauche de classe. Confrontation directe sur immigration et classe.", anec:"La tension classe populaire vs classe populaire" },
+
+  // AFFINITIES (green)
+  { source:"lydd",      target:"sinnoh",   type:"affinity",  weight:6,  desc:"Alliance paradoxale anti-démocratie", tooltip:"Marxiste et monarchiste trouvent un terrain commun : mépris du suffrage universel formel, rigueur argumentative, critique des boomers propriétaires.", anec:"Bourdieu + Platon = même conclusion sur la démocratie formelle" },
+  { source:"elilos",    target:"lydd",     type:"affinity",  weight:7,  desc:"Duo dominant du serveur", tooltip:"879 échanges consécutifs. Approche analytique commune, s'allient souvent contre mpb et yabaphi. Mais elilos corrige lydd quand il devient condescendant.", anec:"Le véritable backbone du serveur sur le plan argumentatif" },
+  { source:"zoller",    target:"shaars",   type:"affinity",  weight:5,  desc:"Alliance patrimoniale pragmatique", tooltip:"Idéologies différentes mais pratiques similaires : immobilier, stratégie patrimoniale, lucidité assumée sur leur ascension de classe.", anec:"Zoller 'futur favorisé' + shaars anticapitaliste en bourse = cohérence vécue" },
+  { source:"foudulabo", target:"sinnoh",   type:"affinity",  weight:4,  desc:"Affinité de style — humour sidérant", tooltip:"Aux antipodes politiques mais même registre : formule qui sidère plutôt que convainc, humour noir, refus du conformisme rhétorique.", anec:"L'absurde comme langage commun transcendant la politique" },
+  { source:"yoob",      target:"forandos", type:"affinity",  weight:4,  desc:"Duo terrain", tooltip:"Les deux seuls membres dont l'autorité vient exclusivement du vécu pratique, pas des lectures.", anec:"Prix Rungis + maisons 150m² à Nancy = la réalité contre la théorie" },
+  { source:"elilos",    target:"gk",       type:"affinity",  weight:4,  desc:"Convergence pragmatique", tooltip:"295 échanges consécutifs. Elilos et gk partagent un centrisme pragmatique et se retrouvent souvent à modérer les excès des deux bords.", anec:"Alliance des réalistes face aux idéologues" },
+  { source:"lydd",      target:"foudulabo",type:"affinity",  weight:4,  desc:"Axe gauche cohérent", tooltip:"Lydd (droit, Bourdieu) + foudulabo (sciences, lutte des classes) forment le duo gauche le plus rigoureux du serveur depuis fév. 2025.", anec:"La gauche de classe avec ses sources académiques" },
+  { source:"zoller",    target:"arok",     type:"affinity",  weight:3,  desc:"Libéraux ponctuels", tooltip:"Convergence sur le libéralisme économique et la critique du système de retraite.", anec:"Deux libéraux qui savent calculer leur cotisation" },
+
+  // NEUTRAL (yellow)
+  { source:"forandos",  target:"mpb",      type:"neutral",   weight:3,  desc:"Relation organisationnelle", tooltip:"forandos organise, mpb commente. Peu de friction directe, coopération de surface sur le serveur.", anec:"L'organisateur et le débatteur" },
+  { source:"forandos",  target:"gk",       type:"neutral",   weight:3,  desc:"Pragmatisme partagé", tooltip:"115 échanges consécutifs. Forandos et gk restent dans la neutralité pratique sans former de bloc.", anec:"" },
+  { source:"gk",        target:"mpb",      type:"neutral",   weight:4,  desc:"Opposition pragmatique", tooltip:"216 échanges consécutifs. gk contredit mpb régulièrement ('MPB qui est bloqué dans son raisonnement') mais sans la profondeur doctrinale de lydd.", anec:"«MPB qui est bloqué dans son raisonnement car il a choisit de soutenir une voleuse» — gk" },
+  { source:"yoob",      target:"elilos",   type:"neutral",   weight:3,  desc:"Empathie implicite", tooltip:"Partage d'un certain pragmatisme social. Elilos cite yoob dans les débats sur l'immigration réelle.", anec:"" },
+  { source:"shaars",    target:"mpb",      type:"neutral",   weight:3,  desc:"Co-modération", tooltip:"158 échanges consécutifs. Shaars source, mpb argumente, sans grande tension directe.", anec:"" },
+  { source:"mawlotov",  target:"elilos",   type:"neutral",   weight:3,  desc:"Flottement cordial", tooltip:"mawlotov apprécie elilos mais intervient rarement en direct dans ses débats.", anec:"" },
+  { source:"dorian",    target:"zoller",   type:"neutral",   weight:3,  desc:"Validation silencieuse", tooltip:"Dorian se retrouve souvent dans les takes de zoller sans le verbaliser. Affinité idéologique implicite.", anec:"" },
+  { source:"sinnoh",    target:"zoller",   type:"neutral",   weight:3,  desc:"Libéraux décalés", tooltip:"112 échanges consécutifs. Sinnoh libéral monarchiste + zoller libéral décliniste : convergences économiques, divergences sur la religion.", anec:"" },
+
+  // RAGEBAIT (purple)
+  { source:"kaspei",    target:"zoller",   type:"ragebait",  weight:5,  desc:"Ragebait institutionnalisé — ping pong", tooltip:"Kaspei trashtalk le ping pong pour le plaisir de faire rager zoller. Assumé comme tel par les deux parties. Théâtre relationnel revendiqué.", anec:"«Je trashtalk le ping pong parce que ça me fait rire de ragebait Zoller» — kaspei" },
+  { source:"arok",      target:"mpb",      type:"ragebait",  weight:4,  desc:"Ragebait affectueux", tooltip:"Arok qualifie mpb de 'golem originel' et de 'happiness manager'. Contradiction dialectique attituée — adversaire affectionné.", anec:"«je suis intimement convaincu à l'inverse de mpb que nos politiciens sont des clowns»" },
+  { source:"mawlotov",  target:"yabaphi",  type:"ragebait",  weight:3,  desc:"Troll de gauche ciblé", tooltip:"mawlotov désigne yabaphi comme 'bobo breton' et cible ses positions identitaires avec son ironie droitarde.", anec:"«risto qui pourrait sauver des petits immigrés stigmatisés mais qui préfère faire son bobo breton»" },
+  { source:"foudulabo", target:"lydd",     type:"ragebait",  weight:2,  desc:"Absurde après analyse", tooltip:"foudulabo suit une analyse sérieuse de 300 mots avec une chaîne de caractères aléatoires. Pas du ragebait direct — décompression.", anec:"«Je suis sous le seuil de pauvreté igoz» → [+45min] «FZOFKOZEKFPEOZF»" },
+];
+
+// ============================================================
+// D3 GRAPH
+// ============================================================
+const svg = d3.select("#graph-svg");
+const container = document.getElementById("graph-container");
+const tooltip = document.getElementById("tooltip");
+
+let width = container.clientWidth;
+let height = container.clientHeight;
+
+const g = svg.append("g");
+
+// Zoom
+const zoom = d3.zoom()
+  .scaleExtent([0.3, 3])
+  .on("zoom", (event) => g.attr("transform", event.transform));
+svg.call(zoom);
+
+// Controls
+document.getElementById("zoom-in").onclick = () => svg.transition().call(zoom.scaleBy, 1.4);
+document.getElementById("zoom-out").onclick = () => svg.transition().call(zoom.scaleBy, 0.7);
+document.getElementById("zoom-reset").onclick = () => svg.transition().call(zoom.transform, d3.zoomIdentity.translate(width/2, height/2).scale(0.9));
+
+const COLOR = { conflict:"#e94560", affinity:"#2ecc71", neutral:"#f39c12", ragebait:"#9b59b6" };
+const TYPE_LABEL = { conflict:"⚔ Conflit récurrent", affinity:"♦ Affinité / Alliance", neutral:"— Relation neutre", ragebait:"◉ Ragebait ciblé" };
+
+// Scales
+const maxMsgs = d3.max(members, d => d.msgs);
+const rScale = d3.scaleSqrt().domain([0, maxMsgs]).range([10, 34]);
+const wScale = d3.scaleLinear().domain([1,10]).range([1,6]);
+
+// Build nodes/links
+const nodes = members.map(d => ({ ...d }));
+const links = relationships.map(d => ({ ...d }));
+
+// Force simulation
+const simulation = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+    const base = (rScale(d.source.msgs||100) + rScale(d.target.msgs||100)) * 2.5;
+    return base + (10 - (d.weight||3)) * 8;
+  }).strength(0.4))
+  .force("charge", d3.forceManyBody().strength(-320))
+  .force("center", d3.forceCenter(width/2, height/2))
+  .force("collision", d3.forceCollide().radius(d => rScale(d.msgs) + 12))
+  .force("x", d3.forceX(width/2).strength(0.03))
+  .force("y", d3.forceY(height/2).strength(0.03));
+
+// Draw links
+const link = g.append("g").attr("class","links")
+  .selectAll("line")
+  .data(links)
+  .enter().append("line")
+  .attr("class","link")
+  .attr("stroke", d => COLOR[d.type])
+  .attr("stroke-width", d => wScale(d.weight||3))
+  .attr("stroke-dasharray", d => d.type === "neutral" ? "4 4" : null)
+  .on("mouseover", (event, d) => {
+    const src = typeof d.source === "object" ? d.source.id : d.source;
+    const tgt = typeof d.target === "object" ? d.target.id : d.target;
+    showTooltip(event, `
+      <div class="tt-name" style="color:${COLOR[d.type]}">${TYPE_LABEL[d.type]}</div>
+      <div class="tt-msgs">${src} ↔ ${tgt}</div>
+      <hr class="tt-sep">
+      <div class="tt-rel-type">${d.desc}</div>
+      <div class="tt-rel-desc">${d.tooltip}</div>
+      ${d.anec ? `<div class="tt-anec">${d.anec}</div>` : ''}
+    `);
+  })
+  .on("mousemove", moveTooltip)
+  .on("mouseout", hideTooltip);
+
+// Draw nodes
+const node = g.append("g").attr("class","nodes")
+  .selectAll("g")
+  .data(nodes)
+  .enter().append("g")
+  .attr("class","node")
+  .call(d3.drag()
+    .on("start", (event, d) => { if(!event.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+    .on("drag", (event, d) => { d.fx=event.x; d.fy=event.y; })
+    .on("end", (event, d) => { if(!event.active) simulation.alphaTarget(0); })
+  );
+
+// Glow filter
+const defs = svg.append("defs");
+const filter = defs.append("filter").attr("id","glow");
+filter.append("feGaussianBlur").attr("stdDeviation","4").attr("result","coloredBlur");
+const feMerge = filter.append("feMerge");
+feMerge.append("feMergeNode").attr("in","coloredBlur");
+feMerge.append("feMergeNode").attr("in","SourceGraphic");
+
+// Node colors by cluster
+function nodeColor(d) {
+  const clusters = {
+    "lydd":"#533483","elilos":"#533483","mpb":"#533483","gk":"#533483","sinnoh":"#533483",
+    "zoller":"#c0392b","shaars":"#c0392b","forandos":"#c0392b","yoob":"#c0392b","dorian":"#c0392b",
+    "foudulabo":"#1e8449","merko":"#1e8449","mawlotov":"#1e8449",
+    "yabaphi":"#7d6608","raydo":"#7d6608","arok":"#7d6608",
+    "kaspei":"#6c3483","egide":"#6c3483",
+  };
+  return clusters[d.id] || "#533483";
+}
+
+node.append("circle")
+  .attr("r", d => rScale(d.msgs))
+  .attr("fill", d => nodeColor(d))
+  .attr("stroke", d => d3.color(nodeColor(d)).brighter(0.8))
+  .attr("stroke-width", 2)
+  .attr("filter","url(#glow)")
+  .on("mouseover", (event, d) => {
+    showTooltip(event, `
+      <div class="tt-name">${d.label}</div>
+      <div class="tt-msgs">${d.msgs.toLocaleString()} msgs · Période analysée</div>
+      <div class="tt-role">${d.role}</div>
+      <div class="tt-politic">${d.politic}</div>
+    `);
+  })
+  .on("mousemove", moveTooltip)
+  .on("mouseout", hideTooltip);
+
+node.append("text")
+  .text(d => d.label)
+  .attr("font-size", d => Math.max(9, Math.min(12, rScale(d.msgs) * 0.55)))
+  .attr("dy", "0.35em");
+
+// Tick
+simulation.on("tick", () => {
+  link
+    .attr("x1", d => d.source.x)
+    .attr("y1", d => d.source.y)
+    .attr("x2", d => d.target.x)
+    .attr("y2", d => d.target.y);
+  node.attr("transform", d => `translate(${d.x},${d.y})`);
+});
+
+// Tooltip functions
+function showTooltip(event, html) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add("visible");
+  moveTooltip(event);
+}
+function moveTooltip(event) {
+  const pad = 16;
+  let x = event.clientX + pad;
+  let y = event.clientY + pad;
+  const tw = 320, th = 160;
+  if (x + tw > window.innerWidth) x = event.clientX - tw - pad;
+  if (y + th > window.innerHeight) y = event.clientY - th - pad;
+  tooltip.style.left = x + "px";
+  tooltip.style.top = y + "px";
+}
+function hideTooltip() {
+  tooltip.classList.remove("visible");
+}
+
+// Resize
+window.addEventListener("resize", () => {
+  width = container.clientWidth;
+  height = container.clientHeight;
+  simulation.force("center", d3.forceCenter(width/2, height/2));
+  simulation.alpha(0.1).restart();
+});
+</script>
+</body>
+</html>

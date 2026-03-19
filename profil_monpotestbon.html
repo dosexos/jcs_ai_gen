@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 24px;
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border-radius: 16px;
+    border: 1px solid #533483;
+  }
+  .username {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e94560;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    color: #a0a0c0;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e94560;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #8080a0;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .card {
+    background: #16213e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card.full { grid-column: span 2; }
+  .card-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #533483;
+    font-weight: 700;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2a2a4a;
+    padding-bottom: 8px;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .tag.red { background: #e9456020; color: #e94560; border: 1px solid #e9456040; }
+  .tag.purple { background: #53348320; color: #a380f0; border: 1px solid #53348340; }
+  .tag.blue { background: #0f346020; color: #60a0e9; border: 1px solid #0f346040; }
+  .tag.green { background: #1a4a2a20; color: #60c080; border: 1px solid #1a4a2a40; }
+  .tag.orange { background: #4a2a0020; color: #e09060; border: 1px solid #e0906040; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 0.8rem; color: #a0a0c0; width: 130px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: #2a2a4a; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { font-size: 0.75rem; color: #6060a0; width: 35px; text-align: right; }
+  .quote {
+    background: #0f1a2e;
+    border-left: 3px solid #533483;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.83rem;
+    color: #c0c0d8;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .quote .meta { color: #533483; font-size: 0.72rem; font-style: normal; margin-top: 5px; }
+  .meter { margin-bottom: 12px; }
+  .meter-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .meter-name { font-size: 0.82rem; color: #c0c0d8; }
+  .meter-score { font-size: 0.82rem; font-weight: 700; color: #e94560; }
+  .meter-track { height: 10px; background: #2a2a4a; border-radius: 5px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 5px; transition: width 0.5s; }
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e, #2a0a3e);
+    border: 1px solid #e94560;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .verdict-label { font-size: 0.75rem; color: #e94560; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .verdict-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.5; }
+  .verdict-sub { font-size: 0.82rem; color: #a080b0; margin-top: 8px; }
+  .hour-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; margin-top: 8px; }
+  .hour-bar { flex: 1; border-radius: 2px 2px 0 0; min-height: 2px; position: relative; }
+  .hour-bar:hover::after {
+    content: attr(data-h) 'h';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .hour-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .hour-lbl { font-size: 0.65rem; color: #6060a0; }
+  .evo-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .evo-year { font-size: 0.78rem; color: #8080a0; width: 35px; flex-shrink: 0; }
+  .evo-text { font-size: 0.8rem; color: #c0c0d8; flex: 1; }
+  .evo-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="username">monpotestbon</div>
+  <div class="subtitle">Profil Discord · Serveur privé francophone · 2021–2026</div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num">17 428</div>
+    <div class="stat-label">Messages</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">57</div>
+    <div class="stat-label">Chars moy.</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">1 000</div>
+    <div class="stat-label">Messages nocturnes</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">276</div>
+    <div class="stat-label">Tirades > 300c</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">14h–17h</div>
+    <div class="stat-label">Pic d'activité</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- Personnalité -->
+  <div class="card">
+    <div class="card-title">🧠 Traits de personnalité</div>
+    <div class="tag-row">
+      <span class="tag red">Controverse-seeking</span>
+      <span class="tag purple">Hyperrationaliste</span>
+      <span class="tag blue">Pédagogue frustré</span>
+      <span class="tag orange">Cohérence obsessionnelle</span>
+      <span class="tag green">Autodidacte affirmé</span>
+    </div>
+    <p style="font-size:0.82rem;color:#a0a0c0;line-height:1.6;margin-top:8px;">
+      Profil intellectuellement très actif, avec un rapport au débat qui confine à l'obsession. Grande confiance dans sa capacité à <em>avoir raison</em> et à <em>démontrer</em> les positions adverses. S'identifie volontiers comme l'unique personne de bonne foi dans la conversation. Capable d'humour mordant et d'autodérision ponctuelle, mais les deux s'effacent dès que le débat monte en température.
+    </p>
+  </div>
+
+  <!-- Style de communication -->
+  <div class="card">
+    <div class="card-title">✍️ Style de communication</div>
+    <div class="bar-row"><div class="bar-label">Argot / verlan / sah</div><div class="bar-track"><div class="bar-fill" style="width:65%;background:#e94560;"></div></div><div class="bar-val">65%</div></div>
+    <div class="bar-row"><div class="bar-label">Prose structurée</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:#533483;"></div></div><div class="bar-val">25%</div></div>
+    <div class="bar-row"><div class="bar-label">Références culturelles</div><div class="bar-track"><div class="bar-fill" style="width:45%;background:#0f5460;"></div></div><div class="bar-val">45%</div></div>
+    <div class="bar-row"><div class="bar-label">Ton professoral</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:#e09060;"></div></div><div class="bar-val">55%</div></div>
+    <div class="bar-row"><div class="bar-label">Messages 1 ligne</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#60c080;"></div></div><div class="bar-val">70%</div></div>
+    <p style="font-size:0.75rem;color:#6060a0;margin-top:8px;">70% du corpus = messages courts / réactions. Les 30% restants concentrent 80% de la substance.</p>
+  </div>
+
+  <!-- Heure d'activité -->
+  <div class="card">
+    <div class="card-title">🕐 Rythme d'activité</div>
+    <div class="hour-chart" id="hourChart"></div>
+    <div class="hour-labels">
+      <span class="hour-lbl">0h</span>
+      <span class="hour-lbl">6h</span>
+      <span class="hour-lbl">12h</span>
+      <span class="hour-lbl">18h</span>
+      <span class="hour-lbl">23h</span>
+    </div>
+    <p style="font-size:0.78rem;color:#8080a0;margin-top:10px;">Pic 14h–17h (lycée ?). Plateau actif 8h–20h. <strong style="color:#e94560;">1 000 messages nocturnes (00–03h)</strong> — dont les séances de débat les plus intenses.</p>
+  </div>
+
+  <!-- Sujets -->
+  <div class="card">
+    <div class="card-title">📌 Sujets de prédilection</div>
+    <div class="bar-row"><div class="bar-label">Politique française</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:#e94560;"></div></div><div class="bar-val">⬛⬛⬛</div></div>
+    <div class="bar-row"><div class="bar-label">Éducation / école</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:#533483;"></div></div></div>
+    <div class="bar-row"><div class="bar-label">Immigration</div><div class="bar-track"><div class="bar-fill" style="width:75%;background:#e09060;"></div></div></div>
+    <div class="bar-row"><div class="bar-label">Méritocratie / classes</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#60a0e9;"></div></div></div>
+    <div class="bar-row"><div class="bar-label">Justice pénale</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:#a380f0;"></div></div></div>
+    <div class="bar-row"><div class="bar-label">Gaming / culture pop</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:#60c080;"></div></div></div>
+    <div class="bar-row"><div class="bar-label">Philosophie / sens de la vie</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#e9b060;"></div></div></div>
+  </div>
+
+  <!-- Évolution politique -->
+  <div class="card full">
+    <div class="card-title">🗳️ Positions politiques & évolution (2021–2026)</div>
+    <div class="evo-row"><div class="evo-year">2021</div><div class="evo-dot" style="background:#e94560;"></div><div class="evo-text">S'auto-définit "de droite voire extrême droite". Attaque les boomers, critique la gauche culturelle. Soutien implicite à Zemmour ("coup de pied dans la fourmilière").</div></div>
+    <div class="evo-row"><div class="evo-year">2022</div><div class="evo-dot" style="background:#e97040;"></div><div class="evo-text">Vote Zemmour au 1er tour. Critique acerbe de l'immigration mais nuancée (problème culturel ≠ racial selon lui). Déjà prof, sensible à l'école et la méritocratie.</div></div>
+    <div class="evo-row"><div class="evo-year">2023</div><div class="evo-dot" style="background:#e09060;"></div><div class="evo-text">Passe au vote RN. Nationaliste affiché mais commence à contester les étiquettes : "je suis ni gauche ni droite classique". Débats de plus en plus longs sur l'immigration.</div></div>
+    <div class="evo-row"><div class="evo-year">2024</div><div class="evo-dot" style="background:#a380f0;"></div><div class="evo-text">Positionnement qui se complexifie. Se dit "conservateur sociétal, gauche économique". Distingue libéralisme sociétal / économique sur 4 axes. Polémique Cyrano de Bergerac contre les accusations d'extrême droite.</div></div>
+    <div class="evo-row"><div class="evo-year">2025</div><div class="evo-dot" style="background:#60a0e9;"></div><div class="evo-text">Se réclame "nationaliste" mais précise être "de gauche économiquement". Dit explicitement n'avoir "jamais mis un bulletin RN au 1er tour de sa vie". Tension croissante entre ces affirmations et le corpus.</div></div>
+    <div class="evo-row"><div class="evo-year">2026</div><div class="evo-dot" style="background:#60c080;"></div><div class="evo-text">Moins de grands débats politiques. Plus de réactions courtes. Glissement vers un scepticisme institutionnel global plutôt qu'un ancrage partisan net.</div></div>
+  </div>
+
+  <!-- Citations -->
+  <div class="card full">
+    <div class="card-title">💬 Citations représentatives</div>
+    <div class="quote">
+      "La méritocratie c'est juste la capacité légale de s'élever socialement de manière théoriquement indéfinie par son travail et ses efforts. C'est factuellement le système en place en France."
+      <div class="meta">00:29, 30 nov. 2024 — pendant 378 messages nocturnes sur la bourgeoisie</div>
+    </div>
+    <div class="quote">
+      "D'extrême droite ? Ah non, c'est un peu court jeune homme. On pouvait dire, bien des choses en somme..." <em>[suivi d'une parodie Cyrano en alexandrins]</em>
+      <div class="meta">16:57, 9 oct. 2024 — réponse à une accusation d'extrême droite</div>
+    </div>
+    <div class="quote">
+      "Un monde sans racines, sans patries, sans nations, c'est un monde qui ne vit que par et pour l'argent. Un monde de consommation permanente. C'est immonde."
+      <div class="meta">Débat immigration, sept. 2024</div>
+    </div>
+    <div class="quote">
+      "Pour moi suivre une religion c'est juste être trop faible mentalement pour accepter qu'il n'y a rien après la mort."
+      <div class="meta">Déc. 2021 — ton radical early game</div>
+    </div>
+    <div class="quote">
+      "PERSONNE NE DIT CA PUTAIN"
+      <div class="meta">01:06, 30 nov. 2024 — climax de la nuit la plus longue du corpus (caps lock activé)</div>
+    </div>
+    <div class="quote">
+      "J'ai debunk la chose y a 2 semaines mais t'as juste pas lu donc osef."
+      <div class="meta">Format récurrent — le débunker incompris</div>
+    </div>
+  </div>
+
+  <!-- Ragebait-o-mètre -->
+  <div class="card">
+    <div class="card-title">🌡️ Ragebait-o-mètre</div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Mauvaise foi perçue chez les autres</span><span class="meter-score">8.5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:85%;background:linear-gradient(90deg,#533483,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Conscientisation du ragebait</span><span class="meter-score">5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:50%;background:linear-gradient(90deg,#0f5460,#60a0e9);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Volonté de "avoir raison"</span><span class="meter-score">9/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:90%;background:linear-gradient(90deg,#e09060,#e94560);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Qualité argumentative réelle</span><span class="meter-score">6.5/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:65%;background:linear-gradient(90deg,#1a4a2a,#60c080);"></div></div>
+    </div>
+    <div class="meter">
+      <div class="meter-label"><span class="meter-name">Personnalité clivante</span><span class="meter-score">8/10</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:80%;background:linear-gradient(90deg,#4a1a4a,#a380f0);"></div></div>
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="card verdict">
+    <div class="verdict-label">⚖️ Verdict final</div>
+    <div class="verdict-text">Ragebait semi-conscient.<br>Personnalité clivante à vocation fédératrice déçue.</div>
+    <div class="verdict-sub">
+      La réputation "débat à 2h du mat" est <strong>entièrement méritée et documentée</strong>.<br>
+      Il ne fuit pas le débat — il ne sait pas s'arrêter.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const hourData = [425,371,189,15,4,17,50,98,333,503,822,1011,994,1262,1538,1645,1282,1388,1278,936,1253,829,706,479];
+const max = Math.max(...hourData);
+const chart = document.getElementById('hourChart');
+hourData.forEach((v, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar';
+  const pct = Math.max(3, Math.round((v / max) * 100));
+  const isNight = i <= 3;
+  const isPeak = i >= 14 && i <= 17;
+  bar.style.height = pct + '%';
+  bar.style.background = isNight ? '#e9456080' : isPeak ? '#e94560' : '#533483';
+  bar.setAttribute('data-h', i);
+  chart.appendChild(bar);
+});
+</script>
+</body>
+</html>
