@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPB vs MERKO — Le Grand Débat Jungle</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #1a1a2e;
+    --bg3: #16213e;
+    --purple: #533483;
+    --purple-light: #7b52c7;
+    --red: #e94560;
+    --red-light: #ff6b80;
+    --gold: #f5a623;
+    --blue: #0f3460;
+    --teal: #00b4d8;
+    --text: #e8e8f0;
+    --text-dim: #9999bb;
+    --mpb-color: #7b52c7;
+    --merko-color: #e94560;
+    --mani-color: #f5a623;
+    --discord-bg: #36393f;
+    --discord-bg2: #2f3136;
+    --discord-msg: #32353b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+  /* ─── HEADER FIGHT POSTER ─── */
+  .fight-header {
+    position: relative;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 40%, #0f3460 100%);
+    padding: 60px 20px 40px;
+    text-align: center;
+    overflow: hidden;
+    border-bottom: 3px solid var(--red);
+  }
+
+  .fight-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(83,52,131,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(233,69,96,0.3) 0%, transparent 60%);
+  }
+
+  .fight-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1px;
+    height: 85%;
+    background: linear-gradient(to bottom, transparent, var(--red), transparent);
+    opacity: 0.6;
+  }
+
+  .event-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .fight-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 3vw, 22px);
+    letter-spacing: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .vs-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    margin: 20px 0;
+  }
+
+  .fighter-header {
+    flex: 1;
+    max-width: 380px;
+    padding: 20px 30px;
+    position: relative;
+  }
+
+  .fighter-name-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 90px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    position: relative;
+  }
+
+  .fighter-name-big.mpb {
+    color: var(--mpb-color);
+    text-shadow: 0 0 40px rgba(123,82,199,0.5), 3px 3px 0 rgba(83,52,131,0.8);
+    text-align: left;
+  }
+  .fighter-name-big.merko {
+    color: var(--merko-color);
+    text-shadow: 0 0 40px rgba(233,69,96,0.5), -3px 3px 0 rgba(180,40,60,0.8);
+    text-align: right;
+  }
+
+  .fighter-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    opacity: 0.8;
+  }
+  .mpb .fighter-subtitle { color: var(--mpb-color); text-align: left; }
+  .merko .fighter-subtitle { color: var(--merko-color); text-align: right; }
+
+  .fighter-stats-mini {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mpb .fighter-stats-mini { text-align: left; }
+  .merko .fighter-stats-mini { text-align: right; }
+
+  .stat-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .merko .stat-mini { flex-direction: row-reverse; }
+
+  .stat-mini .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .mpb .dot { background: var(--mpb-color); }
+  .merko .dot { background: var(--merko-color); }
+
+  .vs-badge {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(233,69,96,0.4);
+    position: relative;
+    z-index: 2;
+    animation: pulse-vs 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-vs {
+    0%, 100% { box-shadow: 0 0 30px rgba(233,69,96,0.4); }
+    50% { box-shadow: 0 0 50px rgba(233,69,96,0.7), 0 0 80px rgba(83,52,131,0.3); }
+  }
+
+  .subtitle-line {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-top: 10px;
+    position: relative;
+    animation: glow-text 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-text {
+    0%, 100% { text-shadow: 0 0 10px rgba(233,69,96,0.5); }
+    50% { text-shadow: 0 0 20px rgba(233,69,96,0.9), 0 0 40px rgba(233,69,96,0.4); }
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 20px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: 6px;
+    color: var(--red);
+    text-align: center;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+  }
+
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--red), transparent);
+    margin: 60px 0 0;
+  }
+
+  /* ─── FIGHTER CARDS ─── */
+  .fighters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 700px) {
+    .fighters-grid { grid-template-columns: 1fr; }
+    .vs-row { flex-direction: column; gap: 20px; }
+  }
+
+  .fighter-card {
+    background: var(--bg3);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.3s ease;
+  }
+  .fighter-card:hover { transform: translateY(-4px); }
+
+  .fighter-card.mpb-card {
+    border-top: 3px solid var(--mpb-color);
+    box-shadow: 0 4px 40px rgba(123,82,199,0.15);
+  }
+  .fighter-card.merko-card {
+    border-top: 3px solid var(--merko-color);
+    box-shadow: 0 4px 40px rgba(233,69,96,0.15);
+  }
+
+  .fighter-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+  .mpb-card::before { background: var(--mpb-color); }
+  .merko-card::before { background: var(--merko-color); }
+
+  .card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+  }
+  .mpb-card .card-name { color: var(--mpb-color); }
+  .merko-card .card-name { color: var(--merko-color); }
+
+  .card-real-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .card-section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 18px 0 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding-bottom: 4px;
+  }
+
+  .card-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ─── STAT BARS ─── */
+  .stat-bars { margin-top: 16px; }
+
+  .stat-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .stat-bar-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .stat-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    position: relative;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .stat-bar-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    width: 28px;
+    text-align: right;
+    color: var(--text-dim);
+  }
+
+  .mpb-card .stat-bar-fill { background: linear-gradient(to right, var(--purple), var(--mpb-color)); }
+  .merko-card .stat-bar-fill { background: linear-gradient(to right, #8b1a30, var(--merko-color)); }
+
+  /* ─── CITATION CARD ─── */
+  .citation {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text);
+    position: relative;
+  }
+  .mpb-card .citation { border-color: var(--mpb-color); }
+  .merko-card .citation { border-color: var(--merko-color); }
+
+  .citation-date {
+    display: block;
+    font-style: normal;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── MANIGOLDO CARD ─── */
+  .mani-card {
+    background: var(--bg3);
+    border-radius: 12px;
+    padding: 28px;
+    border-top: 3px solid var(--mani-color);
+    box-shadow: 0 4px 40px rgba(245,166,35,0.1);
+    border: 1px solid rgba(245,166,35,0.15);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .mani-card .card-name { color: var(--mani-color); }
+  .mani-card .citation { border-color: var(--mani-color); }
+  .mani-badge {
+    display: inline-block;
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.4);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--mani-color);
+    margin-bottom: 14px;
+  }
+
+  /* ─── DISCORD CHAT ─── */
+  .discord-wrapper {
+    background: var(--discord-bg2);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 60px rgba(0,0,0,0.5);
+  }
+
+  .discord-header {
+    background: var(--discord-bg2);
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .discord-channel-icon {
+    font-size: 18px;
+    color: var(--text-dim);
+  }
+
+  .discord-channel-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  .discord-channel-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  .discord-messages {
+    background: var(--discord-bg);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .msg-group {
+    display: flex;
+    gap: 14px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    margin-top: 12px;
+    position: relative;
+  }
+  .msg-group:hover { background: rgba(255,255,255,0.02); }
+
+  .msg-group.continuation {
+    margin-top: 0;
+    padding-top: 2px;
+    padding-left: 58px;
+  }
+  .msg-group.continuation:hover { background: rgba(255,255,255,0.02); }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: white;
+  }
+
+  .avatar.mpb-av { background: linear-gradient(135deg, #533483, #7b52c7); }
+  .avatar.merko-av { background: linear-gradient(135deg, #8b1a30, #e94560); }
+  .avatar.mani-av { background: linear-gradient(135deg, #a05c00, #f5a623); }
+
+  .msg-body { flex: 1; }
+
+  .msg-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+
+  .msg-author {
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.5px;
+  }
+  .msg-author.mpb-author { color: var(--mpb-color); }
+  .msg-author.merko-author { color: var(--merko-color); }
+  .msg-author.mani-author { color: var(--mani-color); }
+
+  .msg-time {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 1px;
+  }
+
+  .msg-content {
+    font-size: 14px;
+    color: #dcddde;
+    line-height: 1.55;
+  }
+
+  .msg-content em {
+    color: #aab;
+    background: rgba(255,255,255,0.04);
+    border-left: 2px solid rgba(255,255,255,0.15);
+    padding: 0 6px;
+    border-radius: 0 3px 3px 0;
+    font-size: 13px;
+  }
+
+  .msg-content .real-quote {
+    color: #c9b fff;
+    background: rgba(255,255,255,0.05);
+    border-left: 2px solid var(--gold);
+    padding: 3px 8px;
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+    font-size: 13px;
+    color: #ccc;
+    display: block;
+    margin: 4px 0;
+  }
+
+  .msg-reactions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .reaction {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 13px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .reaction .count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .debate-phase {
+    background: var(--discord-bg2);
+    padding: 8px 16px;
+    margin: 8px -16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phase-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .phase-bar {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,0.1), transparent);
+  }
+
+  /* ─── ANALYSE CARDS ─── */
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .analysis-grid { grid-template-columns: 1fr; }
+  }
+
+  .analysis-card {
+    background: var(--bg3);
+    border-radius: 10px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .analysis-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+  }
+
+  .analysis-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .analysis-title::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .analysis-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .analysis-text strong { color: white; }
+  .analysis-text .mpb-tag { color: var(--mpb-color); font-weight: 700; }
+  .analysis-text .merko-tag { color: var(--merko-color); font-weight: 700; }
+  .analysis-text .mani-tag { color: var(--mani-color); font-weight: 700; }
+
+  .analysis-wide {
+    grid-column: 1 / -1;
+  }
+
+  /* ─── VERDICT ─── */
+  .verdict-wrapper {
+    background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid rgba(233,69,96,0.2);
+    box-shadow: 0 0 60px rgba(233,69,96,0.08), 0 0 100px rgba(83,52,131,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict-wrapper::before {
+    content: 'VERDICT';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: rgba(255,255,255,0.015);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .verdict-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 650px) {
+    .verdict-row { flex-direction: column; }
+  }
+
+  .verdict-card {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  .verdict-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .verdict-winner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+
+  .verdict-winner.mpb { color: var(--mpb-color); }
+  .verdict-winner.merko { color: var(--merko-color); }
+
+  .verdict-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .verdict-crown {
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    font-size: 20px;
+    animation: sway 2s ease-in-out infinite;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  /* ─── FINAL QUOTES ─── */
+  .final-quotes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 700px) {
+    .final-quotes { grid-template-columns: 1fr; }
+  }
+
+  .final-quote-card {
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .fq-author {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+  .fq-mpb { color: var(--mpb-color); }
+  .fq-merko { color: var(--merko-color); }
+  .fq-mani { color: var(--mani-color); }
+
+  .fq-text {
+    font-size: 13px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .fq-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 2px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-style: normal;
+  }
+  .badge-purple { background: rgba(123,82,199,0.2); border: 1px solid rgba(123,82,199,0.4); color: var(--mpb-color); }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.4); color: var(--merko-color); }
+  .badge-gold { background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.4); color: var(--mani-color); }
+  .badge-teal { background: rgba(0,180,216,0.15); border: 1px solid rgba(0,180,216,0.4); color: var(--teal); }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scanlines {
+    position: relative;
+  }
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .tag-line {
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-top: -20px;
+    margin-bottom: 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     HEADER — AFFICHE DE COMBAT
+════════════════════════════════════════════════ -->
+<header class="fight-header scanlines">
+  <div class="event-tag">⚔ QQ-ONLY CHAMPIONSHIP · SAISON 2023 · ÉDITION SPÉCIALE JUNGLE ⚔</div>
+  <div class="fight-title">Le Grand Débat</div>
+
+  <div class="vs-row">
+    <!-- MPB -->
+    <div class="fighter-header mpb fade-in" style="animation-delay:0.1s">
+      <div class="fighter-name-big mpb">MPB</div>
+      <div class="fighter-subtitle">MONPOTESTBON</div>
+      <div class="fighter-stats-mini">
+        <div class="stat-mini"><span class="dot"></span> 15 113 messages all-time</div>
+        <div class="stat-mini"><span class="dot"></span> Rôle : Jungle / Mid</div>
+        <div class="stat-mini"><span class="dot"></span> Champ sig. : Rengar / Elise</div>
+        <div class="stat-mini"><span class="dot"></span> Rage Level : 6.5 / 10</div>
+      </div>
+    </div>
+
+    <div class="vs-badge">VS</div>
+
+    <!-- MERKO -->
+    <div class="fighter-header merko fade-in" style="animation-delay:0.2s">
+      <div class="fighter-name-big merko">MERKO</div>
+      <div class="fighter-subtitle">MERK0</div>
+      <div class="fighter-stats-mini">
+        <div class="stat-mini"><span class="dot"></span> 4 782 messages all-time</div>
+        <div class="stat-mini"><span class="dot"></span> Rôle : Top / ADC</div>
+        <div class="stat-mini"><span class="dot"></span> Champ sig. : Aatrox / Draven</div>
+        <div class="stat-mini"><span class="dot"></span> Rage Level : 7.5 / 10</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subtitle-line">LA JUNGLE EST-ELLE BROKEN ? — LE DÉBAT ULTIME</div>
+</header>
+
+
+<!-- ════════════════════════════════════════════════
+     PARTIE 1 — PRÉSENTATION DES COMBATTANTS
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title fade-in">Partie 1</div>
+  <div class="section-subtitle fade-in">— PRÉSENTATION DES COMBATTANTS —</div>
+
+  <div class="fighters-grid">
+
+    <!-- MPB -->
+    <div class="fighter-card mpb-card fade-in">
+      <div class="card-name">MPB</div>
+      <div class="card-real-name">monpotestbon · main jungle / mid</div>
+
+      <div class="card-section-title">Style de jeu</div>
+      <div class="card-text">
+        Jungler analytique et intellectualisateur compulsif. MPB ne perd jamais une game — il subit une <em>jungle diff</em>. Défenseur acharné de la complexité du rôle jungler, il est capable de pondre des monologues de 500 mots pour expliquer pourquoi le laner qui vient de mourir d'un gank level 2 est en réalité responsable de sa mort. Joue sérieusement, déteste qu'on lui dise que le jungler c'est simple.
+      </div>
+
+      <div class="card-section-title">Position sur la jungle</div>
+      <div class="card-text">
+        La jungle est le rôle le plus complexe du jeu. Le jungler doit tout gérer simultanément — les waves, les lanes, les objectifs, les timers de camps, le tracking ennemi. Mais ironiquement, la jungle <em>est aussi</em> broken selon lui — il perd souvent à cause d'une <strong>jungle diff</strong>, jamais à cause de lui. Il cite Dopa, regarde des streams de pros, fait des calculs d'XP différentiel. Concède que le rôle est puissant mais insiste sur sa difficulté de maîtrise.
+      </div>
+
+      <div class="card-section-title">Niveau de rage</div>
+      <div class="card-text">
+        Rage froide et didactique. Explique calmement en 4 paragraphes pourquoi ton argument est nul. La rage éclate quand on le compare à Merko ou quand on simplifie le rôle jungler à "taper des camps".
+      </div>
+
+      <div class="card-section-title">Stats de combat</div>
+      <div class="stat-bars">
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Rage brute</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:65%"></div></div>
+          <span class="stat-bar-val">6.5</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Argumentation</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:88%"></div></div>
+          <span class="stat-bar-val">8.8</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Toxicité</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:45%"></div></div>
+          <span class="stat-bar-val">4.5</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Skill apparent</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:78%"></div></div>
+          <span class="stat-bar-val">7.8</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Longueur msgs</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:95%"></div></div>
+          <span class="stat-bar-val">9.5</span>
+        </div>
+      </div>
+
+      <div class="card-section-title">Citations représentatives</div>
+      <div class="citation">
+        "Travail du jungler : analyse les wincond, l'état des 3 lanes, track le jungler, pose de la vision, sweep, counter jungle, set up et joue les objectifs, power farm, countergank, gank, dive, skip des camps, reset on tempo, apprendre les nuances du clear, préparer tes plans de jeu 2 minutes à l'avance"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+      <div class="citation">
+        "Rappel que la différence sur un full clear en moyenne entre un main jungle gold et master, c'est quasiment 20 secondes"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+      <div class="citation">
+        "La jungle c'est une lane sauf que tu tapes des loups et pas des cs et qu'au lieu d'être stuck contre un laner, tu peux literallement taper tout le monde"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+      <div class="citation">
+        "Je préfère perdre dans la bonne humeur et les 'np, it happens' que gagner dans le flame et les 'get carried dogshit jungler'"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+    </div>
+
+    <!-- MERKO -->
+    <div class="fighter-card merko-card fade-in">
+      <div class="card-name">MERKO</div>
+      <div class="card-real-name">merk0 · top / adc · jongleur de rôles</div>
+
+      <div class="card-section-title">Style de jeu</div>
+      <div class="card-text">
+        Multi-rôle capable, ex-semi-jungler reconverti en toppeur/ADC. Merko a <em>joué</em> jungle, ce qui lui donne à ses yeux une légitimité totale pour affirmer que le rôle est broken et surcoté. Approche directe, arguments tranchants, zéro fioriture. Là où MPB prend 10 lignes, Merko prend 2 phrases. Joue aussi bien Aatrox que Draven, ce qui illustre parfaitement son état d'esprit : "carry ou rien".
+      </div>
+
+      <div class="card-section-title">Position sur la jungle</div>
+      <div class="card-text">
+        La jungle est le rôle le plus <strong>broken et sous-exploité</strong> du jeu. Broken parce qu'elle permet d'influencer toute la carte sans vrai risque, sous-exploité parce que 95% des junglers sont des PVE-glads incapables de ping le jungler ennemi sur une ward. Simplifie volontairement le clear pour contrarier MPB, mais concède le broken de la jungle pour mieux accabler les main jungle de leur incompétence à l'exploiter.
+      </div>
+
+      <div class="card-section-title">Niveau de rage</div>
+      <div class="card-text">
+        Rage vive et concentrée. Merko ne développe pas : il assène. Le pic de rage arrive quand on lui explique que le clear c'est difficile — il considère ça comme une insulte à son intelligence.
+      </div>
+
+      <div class="card-section-title">Stats de combat</div>
+      <div class="stat-bars">
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Rage brute</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:75%"></div></div>
+          <span class="stat-bar-val">7.5</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Argumentation</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:70%"></div></div>
+          <span class="stat-bar-val">7.0</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Toxicité</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:68%"></div></div>
+          <span class="stat-bar-val">6.8</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Skill apparent</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:72%"></div></div>
+          <span class="stat-bar-val">7.2</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Longueur msgs</span>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:40%"></div></div>
+          <span class="stat-bar-val">4.0</span>
+        </div>
+      </div>
+
+      <div class="card-section-title">Citations représentatives</div>
+      <div class="citation">
+        "Jungle rôle borken mais mal utilisé par 95% de la playerbase + pveglad + delete FoN c pu possible on en peut plus"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+      <div class="citation">
+        "Vous aimez trop vous branler sur la difficulté du rôle alors que dans les fait t même pas capable de regarder ta Map en tapant des camps"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+      <div class="citation">
+        "Faut pas feed on rappelle mpb veut pas ping ses laners quand il voit le jgl adverse passer sur une ward pck il réfléchit trop en tapant ses loups"
+        <span class="citation-date">20 avril 2023</span>
+      </div>
+      <div class="citation">
+        "Csc, 95% des junglers sont déjà pas capable de ping le jungler ennemi quand il passe sur une ward"
+        <span class="citation-date">15 mars 2023</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANIGOLDO -->
+  <div class="tag-line">— L'ARBITRE SUSPECT —</div>
+  <div class="mani-card fade-in">
+    <div class="mani-badge">INTERVENANT NEUTRE · RÉSULTAT NON GARANTI</div>
+    <div class="card-name">MANIGOLDO</div>
+    <div class="card-real-name">manigoldo1500 · adc · procureur de la jungle</div>
+
+    <div class="card-section-title">Rôle dans les débats</div>
+    <div class="card-text">
+      Manigoldo est l'élément catalyseur. Il ne débat pas vraiment — il <strong>juge depuis les tribunes</strong> avec une confiance absolue. Sur la jungle, sa position est simple : la jungle est inflated, les main jungle vendent leur âme, et le rôle est broken principalement parce qu'il gank. Quand MPB et Merko débattent, Manigoldo intervient pour enfoncer l'un ou l'autre au moment le plus opportuniste. Ses sentences sont courtes, définitives, et souvent dévastatrices pour les deux partis.
+    </div>
+
+    <div class="card-section-title">Position sur la jungle</div>
+    <div class="card-text">
+      <span class="badge badge-gold">VERDICT MANI</span> &nbsp; <em>"en soloq : jgl&gt;top&gt;mid&gt;supp&gt;&gt;&gt;&gt;adc"</em> (05/03/2023). Pour Manigoldo, la jungle est broke, les main jungle sont des assistés, et la preuve c'est que tout le monde finit GM en jungle avant de swap ADC pour "chill". Il se définit comme ADC et demande plus de ganks que n'importe qui.
+    </div>
+
+    <div class="card-section-title">Style d'intervention</div>
+    <div class="card-text">
+      Courtes rafales de jugements définitifs. Crée le surnombre rhétorique en s'alliant à celui qui cogne l'autre, avant de retourner sa veste. Aime conclure un débat de 200 messages par une phrase de 5 mots qui ne prouve rien mais stoppe tout.
+    </div>
+
+    <div class="citation" style="border-color: var(--mani-color)">
+      "Les mains jgl ont vendu leurs âmes à Lucifer pour des lps"
+      <span class="citation-date">15 mars 2023</span>
+    </div>
+    <div class="citation" style="border-color: var(--mani-color)">
+      "Top ---> les chialeuses / Jgl --> les merdes / Mid --> les aw / Adc ---> les + skilled / Supp ---> les inflated"
+      <span class="citation-date">15 mars 2023</span>
+    </div>
+    <div class="citation" style="border-color: var(--mani-color)">
+      "Jungle c'est qd même le seul rôle où tu peux décider de quel joueur jouera pas la game"
+      <span class="citation-date">30 avril 2023</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     PARTIE 2 — LE DÉBAT RECONSTITUÉ
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title fade-in">Partie 2</div>
+  <div class="section-subtitle fade-in">— LE DÉBAT RECONSTITUÉ (FICTIF MAIS DOCUMENTÉ) —</div>
+
+  <div class="discord-wrapper fade-in">
+    <div class="discord-header">
+      <span class="discord-channel-icon">#</span>
+      <span class="discord-channel-name">qq-only</span>
+      <span class="discord-channel-desc">canal défouloir · LoL soloQ · rage certifiée</span>
+    </div>
+
+    <div class="discord-messages">
+
+      <!-- ═══ PHASE 1 — ACCROCHE ═══ -->
+      <div class="debate-phase">
+        <span class="phase-label">Phase 1 — Accroche</span>
+        <div class="phase-bar"></div>
+      </div>
+
+      <!-- Merko ouvre -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 14:22</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Jungle rôle borken mais mal utilisé par 95% de la playerbase + pveglad + delete FoN c pu possible on en peut plus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          franchement t'as pas besoin de savoir jouer pour être utile en jungle. tu campes les 3 premiers objectifs et t'as déjà gagné la game
+        </div>
+        <div class="msg-reactions">
+          <div class="reaction">😂 <span class="count">3</span></div>
+        </div>
+      </div>
+
+      <!-- MPB répond -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:24</span>
+          </div>
+          <div class="msg-content">
+            phrase de mec qui ne connait rien/est juste nul en jungle
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Travail du jungler : analyse les wincond, l'état des 3 lanes, track le jungler, pose de la vision, sweep, counter jungle, set up et joue les objectifs, power farm, countergank, gank, dive, skip des camps, reset on tempo, apprendre les nuances du clear, préparer tes plans de jeu 2 minutes à l'avance</span>
+          c'est du PVE ça ?
+        </div>
+      </div>
+
+      <!-- Mani arrive -->
+      <div class="msg-group">
+        <div class="avatar mani-av">G</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mani-author">manigoldo1500</span>
+            <span class="msg-time">Aujourd'hui à 14:25</span>
+          </div>
+          <div class="msg-content">
+            La jungle est broken pourquoi ?
+            <div class="msg-reactions">
+              <div class="reaction">🍿 <span class="count">2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Parce qu'elle gank</span>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          Quel est le meilleur gankeur : j4
+        </div>
+        <div class="msg-reactions">
+          <div class="reaction">💀 <span class="count">4</span></div>
+        </div>
+      </div>
+
+      <!-- ═══ PHASE 2 — MONTÉE EN TENSION ═══ -->
+      <div class="debate-phase">
+        <span class="phase-label">Phase 2 — Montée en tension</span>
+        <div class="phase-bar"></div>
+      </div>
+
+      <!-- Merko attaque le clear -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 14:27</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Vous aimez trop vous branler sur la difficulté du rôle alors que dans les fait t même pas capable de regarder ta Map en tapant des camps</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          j'ai joué jungle. t'apprends l'IA des camps par cœur au bout de 5 games et après c'est du PVE en loop. le vrai boulot c'est gank et countergank. le reste c'est du remplissage
+        </div>
+      </div>
+
+      <!-- MPB s'énerve légèrement -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:29</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Rappel que la différence sur un full clear en moyenne entre un main jungle gold et master, c'est quasiment 20 secondes</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          t'es semi-jungler, t'as jamais eu à analyser simultanément 3 lanes pendant ton clear. le temps entre deux autos c'est 0.8 secondes, et c'est pendant ce temps que tu dois bouger ta caméra partout sur la carte
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Tu kites tes camps différemment en fonction du lane state que t'observes pendant ton clear, si je clear mes loups et que je vois un giga fight qui explose en bot lane, je vais changer mon kiting pour amener mon camp vers le bot side au lieu de continuer à path top</span>
+        </div>
+      </div>
+
+      <!-- Merko riposter -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 14:32</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Moi en jungle je le fais tlt</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          et tu sais ce que j'avais en + : <span class="real-quote">Tu peux même pu smite pr te heal / Juste tu fais le camp t full vie</span> — c'est tellement simple à gérer maintenant que même les laners autofill font des games correctes. C TROP FACILE
+        </div>
+      </div>
+
+      <!-- MPB : argument XP/ressources -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:35</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">On te mets contre un jungle master tu finis en slip toute la game, on me met contre un top GM je pick Malphite je meurs pas je suis even</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          le gap skill en jungle est EXPONENTIELLEMENT plus grand qu'en lane. un main jungle gold a les mêmes mécaniques de clear qu'un diamant autofill, mais c'est tout. la prise de décision macro c'est là que l'écart se creuse et c'est là que les mains jungle de ton elo sont tous nuls
+        </div>
+      </div>
+
+      <!-- Mani — relance explosive -->
+      <div class="msg-group">
+        <div class="avatar mani-av">G</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mani-author">manigoldo1500</span>
+            <span class="msg-time">Aujourd'hui à 14:37</span>
+          </div>
+          <div class="msg-content">
+            Tu as prouvé que tu comprenais rien à la jgl
+            <div class="msg-reactions">
+              <div class="reaction">💀 <span class="count">5</span></div>
+              <div class="reaction">☠️ <span class="count">2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Les mains jgl ont vendu leurs âmes à Lucifer pour des lps</span>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">en soloq : jgl>top>mid>supp>>>>adc</span>
+        </div>
+      </div>
+
+      <!-- ═══ PHASE 3 — PIC DE RAGE ═══ -->
+      <div class="debate-phase">
+        <span class="phase-label">Phase 3 — Pic de rage 🔥</span>
+        <div class="phase-bar"></div>
+      </div>
+
+      <!-- Merko sort le coup mortel -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 14:43</span>
+          </div>
+          <div class="msg-content" style="color:#ff9999">
+            <span class="real-quote">Faut pas feed on rappelle mpb veut pas ping ses laners quand il voit le jgl adverse passer sur une ward pck il réfléchit trop en tapant ses loups</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content" style="color:#ff9999">
+          t'es là à me sortir 15 lignes sur le multitasking et t'es même pas capable de appuyer sur G pour signaler que le jungler adverse traverse le river 💀
+        </div>
+        <div class="msg-reactions">
+          <div class="reaction">😭 <span class="count">7</span></div>
+          <div class="reaction">💀 <span class="count">4</span></div>
+        </div>
+      </div>
+
+      <!-- MPB — contre-attaque -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:46</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Et puis bon, t'assumes des choses totalement fausses, je ping énormément les junglers</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          et surtout : <span class="real-quote">Marrant venant du mec qui meurt de ganks en disant "je savais qu'il était là mais mon jungler avait pas à être top side, jungle diff"</span>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Soyez pas nul à chier au jeu et la jungle aura plus d'impact</span>
+        </div>
+        <div class="msg-reactions">
+          <div class="reaction">🥊 <span class="count">3</span></div>
+        </div>
+      </div>
+
+      <!-- Merko explose -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 14:49</span>
+          </div>
+          <div class="msg-content" style="color:#ff7070">
+            MAIS C'EST EXACTEMENT CE QUE JE DIS. le rôle est BROKEN et les mains jgl savent même pas l'exploiter. 95% des junglers sont des assistés qui pleurent que le rôle est difficile pendant qu'ils spam full clear en PVE. et toi t'es là à me sortir la liste de la liste des compétences du jungler comme si ça justifiait de PAS PINGER LE JUNGLER ENNEMI SUR UNE WARD
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Des fois ça sert des fois ça sert pas mais je suis bien content quand je réalise que jme fais gank sur le bruit du ping pck j'étais concentré sur un trade</span>
+        </div>
+      </div>
+
+      <!-- MPB contre-contre-attaque avec stats -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:52</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Bah c'est surtout que l'adc a besoin de se concentrer sur : les adc, les supports, les jungler, les prios mid, les tp des top laners. Alors que le jungler doit suivre tout ça mais également les summoners de toutes les lanes, le wave management de toutes les lanes, les prises de vision et d'objectifs dans le top side.</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          donc tu peux pas dire que le jungler a "moins de trucs à faire". il en a plus, globalement. la différence c'est que t'as pas l'aspect mécanique des lanes — mais c'est normal, c'est pas son rôle d'être un duelist
+        </div>
+      </div>
+
+      <!-- Mani — côté Merko + sentence -->
+      <div class="msg-group">
+        <div class="avatar mani-av">G</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mani-author">manigoldo1500</span>
+            <span class="msg-time">Aujourd'hui à 14:55</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">C'est pas normal de pouvoir gank bot lvl 2 et pas pouvoir se faire punir derrière</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Jgl supp rôle les plus inflated ça bouge pas</span>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          Tiens un autre jgl delusional
+          <div class="msg-reactions">
+            <div class="reaction">😭 <span class="count">6</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MPB — argument massue "Ne pas punir = mourir" -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 14:58</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Le sujet c'est que le jungler il doit punir, s'il punit pas c'est comme s'il se faisait punir (en équivalent laner)</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">Ne pas punir en jungler c'est l'équivalent de mourir d'un gank en tant que laner</span>
+          — c'est exactement ce que tu refuses de comprendre. le rôle n'est pas sans risque, le risque est juste redistribué différemment
+        </div>
+      </div>
+
+      <!-- ═══ PHASE 4 — DÉNOUEMENT ═══ -->
+      <div class="debate-phase">
+        <span class="phase-label">Phase 4 — Dénouement / Entente du bout des dents</span>
+        <div class="phase-bar"></div>
+      </div>
+
+      <!-- Merko — concession partielle -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 15:12</span>
+          </div>
+          <div class="msg-content">
+            ok admettons que le rôle est complexe au TOP niveau. ça change pas le fait que <span class="real-quote">Jungle rôle borken mais mal utilisé par 95% de la playerbase</span>. et que les mecs qui chiaient sur la jungle weak en sont les premiers responsables
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          la jungle gap crée le bot gap crée le mid gap. si t'es d'accord avec ça on est d'accord sur l'essentiel
+        </div>
+      </div>
+
+      <!-- MPB — ni oui ni non -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 15:14</span>
+          </div>
+          <div class="msg-content">
+            ouais mais alors t'assumes que le meilleur jungler est toujours celui qui gagne et ça c'est faux — sinon y a pas de lol, y a juste une game où le jungler appuie sur un bouton. le rôle est fort, oui. il est broken au sens "tout dépend de lui" dans 60% des games ? non
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          <span class="real-quote">La jungler est un multiplicateur de carry, si les carry sont en dessous des adversaires, le better jungler wins ne pourra jamais avoir lieu</span> — Dopa 🙂
+        </div>
+        <div class="msg-reactions">
+          <div class="reaction">🤓 <span class="count">2</span></div>
+          <div class="reaction">😑 <span class="count">3</span></div>
+        </div>
+      </div>
+
+      <!-- Manigoldo — conclusion catastrophique -->
+      <div class="msg-group">
+        <div class="avatar mani-av">G</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mani-author">manigoldo1500</span>
+            <span class="msg-time">Aujourd'hui à 15:17</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">every game is a jgl diff / every botlane is a jgl diff</span>
+          </div>
+        </div>
+      </div>
+      <div class="msg-group continuation">
+        <div class="msg-content">
+          donc au final vous êtes tous les deux d'accord avec moi
+          <div class="msg-reactions">
+            <div class="reaction">💀 <span class="count">8</span></div>
+            <div class="reaction">🤡 <span class="count">5</span></div>
+            <div class="reaction">😭 <span class="count">3</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MPB mot de la fin -->
+      <div class="msg-group">
+        <div class="avatar mpb-av">P</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author mpb-author">monpotestbon</span>
+            <span class="msg-time">Aujourd'hui à 15:18</span>
+          </div>
+          <div class="msg-content">
+            <span class="real-quote">Je préfère perdre dans la bonne humeur et les "np, it happens" que gagner dans le flame et les "get carried dogshit jungler"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Merko mot de la fin -->
+      <div class="msg-group">
+        <div class="avatar merko-av">M</div>
+        <div class="msg-body">
+          <div class="msg-header">
+            <span class="msg-author merko-author">merk0</span>
+            <span class="msg-time">Aujourd'hui à 15:19</span>
+          </div>
+          <div class="msg-content">
+            t'es vraiment l'archétype du gars qui cite Dopa pour perdre en plat 😭
+            <div class="msg-reactions">
+              <div class="reaction">💀 <span class="count">9</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end discord-messages -->
+  </div><!-- end discord-wrapper -->
+</div>
+
+<div class="section-divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     PARTIE 3 — ANALYSE DU DÉBAT
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title fade-in">Partie 3</div>
+  <div class="section-subtitle fade-in">— ANALYSE DU DÉBAT —</div>
+
+  <div class="analysis-grid">
+
+    <!-- Q1 -->
+    <div class="analysis-card" data-num="1">
+      <div class="analysis-title">Qui a les meilleurs arguments objectivement ?</div>
+      <div class="analysis-text">
+        <span class="mpb-tag">MPB</span> remporte objectivement la bataille des arguments. Ses prises de position sont documentées, chiffrées (l'écart de 20 secondes sur le full clear, la citation Dopa) et cohérentes. Il articule correctement la différence entre <em>complexité d'exécution</em> et <em>complexité de décision</em>, ce que Merko ne fait pas.
+        <br><br>
+        <span class="merko-tag">Merko</span> a <strong>raison sur le fond</strong> — la jungle est broken en soloQ et 95% des main jungle ne l'exploitent pas — mais ses arguments sont des assertions, pas des démonstrations. Il ne prouve rien, il affirme avec confiance.
+        <br><br>
+        Verdict : <strong>MPB +1 sur l'argumentation, Merko +1 sur la pertinence terrain</strong>.
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="analysis-card" data-num="2">
+      <div class="analysis-title">Qui rage le plus et pourquoi ?</div>
+      <div class="analysis-text">
+        <span class="merko-tag">Merko</span> rage plus, et sa rage est plus visible — messages en majuscules, "😭💀", formules assassines. Sa rage est déclenchée par la <em>perception d'auto-congratulation</em> des main jungle qui font des monologues sur la complexité du rôle tout en jouant mal.
+        <br><br>
+        <span class="mpb-tag">MPB</span> rage de manière froide et didactique. Sa vraie pique — <em>"phrase de mec qui ne connait rien"</em> — est délivrée sans majuscule. La rage de MPB se trahit dans la longueur : plus le message est long, plus il est en train d'exploser intérieurement.
+        <br><br>
+        <span class="mani-tag">Manigoldo</span> ne rage pas — il <em>préside</em>. Sa satisfaction vient de voir les deux se combattre.
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="analysis-card" data-num="3">
+      <div class="analysis-title">Qui a le dessus rhétoriquement ?</div>
+      <div class="analysis-text">
+        Rhétoriquement, c'est <span class="merko-tag">Merko</span> par une courte tête. Ses phrases courtes sont des uppercuts : <em>"t même pas capable de regarder ta Map en tapant des camps"</em> — ça reste dans la tête même si c'est exagéré.
+        <br><br>
+        MPB est le type qui gagne un débat à l'écrit mais qui en sortant de la pièce, tout le monde retient la vanne de l'autre. La concision de Merko + son point sur le ping du jungler ennemi (qui est FACTUEL et MPB ne dément jamais vraiment) constitue son meilleur coup.
+        <br><br>
+        <strong>Merko 1 / MPB 0 à la rhétorique pure</strong>. MPB 1 / Merko 0 à la rigueur.
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="analysis-card" data-num="4">
+      <div class="analysis-title">Rôle de Manigoldo — arbitre, fouteur de merde ou allié opportuniste ?</div>
+      <div class="analysis-text">
+        <span class="mani-tag">Manigoldo</span> est <strong>les trois à la fois, en fonction du moment</strong>.
+        <br><br>
+        Il commence en <em>arbitre</em> en posant la question basique ("La jungle est broken pourquoi ?") qui structure le débat. Il devient <em>fouteur de merde</em> en sortant "tu as prouvé que tu comprenais rien à la jgl" au moment où MPB était en train de reprendre l'avantage. Et il finit en <em>allié opportuniste</em> en concluant que les deux lui donnent raison — ce qui est techniquement faux mais impossible à réfuter en 2 secondes.
+        <br><br>
+        Son vrai rôle : <strong>Catalyseur d'escalade</strong>. Sans lui, MPB et Merko auraient probablement trouvé un consensus au bout de 50 messages. Avec lui, le débat dure 3 heures.
+      </div>
+    </div>
+
+    <!-- Q5 — wide -->
+    <div class="analysis-card analysis-wide" data-num="5">
+      <div class="analysis-title">Comment ce débat se serait terminé dans la vraie vie ?</div>
+      <div class="analysis-text">
+        Le schéma habituel de ce canal : après 2-3 heures de débat, MPB lâche quelque chose de philosophique du genre <em>"je préfère perdre dans la bonne humeur"</em> qui désarme tout le monde. Merko répond avec une vanne cinglante qui obtient les plus grosses réactions. Manigoldo déclare victoire pour lui-même.
+        <br><br>
+        Puis une heure plus tard, l'un des trois lance une game. Deux heures après, il revient dans le canal avec un screen de game pour prouver son point — et le débat reprend <strong>exactement là où il s'était arrêté</strong>, comme si rien ne s'était passé.
+        <br><br>
+        Dans les données réelles, cette séquence arrive le <strong>15 mars 2023</strong> et se prolonge sur plusieurs heures avec des variantes le 20 avril et le 30 avril. Le sujet n'est jamais clos. Il ne peut pas l'être — c'est là tout l'intérêt.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     PARTIE 4 — VERDICT
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title fade-in">Partie 4</div>
+  <div class="section-subtitle fade-in">— VERDICT FINAL —</div>
+
+  <div class="verdict-wrapper fade-in">
+
+    <div class="verdict-row">
+      <!-- Vainqueur du débat -->
+      <div class="verdict-card">
+        <div class="verdict-crown">👑</div>
+        <div class="verdict-title">VAINQUEUR DU DÉBAT JUNGLE</div>
+        <div class="verdict-winner mpb">MPB</div>
+        <div class="verdict-text">
+          MPB remporte le débat sur le fond. Il démontre avec cohérence que la jungle cumule une complexité décisionnelle que les laners n'ont pas, étaye avec des données (clear time, citation Dopa, wave management), et ne laisse aucun de ses arguments sans réponse. Merko a raison sur <em>"la jungle est broken"</em> mais ne démontre rien — il affirme. Quand on démonte ses exemples un par un, il pivote vers une autre assertion. C'est de la rhétorique, pas du débat.
+          <br><br>
+          <strong>Victoire aux points. Pas par KO.</strong>
+        </div>
+      </div>
+
+      <!-- Vainqueur de la rage -->
+      <div class="verdict-card">
+        <div class="verdict-title">VAINQUEUR DE LA RAGE</div>
+        <div class="verdict-winner merko">MERKO</div>
+        <div class="verdict-text">
+          Merko remporte haut la main le titre de la rage la plus expressive, la plus mémorable et la plus efficace au coup par coup. Ses deux vacheries sur MPB qui "réfléchit trop en tapant ses loups" et qui "cite Dopa pour perdre en plat" sont les deux meilleurs moments du débat — ceux dont tout le monde se souvient en sortant.
+          <br><br>
+          <strong>Victoire par TKO rhétorique au round 5.</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Citations finales -->
+    <div style="text-align:center; margin-bottom: 20px;">
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 8px; color: var(--text-dim);">CITATIONS FINALES — PORTRAITS EN UNE PHRASE</div>
+    </div>
+
+    <div class="final-quotes">
+
+      <div class="final-quote-card">
+        <div class="fq-author fq-mpb">MPB</div>
+        <div class="fq-text">
+          "Je préfère perdre dans la bonne humeur et les 'np, it happens' que gagner dans le flame et les 'get carried dogshit jungler'"
+        </div>
+        <div class="fq-meta">15 mars 2023 · Résume tout : analytique, fair-play en surface, et légèrement condescendant quand même</div>
+      </div>
+
+      <div class="final-quote-card">
+        <div class="fq-author fq-merko">MERKO</div>
+        <div class="fq-text">
+          "Jungle rôle borken mais mal utilisé par 95% de la playerbase + pveglad + delete FoN c pu possible on en peut plus"
+        </div>
+        <div class="fq-meta">15 mars 2023 · Trois positions en une phrase, zéro développement, conviction totale</div>
+      </div>
+
+      <div class="final-quote-card">
+        <div class="fq-author fq-mani">MANIGOLDO</div>
+        <div class="fq-text">
+          "Jungle c'est qd même le seul rôle où tu peux décider de quel joueur jouera pas la game"
+        </div>
+        <div class="fq-meta">30 avril 2023 · Une vérité indiscutable lâchée au bon moment — c'est tout son art</div>
+      </div>
+
+    </div>
+
+    <!-- Palmarès final -->
+    <div style="margin-top: 36px; padding: 24px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); text-align: center;">
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 6px; color: var(--text-dim); margin-bottom: 16px;">PALMARÈS OFFICIEL</div>
+      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+        <div>
+          <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim);">DÉBAT SUR LE FOND</div>
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--mpb-color);">MPB 🏆</div>
+        </div>
+        <div>
+          <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim);">MEILLEURE VANNE</div>
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--merko-color);">MERKO 🗡️</div>
+        </div>
+        <div>
+          <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim);">PLUS GRANDE RAGE</div>
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--merko-color);">MERKO 🔥</div>
+        </div>
+        <div>
+          <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim);">MEILLEUR TIMING</div>
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--mani-color);">MANI ⚖️</div>
+        </div>
+        <div>
+          <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-dim);">DÉBAT LE + LONG</div>
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text-dim);">TBD 🔄</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  QQ-ONLY CHAMPIONSHIP · Reconstruction fictive basée sur des messages réels · Mars-Avril 2023 · Toute ressemblance avec des débats réels est intentionnelle
+</div>
+
+<script>
+  // Animate stat bars on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const bars = document.querySelectorAll('.stat-bar-fill');
+    bars.forEach(bar => {
+      const target = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = target; }, 300);
+    });
+
+    // Fade in observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  });
+</script>
+
+</body>
+</html>
