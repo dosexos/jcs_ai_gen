@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manigoldo — Dossier #qq-only</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+  :root {
+    --bg: #0e0e1a;
+    --bg2: #13131f;
+    --bg3: #1a1a2e;
+    --bg4: #1f1f35;
+    --purple: #533483;
+    --purple-light: #7b52c8;
+    --purple-glow: rgba(83,52,131,0.4);
+    --red: #e94560;
+    --red-glow: rgba(233,69,96,0.35);
+    --gold: #f5a623;
+    --teal: #2ee8c4;
+    --text: #d8d8e8;
+    --text-dim: #8888a8;
+    --text-bright: #ffffff;
+    --border: rgba(83,52,131,0.3);
+    --border-hot: rgba(233,69,96,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    position: relative;
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0a22 40%, #0e0e1a 100%);
+    border-bottom: 1px solid var(--border-hot);
+    padding: 48px 48px 36px;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(83,52,131,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px;
+    flex-shrink: 0;
+    box-shadow: 0 0 40px var(--red-glow), 0 0 80px var(--purple-glow);
+    border: 2px solid var(--red);
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 30px var(--red-glow), 0 0 60px var(--purple-glow); }
+    50% { box-shadow: 0 0 50px rgba(233,69,96,0.6), 0 0 100px rgba(83,52,131,0.4); }
+  }
+
+  .header-info { flex: 1; }
+
+  .pseudo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    background: linear-gradient(90deg, #fff 0%, var(--red) 50%, var(--purple-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .channel-tag {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    padding: 4px 14px;
+    border-radius: 2px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red); }
+  .badge-purple { background: rgba(83,52,131,0.25); border: 1px solid var(--purple-light); color: var(--purple-light); }
+  .badge-gold { background: rgba(245,166,35,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-teal { background: rgba(46,232,196,0.12); border: 1px solid var(--teal); color: var(--teal); }
+
+  .header-quote {
+    margin-top: 28px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--red);
+    background: rgba(233,69,96,0.06);
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: #bbaabb;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-quote cite {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    font-style: normal;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ============ STATS BAR ============ */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .stat-cell {
+    padding: 20px 28px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-value span { color: var(--red); }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ============ LAYOUT ============ */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .content-left { border-right: 1px solid var(--border); }
+  .content-right {}
+
+  /* ============ SECTION ============ */
+  .section {
+    padding: 32px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-hot), transparent);
+  }
+
+  /* ============ CHART ============ */
+  .chart-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .chart-title {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  canvas { width: 100% !important; }
+
+  /* ============ CARDS GRID ============ */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .card {
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .card:nth-child(2n) { border-right: none; }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  /* ============ BAR PROGRESS ============ */
+  .bar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .bar-label {
+    width: 90px;
+    font-size: 12px;
+    color: var(--text);
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    transition: width 0.8s ease;
+  }
+
+  .bar-count {
+    width: 36px;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* ============ EXPRESSIONS ============ */
+  .expr-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .expr-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+
+  .expr-word {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--teal);
+  }
+
+  .expr-count {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--red);
+  }
+
+  /* ============ RAGE METER ============ */
+  .rage-meter {
+    margin: 16px 0;
+  }
+
+  .rage-track {
+    height: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .rage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ee8c4, #533483, #e94560, #ff2244);
+    border-radius: 6px;
+    width: 78%;
+    animation: rage-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes rage-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .rage-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ============ MOMENTS MÉMORABLES ============ */
+  .moment {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .moment:last-child { border-bottom: none; }
+
+  .moment-date {
+    font-size: 10px;
+    color: var(--purple-light);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .moment-quote {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .moment-quote::before { content: '"'; color: var(--red); font-size: 20px; }
+  .moment-quote::after { content: '"'; color: var(--red); font-size: 20px; }
+
+  .moment-context {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ============ RELATIONS ============ */
+  .relation-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .rel-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .rel-rival { background: var(--red); }
+  .rel-ami { background: var(--teal); }
+  .rel-disciple { background: var(--gold); }
+  .rel-neutre { background: var(--text-dim); }
+
+  .rel-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-bright);
+    width: 90px;
+  }
+
+  .rel-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .rel-count {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar { background: var(--bg2); }
+
+  .sidebar .section { padding: 24px 28px; }
+
+  /* ============ PROSE SECTION ============ */
+  .prose-section {
+    padding: 40px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose-section .section-title {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .subsection {
+    margin-bottom: 36px;
+  }
+
+  .subsection-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+
+  .subsection-num {
+    color: var(--red);
+    margin-right: 8px;
+  }
+
+  .prose {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #c8c8d8;
+    text-align: justify;
+  }
+
+  .prose em {
+    font-style: italic;
+    color: #e0d0e8;
+  }
+
+  .prose strong {
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+
+  .prose .cite {
+    display: block;
+    margin: 16px 0;
+    padding: 12px 18px;
+    border-left: 2px solid var(--purple-light);
+    background: rgba(83,52,131,0.1);
+    font-style: italic;
+    color: #bbaabb;
+    font-size: 16px;
+  }
+
+  .prose .cite .cite-date {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    font-style: normal;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ============ RAPPORT PSYCHIATRIQUE ============ */
+  .psy-section {
+    padding: 40px 48px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(83,52,131,0.04) 0%, transparent 100%);
+  }
+
+  .psy-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 28px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .psy-header-field { margin-bottom: 6px; }
+  .psy-header-field span { color: var(--text); }
+
+  .psy-header-logo {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--purple-light);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .psy-block {
+    margin-bottom: 24px;
+  }
+
+  .psy-block-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .psy-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #c8c8d8;
+  }
+
+  .psy-text em { font-style: italic; color: #e0d0e8; }
+
+  .psy-dsm {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(233,69,96,0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin: 2px;
+    border-radius: 2px;
+  }
+
+  .ordonnance {
+    margin-top: 20px;
+    padding: 20px 24px;
+    border: 1px dashed var(--border-hot);
+    background: rgba(233,69,96,0.04);
+  }
+
+  .ordonnance-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .ordonnance-item {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    color: #c8c8d8;
+    padding: 4px 0;
+    border-bottom: 1px dotted rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+  }
+
+  .rx { color: var(--red); font-weight: 700; flex-shrink: 0; }
+
+  .ordonnance-footer {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    text-align: right;
+  }
+
+  /* ============ VERDICT ============ */
+  .verdict-section {
+    padding: 40px 48px;
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0822 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(233,69,96,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .verdict-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--text-bright);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .verdict-text .accent { color: var(--red); }
+  .verdict-text .accent2 { color: var(--teal); }
+
+  .verdict-sig {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ============ YEAR ACTIVITY ============ */
+  .year-bars { display: flex; flex-direction: column; gap: 6px; }
+
+  .year-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .year-label {
+    width: 36px;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .year-bar-track {
+    flex: 1;
+    height: 18px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .year-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+    border-radius: 2px;
+  }
+
+  /* ============ VERDICT FINAL SMALL ============ */
+  .verdict-stars {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  .star {
+    width: 14px; height: 14px;
+    background: var(--red);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+
+  .star.empty { background: rgba(233,69,96,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="header-top">
+    <div class="avatar">🎯</div>
+    <div class="header-info">
+      <div class="pseudo">MANIGOLDO</div>
+      <div class="channel-tag">// canal #qq-only · dossier psychiatrique & comportemental</div>
+      <div class="badges">
+        <span class="badge badge-red">🔥 Main ADC</span>
+        <span class="badge badge-purple">⚔️ Draven Théologien</span>
+        <span class="badge badge-gold">👑 Maître des Tipeux</span>
+        <span class="badge badge-teal">📊 Master 312 LP</span>
+        <span class="badge badge-red">🧠 Analyste Autoproclamé</span>
+        <span class="badge badge-purple">🏆 Acad JCS Vétéran</span>
+      </div>
+    </div>
+  </div>
+  <blockquote class="header-quote">
+    «&nbsp;Quand t'as la win dans l'ADN, on en oublie presque ce que peuvent ressentir les gueux.&nbsp;»
+    <cite>— Manigoldo, 26 novembre 2024</cite>
+  </blockquote>
+</header>
+
+<!-- ═══════════════ STATS BAR ═══════════════ -->
+<div class="stats-bar">
+  <div class="stat-cell">
+    <div class="stat-value"><span>13</span>&thinsp;061</div>
+    <div class="stat-label">Messages totaux</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-value"><span>7</span> ans</div>
+    <div class="stat-label">2019 → 2026</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-value">5.<span>11</span></div>
+    <div class="stat-label">Msgs / jour (moy.)</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-value"><span>13</span>h</div>
+    <div class="stat-label">Pic d'activité</div>
+  </div>
+</div>
+
+<!-- ═══════════════ CONTENU PRINCIPAL ═══════════════ -->
+<div class="main">
+  <div class="content-left">
+
+    <!-- Chart activité horaire -->
+    <div class="section">
+      <div class="section-title">Activité horaire</div>
+      <div class="chart-container">
+        <canvas id="hourlyChart" height="110"></canvas>
+      </div>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="cards-grid">
+
+      <!-- Champions les plus mentionnés -->
+      <div class="card">
+        <div class="card-title">Champions & Rôles / Sujets LoL</div>
+        <div class="bar-item">
+          <div class="bar-label">ADC (rôle)</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          <div class="bar-count">341</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">FF</div>
+          <div class="bar-track"><div class="bar-fill" style="width:76%"></div></div>
+          <div class="bar-count">259</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Int/inting</div>
+          <div class="bar-track"><div class="bar-fill" style="width:61%"></div></div>
+          <div class="bar-count">207</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Draven</div>
+          <div class="bar-track"><div class="bar-fill" style="width:26%"></div></div>
+          <div class="bar-count">88</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Sion</div>
+          <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+          <div class="bar-count">69</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Soloq</div>
+          <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+          <div class="bar-count">61</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Académie</div>
+          <div class="bar-track"><div class="bar-fill" style="width:27%"></div></div>
+          <div class="bar-count">91</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Rengar</div>
+          <div class="bar-track"><div class="bar-fill" style="width:8%"></div></div>
+          <div class="bar-count">26</div>
+        </div>
+      </div>
+
+      <!-- Expressions signature -->
+      <div class="card">
+        <div class="card-title">Expressions Signature</div>
+        <div class="expr-grid">
+          <div class="expr-item">
+            <span class="expr-word">mpb</span>
+            <span class="expr-count">359×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">mdr</span>
+            <span class="expr-count">219×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">ez</span>
+            <span class="expr-count">255×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">wesh</span>
+            <span class="expr-count">97×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">tipeu(x)</span>
+            <span class="expr-count">69×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">sah</span>
+            <span class="expr-count">68×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">fdp</span>
+            <span class="expr-count">76×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">zebi</span>
+            <span class="expr-count">49×</span>
+          </div>
+          <div class="expr-item">
+            <span class="expr-word">pazifier</span>
+            <span class="expr-count">20×</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Style de rage -->
+      <div class="card">
+        <div class="card-title">Thermomètre à Rage</div>
+        <div class="rage-meter">
+          <div class="rage-track">
+            <div class="rage-fill" style="width:78%"></div>
+          </div>
+          <div class="rage-labels">
+            <span>ZEN TOTAL</span>
+            <span>≈ 78%</span>
+            <span>VOLCAN</span>
+          </div>
+        </div>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:14px; line-height:1.6;">
+          Rage <strong style="color:#e94560">stratégique et argumentée</strong> — jamais gratuite. Mani rage contre des systèmes (rôle ADC, meta, supports inutiles), pas des individus au hasard. Sa colère a toujours un <em>raisonnement</em>, même absurde.<br><br>
+          Style : <span style="color:var(--teal)">procureur</span> → liste les chefs d'accusation, cite les preuves (elo, stats, CS), prononce la sentence.
+        </p>
+        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">INT À VUE</span>
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">SOFT INT</span>
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">RUNDOWN</span>
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">SANCTIONNER</span>
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">HAGAR</span>
+          <span style="padding:3px 8px; border:1px solid var(--border); font-size:10px; color:var(--text-dim); letter-spacing:1px;">PAZIFIER</span>
+        </div>
+      </div>
+
+      <!-- Moments mémorables -->
+      <div class="card">
+        <div class="card-title">Moments Mémorables</div>
+
+        <div class="moment">
+          <div class="moment-date">2021-03-07 · JOUR LE PLUS ACTIF (232 msgs)</div>
+          <div class="moment-quote">Il me soft int ce fdp</div>
+          <div class="moment-context">Session de rage collective épique, probablement une session ranked apocalyptique</div>
+        </div>
+
+        <div class="moment">
+          <div class="moment-date">2019-03-13 · MANIFESTE FONDATEUR</div>
+          <div class="moment-quote">Draven = +15 points d'alphatitude. Bruiser = -10. Assassin = -15.</div>
+          <div class="moment-context">Création du système de classement de virilité par champion</div>
+        </div>
+
+        <div class="moment">
+          <div class="moment-date">2021-02-15</div>
+          <div class="moment-quote">J'ai compris quel était ma destinée : redevenir OTP Draven, meilleur perso de League.</div>
+          <div class="moment-context">Révélation spirituelle, probablement post-lose streak</div>
+        </div>
+
+        <div class="moment">
+          <div class="moment-date">2024-11-26</div>
+          <div class="moment-quote">Quand on a la win dans l'ADN on en oublie presque ce que peuvent ressentir les gueux.</div>
+          <div class="moment-context">Après une victoire. Humilité légendaire.</div>
+        </div>
+
+        <div class="moment">
+          <div class="moment-date">2024-08-26</div>
+          <div class="moment-quote">Pour un jeu sain il faudrait que l'ADC puisse dire au JGL et au supp exactement quoi faire avec les pings et si ils obéissent pas → ban 14j.</div>
+          <div class="moment-context">Proposition de réforme du système judiciaire de League of Legends</div>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+    <!-- ═══════ PROSE LONGUE ═══════ -->
+    <div class="prose-section">
+      <div class="section-title">Analyse comportementale — profil complet</div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">1.</span> Personnalité sur le canal — La philosophie du Procureur</div>
+        <div class="prose">
+          Manigoldo n'est pas un rageur au sens vulgaire du terme. Il serait bien trop réducteur de le réduire à un simple gestionnaire de frustrations post-ranked. Ce qui caractérise fondamentalement sa présence sur <em>#qq-only</em>, c'est la cohérence idéologique de ses interventions. Quand il rage, il rage avec un <strong>plan argumentatif</strong>. Il ne dit pas simplement « ce jeu est nul » — il explique pourquoi le rôle ADC est structurellement brisé, en quoi la jungle a trop d'impact, comment les supports parasitent l'économie de botlane, et il étaie le tout avec des exemples concrets, des noms, des matchups, des LP. Il est le procureur de ses propres parties. Il instruit le dossier, cite les témoins (Gumayusi, Hans Sama, les pros coréens) et rend le verdict lui-même.
+
+          <span class="cite">
+            «&nbsp;Pour un jeu sain en réalité il faudrait que l'ADC puisse dire au JGL et au supp exactement quoi faire avec les pings et si ils obéissent pas → ban 14j.&nbsp;»
+            <span class="cite-date">— 26 août 2024</span>
+          </span>
+
+          Cette citation résume à elle seule son rapport au jeu : il pense être dans le vrai, et si les autres ne suivent pas, c'est un problème de gouvernance, pas de gameplay. Il ne se remet que très rarement en question sur ses propres performances — quand ça arrive, c'est formulé avec une telle précision chirurgicale qu'on croirait lire un rapport d'audit. À côté de ce personnage de juge austère, il y a aussi le Manigoldo comique, celui qui laisse exploser une joie <strong>démesurée et théâtrale</strong> après une victoire, balançant des formules qui frôlent le génie involontaire. La dualité est fascinante : même registre langagier, même confiance absolue, qu'il gagne ou qu'il perde — seule la direction du flux émotionnel change.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">2.</span> Son niveau et sa façon de parler de ses performances</div>
+        <div class="prose">
+          Sur la période couverte par le dossier, Manigoldo a évolué dans une fourchette allant de <strong>Platine 3-4</strong> jusqu'à <strong>Master 312 LP</strong> — une progression réelle et remarquable sur 7 ans, même si elle n'a jamais été linéaire. Sa communication autour de l'elo est un sujet d'étude en soi : en période de montée, il en parle avec une sobriété presque clinique, comme si c'était naturel. En période de lose streak, le sujet est soit évité, soit transformé en procès contre le rôle ADC, contre la meta, contre les coéquipiers aléatoires, contre Riot Games. Le « meilleur ADC gagne toujours » est sa théorie unificatrice — principe qu'il défend avec la rigueur d'un théorème mathématique tout en admettant implicitement, dans les creux, que ladite règle ne s'applique pas toujours à lui en ce moment particulier.
+
+          <span class="cite">
+            «&nbsp;IMAGINE CALISTE (MEILLEUR ADC EUW APRÈS HANS) GALÈRE PENDANT QUE DES NO NAMES TOP JGL MONTENT FACILE.&nbsp;»
+            <span class="cite-date">— 21 septembre 2024</span>
+          </span>
+
+          Il se réfère régulièrement à l'Académie (JCS, compétitions amateurs) comme cadre de référence de son niveau, citant des pazifications d'adversaires masters et diamants avec la précision d'un palmarès olympique. Son OTP Draven est une constante identitaire — même quand il s'en éloigne temporairement (MF, Kai'Sa, Jinx selon la meta), il revient toujours au Roi de la Botlane. Draven n'est pas juste un champion, c'est un <strong>marqueur de valeurs</strong> : virilité, agression, prise de risque, skill gap revendiqué.
+
+          <span class="cite">
+            «&nbsp;On est souvent pour ne pas dire toujours (je suis modeste comme la plupart des mains Draven) 1v9.&nbsp;»
+            <span class="cite-date">— 9 juillet 2021</span>
+          </span>
+
+          La parenthèse autocritique sur sa propre modestie est un bijou de meta-humour parfaitement conscient.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">3.</span> Têtes de turc récurrentes — Le Panthéon des Accusés</div>
+        <div class="prose">
+          Le bestiaire des ennemis de Manigoldo est riche et structuré. En premier lieu viennent <strong>les supports</strong>, catégorie haïe avec une constance remarquable sur l'ensemble du corpus. Les mains support sont décrits comme des parasites de l'économie, des role carriers qui n'ont pas d'impact réel mais s'arrogent un statut injustifié. La détestation est sélective : il peut reconnaître qu'un bon support change une game, mais cela ne fait qu'illustrer leur dépendance envers l'ADC qui les « porte » de fait.
+
+          <span class="cite">
+            «&nbsp;Les mains supp, on va continuer à vous rundown.&nbsp;»
+            <span class="cite-date">— 21 décembre 2024</span>
+          </span>
+
+          Vient ensuite <strong>la jungle</strong>, rôle à impact trop élevé qui prive l'ADC de son juste crédit quand il gagne — et qui sert d'explication commode quand il perd. Les <strong>topplaners</strong> constituent une troisième cible : accusés de jouer des champions brisés pour compenser un déficit de virilité. Les <strong>mages en botlane</strong> sont une abomination particulière, violation du contrat social de League of Legends selon Manigoldo. Enfin, <strong>Riot Games</strong> elle-même est régulièrement mise en cause, tantôt pour avoir nerfé l'ADC, tantôt pour avoir bufé des champions injouables, et dans une saillie mémorable de janvier 2026, pour ses dirigeants de nationalité douteuse. Parmi les personnages nommés, <strong>MPB</strong> (357 mentions) et <strong>GK</strong> (464 mentions) constituent ses principales têtes de turc nommées — les relations complexes et affectueuses avec ces individus constituent le fil rouge émotionnel du canal.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">4.</span> Expressions signature — Le Lexique Manigoïde</div>
+        <div class="prose">
+          Le vocabulaire de Manigoldo est une création collective entre argot de cité, jargon LoL et inventions personnelles qui ont manifestement colonisé le reste du groupe. Le terme <strong>« tipeux »</strong> (69 occurrences) désigne les joueurs inférieurs placés sous sa protection condescendante — les <em>padawans</em> du système Mani, dont il surveille la progression avec l'attention d'un coach bienveillant et parfois moqueur. <strong>« Pazifier »</strong> (20 occurrences) est un verbe-univers signifiant écraser l'adversaire de façon humiliante et définitive, avec une connotation de remise à sa place sociale. <strong>« Hagar »</strong>, terme issu du verbe arabe algérien désignant le mépris/l'écrasement, est utilisé pour décrire ce qui arrive aux perdants.
+
+          <span class="cite">
+            «&nbsp;Liste des pazifications effectuées par MPB cette saison 10 : Eliglos (D1), Dorian (D1), Piafix (D3), Smoggi (Master : rage quit), Tsuki (Master)…&nbsp;»
+            <span class="cite-date">— 1er juin 2021</span>
+          </span>
+
+          <strong>« Ez »</strong> est employé dans deux registres distincts : la célébration ironique post-victoire, et la provocation préventive. <strong>« Wesh »</strong> fonctionne comme interjection universelle de début de phrase, équivalent de « alors » ou « donc » dans ce registre. <strong>« Sah »</strong> (de l'arabe algérien *sah* = « vrai ») marque l'acquiescement sincère ou l'ironie selon le contexte. La formule <strong>« gueux »</strong> pour désigner les joueurs de rang inférieur est utilisée avec une délectation aristocratique qui relève du jeu de rôle plus que du mépris réel.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">5.</span> Humour et style dans ce contexte décontracté</div>
+        <div class="prose">
+          L'humour de Manigoldo est de la variété <strong>auto-consciente et décalée</strong>. Il ne fait pas de blagues — il fait des <em>constats</em> qui sont objectivement drôles parce qu'il y croit vraiment. C'est la subtilité : la distance ironique est présente mais jamais totale. Quand il déclare avoir « la win dans l'ADN », on ne sait jamais à 100% s'il plaisante ou s'il s'agit d'un diagnostic médical qu'il a réellement posé sur lui-même. Cette ambiguïté est la source de la plupart de ses moments les plus mémorables.
+
+          <span class="cite">
+            «&nbsp;WSH igozent SDK Persoent----------->bicravax MOULAGA grosse MOULAX ENT / Les chof loumars PAZAIFING…&nbsp;»
+            <span class="cite-date">— 22 avril 2021</span>
+          </span>
+
+          Ce type de message — un texte en verlan charabia volontairement illisible — coexiste avec des analyses tactiques sérieuses sur l'état du jeu compétitif coréen. L'écart stylistique est immense et volontaire. Il peut passer en quelques messages d'une formule médiévale précieuse (<em>« Nous avons porté intérêt à votre missive, mais nous n'avons pu reconnaitre votre patronyme »</em>) à un message monosyllabique d'approbation totale. Cette <strong>versatilité registrale</strong> est sa signature la plus distinctive. Hors LoL, il mentionne des cours de salsa, de quidditch, du travail, du télétravail — autant de fragments qui révèlent une personnalité plus complexe et plus active socialement que ne le laisse croire la pure quantité de messages League.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="subsection-num">6.</span> Rageur chronique ou joueur zen ? Verdict comportemental</div>
+        <div class="prose">
+          La réponse honnête est : <strong>ni l'un ni l'autre dans leur forme pure</strong>. Manigoldo est un rageur <em>cohérent</em>, ce qui est une catégorie à part. Il ne rage pas au hasard — il identifie systématiquement la source de sa frustration, la nomme, la juge, et applique une sanction verbale ou ludique (l'int à vue, le dodge, le "rundown"). Il y a une logique, presque un protocole. Cela le distingue du rageur classique qui flambe en all-chat et feed. Lui, il pense que flamber en vocal sur le canal est une forme de catharsis saine et documentée.
+
+          <span class="cite">
+            «&nbsp;Je int ces fdp. Juste int à vue. Et c'est pas près de changer.&nbsp;»
+            <span class="cite-date">— 24 avril 2021</span>
+          </span>
+
+          La question « toxic ou fair-play » est également nuancée : sur le canal entre amis, son ton peut être brutal, mais il y a une forme de code d'honneur. Il rage contre des systèmes et des performances, pas vraiment contre des personnes qu'il respecte. MPB et GK, ses cibles les plus fréquentes, sont visiblement des amis proches dont il suit la progression avec une attention presque paternelle. Le toxique serait celui qui insulte sans cause — Manigoldo, lui, fournit toujours une cause, un dossier, un motif. C'est le distinguo qui lui permet de dormir sereinement avec son bilan de messagerie.
+        </div>
+      </div>
+
+    </div><!-- /prose-section -->
+
+    <!-- ═══════ RAPPORT PSY ═══════ -->
+    <div class="psy-section">
+      <div class="section-title" style="color:var(--gold);">Évaluation psychiatrique — Rapport confidentiel</div>
+
+      <div class="psy-header">
+        <div class="psy-header-logo">🏥 CLINIQUE DU TILTÉ CHRONIQUE — UNITÉ DE SOLOQ PATHOLOGIQUE 🏥</div>
+        <div>
+          <div class="psy-header-field">Patient : <span>MANIGOLDO (alias manigoldo1500)</span></div>
+          <div class="psy-header-field">Naissance : <span>estimée avant l'ère du Système de Rang</span></div>
+          <div class="psy-header-field">Motif de consultation : <span>Troubles du comportement ADC, délire de grandeur ELO, syndrome du tipeux-manager</span></div>
+        </div>
+        <div>
+          <div class="psy-header-field">Praticien : <span>Dr. Failleur, Psychiatre du Jeu Vidéo</span></div>
+          <div class="psy-header-field">Dossier : <span>#13061 messages, #qq-only, 2019–2026</span></div>
+          <div class="psy-header-field">Classification : <span>CONFIDENTIEL — NE PAS MONTRER À RIOT GAMES</span></div>
+        </div>
+      </div>
+
+      <div class="psy-block">
+        <div class="psy-block-title">I. Diagnostics principaux (DSM-LoL-5)</div>
+        <div class="psy-text">
+          Après lecture exhaustive du corpus documentaire, le comité clinique a identifié les troubles suivants, présentés par ordre de sévérité croissante :
+          <br><br>
+          <span class="psy-dsm">F60.0 — Personnalité ADC Narcissique</span>
+          <span class="psy-dsm">F42.1 — TOC du Système de Rang</span>
+          <span class="psy-dsm">Z72.8 — Tipeux Management Compulsif</span>
+          <span class="psy-dsm">F10.2x — Dépendance à la Rhétorique de Pazification</span>
+          <span class="psy-dsm">F60.8 — Trouble de la Personnalité Draven-Centrée</span>
+          <br><br>
+          Le patient présente un tableau clinique cohérent et stable sur 7 ans, ce qui témoigne d'une <strong>solidité psychique remarquable</strong> (bien que son expression soit fortement pathologique). Il ne se dégrade pas — il s'approfondit.
+        </div>
+      </div>
+
+      <div class="psy-block">
+        <div class="psy-block-title">II. Observations cliniques</div>
+        <div class="psy-text">
+          Le patient croit sincèrement que <em>« le meilleur ADC gagne toujours »</em>, théorie qu'il défend depuis au moins 2021 avec une constance qui forcerait l'admiration des philosophes stoïciens. Cette conviction fonctionne comme un <strong>axiome non falsifiable</strong> : quand il gagne, c'est la preuve que la théorie est vraie ; quand il perd, c'est la preuve que les coéquipiers ont sabordé l'expérience. On notera la beauté épistémologique du système.
+
+          <br><br>Le délire de compétence tutélaire se manifeste dans l'organisation d'un <strong>système de tipeux</strong> : le patient classe ses pairs en « tipeux » (subordonnés nécessitant guidance) et « frères » (égaux reconnus). Cette hiérarchisation n'est pas perçue comme blessante par l'entourage — au contraire, elle semble être acceptée, voire valorisée, signe que le patient a une réelle autorité sociale dans son groupe.
+
+          <br><br>Extrait cliniquement significatif :
+          <br>
+          <em>« 4 ou 5 lanes gagnées sur 6 pour mon tipeu MPB pour l'instant sur cette saison, il a fait des progrès, c'est pas mal. »</em> (21 avril 2021) — Le patient évalue les performances de ses amis comme un coach évalue des protégés. Aucune ironie détectée dans le ton.
+
+          <br><br>Le <strong>syndrome de l'indigné structurel</strong> est également prononcé : le patient ne rage pas contre la chance ou la malchance — il rage contre des injustices systémiques. Chaque défaite est une injustice sociale, une faute de gouvernance de Riot Games, un échec institutionnel. Cette externalisation totale de la responsabilité est accompagnée, paradoxalement, d'une <strong>prise en charge totale du mérite</strong> en cas de victoire. <em>« C moi qui ai solowin »</em> (8 septembre 2024) : 5 mots, aucun doute, aucune attribution externe.
+        </div>
+      </div>
+
+      <div class="psy-block">
+        <div class="psy-block-title">III. Déclencheurs et mécanismes de défense</div>
+        <div class="psy-text">
+          <strong>Déclencheurs primaires :</strong> support autofill, jungler passif, toplane broken, mage en ADC, Riot nerfs, perte de LP en soloq, être pris comme référence négative par MPB ou GK.
+          <br><br>
+          <strong>Mécanismes de défense observés :</strong>
+          <br>— <em>Intellectualisation</em> : transforme la rage en analyse tactique sur 10 messages.
+          <br>— <em>Déplacement</em> : reporte la frustration ranked sur la critique de Riot Games.
+          <br>— <em>Formation réactionnelle</em> : après une lose streak, proclame haut et fort l'inutilité de l'ELO comme indicateur de niveau.
+          <br>— <em>Humour absurde</em> : en cas d'impasse argumentative, bascule dans le registre charabia (<em>« WSH igozent SDK Persoent bicravax MOULAGA »</em>, 22 avril 2021) — mécanisme de fuite élégant.
+          <br><br>
+          <strong>Remarque clinique :</strong> le patient semble avoir développé une remarquable résistance au doute. Dans l'ensemble du corpus (13 061 messages), les occurrences d'auto-remise en question sincère et non rhétorique se comptent sur les doigts d'une main de support Yuumi autofill.
+        </div>
+      </div>
+
+      <div class="psy-block">
+        <div class="psy-block-title">IV. Pronostic de guérison</div>
+        <div class="psy-text">
+          <strong>Défavorable.</strong> Non pas parce que le patient souffre — au contraire, il semble épanoui dans son système de pensée — mais parce qu'il ne perçoit aucun trouble à traiter. Le pronostic de guérison nécessite une prise de conscience pathologique que le comité clinique juge <strong>hautement improbable</strong>. Le patient atteindra probablement Grandmaster avant d'admettre qu'un support a pu, une fois, faire la différence.
+        </div>
+      </div>
+
+      <div class="ordonnance">
+        <div class="ordonnance-title">℞ ORDONNANCE MÉDICALE — À RENOUVELER APRÈS CHAQUE SAISON</div>
+        <div class="ordonnance-item"><span class="rx">℞</span> <span><strong>Copiumax® 500mg</strong> — 1 comprimé après chaque défaite en ranked, à avaler avec un clip de Faker montrant qu'un ADC peut perdre</span></div>
+        <div class="ordonnance-item"><span class="rx">℞</span> <span><strong>Tipewatcher Pro®</strong> — Surveillance des tipeux 2× par semaine maximum, éviter l'overdose de bilan de saison</span></div>
+        <div class="ordonnance-item"><span class="rx">℞</span> <span><strong>Supporticide® (spray nasal)</strong> — À utiliser avant de se mettre en file avec un autofill support, effet calmant sur l'amygdale</span></div>
+        <div class="ordonnance-item"><span class="rx">℞</span> <span><strong>Serumez® (homéopathique)</strong> — 3 granules de « peut-être que le meilleur ADC perd quand même parfois », sous la langue, avant le coucher</span></div>
+        <div class="ordonnance-item"><span class="rx">℞</span> <span><strong>Pazithérapie® groupe</strong> — Sessions hebdomadaires de pazification contrôlée en environnement sécurisé (Académie JCS conseillée)</span></div>
+        <div class="ordonnance-footer">
+          Signature : Dr. Failleur — Spécialiste en Soloq Pathologique & Troubles de la Botlane<br>
+          ⚠️ Ce médicament ne peut être pris en charge qu'en cas de Diamant ou plus
+        </div>
+      </div>
+
+    </div><!-- /psy-section -->
+
+    <!-- ═══════ VERDICT ═══════ -->
+    <div class="verdict-section">
+      <div class="section-title" style="color:var(--teal); justify-content:center;">Verdict final</div>
+      <div class="verdict-text">
+        Manigoldo est <span class="accent">un procureur égaré dans une arène de gladiateurs</span> — il a raison sur tout, perd quand même, et en tire une philosophie. Main ADC depuis l'aube du Système de Rang, il a transformé la soloq en <span class="accent2">tribunal permanent</span> où il occupe simultanément les rôles de juge, procureur et victime du système. Ses tipeux l'aiment, ses rivaux le respectent en silence, et Riot Games ne sait pas qu'il existe — <span class="accent">ce qui est objectivement leur problème</span>. En sept ans et treize mille messages, une constante : il n'a jamais douté. Et c'est peut-être la chose la plus impressionnante que ce dossier révèle.
+      </div>
+      <div class="verdict-stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star empty"></div>
+      </div>
+      <div class="verdict-sig">4/5 — Aurait 5/5 si le meilleur ADC gagnait vraiment toujours · Généré par Clinique du Tilté Chronique © 2026</div>
+    </div>
+
+  </div><!-- /content-left -->
+
+  <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <div class="content-right sidebar">
+
+    <!-- Activité par année -->
+    <div class="section">
+      <div class="section-title">Activité par année</div>
+      <div class="year-bars">
+        <div class="year-row">
+          <div class="year-label">2019</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:5.4%">183</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2020</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:0.4%"></div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2021</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:100%">3 464</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2022</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:55%">1 913</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2023</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:81%">2 818</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2024</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:98%">3 389</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2025</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:25%">852</div>
+          </div>
+        </div>
+        <div class="year-row">
+          <div class="year-label">2026</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" style="width:12%">430</div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:10px; font-size:10px; color:var(--text-dim); letter-spacing:1px;">2021 : ANNÉE DU GRAND RÉVEIL · 2022 : PAUSE MYSTÈRE · 2024 : RENAISSANCE</p>
+    </div>
+
+    <!-- Relations sociales -->
+    <div class="section">
+      <div class="section-title">Graphe social</div>
+      <div class="relation-item">
+        <div class="rel-dot rel-ami"></div>
+        <div class="rel-name">GK</div>
+        <div class="rel-desc">Rival-ami principal. Sujet de 464 mentions. Manigoldo le montre, le commente, le « pazifie » et le défend selon les jours.</div>
+        <div class="rel-count">464×</div>
+      </div>
+      <div class="relation-item">
+        <div class="rel-dot rel-disciple"></div>
+        <div class="rel-name">MPB</div>
+        <div class="rel-desc">Tipeux n°1. Mani suit sa progression avec l'attention d'un coach. Amour vache garanti.</div>
+        <div class="rel-count">357×</div>
+      </div>
+      <div class="relation-item">
+        <div class="rel-dot rel-rival"></div>
+        <div class="rel-name">Karma</div>
+        <div class="rel-desc">Accusé de « stuck plat » et d'incompétence tactique. Cible favorite lors des grandes tirades.</div>
+        <div class="rel-count">120×</div>
+      </div>
+      <div class="relation-item">
+        <div class="rel-dot rel-neutre"></div>
+        <div class="rel-name">Elilos</div>
+        <div class="rel-desc">Référence ADC respectée. Comparaison fréquente pour étalonner les niveaux.</div>
+        <div class="rel-count">104×</div>
+      </div>
+      <div class="relation-item">
+        <div class="rel-dot rel-rival"></div>
+        <div class="rel-name">Merko</div>
+        <div class="rel-desc">Présence récurrente dans les discussions académie. Tensions documentées.</div>
+        <div class="rel-count">98×</div>
+      </div>
+      <div class="relation-item">
+        <div class="rel-dot rel-disciple"></div>
+        <div class="rel-name">Ransberg</div>
+        <div class="rel-desc">Autre tipeux dans l'orbite. Comparé à MPB pour établir une hiérarchie.</div>
+        <div class="rel-count">59×</div>
+      </div>
+    </div>
+
+    <!-- Sujets hors LoL -->
+    <div class="section">
+      <div class="section-title">Vie hors Faille</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="padding:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:2px;">
+          <div style="font-family:'Rajdhani',sans-serif; font-size:12px; color:var(--teal); letter-spacing:1px; margin-bottom:4px;">COMPÉTITIF AMATEUR</div>
+          <div style="font-size:12px; color:var(--text-dim); line-height:1.5;">JCS, Académie LoL, scrims, tournois. C'est son vrai deuxième univers. Il se considère une figure du circuit.</div>
+        </div>
+        <div style="padding:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:2px;">
+          <div style="font-family:'Rajdhani',sans-serif; font-size:12px; color:var(--teal); letter-spacing:1px; margin-bottom:4px;">VIE SOCIALE & TRAVAIL</div>
+          <div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Cours de salsa, quidditch (sic), télétravail, stack de SMICs, boulot mentionné sporadiquement.</div>
+        </div>
+        <div style="padding:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:2px;">
+          <div style="font-family:'Rajdhani',sans-serif; font-size:12px; color:var(--teal); letter-spacing:1px; margin-bottom:4px;">HUMOUR & CULTURE</div>
+          <div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Références One Piece (Gorosei), sport, mèmes Discord, saillies médiévales précieuses.</div>
+        </div>
+        <div style="padding:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:2px;">
+          <div style="font-family:'Rajdhani',sans-serif; font-size:12px; color:var(--teal); letter-spacing:1px; margin-bottom:4px;">PHILOSOPHIE DE VIE</div>
+          <div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Solidarité inter-communautaire, hiérarchie sociale nette, loyauté envers son groupe, méfiance des outsiders.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profil joueur synthèse -->
+    <div class="section">
+      <div class="section-title">Profil Joueur — Synthèse</div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>NIVEAU DE RAGE</span><span style="color:var(--red);">78 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:78%; height:100%; background:linear-gradient(90deg,var(--purple),var(--red));"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>CONFIANCE EN SOI</span><span style="color:var(--red);">96 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:96%; height:100%; background:linear-gradient(90deg,var(--purple),var(--red));"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>ANALYSE TACTIQUE</span><span style="color:var(--red);">85 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:85%; height:100%; background:linear-gradient(90deg,var(--purple),var(--red));"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>HUMILITÉ</span><span style="color:var(--teal);">12 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:12%; height:100%; background:linear-gradient(90deg,var(--teal),var(--purple));"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>FIDÉLITÉ AU GROUPE</span><span style="color:var(--red);">91 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:91%; height:100%; background:linear-gradient(90deg,var(--purple),var(--red));"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px; color:var(--text-dim);">
+            <span>FAIR-PLAY (envers amis)</span><span style="color:var(--red);">74 / 100</span>
+          </div>
+          <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+            <div style="width:74%; height:100%; background:linear-gradient(90deg,var(--purple),var(--red));"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /main -->
+
+<script>
+// ═══ Chart activité horaire ═══
+const hourlyData = {"0":218,"1":159,"2":41,"3":4,"4":4,"5":31,"6":49,"7":64,"8":378,"9":682,"10":842,"11":1124,"12":1109,"13":1161,"14":1092,"15":956,"16":736,"17":811,"18":704,"19":536,"20":606,"21":639,"22":688,"23":427};
+
+const canvas = document.getElementById('hourlyChart');
+const ctx = canvas.getContext('2d');
+
+const hours = Array.from({length:24}, (_,i) => i);
+const vals = hours.map(h => hourlyData[h] || 0);
+const maxVal = Math.max(...vals);
+
+canvas.width = canvas.parentElement.clientWidth * 2;
+canvas.height = 220;
+canvas.style.height = '110px';
+
+const W = canvas.width;
+const H = canvas.height;
+const padL = 10, padR = 10, padT = 20, padB = 40;
+const chartW = W - padL - padR;
+const chartH = H - padT - padB;
+const barW = chartW / 24;
+
+ctx.clearRect(0, 0, W, H);
+
+hours.forEach((h, i) => {
+  const v = vals[i];
+  const barH = (v / maxVal) * chartH;
+  const x = padL + i * barW;
+  const y = padT + chartH - barH;
+
+  // Color: peak in red, others in purple gradient
+  const intensity = v / maxVal;
+  if (h === 13) {
+    ctx.fillStyle = '#e94560';
+  } else if (intensity > 0.8) {
+    ctx.fillStyle = '#b03a5a';
+  } else {
+    const alpha = 0.3 + intensity * 0.5;
+    ctx.fillStyle = `rgba(123,82,200,${alpha})`;
+  }
+
+  ctx.fillRect(x + 2, y, barW - 4, barH);
+
+  // Hour label
+  if (h % 4 === 0 || h === 13) {
+    ctx.fillStyle = h === 13 ? '#e94560' : '#666688';
+    ctx.font = `${22}px monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(h + 'h', x + barW / 2, H - 10);
+  }
+
+  // Value label on peak
+  if (h === 13) {
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `bold 22px monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(v, x + barW / 2, y - 8);
+  }
+});
+
+// Axes
+ctx.strokeStyle = 'rgba(83,52,131,0.3)';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(padL, padT + chartH);
+ctx.lineTo(W - padR, padT + chartH);
+ctx.stroke();
+</script>
+
+</body>
+</html>
