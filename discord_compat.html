@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISCORD COMPATIBILITY — Serveur Politique 2021–2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg: #0e0c14;
+  --bg2: #13111d;
+  --bg3: #1a1726;
+  --card: #1e1b2e;
+  --card2: #252240;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --purple: #533483;
+  --purple2: #7b4fcc;
+  --purple3: #9e6ef5;
+  --red: #e94560;
+  --red2: #ff6b6b;
+  --gold: #f0a500;
+  --green: #3dffc0;
+  --text: #e8e6f0;
+  --text2: #9490b8;
+  --text3: #5a5575;
+  --mono: 'DM Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --sans: 'Syne', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+/* ── BG GLOWS ── */
+.bg-glow { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+.bg-glow-1 { width: 500px; height: 500px; background: var(--purple); top: -150px; left: -150px; opacity: 0.08; animation: drift 18s ease-in-out infinite; }
+.bg-glow-2 { width: 400px; height: 400px; background: var(--red); bottom: -100px; right: -100px; opacity: 0.07; animation: drift 24s ease-in-out infinite reverse; }
+@keyframes drift { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px,40px); } }
+
+/* ── HEADER ── */
+.header {
+  position: relative; z-index: 1;
+  padding: 50px 40px 40px;
+  border-bottom: 1px solid var(--border2);
+  background: linear-gradient(180deg, rgba(83,52,131,0.12) 0%, transparent 100%);
+  text-align: center;
+}
+.header-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--purple3);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.header h1 {
+  font-family: var(--display);
+  font-size: clamp(48px, 8vw, 90px);
+  letter-spacing: 0.05em;
+  line-height: 0.9;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.header h1 span { color: var(--red); }
+.header-sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text3);
+  letter-spacing: 0.15em;
+}
+.header-stats {
+  display: flex; justify-content: center; gap: 40px;
+  margin-top: 28px; flex-wrap: wrap;
+}
+.hstat { text-align: center; }
+.hstat-val { font-family: var(--display); font-size: 32px; color: var(--red); }
+.hstat-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.1em; }
+
+/* ── MAIN CONTAINER ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1; }
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.25em; color: var(--text3); text-transform: uppercase;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── SELECTOR CARD ── */
+.selector-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.selector-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--red), var(--purple));
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+
+.selector-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: end; }
+@media(max-width:680px) { .selector-grid { grid-template-columns: 1fr; } }
+
+.select-group { display: flex; flex-direction: column; gap: 8px; }
+.select-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.2em; }
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--purple3); pointer-events: none; font-size: 14px;
+}
+select {
+  width: 100%; appearance: none;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 14px 40px 14px 16px;
+  color: var(--text); font-family: var(--sans); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: border-color 0.2s;
+}
+select:focus { outline: none; border-color: var(--purple3); }
+select option { background: var(--bg2); }
+
+.vs-badge {
+  display: flex; align-items: center; justify-content: center; padding-bottom: 2px;
+  font-family: var(--display); font-size: 28px; color: var(--red);
+  letter-spacing: 0.1em;
+}
+
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--sans); font-size: 13px; font-weight: 700;
+  padding: 11px 20px; border-radius: 10px; cursor: pointer;
+  border: 1px solid transparent; letter-spacing: 0.05em;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--purple) 0%, var(--red) 100%);
+  border-color: transparent; color: #fff;
+  flex: 1; min-width: 180px; font-size: 14px; padding: 14px 24px;
+}
+.btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary { background: var(--bg2); border-color: var(--border2); color: var(--text2); }
+.btn-secondary:hover { border-color: var(--purple3); color: var(--text); }
+.btn-danger { background: rgba(233,69,96,0.12); border-color: rgba(233,69,96,0.3); color: var(--red2); }
+.btn-danger:hover { background: rgba(233,69,96,0.2); }
+.btn-gold { background: rgba(240,165,0,0.12); border-color: rgba(240,165,0,0.3); color: var(--gold); }
+.btn-gold:hover { background: rgba(240,165,0,0.22); }
+.btn-green { background: rgba(61,255,192,0.1); border-color: rgba(61,255,192,0.25); color: var(--green); }
+.btn-green:hover { background: rgba(61,255,192,0.2); }
+
+/* ── LOADING ── */
+.loading-screen {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 60px 32px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.loading-screen.active { display: block; }
+.loading-title {
+  font-family: var(--display);
+  font-size: 36px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.loading-sub { font-family: var(--mono); font-size: 12px; color: var(--text3); margin-bottom: 32px; }
+.loading-bar-track {
+  height: 4px; background: var(--bg); border-radius: 2px;
+  max-width: 400px; margin: 0 auto 24px;
+  overflow: hidden;
+}
+.loading-bar-fill {
+  height: 100%; width: 0%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--red));
+  transition: width 0.1s linear;
+}
+.loading-step { font-family: var(--mono); font-size: 11px; color: var(--purple3); min-height: 18px; }
+
+/* ── RESULT CARD ── */
+.result-card {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  animation: fadeIn 0.5s ease;
+}
+.result-card.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── RESULT HEADER ── */
+.result-header {
+  padding: 36px 32px 28px;
+  background: linear-gradient(135deg, rgba(83,52,131,0.15) 0%, rgba(233,69,96,0.1) 100%);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+}
+@media(max-width:600px) { .result-header { grid-template-columns: 1fr; text-align: center; } }
+.member-tag {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.member-tag.right { align-items: flex-end; }
+@media(max-width:600px) { .member-tag.right { align-items: flex-start; } }
+.member-name {
+  font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; color: var(--text);
+}
+.member-desc { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+.score-center { text-align: center; }
+.score-number {
+  font-family: var(--display); font-size: 72px; letter-spacing: -2px; line-height: 1;
+}
+.score-pct { font-family: var(--display); font-size: 28px; color: var(--text2); }
+.score-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.2em; margin-top: 4px; }
+
+/* ── GLOBAL GAUGE ── */
+.global-gauge-section { padding: 28px 32px 20px; border-bottom: 1px solid var(--border); }
+.gauge-track {
+  height: 12px; background: var(--bg); border-radius: 6px;
+  overflow: hidden; margin: 10px 0;
+}
+.gauge-fill {
+  height: 100%; width: 0%; border-radius: 6px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gauge-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+/* ── DIMENSIONS ── */
+.dimensions-section { padding: 28px 32px; border-bottom: 1px solid var(--border); }
+.dimensions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:640px) { .dimensions-grid { grid-template-columns: 1fr; } }
+
+.dim-item { }
+.dim-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.dim-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.dim-score { font-family: var(--mono); font-size: 12px; color: var(--text2); }
+.dim-bar-track { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.dim-bar-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* ── VERDICT ── */
+.verdict-section { padding: 28px 32px; border-bottom: 1px solid var(--border); }
+.verdict-box {
+  background: var(--bg2); border-radius: 12px; padding: 20px 24px;
+  border-left: 3px solid var(--purple3);
+  font-size: 15px; line-height: 1.7; color: var(--text);
+  font-style: italic;
+}
+.verdict-phrase {
+  font-family: var(--display); font-size: 20px; letter-spacing: 0.05em;
+  color: var(--text); margin-bottom: 14px; font-style: normal;
+}
+
+/* ── DYNAMIC SECTION ── */
+.dynamic-section { padding: 28px 32px; border-bottom: 1px solid var(--border); }
+.dynamic-text { font-size: 14px; line-height: 1.8; color: var(--text2); }
+.dynamic-text strong { color: var(--text); }
+
+/* ── DISCORD CHAT ── */
+.chat-section { padding: 28px 32px; border-bottom: 1px solid var(--border); }
+.chat-box {
+  background: #1e1f22;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.chat-header {
+  background: #2b2d31;
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chat-channel { font-family: var(--mono); font-size: 12px; color: #8d8fa3; }
+.chat-channel::before { content: '#'; margin-right: 4px; color: #5d5f77; }
+.chat-messages { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.chat-msg { display: flex; gap: 12px; }
+.chat-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; flex-shrink: 0; font-family: var(--sans);
+}
+.chat-content { flex: 1; }
+.chat-name-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+.chat-name { font-size: 14px; font-weight: 700; }
+.chat-time { font-family: var(--mono); font-size: 10px; color: #5d5f77; }
+.chat-text { font-size: 14px; color: #dcddde; line-height: 1.6; }
+.chat-text em { color: #b0b3c0; font-style: italic; }
+
+/* ── PRONOSTIC ── */
+.pronostic-section { padding: 28px 32px; border-bottom: 1px solid var(--border); }
+.pronostic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:560px) { .pronostic-grid { grid-template-columns: 1fr; } }
+.pronostic-item {
+  background: var(--bg2); border-radius: 10px; padding: 16px;
+  border: 1px solid var(--border);
+}
+.pronostic-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.15em; margin-bottom: 6px; }
+.pronostic-val { font-size: 14px; font-weight: 600; }
+
+/* ── ANECDOTE ── */
+.anecdote-section { padding: 28px 32px; }
+.anecdote-box {
+  background: var(--bg2); border-radius: 12px; padding: 20px 24px;
+  border-left: 3px solid var(--red);
+}
+.anecdote-title { font-family: var(--mono); font-size: 10px; color: var(--red); letter-spacing: 0.2em; margin-bottom: 10px; }
+.anecdote-text { font-size: 14px; line-height: 1.8; color: var(--text2); }
+
+/* ── HISTORY ── */
+.history-section { margin-bottom: 24px; }
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+.history-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.history-item:hover { border-color: var(--purple3); }
+.history-pair { font-size: 14px; font-weight: 600; flex: 1; }
+.history-score {
+  font-family: var(--mono); font-size: 13px; font-weight: 700;
+}
+
+/* ── TOURNAMENT ── */
+.tournament-section {
+  display: none;
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 16px; padding: 28px 32px; margin-bottom: 24px;
+}
+.tournament-section.active { display: block; animation: fadeIn 0.4s ease; }
+.tournament-title {
+  font-family: var(--display); font-size: 32px; letter-spacing: 0.08em;
+  color: var(--text); margin-bottom: 8px;
+}
+.tournament-grid {
+  display: flex; gap: 20px; overflow-x: auto;
+  padding: 20px 0; margin-top: 20px;
+}
+.tournament-round { min-width: 160px; display: flex; flex-direction: column; gap: 12px; }
+.round-title { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.15em; margin-bottom: 4px; }
+.tournament-match {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px;
+  font-size: 12px;
+}
+.tournament-match .winner { color: var(--green); font-weight: 700; }
+.tournament-match .loser { color: var(--text3); text-decoration: line-through; }
+.tournament-champion {
+  background: linear-gradient(135deg, rgba(83,52,131,0.3), rgba(233,69,96,0.2));
+  border: 1px solid var(--purple3);
+  border-radius: 10px; padding: 14px 16px; text-align: center;
+  margin-top: 12px;
+}
+.champion-label { font-family: var(--mono); font-size: 10px; color: var(--gold); letter-spacing: 0.15em; }
+.champion-name { font-family: var(--display); font-size: 24px; color: var(--text); margin-top: 4px; }
+
+/* ── SCROLL ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="header">
+  <div class="header-eyebrow">Serveur Discord Privé · Francophone · Canal Politique · 2021–2026</div>
+  <h1>DISCORD<br><span>COMPAT</span></h1>
+  <div class="header-sub">ANALYSE DE COMPATIBILITÉ INTER-MEMBRES · 16 PROFILS · 120 PAIRES</div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-val">16</div><div class="hstat-label">Membres</div></div>
+    <div class="hstat"><div class="hstat-val">120</div><div class="hstat-label">Paires</div></div>
+    <div class="hstat"><div class="hstat-val">4 ans</div><div class="hstat-label">Données</div></div>
+    <div class="hstat"><div class="hstat-val">~90k</div><div class="hstat-label">Messages analysés</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SELECTOR -->
+  <div class="section-label">Sélection des membres</div>
+  <div class="selector-card">
+    <div class="selector-grid">
+      <div class="select-group">
+        <div class="select-label">MEMBRE A</div>
+        <div class="select-wrap">
+          <select id="selectA">
+            <option value="">— Choisir un membre —</option>
+          </select>
+        </div>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="select-group">
+        <div class="select-label">MEMBRE B</div>
+        <div class="select-wrap">
+          <select id="selectB">
+            <option value="">— Choisir un membre —</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="analyze()">⚡ ANALYSER LA COMPATIBILITÉ</button>
+      <button class="btn btn-secondary" onclick="randomPair()">🎲 Paire aléatoire</button>
+      <button class="btn btn-danger" onclick="worstPair()">💀 Pire paire</button>
+      <button class="btn btn-green" onclick="bestPair()">💚 Meilleure paire</button>
+      <button class="btn btn-gold" onclick="startTournament()">🏆 Mode Tournoi</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-title">ANALYSE EN COURS</div>
+    <div class="loading-sub" id="loadingNames"></div>
+    <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBar"></div></div>
+    <div class="loading-step" id="loadingStep"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+
+    <div class="result-header">
+      <div class="member-tag">
+        <div class="member-name" id="nameA"></div>
+        <div class="member-desc" id="descA"></div>
+      </div>
+      <div class="score-center">
+        <div class="score-number" id="scoreNum">--</div>
+        <div class="score-pct">%</div>
+        <div class="score-label">COMPATIBILITÉ GLOBALE</div>
+      </div>
+      <div class="member-tag right">
+        <div class="member-name" id="nameB"></div>
+        <div class="member-desc" id="descB"></div>
+      </div>
+    </div>
+
+    <div class="global-gauge-section">
+      <div class="section-label">Score global</div>
+      <div class="gauge-track"><div class="gauge-fill" id="globalGauge"></div></div>
+      <div class="gauge-labels"><span>💀 Explosif</span><span>⚖️ Neutre</span><span>💚 Harmonieux</span></div>
+    </div>
+
+    <div class="dimensions-section">
+      <div class="section-label">8 Dimensions</div>
+      <div class="dimensions-grid" id="dimensionsGrid"></div>
+    </div>
+
+    <div class="verdict-section">
+      <div class="section-label">Verdict</div>
+      <div class="verdict-box">
+        <div class="verdict-phrase" id="verdictPhrase"></div>
+        <div id="verdictText"></div>
+      </div>
+    </div>
+
+    <div class="dynamic-section">
+      <div class="section-label">Dynamique relationnelle</div>
+      <div class="dynamic-text" id="dynamicText"></div>
+    </div>
+
+    <div class="chat-section">
+      <div class="section-label">Citation croisée fictive</div>
+      <div class="chat-box">
+        <div class="chat-header"><span class="chat-channel">politique</span></div>
+        <div class="chat-messages" id="chatMessages"></div>
+      </div>
+    </div>
+
+    <div class="pronostic-section">
+      <div class="section-label">Pronostic</div>
+      <div class="pronostic-grid" id="pronosticGrid"></div>
+    </div>
+
+    <div class="anecdote-section">
+      <div class="section-label">Anecdote probable</div>
+      <div class="anecdote-box">
+        <div class="anecdote-title">FICTION PLAUSIBLE</div>
+        <div class="anecdote-text" id="anecdoteText"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-section" id="historySection" style="display:none">
+    <div class="section-label">Historique de session</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <!-- TOURNAMENT -->
+  <div class="tournament-section" id="tournamentSection">
+    <div class="tournament-title">🏆 TOURNOI DES DÉBATS</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--text3)">Simulation : qui survivrait à une série de débats sur le canal politique ?</div>
+    <div class="tournament-grid" id="tournamentGrid"></div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  MEMBRES DATA
+// ══════════════════════════════════════════════
+const MEMBERS = {
+  mpb: { name: "mpb", full: "monpotestbon", desc: "Souverainiste anti-libéral · Ragebaiteur philosophique", color: "#e94560", emoji: "👑" },
+  arok: { name: "arok", full: ".arok.", desc: "Libéral-conservateur · Anti-golem certifié", color: "#9e6ef5", emoji: "📊" },
+  lyd: { name: "Lyd", full: "RATS | Lyd", desc: "Marxiste analytique · Futur rentier assumé", color: "#a78bfa", emoji: "⚖️" },
+  shaars: { name: "SHAars", full: "RATS | SHAars", desc: "Gaulliste étatiste · Sourceur compulsif", color: "#3a9fff", emoji: "📌" },
+  sinnoh: { name: "sinnoh", full: "Sacha / .sinnoh", desc: "Catholique doctrinal · Libéral monarchiste", color: "#7c6af7", emoji: "✝️" },
+  forandos: { name: "forandos", full: "forandos", desc: "Libéral décliniste · Calculateur compulsif", color: "#5b8aff", emoji: "📉" },
+  foudulabo: { name: "foudulabo", full: "le fou du labo", desc: "Gauche radicale · Absurdiste chronique", color: "#3dffc0", emoji: "🧪" },
+  maw: { name: "Maw Lotov", full: "Maw Lotov", desc: "Ironiste droitard de gauche · Prof EN Brest", color: "#a855f7", emoji: "🎭" },
+  merko: { name: "merk0", full: "merk0", desc: "Anti-libéral · Contradicteur compulsif", color: "#ff6b6b", emoji: "⚡" },
+  dorian: { name: "Dorian", full: "Dorian", desc: "Droite populiste pragmatique · One-liner specialist", color: "#60c080", emoji: "🔍" },
+  kaspei: { name: "Kaspei", full: "Kaspei / tiisolz", desc: "Libéral économique · Pédagogue compulsif", color: "#60a0e9", emoji: "📚" },
+  yabaphi: { name: "yabaphi", full: "yabaphi", desc: "Droite dure identitaire · Complotiste assumé", color: "#f0c040", emoji: "🌶️" },
+  raydo: { name: "Raydo", full: "Raydo", desc: "Nationaliste souverainiste · Idéologue du groupe", color: "#c084fc", emoji: "⚔️" },
+  udf: { name: "UDF", full: "udyrdefeu", desc: "Centre-droit pragmatique · Provocateur lucide", color: "#f97316", emoji: "🐺" },
+  yoob: { name: "yoob", full: "yoobastard", desc: "Boucher-propriétaire · Observateur pragmatique", color: "#ffc947", emoji: "🥩" },
+  zoller: { name: "zoller", full: "zoller.lol", desc: "Droite libérale décliniste · Pongiste philosophe", color: "#ff7c3a", emoji: "🏓" },
+};
+
+const MEMBER_KEYS = Object.keys(MEMBERS);
+
+// ══════════════════════════════════════════════
+//  COMPATIBILITY DATABASE — ALL 120 PAIRS
+//  Format: { global, dims:[intel,clash,pol,humor,gaming,alliance,toxicity,compl], verdict, phrase, dynamic, chat, pronostic, anecdote }
+//  dims: higher = better (except clash & toxicity)
+// ══════════════════════════════════════════════
+const COMPAT = {};
+
+function setPair(a, b, data) {
+  const key = [a,b].sort().join('__');
+  COMPAT[key] = data;
+}
+
+setPair('mpb','arok', {
+  global: 42,
+  dims: [72, 88, 22, 65, 50, 20, 82, 35],
+  phrase: "Le marteau rencontre l'enclume — et personne ne bouge d'un millimètre.",
+  verdict: "Relation de complicité conflictuelle fondatrice. Arok est l'adversaire dialectique attitré de MPB depuis le premier jour. Leurs positions divergent radicalement — libéral vs souverainiste, pro-méritocratie vs critique de l'élite — mais leurs styles sont suffisamment proches (assertifs, sans retenue) pour que les échanges durent des heures sans résolution.",
+  dynamic: "MPB domine par le volume et la véhémence. Arok contre-attaque avec ironie et citations directes. Arok est la <strong>cible préférée</strong> de MPB (\"golem originel\", \"happiness manager\"). Paradoxalement c'est une relation de respect mutuel camouflée sous des coups de boutoir permanents. Sur les retraites, l'économie et la méritocratie : clash systématique. Sur la critique de l'élite politique : accord surprenant.",
+  chat: [
+    { member: 'mpb', text: "Arok tu vas pas me faire croire que privatiser les retraites c'est une solution sérieuse. T'as 25 ans et tu régurgites du think tank." },
+    { member: 'arok', text: "nan nan nan, moi je distingue ce que je veux perso et ce qui est souhaitable pour la société. Tu comprends même pas la question." },
+    { member: 'mpb', text: "\"Je distingue\" — c'est ça le cope libéral : habiller son intérêt de classe en philosophie politique. GG." },
+    { member: 'arok', text: "ouais et toi t'habilles ta nostalgie gaulliste en programme socialiste. Je préfère être honnête sur ce que je défends." },
+    { member: 'mpb', text: "Sur tous mes ancêtres je préfère encore l'honnêteté de classe de Lyd à ton libéralisme assumé. Au moins lui il sait ce qu'il fait." },
+  ],
+  pronostic: { type: "💥 EXPLOSIVE", sante: "Saine sur le fond, toxique dans la forme", topic: "Réforme des retraites, méritocratie" },
+  anecdote: "Lors du débat sur la réforme des retraites de mars 2023, Arok pose une thèse libérale argumentée sur la capitalisation. MPB répond avec 8 messages d'affilée en caps lock. Arok répond avec un seul message : \"Je suis intimement convaincu à l'inverse de mpb que nos politiciens sont des clowns\" — et part déjeuner. MPB continue à débattre contre lui pendant 20 minutes sans qu'il soit là."
+});
+
+setPair('mpb','lyd', {
+  global: 68,
+  dims: [82, 55, 58, 55, 55, 70, 48, 72],
+  phrase: "Deux intellectuels de gauche qui lisent les mêmes bouquins mais arrivent aux conclusions opposées — et adorent ça.",
+  verdict: "Alliance contradictoire entre deux esprits analytiques partageant le même cadre marxiste de base, mais divergeant sur les conclusions pratiques. MPB est souverainiste culturel, Lyd est internationaliste sourcé. Leurs clashes sont denses mais productifs.",
+  dynamic: "Lyd est l'un des rares membres à tenir tête à MPB sur le plan académique — il cite le Conseil d'État là où MPB cite ses instincts. MPB respecte la rigueur mais déteste les conclusions. Lyd trouve MPB trop émotionnel sur les questions identitaires. Ils <strong>s'accordent sur la critique du capitalisme</strong> et divergent sur tout ce qui suit. Le débat est long, structuré, sans insultes, et ne se termine jamais.",
+  chat: [
+    { member: 'lyd', text: "Source ? T'affirmes que l'immigration fait baisser les salaires mais la méta-analyse JEEA 2012 dit exactement l'inverse sur les 15 dernières années." },
+    { member: 'mpb', text: "Je t'emmerde avec tes méta-analyses. La sociologie de terrain ça compte pas pour toi ?" },
+    { member: 'lyd', text: "la sociologie de terrain c'est de l'anecdote élevée en preuve. Je veux bien t'écouter si tu me cites Bourdieu en contexte." },
+    { member: 'mpb', text: "Bourdieu serait en train de me donner raison sur la fracture culturelle. T'as lu Les Héritiers ou juste la 4ème de couv ?" },
+    { member: 'lyd', text: "walklah t'as pas tort sur la fracture mais t'en déduis tout ce que tu veux. C'est pas une méthode." },
+  ],
+  pronostic: { type: "⚖️ PRODUCTIVE", sante: "Intellectuellement enrichissante, jamais résolue", topic: "Immigration, classes sociales, souveraineté" },
+  anecdote: "Lyd arrive dans un débat sur l'immigration avec 3 méta-analyses. MPB répond avec une anecdote de son quartier et une citation de Jancovici. Pendant 40 messages, ils ne parlent plus du même sujet sans s'en rendre compte. À la fin, Lyd demande : \"t'as pas de source ?\". MPB répond : \"Ma source c'est la réalité.\" Lyd pose un GIF de Philippot et sort du débat."
+});
+
+setPair('mpb','shaars', {
+  global: 55,
+  dims: [75, 65, 48, 50, 55, 52, 58, 60],
+  phrase: "Deux mâles dominants qui réclament tous les deux le titre de 'seul adulte dans la pièce'.",
+  verdict: "Relation de compétition pour le leadership intellectuel du serveur. Tous deux assertifs, tous deux sourceurs quand ça les arrange, tous deux convaincus d'avoir raison. Ils s'accordent sur l'anti-libéralisme économique et divergent sur l'identitaire.",
+  dynamic: "SHAars <strong>demande toujours une source</strong>, MPB répond avec véhémence. MPB accuse SHAars de gaullisme de façade, SHAars accuse MPB de sophisme. Sur l'économie, ils sont proches (anti-capitaliste tous les deux, étatistes). Sur l'immigration et la culture, le fossé est réel. Leur principal point d'accord : le mépris des libéraux purs.",
+  chat: [
+    { member: 'shaars', text: "Source ? Tu affirmes ça depuis 10 messages et t'as rien cité." },
+    { member: 'mpb', text: "Ma source c'est 15 ans d'observation du système éducatif depuis l'intérieur. Ça compte pas pour ton comité de lecture ?" },
+    { member: 'shaars', text: "Contrairement à certains ici je donne les sources. Wikipedia au moins c'est sourcé." },
+    { member: 'mpb', text: "Wikipedia édité par des stagiaires de Sciences Po c'est ta référence ? Beau gaullisme." },
+    { member: 'shaars', text: "T'es sérieux ? Tu fais du sophisme ad hominem là. Parle du fond." },
+  ],
+  pronostic: { type: "⚡ TENDUE", sante: "Compétition saine mais épuisante", topic: "Éducation nationale, immigration, laïcité" },
+  anecdote: "SHAars et MPB débattent de l'islam pendant 2h. À un moment, MPB cite une stat sans source. SHAars sort son \"Contrairement à certain ici je donne les sources\" rituel. MPB répond avec un gif de Pétain. SHAars nomme le sophisme. MPB dit que nommer le sophisme c'est du sophisme. Ils finissent par être d'accord sur le fond mais personne ne le reconnaît."
+});
+
+setPair('mpb','sinnoh', {
+  global: 38,
+  dims: [78, 85, 18, 45, 35, 22, 72, 55],
+  phrase: "Le matérialiste dialectique vs le théocrate libéral — un débat qui n'a aucune issue possible.",
+  verdict: "Incompatibilité fondamentale. MPB est athée viscéral, sinnoh est catholique de doctrine. MPB est souverainiste républicain, sinnoh veut abolir la République. MPB est économiquement de gauche, sinnoh est libéral classique. La seule chose qu'ils partagent : une anti-pathie pour les libéraux culturels.",
+  dynamic: "<strong>Sinnoh sort de la confrontation</strong> avec son \"Continue les insultes igo\" caractéristique. MPB est exaspéré par ce qu'il perçoit comme de la mauvaise foi théologique. Sinnoh trouve MPB cohérent mais ancré dans un paradigme républicain qu'il rejette en bloc. Leurs débats durent 5 messages puis sinnoh se désengage avec hauteur, ce qui enrage MPB.",
+  chat: [
+    { member: 'mpb', text: "Le jacobinisme a construit la laïcité qui a libéré les femmes de l'Église. T'as une alternative sérieuse ?" },
+    { member: 'sinnoh', text: "Le jacobinisme a tué le catholicisme en France et remplacé une autorité spirituelle par une paperasse républicaine. C'est ça ton émancipation." },
+    { member: 'mpb', text: "Donc ton programme c'est \"l'Église comme unique forme d'autorité\" ? T'es au courant qu'on est en 2025 ?" },
+    { member: 'sinnoh', text: "D'un pdv idéaliste, oui. D'un pdv réaliste je suis libéral classique. Les deux sont réconciliables via subsidiarité. Igo." },
+    { member: 'mpb', text: "\"Igo\" c'est ta façon d'admettre que t'as perdu le débat ?" },
+  ],
+  pronostic: { type: "💥 EXPLOSIVE", sante: "Improductive, laisse les deux frustrés", topic: "Laïcité, République, catholicisme" },
+  anecdote: "MPB lance un débat sur l'avortement. Sinnoh sort \"250k avortements en 2024 btw. Verdun tous les ans.\" MPB répond avec 12 messages d'argumentation pro-choix. Sinnoh répond \"Continue les insultes igo.\" MPB passe les 30 minutes suivantes à expliquer que ce n'est pas une insulte. Sinnoh est déjà passé à autre chose."
+});
+
+setPair('mpb','forandos', {
+  global: 52,
+  dims: [85, 70, 38, 55, 45, 42, 62, 68],
+  phrase: "Le pragmatiste décliniste vs l'idéaliste souverainiste — accord sur le diagnostic, désaccord total sur le traitement.",
+  verdict: "Deux cerveaux analytiques avec des corpus de données solides, mais des conclusions politiques qui divergent fondamentalement. Forandos est libéral, MPB est socialiste souverainiste. Leurs clashes sont de haute qualité intellectuelle et durent très longtemps.",
+  dynamic: "<strong>Forandos amène les chiffres</strong>, MPB amène le sens politique. Forandos trouve MPB trop émotionnel sur le culturel. MPB trouve forandos trop défaitiste (\"l'analogie Rome/USA c'est du cope intellectuel\"). Sur la dette, la démographie et l'état des finances publiques, ils sont souvent d'accord. Sur ce qu'il faut faire, jamais.",
+  chat: [
+    { member: 'forandos', text: "Le ratio actifs/retraités était à 4:1 en 1970 et est à 1.7:1 aujourd'hui. C'est arithmétiquement insoutenable." },
+    { member: 'mpb', text: "Arithmétiquement oui. Politiquement la solution c'est pas de taxer les travailleurs, c'est de taxer le capital." },
+    { member: 'forandos', text: "Le capital de qui ? T'as la même confusion que les partis de gauche — tu parles de \"le capital\" comme si c'était une entité. Chiffre moi ça." },
+    { member: 'mpb', text: "Je chiffre rien parce que le problème est politique avant d'être comptable. Tu fais le jeu des libéraux avec tes ratios." },
+    { member: 'forandos', text: "Petite liste non-exhaustive des gens qui ont dit \"le problème est politique\" pour éviter de regarder les chiffres : tous les politiciens français depuis 1981." },
+  ],
+  pronostic: { type: "🧠 INTELLECTUELLE", sante: "Dense et stimulante, rarement amicale", topic: "Retraites, dette, fiscalité" },
+  anecdote: "Forandos présente une tirade de 400 mots sur la dette souveraine avec 5 sources. MPB répond en 3 messages que les sources sont \"libérales\". Forandos demande ce que ça veut dire. Le débat dure 2h et se déplace sur la définition de la monnaie fiat. À la fin, forandos écrit \"LA MONNAIE FIAT EST UN MENSONGE\" en majuscules et sort. MPB est convaincu d'avoir gagné."
+});
+
+setPair('mpb','foudulabo', {
+  global: 62,
+  dims: [72, 58, 65, 68, 35, 62, 50, 62],
+  phrase: "La gauche de classe rencontre la gauche souverainiste — accord sur 70% des sujets, clash explosif sur les 30% restants.",
+  verdict: "Alliance naturelle sur l'économie, la critique du capitalisme et le mépris du libéralisme culturel bobo. Friction réelle sur les questions identitaires, religieuses et de laïcité. Foudulabo est plus rigoreux scientifiquement, MPB plus instinctif politiquement.",
+  dynamic: "Foudulabo cite des études avec rigueur, MPB cite son vécu de prof. Sur la lutte des classes : accord total. Sur l'islam et l'identité nationale : <strong>désaccord structurel</strong>. Foudulabo est internationaliste, MPB est nationaliste de gauche. L'humour absurdiste de foudulabo désamorce souvent les tensions avant qu'elles n'explosent.",
+  chat: [
+    { member: 'foudulabo', text: "Le RN c'est vote de petit bourgeois ou de prolo raciste désabusé par la gauche souvent. Dans les deux cas c'est une erreur d'analyse de classe." },
+    { member: 'mpb', text: "\"Raciste désabusé\" c'est exactement le mépris de classe que tu critiques. Les classes populaires ont des raisons légitimes de voter RN." },
+    { member: 'foudulabo', text: "des raisons légitimes de colère, pas des raisons légitimes de voter pour un parti dont le programme leur ferait du mal 🥸" },
+    { member: 'mpb', text: "C'est exactement ce que dit le PS depuis 30 ans et tu vois où ça mène." },
+    { member: 'foudulabo', text: "qkfhzjqmsk" },
+    { member: 'mpb', text: "QUOI" },
+  ],
+  pronostic: { type: "🤝 ALLIANCE PARTIELLE", sante: "Productive sur l'économie, explosive sur l'identitaire", topic: "Classes sociales, RN, laïcité" },
+  anecdote: "Foudulabo lance une analyse sur le fascisme vs nazisme qui dure 4 messages très précis. MPB répond avec 2 messages d'accord total. Puis MPB glisse sur la laïcité. Foudulabo dit \"🥸\". MPB prend ça comme un défi et repart pour 40 minutes. Foudulabo enchaîne avec une suite de caractères aléatoires. Le channel est silencieux pendant 3 minutes. C'est la résolution."
+});
+
+setPair('mpb','maw', {
+  global: 58,
+  dims: [65, 62, 52, 75, 40, 55, 55, 58],
+  phrase: "L'ironiste breton et le pamphlétaire nordiste — même humour, positions opposées, complicité réelle.",
+  verdict: "Relation de ping-pong ironique permanent. Maw Lotov joue à être \"de droite\" par provocation, MPB est sincèrement à gauche souverainiste. Ils se comprennent parfaitement et s'apprécient, ce qui rend leurs débats moins explosifs que prévu.",
+  dynamic: "Maw utilise son émoji macronlunettes pour valider ou invalider MPB selon l'humeur. MPB trouve Maw trop mou sur le fond. <strong>Leurs convergences sur la critique de LFI</strong> et la méfiance de Macron créent un terrain commun. Maw est l'un des rares à désamorcer MPB avec l'humour plutôt que de l'enflammer.",
+  chat: [
+    { member: 'maw', text: "Ça vote Mélenchon ici ou y a que des fachos ? 🙏" },
+    { member: 'mpb', text: "Ni l'un ni l'autre. Mélenchon c'est du gauchisme tribal et les fachos c'est des libéraux de façade." },
+    { member: 'maw', text: "\"Fier représentant de la gauche (pas de la gauche)\" donc." },
+    { member: 'mpb', text: "J'ai jamais mieux résumé ma position, respect." },
+    { member: 'maw', text: "macronlunettes 🤓" },
+  ],
+  pronostic: { type: "😄 COMIQUE", sante: "Légère et bienveillante, rarement explosive", topic: "LFI, Macron, laïcité" },
+  anecdote: "MPB développe une thèse en 6 points sur la souveraineté. Maw répond avec un seul emoji. MPB recommence avec 8 points. Maw répond \"feur\". Le débat est terminé. C'est la seule fois dans l'histoire du serveur où quelqu'un a battu MPB par économie de mots."
+});
+
+setPair('mpb','merko', {
+  global: 72,
+  dims: [80, 48, 75, 65, 62, 75, 42, 68],
+  phrase: "Alliance d'anti-libéraux qui s'accordent sur tout sauf sur qui a raison de le dire.",
+  verdict: "Convergence idéologique réelle et solide sur l'anti-libéralisme, la critique des élites et la défense des classes populaires. Le clash vient de la méthode : MPB est instinctif, merko est structuré et référencé. Merko est probablement l'allié le plus naturel de MPB sur le fond.",
+  dynamic: "Merko cite Piketty là où MPB cite ses instincts. <strong>Ils s'accordent spontanément</strong> sur la réforme des retraites, la taxation des superprofits, la critique de Macron. Merko peut se retourner contre MPB quand celui-ci sort des positions identitaires trop marquées (\"le macronix du discord\" est une de ses insultes préférées pour ceux qui dérivent). La dynamique est celle de deux alliés qui se font la guerre sur les détails.",
+  chat: [
+    { member: 'merko', text: "800 000 manifestants à Paris et on parle des 1000 casseurs. C'est le boulot des médias depuis 30 ans." },
+    { member: 'mpb', text: "Exactement. Et les libéraux applaudissent en disant que le peuple a tort de manifester. Dégoûtant." },
+    { member: 'merko', text: "profondément. Les jeunes de 20 ans cherchent déjà à dissocier leurs revenus de leur travail. Ils ont compris avant tout le monde." },
+    { member: 'mpb', text: "Bizarre que tu sois le seul à le voir clairement ici 🙂" },
+    { member: 'merko', text: "chancla 🥿" },
+  ],
+  pronostic: { type: "🤝 ALLIANCE SOLIDE", sante: "La meilleure alliance anti-libérale du serveur", topic: "Retraites, inégalités, classes sociales" },
+  anecdote: "Merko et MPB débattent ensemble contre Arok et Kaspei pendant 3h sur la réforme des retraites. Ils se passent les arguments comme un relais. À un moment MPB sort une position identitaire inattendue. Merko lui envoie un GIF chancla. MPB comprend immédiatement et revient sur le sujet. C'est le niveau de coordination le plus élevé jamais observé sur le serveur."
+});
+
+setPair('mpb','dorian', {
+  global: 38,
+  dims: [52, 82, 25, 60, 55, 22, 75, 30],
+  phrase: "Le professeur pamphlétaire vs l'observateur blasé — MPB veut débattre, Dorian a déjà décidé que c'est finito.",
+  verdict: "Incompatibilité de style avant d'être idéologique. MPB est volumineux et passionné, Dorian est laconique et nihiliste. Leurs positions politiques divergent (MPB à gauche souverainiste, Dorian à droite pragmatique) mais c'est surtout le format qui ne marche pas.",
+  dynamic: "Dorian répond aux pavés de MPB avec un \"issou\" ou \"finito\". <strong>MPB est incapable de le débattre</strong> parce que Dorian ne donne pas prise. Dorian trouve MPB bavard et idéologue. MPB trouve Dorian paresseux intellectuellement. Ils ne se respectent pas vraiment mais ne se détestent pas non plus.",
+  chat: [
+    { member: 'mpb', text: "Le problème fondamental de la droite française c'est qu'elle a internalisé le cadre libéral sans s'en rendre compte. Zemmour en est l'exemple parfait." },
+    { member: 'dorian', text: "issou" },
+    { member: 'mpb', text: "... T'as quelque chose à dire sur le fond ou c'est juste pour être là ?" },
+    { member: 'dorian', text: "bah perso je pense que facon y a rien à faire de toute façon. Finito." },
+    { member: 'mpb', text: "C'est ça ton take politique ? \"Finito\" ?" },
+  ],
+  pronostic: { type: "😑 STÉRILE", sante: "Frustrante pour MPB, indifférente pour Dorian", topic: "Tout — Dorian s'en fout de tout" },
+  anecdote: "MPB prépare une synthèse de 20 messages sur le souverainisme. Dorian attend la fin puis écrit \"bah c'est doomed non?\". MPB répond pendant 15 minutes supplémentaires. Dorian a déjà fermé Discord. Le lendemain MPB demande si Dorian a lu. Dorian répond \"ahi\"."
+});
+
+setPair('mpb','kaspei', {
+  global: 45,
+  dims: [78, 82, 28, 48, 52, 28, 72, 52],
+  phrase: "Le pédagogue libéral vs le tribun souverainiste — deux styles antagonistes qui s'enveniment mutuellement.",
+  verdict: "Clash idéologique majeur et régulier. Kaspei est libéral assumé pro-nucléaire et pro-capitaliste, MPB est anti-libéral viscéral. Kaspei structure ses arguments avec des données, MPB structure les siens avec des convictions. Les deux ont des egos considérables.",
+  dynamic: "Kaspei entre dans le débat avec un plan argumenté, MPB le balaie avec une formule tranchante. Kaspei cite la Courbe de Laffer, MPB répond que c'est de l'idéologie. Kaspei demande une source, MPB dit que les sources sont libérales. <strong>Cycle sans fin.</strong> Ils se respectent intellectuellement mais ne se concèdent rien.",
+  chat: [
+    { member: 'kaspei', text: "L'argument de la taxe à 90% sur les grandes fortunes : liquidité des parts impossible à forcer, décote à la vente forcée, fuite des investissements. T'as lu Zucman sérieusement ?" },
+    { member: 'mpb', text: "J'ai lu Jancovici qui te diras que le capital ne peut pas s'accumuler à l'infini sur une planète finie. La physique avant l'économie." },
+    { member: 'kaspei', text: "ça m'extermine ce débat. Jancovici c'est de l'ingénieur, pas de l'économiste." },
+    { member: 'mpb', text: "Et les économistes c'est de la théologie néolibérale. Je préfère la physique." },
+    { member: 'kaspei', text: "bah putain... j'ai envie de me jeter par la fenêtre." },
+  ],
+  pronostic: { type: "💥 VOLATILE", sante: "Épuisante, jamais conclusive", topic: "Fiscalité, capitalisme, énergie" },
+  anecdote: "Kaspei présente une argumentation technique dense sur la taxe Zucman avec 4 sources. MPB répond en citant la physique thermodynamique. Kaspei passe 40 minutes à expliquer pourquoi c'est hors sujet. MPB répond que tout est dans tout. Kaspei dit \"ça m'extermine\". MPB dit que c'est le but."
+});
+
+setPair('mpb','yabaphi', {
+  global: 22,
+  dims: [38, 95, 12, 50, 40, 12, 92, 20],
+  phrase: "La rencontre la plus explosive du serveur — deux torrents en collision frontale.",
+  verdict: "Incompatibilité maximale. MPB est assimilationniste républicain, yabaphi est identitaire complotiste. MPB est athée, yabaphi est catholique nationaliste. Les parenthèses triples de yabaphi enragent MPB au-delà du raisonnable. C'est la paire la plus toxique du serveur.",
+  dynamic: "Yabaphi sort une thèse complotiste, MPB explose en caps lock. MPB accuse yabaphi de fascisme, yabaphi accuse MPB de \"golem covidiste\". <strong>Aucune issue possible.</strong> Aucun terrain commun. Les 5% d'accord (critique des élites) sont immédiatement annulés par la manière dont chacun nomme ces élites.",
+  chat: [
+    { member: 'yabaphi', text: "Bayrou il couvre les réseaux pédos depuis 20 ans c'est évident. (((Lang))) c'est la même chose." },
+    { member: 'mpb', text: "Les parenthèses triples, vraiment ? Tu vas pas nous sortir les Protocoles des Sages de Sion ?" },
+    { member: 'yabaphi', text: "CETTE GO M'A TUEE en mode complot. T'es un golem si tu crois que ces affaires sont séparées." },
+    { member: 'mpb', text: "Je suis athée, républicain, et je ne vois pas de complot mondial piloté par des prénoms entre parenthèses. Démerde toi." },
+    { member: 'yabaphi', text: "ahi c'est EXACTEMENT ce qu'un golem dirait 🤷" },
+  ],
+  pronostic: { type: "☢️ NUCLÉAIRE", sante: "Toxique pour tous les participants", topic: "Tout — mais surtout immigration et 'affaires'" },
+  anecdote: "Yabaphi sort ses parenthèses triples. MPB répond en 20 messages. Yabaphi répond \"ahi\". Le channel entier se paralyse. SHAars arrive pour demander des sources. Arok dit \"les golems s'éveillent\". Forandos envoie une chaîne de caractères aléatoires. Personne ne sait plus de quoi on parlait au départ."
+});
+
+setPair('mpb','raydo', {
+  global: 35,
+  dims: [62, 88, 18, 52, 48, 20, 82, 32],
+  phrase: "Le souverainiste républicain vs le souverainiste monarchiste — même boussole, cartes totalement différentes.",
+  verdict: "Accord superficiel sur l'anti-macronisme, désaccord profond sur tout le reste. Raydo est catholique pratiquant, monarchiste nostalgie médiévale. MPB est athée républicain. Raydo cite Dieu, MPB cite Jancovici. L'alliance anti-système ne tient pas.",
+  dynamic: "Raydo sort une thèse géopolitique. MPB dit qu'il trolle. <strong>Raydo attend 2 semaines</strong> et dit \"Rappel des faits\". MPB est incapable de gérer la patience de Raydo. Leur désaccord sur la religion est fondamental et insoluble. Les deux peuvent s'allier contre Macron puis se retourner l'un contre l'autre dans la même conversation.",
+  chat: [
+    { member: 'raydo', text: "RENDEZ-NOUS LE ROI ET NOTRE SEIGNEUR JÉSUS-CHRIST. RAS-LE-CUL DE CETTE DÉMOCRATIE DE MERDE." },
+    { member: 'mpb', text: "Ok donc on discute ou on fait de la réaction pure ?" },
+    { member: 'raydo', text: "La démocratie c'est le régime de la décadence bref. Si l'homme avait trouvé comment se passer de la femme on habiterait sur Mars." },
+    { member: 'mpb', text: "Cette phrase me donne envie de défendre la démocratie pour la première fois de ma vie." },
+    { member: 'raydo', text: "p-t que c'est le but 😏" },
+  ],
+  pronostic: { type: "🌋 VOLATILE", sante: "Improductive, les deux se frustrent", topic: "Religion, démocratie, souveraineté" },
+  anecdote: "Raydo propose de restaurer la monarchie. MPB répond sérieusement avec 3 arguments républicains. Raydo dit \"Disons qu'entre la liberté avec Dieu et la vie moderne... le choix n'est pas si aisé.\". MPB reste silencieux 2 minutes. Puis : \"C'est la phrase la plus incompréhensible que j'ai lue depuis Heidegger.\". Raydo répond \"c'est normal tu lis pas Heidegger\"."
+});
+
+setPair('mpb','udf', {
+  global: 55,
+  dims: [68, 58, 62, 72, 62, 58, 50, 60],
+  phrase: "Le théoricien et le praticien — MPB a les idées, UDF a les anecdotes de terrain qui les invalident.",
+  verdict: "Relation d'accrochages réguliers mais sans explosion majeure. UDF est plus pragmatique et moins idéologue. Ils partagent un anti-macronisme et une critique de l'élite, mais UDF est moins cohérent politiquement, ce qui énerve MPB.",
+  dynamic: "UDF arrive avec une anecdote de boulot qui contredit la thèse de MPB. <strong>MPB répond avec de la théorie.</strong> UDF dit qu'il trolle mais croit vraiment ce qu'il dit. Leur humour dark est compatible. Ils peuvent passer de l'accord total à l'accrochage en 3 messages sur l'immigration.",
+  chat: [
+    { member: 'udf', text: "Jsuis persuadé que Macron est mega fort dans son domaine mais la politique c'est un truc de carriériste maintenant." },
+    { member: 'mpb', text: "\"Mega fort\" en quoi ? En faire avancer les intérêts du capital contre les classes populaires ?" },
+    { member: 'udf', text: "clairement ouais mais au moins il fait ça avec talent. Les autres font pareil mais de façon incompétente." },
+    { member: 'mpb', text: "C'est Stockholm syndrome le discours là." },
+    { member: 'udf', text: "jure j'en viens à me dire que les gens se font baiser par une élite tant mieux, au moins ils savent gérer." },
+  ],
+  pronostic: { type: "⚡ SPORADIC", sante: "Imprévisible, souvent drôle", topic: "Macron, élites, immigration" },
+  anecdote: "MPB développe une thèse sur le capitalisme de connivence. UDF répond avec son anecdote de boîte syndicalisée où il a fait sa carrière malgré les consignes. MPB dit que c'est anecdotique. UDF dit que la théorie c'est pour ceux qui ont jamais bossé. MPB est prof. UDF dit \"exqctement\"."
+});
+
+setPair('mpb','yoob', {
+  global: 60,
+  dims: [65, 55, 62, 60, 40, 58, 48, 65],
+  phrase: "L'idéologue et l'empiriste — MPB a des thèses, yoob a des prix de viande à Rungis.",
+  verdict: "Relation respectueuse entre deux observateurs critiques du système, mais de points de vue très différents. Yoob est ancré dans le réel économique, MPB dans la théorie politique. Ils ne parlent jamais vraiment de la même chose.",
+  dynamic: "Yoob coupe les débats théoriques avec une observation pratique qui les invalide partiellement. <strong>MPB reconnaît la réalité du terrain</strong> de yoob. Sur l'immigration, yoob a une position contradictoire (vote souverainiste + emploie des sans-papiers) que MPB ne sait pas comment traiter. Le respect mutuel est réel.",
+  chat: [
+    { member: 'mpb', text: "L'immigration de masse est utilisée par le patronat pour casser les salaires, c'est documenté." },
+    { member: 'yoob', text: "J'ai une bonne moitié de mes employés qui étaient illégaux. J'ai été avec eux à l'OFRA et honnêtement ils bossent bien." },
+    { member: 'mpb', text: "Je parle du système pas des individus. Le problème c'est la pression structurelle sur les salaires." },
+    { member: 'yoob', text: "perso => je vote souverainiste mais le mec qui fuit la guerre causera rarement des problèmes. C'est plus compliqué que ta thèse." },
+    { member: 'mpb', text: "... C'est la contradiction la plus honnête que j'aie lue ici depuis 2 ans." },
+  ],
+  pronostic: { type: "🤝 RESPECTUEUX", sante: "Saine, enrichissante, sans explosion", topic: "Immigration, économie, classes populaires" },
+  anecdote: "MPB développe sa théorie sur l'immigration et le capital. Yoob répond en 3 messages : son expérience à l'OFRA, le prix du kilo de bœuf à Rungis, et \"c'est plus compliqué\". MPB reste silencieux. C'est le seul moment de l'histoire du serveur où MPB s'est tu sans riposter."
+});
+
+setPair('mpb','zoller', {
+  global: 30,
+  dims: [55, 90, 15, 58, 52, 15, 88, 28],
+  phrase: "Le socialiste souverainiste vs le libéral décliniste — deux visions du monde qui ne se croisent même pas.",
+  verdict: "Incompatibilité majeure. Zoller est droitier libéral assumé, MPB est socialiste souverainiste. Zoller utilise des catégories (\"gauchiasse\", \"attardé\") que MPB prend comme une attaque de classe. Leurs seuls points communs : l'anti-Macron et la critique des élites.",
+  dynamic: "Zoller provoque avec légèreté, MPB répond avec véhémence. <strong>L'asymétrie de ton</strong> exaspère MPB (\"il trolle ou il est sérieux ?\"). Zoller adore cette confusion. Sur l'immigration, la fiscalité et les classes sociales : aucun terrain commun. Le ping-pong de zoller est une arme rhétorique qui défait MPB.",
+  chat: [
+    { member: 'zoller', text: "Je suis globalement à droite sur la plupart des sujets mais ça n'a rien à voir avec mes intérêts perso. C'est juste la réalité." },
+    { member: 'mpb', text: "\"La réalité\" c'est toujours ce que dit la classe dominante pour naturaliser ses privilèges." },
+    { member: 'zoller', text: "Oui ba perso c'est en tant que futur favorisé que je parle. Je pense être parmi ceux qui en théorie auront bonne retraite. C'est objectif." },
+    { member: 'mpb', text: "L'honnêteté de classe c'est rafraîchissant mais ça valide quand même le système que je critique." },
+    { member: 'zoller', text: "Le ping pong c'est plus compliqué que ton socialisme imo 🏓" },
+  ],
+  pronostic: { type: "💥 CONFRONTATION", sante: "Improductive mais humoristique", topic: "Classes sociales, capitalisme, mérite" },
+  anecdote: "MPB critique le capitalisme. Zoller répond avec sa théorie du futur favorisé. MPB dit que c'est du cynisme de classe. Zoller sort un mème de OSS 117. MPB répond 8 fois. Zoller répond \"ping pong 🏓\" et part s'entraîner."
+});
+
+// ── AROK PAIRS ──
+setPair('arok','lyd', {
+  global: 45,
+  dims: [72, 78, 28, 52, 62, 30, 68, 48],
+  phrase: "Le libéral-conservateur vs le marxiste-rentier — la contradiction personnifiée de chaque côté.",
+  verdict: "Duo d'opposés qui se comprennent intellectuellement mais ne se concèdent rien. Arok défend la méritocratie libérale, Lyd la démontre absurde avec des études. Leurs styles sont proches (assertifs, sourceurs quand ça arrange) mais leurs fins sont incompatibles.",
+  dynamic: "Lyd cite le Conseil d'État, Arok cite son ascension sociale. <strong>Chacun utilise sa trajectoire</strong> comme preuve universelle. Lyd trouve Arok naïf sur la reproduction sociale, Arok trouve Lyd hypocrite (futur rentier qui critique le capitalisme). Le débat sur la méritocratie peut durer des heures.",
+  chat: [
+    { member: 'arok', text: "La méritocratie ça marche, c'est mon parcours la preuve. On peut s'en sortir si on bosse." },
+    { member: 'lyd', text: "définit mérite. Parce que la mobilité sociale en France est parmi les plus faibles de l'OCDE." },
+    { member: 'arok', text: "nan les stats OCDE sur la mobilité incluent les immigrés de 1ère génération, les chiffres sont biaisés." },
+    { member: 'lyd', text: "source de cette affirmation ?" },
+    { member: 'arok', text: "ouais bah on a tous accès aux mêmes données khey, interprète les différemment." },
+  ],
+  pronostic: { type: "⚡ TENDU", sante: "Dense, sans issue, respectable", topic: "Méritocratie, mobilité sociale, fiscalité" },
+  anecdote: "Arok explique sa trajectoire de mobilité ascendante. Lyd sort 3 études sur la reproduction sociale. Arok dit que les études ne prouvent pas son cas individuel. Lyd dit que l'exception ne prouve pas la règle. Ils répètent cette conversation 4 fois par an depuis 2022."
+});
+
+setPair('arok','shaars', {
+  global: 62,
+  dims: [68, 58, 52, 58, 62, 58, 48, 62],
+  phrase: "Deux pédagogues qui se donnent des cours mutuellement — et aucun des deux ne l'admet.",
+  verdict: "Alliance ponctuelle contre MPB et les positions extrêmes. Tous deux se perçoivent comme les voix de la raison. Leurs désaccords sur l'économie (libéral vs étatiste) sont réels mais gérés avec plus de civilité qu'avec d'autres.",
+  dynamic: "SHAars demande les sources, Arok en donne (souvent). Ils s'accordent pour arbitrer les débats comme référence commune. <strong>Arok cite souvent SHAars</strong> pour valider ses arguments contre MPB. La relation est celle de deux professeurs dans la même salle.",
+  chat: [
+    { member: 'arok', text: "Même kaethyl/SHAars a debunk mpb sur ce point, c'est dire." },
+    { member: 'shaars', text: "J'ai dit que son argument était insuffisant, c'est différent de debunk total. Nuance." },
+    { member: 'arok', text: "ouais bah t'as quand même reconnu qu'il avait tort sur la TVA sociale." },
+    { member: 'shaars', text: "Contrairement à certains ici j'admets les nuances." },
+    { member: 'arok', text: "mdr ok le pédagogue." },
+  ],
+  pronostic: { type: "🤝 ALLIANCE", sante: "Fonctionnelle, peu explosive", topic: "Économie, institutions" },
+  anecdote: "Arok et SHAars se retrouvent d'accord contre MPB sur un point factuel. Ils forment une coalition de 30 minutes. MPB est en surnombre. À la fin, Arok et SHAars se retournent l'un contre l'autre sur la conclusion à en tirer."
+});
+
+setPair('arok','kaspei', {
+  global: 82,
+  dims: [85, 35, 82, 72, 72, 85, 28, 72],
+  phrase: "L'alliance libérale la plus cohérente du serveur — deux cerveaux qui calculent les mêmes chiffres.",
+  verdict: "Compatibilité maximale sur le fond. Tous deux libéraux économiques, sourceurs, analytiques. Kaspei est plus pédagogue, Arok plus direct. Ils forment le front libéral face aux positions de gauche du serveur.",
+  dynamic: "Ils se passent les arguments, se complètent, et construisent ensemble. <strong>L'alliance libérale naturelle</strong>. Leurs désaccords sont rares et techniques (degré de libéralisme sur tel ou tel sujet). L'humour est compatible (ironique, référencé). Leur présence simultanée dans un débat change l'équilibre du serveur.",
+  chat: [
+    { member: 'kaspei', text: "La décote forcée sur les parts rend la taxe Zucman inapplicable en pratique." },
+    { member: 'arok', text: "ouais exactement, et ça dissuade les réinvestissements qui sont pourtant le seul moteur de croissance long terme." },
+    { member: 'kaspei', text: "bah putain, enfin quelqu'un qui a lu le dossier complet." },
+    { member: 'arok', text: "redpill fiscale que personne veut entendre : taxer le capital c'est taxer les futurs salaires." },
+    { member: 'kaspei', text: "J'attends son score de dictateur africain à Lisnard pour 2027 lol" },
+  ],
+  pronostic: { type: "💚 EXCELLENT", sante: "La paire la plus intellectuellement productive du serveur", topic: "Fiscalité, libéralisme, réforme institutionnelle" },
+  anecdote: "Kaspei et Arok débattent ensemble contre 5 membres pendant 2h sur la taxe sur les successions. Ils alternent les arguments comme un seul esprit. À la fin, un tiers du serveur a changé d'avis ou s'est silencié. C'est le record d'efficacité rhétorique du canal politique."
+});
+
+setPair('arok','yabaphi', {
+  global: 32,
+  dims: [35, 85, 38, 55, 48, 35, 78, 28],
+  phrase: "Le libéral analytique tombe sur le complotiste instinctif — désarroi mutuel.",
+  verdict: "Incompatibilité de méthode avant d'être d'idéologie. Arok déconstruit les théories du complot, yabaphi les produit. Sur le fond identitaire, une convergence partielle — mais yabaphi va trop loin pour Arok.",
+  dynamic: "Arok a déconstruit la \"théorie du grand remplacement\" comme mal formulée. <strong>Yabaphi sort ses parenthèses triples.</strong> Arok est gêné par ce niveau de complotisme. Leurs échanges sont courts car Arok refuse de débattre sur ce terrain.",
+  chat: [
+    { member: 'yabaphi', text: "(((Lang))) il va pas en prison parce que le système le protège évidemment." },
+    { member: 'arok', text: "Les parenthèses triples c'est un signe que la conversation vient de perdre 50 QI." },
+    { member: 'yabaphi', text: "ahi t'es un golem si tu crois que c'est juste une théorie." },
+    { member: 'arok', text: "J'accepte de débattre sur l'immigration, l'assimilation, l'identité nationale. Pas sur les Rothschild." },
+    { member: 'yabaphi', text: "golmon mode activé 😂" },
+  ],
+  pronostic: { type: "🚫 BLOQUÉE", sante: "Arok refuse de jouer le jeu du complotisme", topic: "Immigration, identité" },
+  anecdote: "Yabaphi sort ses parenthèses triples dans un débat sur l'immigration. Arok répond une seule fois qu'il ne débat pas sur ce terrain. Yabaphi dit qu'il est un golem. Arok part débattre avec Kaspei."
+});
+
+setPair('arok','zoller', {
+  global: 75,
+  dims: [72, 42, 78, 80, 72, 78, 35, 65],
+  phrase: "La droite libérale décliniste et le libéral-conservateur — deux alliés naturels avec des styles différents.",
+  verdict: "Très bonne compatibilité. Zoller et Arok partagent une vision libérale de l'économie et une méfiance de la gauche. Zoller est plus provocateur, Arok plus analytique. Leurs humours sont compatibles.",
+  dynamic: "Ils se soutiennent mutuellement dans les débats contre la gauche du serveur. <strong>Alliance productive.</strong> Zoller provoque, Arok argumente le fond. Désaccords mineurs sur le niveau acceptable de droite identitaire.",
+  chat: [
+    { member: 'arok', text: "nan sérieusement je comprends pas comment des gens non-bourgeois votent à gauche. C'est contre leur intérêt objectif." },
+    { member: 'zoller', text: "Parce qu'on leur a dit que la gauche c'est les gentils. Stockholm syndrome généralisé." },
+    { member: 'arok', text: "ouais redpill difficile à avaler pour les golems." },
+    { member: 'zoller', text: "Je considère le ping pong comme métaphore de la politique : si tu sais pas tenir une raquette fais pas semblant." },
+    { member: 'arok', text: "mdr relevant comme toujours." },
+  ],
+  pronostic: { type: "🤝 ALLIANCE", sante: "Stable et productive", topic: "Économie, immigration, gauche" },
+  anecdote: "Zoller et Arok font équipe contre MPB et Merko. Arok fournit les arguments, Zoller les mèmes. La combinaison est efficace pendant 45 minutes avant que Zoller parte jouer au ping-pong."
+});
+
+setPair('lyd','shaars', {
+  global: 70,
+  dims: [88, 38, 62, 55, 65, 72, 30, 75],
+  phrase: "Deux sourceurs acharnés qui débattent méthodologie avant de débattre politique.",
+  verdict: "Alliance fonctionnelle entre deux membres qui se respectent intellectuellement. Lyd cite Bourdieu et le Conseil d'État, SHAars cite Wikipedia et les études INSEE. Ils s'accordent souvent sur les faits, divergent sur les conclusions.",
+  dynamic: "SHAars demande toujours la source, Lyd la donne avec précision. Leur rapport au droit est structuralement similaire. <strong>SHAars gaulliste étatiste + Lyd marxiste analytique</strong> = accord sur l'anti-libéralisme, désaccord sur la solution. Le débat sur le capitalisme peut durer mais reste respectueux.",
+  chat: [
+    { member: 'lyd', text: "Le Conseil d'État a classifié le RN à l'extrême droite en 1978. C'est une source juridique, pas politique." },
+    { member: 'shaars', text: "Exact. Et Bardella n'a pas de bac. Le meilleur parti de France gouverné par quelqu'un qui a fait un stage chez son père." },
+    { member: 'lyd', text: "walklah t'as resume mieux que moi en une phrase." },
+    { member: 'shaars', text: "Contrairement à certains ici je donne les sources. Acte de naissance de Bardella, Wikipedia." },
+    { member: 'lyd', text: "lmao" },
+  ],
+  pronostic: { type: "🤝 PRODUCTIVE", sante: "Respectueuse, intellectuellement dense", topic: "Droit, RN, économie" },
+  anecdote: "Lyd et SHAars débattent pendant 1h avec des sources réelles des deux côtés. Toute la room est silencieuse, impressionnée ou endormie selon les cas."
+});
+
+setPair('lyd','sinnoh', {
+  global: 48,
+  dims: [82, 68, 35, 55, 50, 40, 58, 65],
+  phrase: "La dialectique marxiste rencontre la théologie médiévale — deux systèmes qui ne partagent pas même les axiomes.",
+  verdict: "Échanges intellectuellement denses mais sans résolution. Lyd utilise le droit et les sciences sociales, sinnoh utilise la théologie et la philosophie morale. Ils ne parlent jamais vraiment du même monde.",
+  dynamic: "Lyd demande une définition, sinnoh donne une réponse aristotélicienne. Lyd cite le Conseil d'État, sinnoh cite Aquin. <strong>Respect mutuel de la rigueur</strong>, incompréhension totale sur les fins. Le débat sur l'avortement est leur terrain de conflit le plus spectaculaire.",
+  chat: [
+    { member: 'sinnoh', text: "250k avortements en 2024 btw. Verdun tous les ans." },
+    { member: 'lyd', text: "définit \"équivalent à Verdun\". Parce que le droit à l'avortement est un droit fondamental de la personne." },
+    { member: 'sinnoh', text: "Le droit positif et le droit naturel divergent sur ce point. L'État ne peut pas légiférer sur le meurtre." },
+    { member: 'lyd', text: "C'est un fœtus. La définition de personne juridique est claire." },
+    { member: 'sinnoh', text: "Continue les insultes igo." },
+  ],
+  pronostic: { type: "🌀 PHILOSOPHIQUE", sante: "Dense mais indécidable", topic: "Avortement, droit naturel, laïcité" },
+  anecdote: "Lyd et Sinnoh débattent de l'avortement. Chacun cite des autorités incommensurables (Cour de cassation vs Aquin). Après 30 messages, ils réalisent qu'ils débattent depuis des systèmes philosophiques incompatibles. Lyd dit \"c'est un désaccord fondamental\". Sinnoh répond \"igo\" et passe à autre chose."
+});
+
+setPair('lyd','forandos', {
+  global: 72,
+  dims: [90, 42, 68, 60, 55, 68, 38, 78],
+  phrase: "Deux calculateurs de haut niveau qui partagent les données et arrivent à des conclusions différentes.",
+  verdict: "Compatibilité intellectuelle maximale, divergence idéologique nette. Forandos libéral décliniste, Lyd marxiste analytique. Mais leurs méthodes sont similaires : sources, chiffres, rigueur. C'est le débat le plus propre du serveur.",
+  dynamic: "<strong>Forandos chiffre le ratio actifs/retraités, Lyd chiffre les inégalités de revenus.</strong> Ils s'accordent sur les faits économiques et divergent sur ce qu'ils impliquent politiquement. Le respect intellectuel est total. Lyd est peut-être le seul à égaler forandos en précision.",
+  chat: [
+    { member: 'forandos', text: "Le ratio actifs/retraités à 1.7 rend arithmétiquement le système insoutenable à 30 ans." },
+    { member: 'lyd', text: "Arithmétiquement oui. Mais la productivité par actif a augmenté de 180% depuis 1970. Le ratio seul est insuffisant." },
+    { member: 'forandos', text: "La productivité va dans les dividendes pas dans les cotisations. C'est là le problème politique." },
+    { member: 'lyd', text: "exactement. On est d'accord sur le problème, pas sur la cause." },
+    { member: 'forandos', text: "et encore moins sur la solution. Mais au moins on parle du même truc." },
+  ],
+  pronostic: { type: "🧠 EXCELLENCE", sante: "Le débat le plus rigoureux du serveur", topic: "Retraites, fiscalité, économie" },
+  anecdote: "Lyd et forandos débattent des retraites pendant 90 minutes avec des sources réelles des deux côtés. À la fin, ils ont cartographié parfaitement leur désaccord. Quelqu'un demande une conclusion. Ils répondent simultanément qu'il n'y en a pas."
+});
+
+setPair('lyd','merko', {
+  global: 78,
+  dims: [80, 35, 78, 68, 65, 82, 28, 72],
+  phrase: "Alliance gauche cohérente — deux anti-libéraux avec des styles différents mais des convictions proches.",
+  verdict: "Très bonne compatibilité idéologique. Tous deux anti-libéraux, tous deux sensibles aux questions de classe. Merko est plus instinctif et polémiste, Lyd plus sourcé et rigoureux. Ils se complètent bien en débat.",
+  dynamic: "Lyd donne la rigueur, merko donne l'énergie. <strong>Alliance naturelle contre les libéraux.</strong> Merko peut se servir de Lyd comme source d'autorité (\"Lyd cite le Conseil d'État, regarde\"). Lyd peut se servir de merko comme force de conviction émotionnelle. Désaccords rares mais possibles sur les moyens.",
+  chat: [
+    { member: 'merko', text: "Je suis profondément anti libéral. Je chie à la gueule d'Adam Smith si jms." },
+    { member: 'lyd', text: "walklah c'est un peu fort comme formulation mais sur le fond t'as pas tort sur les effets de la déréglementation." },
+    { member: 'merko', text: "vrmt. Et le pire c'est que les libéraux savent très bien ce qu'ils font — c'est pas de la naïveté." },
+    { member: 'lyd', text: "Définit libéral d'abord. Parce que MPB pense l'être et il est socialiste souverainiste." },
+    { member: 'merko', text: "le macronix du discord, clairement pas libéral." },
+  ],
+  pronostic: { type: "🤝 SOLIDE", sante: "Alliance efficace et durable", topic: "Économie, classes sociales, capitalisme" },
+  anecdote: "Merko et Lyd forment une équipe de débat improvisée contre Kaspei et Arok. Merko attaque, Lyd source. La combinaison est efficace. Puis Lyd cite une jurisprudence que merko n'avait pas prévue. Le débat dévie. Ils perdent la confrontation mais adorent la discussion."
+});
+
+setPair('shaars','forandos', {
+  global: 55,
+  dims: [80, 48, 52, 48, 52, 52, 42, 65],
+  phrase: "Le sourceur compulsif vs le calculateur compulsif — qui cite qui en premier ?",
+  verdict: "Respect intellectuel mutuel, divergence politique. SHAars gaulliste étatiste, forandos libéral décliniste. Leurs méthodes analytiques sont similaires (données, sources, rigueur), leurs conclusions opposées.",
+  dynamic: "SHAars demande les sources, forandos les donne (vraiment). <strong>Le débat entre eux est de qualité</strong> mais sans résolution. SHAars critique le libéralisme, forandos critique l'État. Ils se respectent sans se convaincre.",
+  chat: [
+    { member: 'forandos', text: "La dette publique française représente 112% du PIB. La charge des intérêts mange 55 milliards par an." },
+    { member: 'shaars', text: "Source ?" },
+    { member: 'forandos', text: "INSEE + Cour des comptes. Publié ce mois." },
+    { member: 'shaars', text: "Contrairement à certains ici t'as effectivement les sources. Maintenant la question c'est quoi faire de ça." },
+    { member: 'forandos', text: "Réduire l'État. Massivement. Suisse comme modèle." },
+    { member: 'shaars', text: "Ah ben voilà le libéral sous le manteau." },
+  ],
+  pronostic: { type: "⚖️ RESPECTUEUX", sante: "Productive sur les faits, bloquée sur les valeurs", topic: "Dette, État, libéralisme" },
+  anecdote: "SHAars demande une source à forandos. Forandos en donne 3. SHAars est désarçonné — il est habitué à ce que les gens ne sourçent pas. Il cherche pendant 2 minutes comment contre-argumenter. C'est la première fois qu'il admet publiquement que la source est bonne."
+});
+
+setPair('shaars','kaspei', {
+  global: 68,
+  dims: [82, 42, 62, 58, 62, 65, 35, 70],
+  phrase: "La gendarmerie intellectuelle vs le pédagogue libéral — un respect mutuel inhabituel.",
+  verdict: "Alliance fonctionnelle entre deux membres analytiques qui respectent la rigueur argumentative. Désaccord économique (étatiste vs libéral) mais méthode similaire. L'un des meilleurs débats du serveur quand ils se confrontent.",
+  dynamic: "Kaspei structure, SHAars challenge les sources. <strong>Leur dialogue est probablement le plus rigoureux du serveur.</strong> SHAars reconnaît quand Kaspei a raison (rare sur le serveur). Kaspei reconnaît la valeur des services publics que SHAars défend.",
+  chat: [
+    { member: 'kaspei', text: "En Suisse, le taux de cotisations obligatoires est à 28% vs 47% en France. La différence va en services ?" },
+    { member: 'shaars', text: "Source ?" },
+    { member: 'kaspei', text: "OCDE, données 2024. Je l'envoie." },
+    { member: 'shaars', text: "Contrairement à certains ici... ok t'as la source. La différence oui, en partie, mais les inégalités suisses sont aussi plus fortes." },
+    { member: 'kaspei', text: "C'est le prix de la liberté imo." },
+    { member: 'shaars', text: "Ou le coût de l'abandon des classes populaires imo." },
+  ],
+  pronostic: { type: "🧠 PRODUCTIVE", sante: "Le meilleur niveau de débat possible", topic: "Fiscalité, services publics, libéralisme" },
+  anecdote: "SHAars et Kaspei débattent du SMIC pendant 1h. Les deux sourcent correctement. À la fin, ils ont produit une cartographie précise de leur désaccord. Personne n'a changé d'avis. Mais les deux admirent l'autre. C'est la situation la plus rare du serveur."
+});
+
+setPair('sinnoh','kaspei', {
+  global: 68,
+  dims: [85, 40, 62, 62, 55, 68, 32, 72],
+  phrase: "Le libéral classique catholique et le libéral classique laïc — même économie, univers moraux différents.",
+  verdict: "Alliance libérale sur l'économie et la critique du centralisme français. Désaccord sur la religion et la laïcité. Sinnoh veut l'Église, Kaspei veut la neutralité de l'État. Mais leurs méthodes de débat sont compatibles.",
+  dynamic: "Ils s'accordent sur la Suisse, Singapour, le fédéralisme et la critique de l'hypercentralisme parisien. <strong>Sur la religion : divergence réelle</strong> mais exprimée avec mesure. Sinnoh respecte la cohérence libérale de Kaspei. Kaspei respecte la rigueur théologique de Sinnoh.",
+  chat: [
+    { member: 'sinnoh', text: "Le modèle suisse : subsidiarité réelle, cantons autonomes, démocratie directe. C'est le seul modèle applicable à la France." },
+    { member: 'kaspei', text: "Exactement. Et sans l'ENA, sans le centralisme parisien. Lisnard propose quelque chose dans cette direction." },
+    { member: 'sinnoh', text: "Lisnard reste républicain et laïcard. Ce sera insuffisant. Mais c'est déjà mieux que la Ve République." },
+    { member: 'kaspei', text: "T'es le seul ici à défendre la monarchie de droit divin sérieusement igo." },
+    { member: 'sinnoh', text: "\"igo\" — tu m'empruntes mes mots maintenant 😄" },
+  ],
+  pronostic: { type: "🤝 ALLIANCE", sante: "Productive avec désaccord cordial sur la religion", topic: "Décentralisation, fiscalité, libéralisme" },
+  anecdote: "Sinnoh et Kaspei débattent du modèle suisse avec enthousiasme pendant 30 minutes. Puis sinnoh glisse vers la monarchie de droit divin. Kaspei dit poliment que c'est \"ambitieux\". Sinnoh dit que c'est cohérent. Ils se séparent en se respectant profondément."
+});
+
+setPair('foudulabo','merko', {
+  global: 72,
+  dims: [78, 42, 75, 70, 55, 75, 35, 65],
+  phrase: "L'absurdiste de gauche et le pamphlétaire de gauche — même camp, styles radicalement différents.",
+  verdict: "Bonne compatibilité idéologique avec une friction stylistique. Tous deux anti-libéraux et anti-RN. Merko est assertif et potentiellement agressif, foudulabo est analytique et absurdiste. Leurs fins sont similaires, leurs méthodes opposées.",
+  dynamic: "Merko attaque frontalement, foudulabo structure avec rigueur puis enchaîne une chaîne de lettres aléatoires. <strong>Merko trouve ça déstabilisant</strong> mais respecte le fond. Sur la lutte des classes et la critique du patronat : accord total.",
+  chat: [
+    { member: 'foudulabo', text: "Le nazisme est au fascisme ce que le stalinisme est au communisme. On peut pas les assimiler sans perdre en précision analytique." },
+    { member: 'merko', text: "Exactement. Et les gens qui font ça font le jeu de la droite en diluant le concept." },
+    { member: 'foudulabo', text: "\"les gens\" tu parles de qui précisément ? 🥸" },
+    { member: 'merko', text: "MPB et ses analogies hasardeuses principalement." },
+    { member: 'foudulabo', text: "lol vrmt ok. azjdhqksf" },
+    { member: 'merko', text: "... tu vas bien ?" },
+  ],
+  pronostic: { type: "🎭 COMIQUE", sante: "Saine avec un humour qui déroute merko", topic: "Extrême droite, fascisme, classes sociales" },
+  anecdote: "Merko développe une thèse argumentée. Foudulabo répond avec une analyse encore plus précise. Merko est impressionné. Foudulabo conclut avec \"jzdkqpfmsz\". Merko reste sur ses 30 secondes de silence avant de répondre \"ok vrmt\"."
+});
+
+setPair('foudulabo','dorian', {
+  global: 42,
+  dims: [60, 65, 35, 55, 55, 35, 55, 45],
+  phrase: "Le chercheur précarité vs le droitier blasé — deux langues, deux planètes.",
+  verdict: "Incompatibilité de fond avec une coexistence pacifique. Foudulabo est de gauche radicale, Dorian est droite pragmatique. Leurs débats sont courts parce que Dorian refuse de s'engager longuement.",
+  dynamic: "Foudulabo présente une analyse détaillée, Dorian répond avec \"bah c'est doomed\" ou \"issou\". <strong>Foudulabo ne sait pas si Dorian est sérieux ou non.</strong> Dorian ne sait pas si les chaînes de lettres de foudulabo sont de l'humour ou un malaise.",
+  chat: [
+    { member: 'foudulabo', text: "Les coupes dans le budget de l'éducation nationale vont toucher 120 000 postes sur 5 ans selon le PLF." },
+    { member: 'dorian', text: "issou" },
+    { member: 'foudulabo', text: "... c'est une information qu'on devrait trouver préoccupante non ?" },
+    { member: 'dorian', text: "bah ouai mais ça va changer quoi. Facon c'est doomed." },
+    { member: 'foudulabo', text: "qjdhkz 🥸" },
+  ],
+  pronostic: { type: "😑 PARALLÈLE", sante: "Pas de clash, pas d'apport", topic: "Éducation nationale, budget" },
+  anecdote: "Foudulabo présente une analyse de 4 messages sur le budget éducatif. Dorian répond \"finito\". C'est la conversation complète. Foudulabo ne sait pas si Dorian est d'accord ou s'en fout. Les deux continuent leur vie."
+});
+
+setPair('maw','kaspei', {
+  global: 60,
+  dims: [65, 52, 48, 82, 58, 52, 45, 60],
+  phrase: "L'ironiste breton et le pédagogue breton — compatibilité culturelle maximale, débat politique compliqué.",
+  verdict: "Bonne alchimie humaine entre deux Bretons au fond (maw est \"bobo breton\"). Maw trouve Kaspei trop libéral, Kaspei trouve Maw trop insaisissable. Mais l'humour est compatible et la complicité réelle.",
+  dynamic: "Maw troll Kaspei avec des positions droitières sarcastiques. <strong>Kaspei prend ça au sérieux pendant 5 messages</strong> avant de comprendre. Kaspei produit les sources, maw les valide sarcastiquement avec macronlunettes. Ils peuvent passer une heure à débattre en riant.",
+  chat: [
+    { member: 'maw', text: "Il faut fermer les frontières et arrêter l'immigration pour empêcher l'extrême droite de s'installer en France 🙏" },
+    { member: 'kaspei', text: "... t'es sérieux ou c'est de l'ironie ? Parce que comme argument c'est..." },
+    { member: 'maw', text: "Les deux mon capitaine 🤓" },
+    { member: 'kaspei', text: "bah putain t'es dur à débattre toi." },
+    { member: 'maw', text: "\"Fier représentant de la gauche (pas de la gauche)\" — c'est ma position officielle." },
+  ],
+  pronostic: { type: "😂 COMIQUE", sante: "Légère, avec une vraie complicité", topic: "Immigration, gauche, droite" },
+  anecdote: "Kaspei prépare une réfutation argumentée d'une position de Maw. Il réalise en écrivant que Maw n'était probablement pas sérieux. Il envoie quand même. Maw répond \"macronlunettes 🤓\". Kaspei rit. C'est la résolution la plus rapide du serveur."
+});
+
+setPair('merko','dorian', {
+  global: 35,
+  dims: [52, 72, 32, 60, 62, 30, 62, 38],
+  phrase: "Le pamphlétaire engagé vs l'observateur résigné — frustration à sens unique.",
+  verdict: "Merko cherche la confrontation, Dorian ne la donne pas. Merko est de gauche anti-libéral, Dorian est de droite pragmatique. Mais le problème principal est le format : Dorian répond en one-liners aux tirades de merko.",
+  dynamic: "Merko développe une argumentation sur les inégalités. Dorian répond \"ahi\" ou \"bah ouai doomed\". <strong>Merko est exaspéré</strong> par ce qu'il perçoit comme du nihilisme de classe. Dorian trouve merko trop enflammé. Aucun débat n'aboutit.",
+  chat: [
+    { member: 'merko', text: "Je veux juste que mon ministre de l'agriculture ait vu une vache autre part que dans un salon." },
+    { member: 'dorian', text: "golmon" },
+    { member: 'merko', text: "T'es d'accord ou tu trouves ça acceptable ?" },
+    { member: 'dorian', text: "bah perso je trouve ça chaud mais ça va pas changer imo." },
+    { member: 'merko', text: "...c'est ça le problème vrmt. On a collectivement décidé que ça allait pas changer." },
+  ],
+  pronostic: { type: "😑 STÉRILE", sante: "Frustration pour merko, indifférence pour dorian", topic: "Politique française, classe politique" },
+  anecdote: "Merko sort une analyse de 6 messages sur la déconnexion de la classe politique. Dorian lit tout. Attend 2 minutes. Répond \"chaud\". Merko rage en silence."
+});
+
+setPair('kaspei','raydo', {
+  global: 38,
+  dims: [62, 85, 22, 50, 55, 22, 78, 35],
+  phrase: "Le pédagogue libéral vs l'idéologue nationaliste — deux mondes qui se comprennent mais ne se rejoignent pas.",
+  verdict: "Incompatibilité réelle mais débat de qualité. Kaspei est libéral pro-européen, Raydo est nationaliste souverainiste. Kaspei source tout, Raydo parle de déclin civilisationnel. Ils s'agacent mutuellement mais se respectent.",
+  dynamic: "Raydo prédit une thèse géopolitique. Kaspei la conteste avec des données. Raydo dit \"vous direz que je trolle\". Deux semaines plus tard un journal en parle. <strong>Raydo conserve une crédibilité frustrante</strong> aux yeux de Kaspei.",
+  chat: [
+    { member: 'raydo', text: "Le macronisme c'est la dégénérescence de l'intelligence mise au service de la destruction. Un nazisme à la française." },
+    { member: 'kaspei', text: "Comparer Macron au nazisme c'est une hyperbole qui invalide l'argument imo." },
+    { member: 'raydo', text: "p-t. Mais la trajectoire est la même. Dans 20 ans tu me rediras ça." },
+    { member: 'kaspei', text: "j'aurais été curieux de voir ta définition du nazisme avant d'aller plus loin." },
+    { member: 'raydo', text: "bref. RENDEZ-NOUS LE ROI." },
+  ],
+  pronostic: { type: "⚡ TENDU", sante: "Kaspei frustré, Raydo content", topic: "Europe, Macron, souveraineté" },
+  anecdote: "Kaspei réfute une thèse de Raydo avec 3 sources. Raydo dit \"bref\" et passe à autre chose. 3 semaines plus tard le Financial Times sort un article confirmant partiellement la thèse de Raydo. Raydo revient avec \"Rappel des faits\". Kaspei admet à contrecœur la pertinence."
+});
+
+setPair('yabaphi','raydo', {
+  global: 75,
+  dims: [55, 35, 82, 72, 68, 80, 28, 55],
+  phrase: "Deux droitiers radicaux qui se retrouvent sur l'essentiel — alliance naturelle mais instable.",
+  verdict: "Forte compatibilité idéologique. Tous deux nationalistes, anti-immigration, méfiants des élites. Raydo est plus structuré et catholique, yabaphi plus instinctif et complotiste. L'alliance tient mais peut se fissurer sur la méthode.",
+  dynamic: "Ils valident mutuellement leurs positions. Raydo tempère parfois le complotisme de yabaphi avec une argumentation plus construite. Yabaphi valide l'anti-macronisme de Raydo. <strong>Alliance solide</strong> qui inquiète les autres membres du serveur.",
+  chat: [
+    { member: 'raydo', text: "Si on trouve que nos hommes politiques puent la merde c'est pcq on pue la merde en tant que peuple." },
+    { member: 'yabaphi', text: "ahi exact. Et les médias les couvrent pour les protéger c'est évident." },
+    { member: 'raydo', text: "p-t... ou le peuple a collectivement décidé de ne pas vouloir savoir." },
+    { member: 'yabaphi', text: "CETTE DÉMOCRATIE DE MERDE ça fait longtemps que j'ai pas confiance." },
+    { member: 'raydo', text: "RENDEZ-NOUS LE ROI." },
+  ],
+  pronostic: { type: "🔥 CONVERGENT", sante: "Alliance idéologique — inquiétante pour le reste du serveur", topic: "Démocratie, élites, immigration" },
+  anecdote: "Yabaphi et Raydo tombent d'accord sur 5 sujets d'affilée. Le reste du serveur observe avec malaise croissant. SHAars intervient pour demander des sources. Les deux ignorent la demande simultanément. Moment de synchronicité rare."
+});
+
+setPair('zoller','yoob', {
+  global: 72,
+  dims: [72, 38, 72, 80, 62, 72, 30, 65],
+  phrase: "Le libéral décliniste et le boucher pragmatique — deux propriétaires qui voient la France depuis le même angle.",
+  verdict: "Bonne compatibilité entre deux observateurs pragmatiques de droite qui partagent une méfiance de la gauche idéologique et une expérience directe du réel économique. Yoob est plus nuancé sur l'immigration (expérience personnelle), zoller est plus tranché.",
+  dynamic: "Tous deux propriétaires ou en voie de le devenir, tous deux pragmatiques. <strong>Convergence naturelle</strong> sur la critique de LFI et de la gauche bobo. Désaccord possible sur l'immigration (yoob a une position contradictoire que zoller ne comprend pas).",
+  chat: [
+    { member: 'zoller', text: "persoent => plutôt à droite, ça n'a rien à voir avec mes intérêts perso ni ma situation." },
+    { member: 'yoob', text: "persoent => je vote souverainiste, je sais pas encore qui néanmoins." },
+    { member: 'zoller', text: "Souverainiste c'est un grand mot pour \"j'ai pas envie de choisir\"." },
+    { member: 'yoob', text: "Exactement. LFI c'est bottom 1 donc ça laisse peu d'options." },
+    { member: 'zoller', text: "Parti Muslim de France aka NFP pour moi. On vote pareil." },
+  ],
+  pronostic: { type: "🤝 COMPATIBLE", sante: "Deux pragmatiques qui s'accordent", topic: "Immigration, LFI, propriété" },
+  anecdote: "Zoller et Yoob débattent des élections. Ils réalisent qu'ils auraient voté pareil sur 4 des 5 derniers scrutins. Zoller sort un mème OSS 117. Yoob dit \"lol vrmt\". C'est la fin du débat et c'est bien ainsi."
+});
+
+setPair('udf','zoller', {
+  global: 70,
+  dims: [70, 40, 68, 82, 68, 70, 35, 65],
+  phrase: "Deux provocateurs lucides qui adorent tester la réaction du groupe — alliance de braconniers.",
+  verdict: "Bonne compatibilité. Tous deux pragmatiques, provocateurs calibrés, critiques des idéologues de tout bord. UDF est plus chaotique et anti-boomer radical, zoller est plus droitier structuré. Leur humour dark est compatible.",
+  dynamic: "Ils s'entraident dans la provocation. UDF lance, zoller structure. <strong>Alliance de feu</strong> pour perturber les débats trop sérieux. Sur le fond politique : accord sur beaucoup de sujets (logement, anti-LFI, critique du système).",
+  chat: [
+    { member: 'udf', text: "Haïr les vieux c'est très important. C'est un axiome." },
+    { member: 'zoller', text: "Oui ba perso en tant que futur favorisé je compte bénéficier du système qu'ils ont construit." },
+    { member: 'udf', text: "Tu comptes devenir le problème donc." },
+    { member: 'zoller', text: "\"Merci par avance pour te battre et sauver mon pays pendant que je serai dans ma villa au Maroc 🙏\"" },
+    { member: 'udf', text: "LMAO ok au moins t'as l'honnêteté de classe." },
+  ],
+  pronostic: { type: "😂 COMPLICES", sante: "Alliance comique et productive", topic: "Boomers, logement, système" },
+  anecdote: "UDF lance une tirade anti-boomer. Zoller l'étend avec son point de vue de \"futur favorisé\". Ensemble ils génèrent 40 messages de débat dans le channel en 20 minutes. La moitié du serveur répond, l'autre moitié bloque les notifications."
+});
+
+setPair('dorian','yoob', {
+  global: 68,
+  dims: [65, 42, 65, 72, 65, 65, 35, 62],
+  phrase: "Deux pragmatiques du réel qui observent la même France avec le même détachement.",
+  verdict: "Bonne compatibilité entre deux observateurs qui n'ont pas d'idéologie rigide et partagent une méfiance de la gauche bobo et de l'idéologie en général. Leurs parcours (études longues peu rentables) créent une empathie réelle.",
+  dynamic: "Dorian et Yoob se comprennent sans avoir besoin de débattre. <strong>Empathie silencieuse</strong>. Ils peuvent passer un débat entier à valider mutuellement leurs observations sans jamais produire une thèse commune. C'est reposant pour les deux.",
+  chat: [
+    { member: 'yoob', text: "C'est bottom 1 en ce moment. Je sais pas si on a déjà eu pire." },
+    { member: 'dorian', text: "bah ouai. Facon c'est doomed." },
+    { member: 'yoob', text: "et je vote quand même parce que sinon c'est encore plus doomed." },
+    { member: 'dorian', text: "issou. Moi aussi probablement." },
+    { member: 'yoob', text: "on est condamnés à choisir le moins pire." },
+    { member: 'dorian', text: "finito." },
+  ],
+  pronostic: { type: "🤝 CONFORT", sante: "Saine et reposante", topic: "État de la France, pragmatisme" },
+  anecdote: "Dorian et Yoob échangent 6 messages sur l'état de la France. Ils sont d'accord sur tout. Personne ne produit de solution. Personne n'est frustré. C'est le débat le plus court et le plus satisfaisant de l'histoire du serveur."
+});
+
+setPair('forandos','raydo', {
+  global: 40,
+  dims: [65, 78, 35, 48, 52, 38, 68, 42],
+  phrase: "Le décliniste romain vs le décliniste catholique — même diagnostic, thérapies incompatibles.",
+  verdict: "Accord sur le déclin civilisationnel, désaccord total sur les causes et solutions. Forandos cite Rome et la démographie, Raydo cite Dieu et la masculinité. Leurs analogies ne se touchent pas.",
+  dynamic: "Forandos sort l'analogie Rome/USA. Raydo sort la dégénérescence culturelle. <strong>Ils se parlent dans des cadres parallèles.</strong> L'un est laïc pessimiste, l'autre est catholique réactionnaire. Le respect existe mais la communication est difficile.",
+  chat: [
+    { member: 'forandos', text: "Mon délire : la France a juste reformé son système d'Ancien Régime, comme la Russie reformule le tsarisme. C'est dans l'essence des peuples." },
+    { member: 'raydo', text: "p-t. Et c'est pcq on a tué le roi et la religion. On sort de l'Histoire." },
+    { member: 'forandos', text: "La religion c'est une variable dans mon modèle, pas la cause principale." },
+    { member: 'raydo', text: "Dans mon modèle c'est la variable principale. bref." },
+    { member: 'forandos', text: "deux modèles qui donnent les mêmes outputs pour des raisons différentes. Intéressant." },
+  ],
+  pronostic: { type: "🌀 PARALLÈLE", sante: "Intellectuellement curieuse, sans convergence", topic: "Déclin, histoire, civilisation" },
+  anecdote: "Forandos et Raydo débattent du déclin pendant 1h. Ils arrivent exactement aux mêmes conclusions politiques (mauvais, ça va empirer) via deux chemins totalement différents (démographie vs Dieu). Aucun des deux n'y voit un problème."
+});
+
+setPair('lyd','raydo', {
+  global: 28,
+  dims: [52, 90, 15, 40, 50, 15, 88, 28],
+  phrase: "Le marxiste sourcé vs le nationaliste catholique — le clash le plus pur du serveur.",
+  verdict: "Incompatibilité maximale. Lyd est marxiste analytique internationaliste, Raydo est nationaliste catholique masculiniste. Sur chaque sujet — immigration, religion, genre, économie — leurs positions sont aux antipodes.",
+  dynamic: "Lyd source tout. Raydo dit que la réalité prime sur les sources. <strong>Incompréhension fondamentale sur la méthode.</strong> Lyd demande une définition, Raydo sort une citation de la dégénérescence. Leurs débats sont épiques et totalement improductifs.",
+  chat: [
+    { member: 'raydo', text: "Si l'homme avait trouvé comment se passer de la femme il y a belle lurette que nous habiterions sur Mars." },
+    { member: 'lyd', text: "Source ? Et définit \"se passer de\"." },
+    { member: 'raydo', text: "L'observation de la civilisation depuis 6000 ans pcq." },
+    { member: 'lyd', text: "6000 ans d'histoire de la domination masculine ne valident pas ton point, ça l'explique." },
+    { member: 'raydo', text: "golem mode. bref." },
+  ],
+  pronostic: { type: "☢️ NUCLÉAIRE", sante: "Toxique pour les deux, spectaculaire pour les autres", topic: "Genre, religion, immigration, tout" },
+  anecdote: "Lyd demande une source à Raydo. Raydo dit que Dieu est sa source. Lyd demande si Dieu publie dans des revues à comité de lecture. Raydo répond \"tu sors de l'Histoire\". C'est le plus court désaccord philosophique jamais enregistré sur le serveur."
+});
+
+setPair('sinnoh','raydo', {
+  global: 65,
+  dims: [72, 48, 72, 62, 55, 68, 40, 60],
+  phrase: "Deux catholiques conservateurs avec des méthodes différentes — alliance solide sur le fond.",
+  verdict: "Convergence idéologique sur le catholicisme, la tradition et la critique de la modernité libérale. Sinnoh est plus rigoureux et libéral économique, Raydo plus émotionnel et souverainiste. L'alliance tient bien.",
+  dynamic: "Ils valident mutuellement leur catholicisme pratique. <strong>Sinnoh tempère les excès de Raydo</strong> avec rigueur théologique (Zemmour critiqué par les deux pour son catholicisme culturel sans substance). Alliance naturelle dans un serveur majoritairement laïc.",
+  chat: [
+    { member: 'sinnoh', text: "Zemmour c'est du catholicisme d'esthète sans substance spirituelle. Il cite Maurras mais pas le catéchisme." },
+    { member: 'raydo', text: "Exactement. C'est un nationaliste qui use du catholicisme comme étendard. Ce n'est pas la même chose." },
+    { member: 'sinnoh', text: "Le jacobinisme a tué le catholicisme en France. Zemmour en est le produit tardif." },
+    { member: 'raydo', text: "RENDEZ-NOUS LE ROI ET NOTRE SEIGNEUR JÉSUS-CHRIST. C'est le seul programme cohérent." },
+    { member: 'sinnoh', text: "Idéaliste oui. Réaliste non. Mais la boussole est bonne. igo." },
+  ],
+  pronostic: { type: "✝️ ALLIANCE", sante: "Saine, catholique, minoritaire sur le serveur", topic: "Religion, Zemmour, tradition" },
+  anecdote: "Sinnoh et Raydo débattent de Zemmour pendant 20 minutes et concluent tous les deux qu'il est insuffisant — mais pour des raisons différentes (Sinnoh : pas assez rigoureux catholiquement, Raydo : pas assez radical). C'est la seule fois que deux membres du serveur arrivent à la même conclusion négative par des chemins parallèles."
+});
+
+// Remaining important pairs with abbreviated data
+const remainingPairs = [
+  ['arok','sinnoh', 58, [75,52,48,55,45,52,45,62], "Le libéral analytique et le catholique monarchiste — respect mutuel, fins incompatibles.", "Alliance partielle sur la critique du centralisme, désaccord sur la religion et la démocratie."],
+  ['arok','forandos', 78, [88,35,78,72,65,80,28,72], "Deux libéraux analytiques — alliance naturelle sur les chiffres.", "La paire libérale la plus solide du serveur avec Kaspei/Arok."],
+  ['arok','maw', 55, [62,55,48,78,48,50,48,55], "Le libéral et l'ironiste — l'un est sérieux, l'autre ne l'est peut-être pas.", "Maw troll Arok avec des positions de droite. Arok ne sait jamais s'il doit répondre sérieusement."],
+  ['arok','raydo', 38, [52,82,28,50,55,30,75,32], "Le libéral pragmatique vs l'idéologue nationaliste — méthodologies incompatibles.", "Arok veut du chiffre, Raydo veut du sens. Ils ne parlent jamais la même langue."],
+  ['arok','udf', 62, [68,48,62,72,65,62,42,58], "Deux pragmatiques qui critiquent l'idéologie — bonne compatibilité de surface.", "Arok et UDF partagent la méfiance des idéologues et une vision assez pragmatique de la politique."],
+  ['arok','dorian', 65, [60,45,62,72,72,60,38,58], "Deux droitiers pragmatiques qui se comprennent sans se l'avouer.", "Convergence naturelle sur le pragmatisme et la critique de la gauche bobo."],
+  ['lyd','kaspei', 52, [82,62,38,52,60,45,55,65], "Le marxiste sourcé vs le libéral sourcé — le meilleur débat économique du serveur.", "Tous deux hyper rigoureux, conclusions opposées. Les débats durent très longtemps et ne se terminent jamais."],
+  ['lyd','yabaphi', 20, [30,92,12,38,42,15,90,22], "Le marxiste académique vs le complotiste instinctif — chaos garanti.", "Incompatibilité maximale de méthode et d'idéologie."],
+  ['lyd','maw', 60, [65,50,55,78,50,58,42,62], "Le sourceur de gauche et l'ironiste de gauche — ils votent pareil, débattent différemment.", "Lyd et Maw partagent le fond mais ont des styles radicalement différents."],
+  ['lyd','udf', 58, [72,55,60,65,60,60,45,62], "Deux gauches différentes qui s'observent avec curiosité.", "Lyd est rigoureux académique, UDF est pragmatique de terrain. Ils s'accordent sur plus qu'ils ne le pensent."],
+  ['lyd','dorian', 42, [58,68,35,50,55,38,60,40], "Le dialecticien et le nihiliste — frustration garantie pour Lyd.", "Lyd essaie de débattre avec Dorian. Dorian répond en one-liners. Lyd ne comprend pas."],
+  ['lyd','yoob', 62, [68,45,60,62,52,62,38,65], "Le marxiste théorique et l'empiriste de terrain — accord sur le fond, désaccord sur la méthode.", "Yoob apporte du terrain, Lyd apporte la théorie. Ils s'enrichissent mutuellement."],
+  ['lyd','zoller', 32, [58,85,22,52,55,25,82,30], "Le marxiste rigoureux vs le libéral décliniste — clash permanent, respect à contrecœur.", "Zoller et Lyd s'irritent profondément mais se respectent intellectuellement."],
+  ['shaars','sinnoh', 52, [78,55,45,52,50,50,48,62], "Le gaulliste sourceur vs le catholique monarchiste — deux rigueurs différentes.", "Ils se respectent pour la méthode, divergent fondamentalement sur les fins."],
+  ['shaars','merko', 75, [80,38,75,65,62,78,30,70], "Deux anti-libéraux sourceurs — l'alliance la plus analytique du serveur.", "SHAars et merko sont tous deux rigoureux, étatistes et critiques du RN."],
+  ['shaars','maw', 62, [68,45,58,70,55,62,38,62], "Le gendarme intellectuel et l'ironiste breton — complicité inattendue.", "Maw désamorce SHAars avec l'humour. SHAars apprécie la bonne foi de Maw."],
+  ['shaars','raydo', 38, [60,80,28,48,50,32,72,35], "Le gaulliste républicain vs le nationaliste monarchiste — désaccord fondamental sur la République.", "SHAars défend la République avec des sources. Raydo la rejette avec Dieu."],
+  ['shaars','yabaphi', 22, [38,90,18,38,42,18,88,25], "Le sourceur rigoureux vs le complotiste instinctif — paire la plus explosive après mpb/yabaphi.", "SHAars demande des sources. Yabaphi n'en a pas. Le clash est quasi-automatique."],
+  ['shaars','udf', 60, [70,50,60,68,62,60,42,62], "Deux pragmatiques critiques du système — plus de points communs que prévu.", "SHAars et UDF partagent un anti-élitisme sincère malgré leurs positions différentes."],
+  ['shaars','yoob', 65, [68,42,62,65,58,65,35,65], "Le gendarme sourceur et le boucher pragmatique — respect mutuel inattendu.", "Ils partagent une vision étatiste de l'économie et un pragmatisme sur l'immigration."],
+  ['shaars','dorian', 48, [55,60,45,55,60,45,55,45], "Le gendarme verbeux vs l'observateur laconique — format incompatible.", "SHAars produit des tirades, Dorian répond en 3 mots. SHAars est frustré."],
+  ['shaars','zoller', 42, [62,72,38,58,60,40,65,42], "Le gaulliste étatiste vs le libéral décliniste — désaccord fondamental sur l'État.", "SHAars défend le service public, zoller veut le minimiser."],
+  ['sinnoh','forandos', 65, [80,42,62,55,48,62,35,70], "Deux libéraux classiques avec des cœurs différents — accord sur l'économie.", "Forandos est laïc décliniste, sinnoh est catholique monarchiste. Ils partagent le libéralisme économique."],
+  ['sinnoh','foudulabo', 30, [62,80,18,45,38,20,75,35], "La théologie vs la science — deux modes de raisonnement incompatibles.", "Foudulabo est chercheur scientifique laïc, sinnoh est catholique de doctrine. Choc de paradigmes."],
+  ['sinnoh','maw', 48, [60,60,42,72,45,45,55,50], "Le catholique et le gaucho breton — compatibilité humaine, désaccord politique.", "Maw troll sinnoh sur la laïcité. Sinnoh répond avec hauteur. Maw respecte la cohérence."],
+  ['sinnoh','merko', 35, [65,78,25,48,42,28,72,38], "Le libéral monarchiste et l'anti-libéral pamphlétaire — incompatibilité économique majeure.", "Merko est anti-libéral viscéral, sinnoh est libéral classique. Le clash est net et régulier."],
+  ['sinnoh','yabaphi', 38, [42,70,52,45,38,42,65,35], "Deux catholiques conservateurs de profil très différent — alliance fragile.", "Yabaphi est instinctif et complotiste, sinnoh est rigoureux et doctrinal. Ils divergent sur la méthode."],
+  ['sinnoh','udf', 45, [65,65,38,60,50,42,58,48], "Le monarchiste libéral et le pragmatiste anti-boomer — curiosité mutuelle.", "UDF est intrigué par la cohérence de sinnoh. Sinnoh trouve UDF trop nihiliste."],
+  ['sinnoh','yoob', 55, [65,48,55,62,50,55,42,58], "Le catholique analytique et le boucher pragmatique — respect mutuel inhabituel.", "Yoob apprécie la cohérence de sinnoh. Sinnoh respecte le pragmatisme ancré dans le réel de yoob."],
+  ['sinnoh','dorian', 52, [60,50,52,65,50,50,45,55], "Deux conservateurs avec des styles différents — accord de fond, relation distante.", "Dorian et sinnoh partagent un conservatisme de fond sans se le dire explicitement."],
+  ['sinnoh','zoller', 58, [68,52,62,68,55,60,42,60], "Le libéral catholique et le libéral décliniste — alliance économique avec des fins différentes.", "Zoller et sinnoh s'accordent sur le libéralisme économique, divergent sur le reste."],
+  ['forandos','foudulabo', 35, [65,72,28,55,40,30,68,40], "Le libéral décliniste et le chercheur de gauche — deux rigeurs pour des fins opposées.", "Forandos sourcé libéral, foudulabo sourcé gauche. Le niveau est élevé, l'accord impossible."],
+  ['forandos','maw', 58, [65,48,50,75,50,52,42,60], "Le calculateur compulsif et l'ironiste breton — décalage de modes comique.", "Maw troll forandos avec ses positions. Forandos ne sait pas si c'est sérieux. C'est drôle."],
+  ['forandos','merko', 38, [72,70,32,50,48,35,65,42], "Le libéral décliniste vs l'anti-libéral pamphlétaire — désaccord économique fondamental.", "Forandos cite la Courbe de Laffer, merko répond qu'il chie dessus."],
+  ['forandos','dorian', 60, [62,45,58,65,60,58,38,58], "Deux déclinistes pragmatiques — accord sur le pronostic, silence sur les solutions.", "Forandos et Dorian voient tous les deux la France décliner. Aucun ne croit aux solutions."],
+  ['forandos','yabaphi', 32, [42,80,28,45,45,28,75,32], "Le calculateur analytique vs le complotiste instinctif — respect impossible.", "Forandos déconstruit les thèses de yabaphi avec des chiffres. Yabaphi dit qu'il est un golem."],
+  ['forandos','udf', 62, [72,48,60,70,65,62,40,62], "Deux pragmatiques analytiques qui se comprennent malgré des positions différentes.", "Forandos et UDF sont tous deux des observateurs cyniques. La compatibilité est réelle."],
+  ['forandos','yoob', 65, [68,42,62,68,58,65,35,62], "Le théoricien du déclin et l'observateur de terrain — se complètent bien.", "Forandos donne le cadre macroéconomique, yoob donne la réalité de terrain. Bon équilibre."],
+  ['forandos','zoller', 78, [80,35,78,75,68,78,28,72], "Deux déclinistes libéraux — la paire la plus stable de la droite du serveur.", "Forandos et zoller partagent le libéralisme économique et le déclinisme. Alliance productive."],
+  ['foudulabo','shaars', 62, [72,45,60,60,55,62,38,65], "La gauche radicale sourcée et le gaulliste sourceur — accord sur l'anti-libéralisme.", "Tous deux rigoureux, tous deux critiques du capitalisme. Alliance naturelle de méthode."],
+  ['foudulabo','sinnoh', 30, [62,80,18,45,38,20,75,35], "La rigueur scientifique vs la théologie — clash de paradigmes profond.", "Incompatibilité fondamentale sur les sources de vérité et les fins politiques."],
+  ['foudulabo','kaspei', 40, [72,68,30,55,50,35,62,45], "Le chercheur de gauche et le pédagogue libéral — respectueux mais très opposés.", "Ils se respectent pour la méthode mais divergent sur tout le reste."],
+  ['foudulabo','yabaphi', 25, [35,88,15,40,40,18,85,28], "La gauche antiraciste et la droite complotiste — paire explosive.", "Foudulabo est explicitement anti-RN et anti-complotiste. Yabaphi est l'inverse."],
+  ['foudulabo','raydo', 28, [48,85,18,38,42,18,82,30], "Le chercheur laïc de gauche et le nationaliste catholique — incompatibilité totale.", "Deux mondes qui ne partagent ni les valeurs ni les méthodes."],
+  ['foudulabo','udf', 55, [62,55,58,68,52,55,48,58], "Deux gauches pragmatiques qui se comprennent plus qu'ils ne le pensent.", "Foudulabo est gauche académique, UDF est gauche cynique. Convergence sur la précarité."],
+  ['foudulabo','yoob', 58, [62,48,58,65,50,58,40,62], "Le chercheur précarité et le boucher pragmatique — compréhension mutuelle du réel.", "Foudulabo vit la précarité, yoob la gère comme patron. Respect mutuel."],
+  ['foudulabo','zoller', 28, [48,85,18,40,42,20,82,28], "La gauche radicale et le libéral décliniste — désaccord total.", "Foudulabo et zoller sont aux antipodes sur tout sauf l'humour dark."],
+  ['maw','merko', 62, [68,45,62,75,55,60,38,62], "Deux gauches différentes qui s'allient sur le fond.", "Maw et merko partagent l'anti-libéralisme mais pas le style. Alliance fonctionnelle."],
+  ['maw','raydo', 42, [52,65,38,62,48,40,58,45], "L'ironiste et l'idéologue — Raydo prend Maw trop au sérieux.", "Maw troll raydo avec ses positions. Raydo répond avec sa prophétie. Incompréhension douce."],
+  ['maw','yabaphi', 30, [40,78,25,50,42,28,72,32], "Le gaucho breton et le droitier identitaire — désaccord profond.", "Maw se dit de gauche (même si ironiquement). Yabaphi est identitaire décomplexé. Clash régulier."],
+  ['maw','sinnoh', 48, [60,60,42,72,45,45,55,50], "Compatibilité humaine, désaccord politique complet.", "Maw apprécie la cohérence de sinnoh. Sinnoh ne sait pas si maw est sincère."],
+  ['maw','udf', 68, [65,42,62,82,62,65,35,65], "Deux provocateurs calibrés — alliance naturelle de style.", "Maw et UDF partagent l'humour dark et la capacité à dire des choses qui choquent avec légèreté."],
+  ['maw','yoob', 62, [62,42,60,72,58,62,35,60], "L'enseignant ironiste et le boucher pragmatique — compréhension populaire mutuelle.", "Maw comprend le monde populaire de yoob. Yoob apprécie l'honnêteté de Maw."],
+  ['maw','dorian', 60, [58,45,55,72,60,58,38,58], "Deux observateurs de la France qui partagent le même détachement.", "Maw est ironiquement résigné, Dorian est sincèrement résigné. Ils se comprennent."],
+  ['maw','zoller', 62, [62,42,58,75,60,62,35,60], "L'ironiste et le provocateur calibré — complicité rhétorique.", "Maw et zoller partagent le plaisir de la provocation légèrement sérieuse."],
+  ['merko','kaspei', 35, [72,80,28,48,52,28,75,38], "L'anti-libéral viscéral et le pédagogue libéral — paire la plus débattue.", "Merko et Kaspei s'opposent sur tout économiquement. Leurs débats sont denses et sans issue."],
+  ['merko','yabaphi', 25, [35,88,18,40,40,20,85,25], "L'anti-libéral de gauche et l'identitaire de droite — incompatibilité profonde.", "Merko est anti-RN, yabaphi est sympathisant. Clash régulier."],
+  ['merko','raydo', 28, [50,88,18,42,48,20,82,30], "Le gaucho engagé et le nationaliste catholique — clash inévitable.", "Leurs positions sont opposées sur presque tout. La confrontation est régulière et spectaculaire."],
+  ['merko','sinnoh', 35, [65,78,25,48,42,28,72,38], "Le libéral monarchiste et l'anti-libéral pamphlétaire — désaccord total.", "Merko chie à la gueule d'Adam Smith. Sinnoh est libéral classique. L'incompatibilité est totale."],
+  ['merko','udf', 62, [68,48,62,72,62,60,42,60], "Deux anti-système avec des styles différents — alliance partielle.", "Merko est structuré et engagé, UDF est chaotique et cynique. Ils partagent le fond."],
+  ['merko','yoob', 58, [62,50,58,65,55,58,42,60], "L'engagé et l'observateur — respect mutuel de la cohérence.", "Merko respecte le pragmatisme de yoob. Yoob trouve merko un peu idéologue mais honnête."],
+  ['merko','zoller', 28, [55,85,22,50,50,22,82,28], "L'anti-libéral et le libéral décliniste — clash maximal.", "Merko et zoller sont sur des planètes politiques différentes."],
+  ['dorian','kaspei', 62, [58,42,60,65,72,60,35,58], "Deux pragmatiques de droite — alliance naturelle et discrète.", "Dorian et kaspei convergent sur beaucoup de sujets sans jamais le débattre ouvertement."],
+  ['dorian','sinnoh', 52, [60,50,52,65,50,50,45,55], "Deux conservateurs tranquilles — accord de fond.", "Convergence conservative sans grand débat entre eux."],
+  ['dorian','raydo', 55, [52,62,52,62,68,52,55,50], "Deux droitiers qui partagent le dégoût du système — alliance fragile.", "Dorian et raydo s'accordent sur le constat, divergent sur l'ampleur du désespoir."],
+  ['dorian','udf', 65, [62,42,60,78,72,62,35,62], "Deux pragmatiques irréverencieux — complicité gaming et politique.", "Gaming, observation cynique de la France — Dorian et UDF se comprennent bien."],
+  ['dorian','zoller', 72, [68,38,70,78,75,70,30,65], "La paire la plus compatible de la droite pragmatique.", "Dorian et zoller partagent le même regard pragmatique et légèrement cynique sur la France."],
+  ['kaspei','udf', 58, [72,50,55,65,65,55,42,60], "Le pédagogue libéral et le franc-tireur pragmatique — accord partiel.", "Kaspei et UDF se rejoignent sur la critique du système mais divergent sur les solutions."],
+  ['kaspei','yoob', 60, [65,45,58,60,55,60,38,62], "Deux pragmatiques qui respectent le réel — alliance de méthode.", "Kaspei sourcé et yoob empirique — deux façons différentes d'arriver à des conclusions similaires."],
+  ['kaspei','dorian', 62, [58,42,60,65,72,60,35,58], "Convergence naturelle de la droite pragmatique.", "Kaspei et dorian partagent le pragmatisme libéral sans le verbaliser."],
+  ['kaspei','maw', 60, [65,52,48,82,58,52,45,60], "Le pédagogue et l'ironiste — la compatibilité la plus étrange.", "Kaspei prend maw trop au sérieux. Maw apprécie la rigueur de kaspei."],
+  ['kaspei','foudulabo', 40, [72,68,30,55,50,35,62,45], "La rigueur libérale et la rigueur de gauche — respect mutuel.", "Tous deux rigoureux, conclusions opposées. Le débat est de qualité."],
+  ['kaspei','zoller', 72, [72,38,75,70,70,75,30,65], "Alliance libérale de droite — très bonne compatibilité.", "Kaspei et zoller partagent le libéralisme économique et la méfiance de la gauche."],
+  ['yabaphi','udf', 40, [42,72,38,58,50,38,68,38], "Le complotiste et le cynique — convergence partielle sur la méfiance.", "YABAphi et UDF partagent la méfiance des élites mais pour des raisons très différentes."],
+  ['yabaphi','yoob', 45, [50,62,42,55,48,45,58,42], "Le complotiste et le pragmatique — désaccord de méthode.", "Yoob est empirique, yabaphi est complotiste. Ils ne parlent pas la même langue."],
+  ['yabaphi','dorian', 55, [48,58,52,60,58,52,52,48], "Deux droitiers de terrain — compatibilité de surface.", "Dorian et yabaphi partagent un fond conservateur. Dorian ne suit pas le complotisme."],
+  ['yabaphi','zoller', 62, [52,48,68,65,62,62,40,55], "L'identitaire et le libéral décliniste — accord partiel sur le diagnostic.", "Zoller et yabaphi convergent sur l'immigration et le déclin, divergent sur la méthode."],
+  ['raydo','udf', 35, [50,78,30,52,55,30,72,32], "L'idéologue et le cynique — ils ne parlent pas la même langue.", "Raydo a un programme complet, UDF se méfie de tous les programmes."],
+  ['raydo','yoob', 48, [55,60,45,55,52,48,55,50], "Le nationaliste catholique et le boucher souverainiste — accord partiel.", "Yoob est souverainiste pragmatique, raydo est nationaliste idéologique. Convergence partielle."],
+  ['raydo','dorian', 55, [52,62,52,62,68,52,55,50], "Deux droitiers avec des niveaux d'engagement différents.", "Raydo est passionné et idéologique. Dorian est passif et pragmatique. Ils coexistent."],
+  ['raydo','zoller', 72, [68,38,75,72,68,72,30,65], "Alliance de droite solide — les deux s'accordent sur l'essentiel.", "Raydo et zoller partagent le souverainisme, l'anti-immigration et la critique de la gauche."],
+  ['udf','yoob', 65, [62,42,60,72,62,62,35,62], "Deux pragmatiques de terrain — compatibilité naturelle.", "UDF et yoob partagent une vision directe et sans idéologie de la France."],
+  ['udf','dorian', 65, [62,42,60,78,72,62,35,62], "Deux observateurs cyniques — complicité naturelle.", "UDF et dorian partagent le détachement ironique face à la politique française."],
+  ['yoob','zoller', 72, [72,38,72,80,62,72,30,65], "Deux pragmatiques propriétaires — alliance très naturelle.", "Yoob et zoller partagent le pragmatisme, la propriété et la méfiance de LFI."],
+];
+
+remainingPairs.forEach(([a, b, global, dims, phrase, verdict]) => {
+  setPair(a, b, {
+    global, dims, phrase, verdict,
+    dynamic: verdict,
+    chat: [
+      { member: a, text: "Je maintiens ma position sur ce sujet." },
+      { member: b, text: "Et moi la mienne. On est en désaccord." },
+      { member: a, text: "C'est noté." },
+    ],
+    pronostic: { type: global > 65 ? "🤝 COMPATIBLE" : global > 45 ? "⚡ TENDU" : "💥 EXPLOSIF", sante: "Variable selon les sujets", topic: "À voir" },
+    anecdote: `${MEMBERS[a]?.name} et ${MEMBERS[b]?.name} débattent. Chacun défend ses positions. Le débat se termine sans résolution, comme d'habitude.`
+  });
+});
+
+// ── POPULATE SELECTS ──
+function populateSelects() {
+  const selA = document.getElementById('selectA');
+  const selB = document.getElementById('selectB');
+  MEMBER_KEYS.forEach(k => {
+    const m = MEMBERS[k];
+    selA.innerHTML += `<option value="${k}">${m.emoji} ${m.name} — ${m.full}</option>`;
+    selB.innerHTML += `<option value="${k}">${m.emoji} ${m.name} — ${m.full}</option>`;
+  });
+}
+
+// ── GET PAIR DATA ──
+function getPairData(a, b) {
+  if (a === b) return null;
+  const key = [a,b].sort().join('__');
+  return COMPAT[key] || null;
+}
+
+// ── SCORE COLOR ──
+function scoreColor(v) {
+  if (v >= 70) return '#3dffc0';
+  if (v >= 50) return '#f0a500';
+  return '#e94560';
+}
+
+function dimColor(name, v) {
+  // clash and toxicity: lower = better
+  if (name.includes('clash') || name.includes('toxicit')) {
+    if (v <= 35) return '#3dffc0';
+    if (v <= 60) return '#f0a500';
+    return '#e94560';
+  }
+  return scoreColor(v);
+}
+
+const DIM_NAMES = [
+  '🧠 Compat. intellectuelle',
+  '⚔️ Risque de clash',
+  '🎯 Alignement politique',
+  '😂 Compat. humoristique',
+  '🎮 Compat. gaming',
+  '🤝 Potentiel d\'alliance',
+  '☢️ Indice de toxicité',
+  '💡 Complémentarité'
+];
+
+// ── ANALYZE ──
+let sessionHistory = [];
+
+function analyze() {
+  const a = document.getElementById('selectA').value;
+  const b = document.getElementById('selectB').value;
+  if (!a || !b) { alert('Sélectionne deux membres !'); return; }
+  if (a === b) { alert('Impossible d\'analyser un membre avec lui-même !'); return; }
+  runAnalysis(a, b);
+}
+
+function runAnalysis(a, b) {
+  const data = getPairData(a, b);
+  if (!data) { alert('Données non trouvées pour cette paire.'); return; }
+
+  // Hide result, show loading
+  document.getElementById('resultCard').classList.remove('active');
+  const loading = document.getElementById('loadingScreen');
+  loading.classList.add('active');
+  const ma = MEMBERS[a], mb = MEMBERS[b];
+  document.getElementById('loadingNames').textContent = `${ma.name} × ${mb.name}`;
+
+  const steps = [
+    'Analyse des corpus de messages…',
+    'Calcul des vecteurs idéologiques…',
+    'Évaluation de la toxicité croisée…',
+    'Génération du profil de compatibilité…',
+    'Rédaction du verdict…',
+  ];
+  let step = 0;
+  let pct = 0;
+  const bar = document.getElementById('loadingBar');
+  const stepEl = document.getElementById('loadingStep');
+  stepEl.textContent = steps[0];
+
+  const interval = setInterval(() => {
+    pct += 4;
+    bar.style.width = Math.min(pct, 98) + '%';
+    if (pct % 20 === 0 && step < steps.length - 1) {
+      step++;
+      stepEl.textContent = steps[step];
+    }
+    if (pct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => showResult(a, b, data), 200);
+    }
+  }, 40);
+}
+
+function showResult(a, b, data) {
+  document.getElementById('loadingScreen').classList.remove('active');
+  const card = document.getElementById('resultCard');
+  card.classList.add('active');
+
+  const ma = MEMBERS[a], mb = MEMBERS[b];
+
+  // Names
+  document.getElementById('nameA').textContent = ma.name;
+  document.getElementById('descA').textContent = ma.desc;
+  document.getElementById('nameB').textContent = mb.name;
+  document.getElementById('descB').textContent = mb.desc;
+
+  // Score
+  const scoreEl = document.getElementById('scoreNum');
+  scoreEl.textContent = data.global;
+  scoreEl.style.color = scoreColor(data.global);
+
+  // Global gauge
+  const gauge = document.getElementById('globalGauge');
+  gauge.style.background = `linear-gradient(90deg, ${scoreColor(data.global)}, ${scoreColor(data.global)}88)`;
+  setTimeout(() => { gauge.style.width = data.global + '%'; }, 100);
+
+  // Dimensions
+  const grid = document.getElementById('dimensionsGrid');
+  grid.innerHTML = '';
+  data.dims.forEach((val, i) => {
+    const name = DIM_NAMES[i];
+    const color = name.includes('clash') || name.includes('toxicit') ?
+      (val <= 35 ? '#3dffc0' : val <= 60 ? '#f0a500' : '#e94560') : scoreColor(val);
+    const displayVal = (name.includes('clash') || name.includes('toxicit')) ?
+      (100 - val) + '% ✓' : val + '%';
+    grid.innerHTML += `
+      <div class="dim-item">
+        <div class="dim-header">
+          <span class="dim-name">${name}</span>
+          <span class="dim-score" style="color:${color}">${val}%</span>
+        </div>
+        <div class="dim-bar-track">
+          <div class="dim-bar-fill" style="background:${color}" data-val="${val}"></div>
+        </div>
+      </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.dim-bar-fill').forEach(el => {
+      el.style.width = el.dataset.val + '%';
+    });
+  }, 200);
+
+  // Verdict
+  document.getElementById('verdictPhrase').textContent = data.phrase;
+  document.getElementById('verdictText').textContent = data.verdict;
+
+  // Dynamic
+  document.getElementById('dynamicText').innerHTML = data.dynamic;
+
+  // Chat
+  const chatEl = document.getElementById('chatMessages');
+  chatEl.innerHTML = '';
+  if (data.chat) {
+    data.chat.forEach(msg => {
+      const m = MEMBERS[msg.member];
+      if (!m) return;
+      chatEl.innerHTML += `
+        <div class="chat-msg">
+          <div class="chat-avatar" style="background:${m.color}22;color:${m.color};border:1px solid ${m.color}44">${m.emoji}</div>
+          <div class="chat-content">
+            <div class="chat-name-row">
+              <span class="chat-name" style="color:${m.color}">${m.name}</span>
+              <span class="chat-time">aujourd'hui</span>
+            </div>
+            <div class="chat-text">${msg.text}</div>
+          </div>
+        </div>`;
+    });
+  }
+
+  // Pronostic
+  const pronosticEl = document.getElementById('pronosticGrid');
+  if (data.pronostic) {
+    pronosticEl.innerHTML = `
+      <div class="pronostic-item">
+        <div class="pronostic-label">TYPE DE RELATION</div>
+        <div class="pronostic-val">${data.pronostic.type}</div>
+      </div>
+      <div class="pronostic-item">
+        <div class="pronostic-label">SANTÉ RELATIONNELLE</div>
+        <div class="pronostic-val">${data.pronostic.sante}</div>
+      </div>
+      <div class="pronostic-item" style="grid-column:span 2">
+        <div class="pronostic-label">SUJET DÉCLENCHEUR</div>
+        <div class="pronostic-val">${data.pronostic.topic}</div>
+      </div>`;
+  }
+
+  // Anecdote
+  document.getElementById('anecdoteText').textContent = data.anecdote;
+
+  // History
+  addToHistory(a, b, data.global);
+
+  // Scroll to result
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── HISTORY ──
+function addToHistory(a, b, score) {
+  const ma = MEMBERS[a], mb = MEMBERS[b];
+  sessionHistory.unshift({ a, b, score, nameA: ma.name, nameB: mb.name });
+  if (sessionHistory.length > 10) sessionHistory.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const section = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+  if (sessionHistory.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = sessionHistory.map((h, i) => `
+    <div class="history-item" onclick="replayHistory(${i})">
+      <span class="history-pair">${MEMBERS[h.a].emoji} ${h.nameA} × ${MEMBERS[h.b].emoji} ${h.nameB}</span>
+      <span class="history-score" style="color:${scoreColor(h.score)}">${h.score}%</span>
+    </div>`).join('');
+}
+
+function replayHistory(i) {
+  const h = sessionHistory[i];
+  document.getElementById('selectA').value = h.a;
+  document.getElementById('selectB').value = h.b;
+  runAnalysis(h.a, h.b);
+}
+
+// ── RANDOM PAIR ──
+function randomPair() {
+  const keys = MEMBER_KEYS.slice();
+  const a = keys[Math.floor(Math.random() * keys.length)];
+  let b;
+  do { b = keys[Math.floor(Math.random() * keys.length)]; } while (b === a);
+  document.getElementById('selectA').value = a;
+  document.getElementById('selectB').value = b;
+  runAnalysis(a, b);
+}
+
+// ── WORST PAIR ──
+function worstPair() {
+  let worst = null, worstScore = 999;
+  Object.entries(COMPAT).forEach(([key, data]) => {
+    if (data.global < worstScore) { worstScore = data.global; worst = key; }
+  });
+  if (worst) {
+    const [a, b] = worst.split('__');
+    document.getElementById('selectA').value = a;
+    document.getElementById('selectB').value = b;
+    runAnalysis(a, b);
+  }
+}
+
+// ── BEST PAIR ──
+function bestPair() {
+  let best = null, bestScore = -1;
+  Object.entries(COMPAT).forEach(([key, data]) => {
+    if (data.global > bestScore) { bestScore = data.global; best = key; }
+  });
+  if (best) {
+    const [a, b] = best.split('__');
+    document.getElementById('selectA').value = a;
+    document.getElementById('selectB').value = b;
+    runAnalysis(a, b);
+  }
+}
+
+// ── TOURNAMENT ──
+function startTournament() {
+  const section = document.getElementById('tournamentSection');
+  section.classList.add('active');
+  section.scrollIntoView({ behavior: 'smooth' });
+
+  // Simulate a debate tournament
+  const players = [...MEMBER_KEYS];
+  // Shuffle
+  for (let i = players.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [players[i], players[j]] = [players[j], players[i]];
+  }
+
+  // Round of 16 (use first 16)
+  const rounds = [];
+  let currentRound = players.slice(0, 16);
+
+  while (currentRound.length > 1) {
+    const roundMatches = [];
+    const nextRound = [];
+    for (let i = 0; i < currentRound.length; i += 2) {
+      if (i + 1 >= currentRound.length) { nextRound.push(currentRound[i]); break; }
+      const a = currentRound[i], b = currentRound[i+1];
+      const data = getPairData(a, b);
+      // Winner = better debater (based on clash score - who "wins" in explosive pairs = higher global)
+      // Logic: the more dominant debater wins (use alliance + intellectual dims)
+      const aScore = data ? (data.dims[0] + data.dims[5]) / 2 : 50;
+      const bScore = data ? (100 - data.dims[0] + data.dims[5]) / 2 : 50;
+      // Add some randomness
+      const aWins = (aScore + Math.random() * 20) > (bScore + Math.random() * 20);
+      const winner = aWins ? a : b;
+      const loser = aWins ? b : a;
+      roundMatches.push({ a, b, winner, loser });
+      nextRound.push(winner);
+    }
+    rounds.push(roundMatches);
+    currentRound = nextRound;
+  }
+
+  const champion = currentRound[0];
+
+  const roundNames = ['Tour 1', 'Quarts', 'Demies', 'Finale'];
+  const grid = document.getElementById('tournamentGrid');
+  grid.innerHTML = '';
+
+  rounds.forEach((matches, ri) => {
+    const col = document.createElement('div');
+    col.className = 'tournament-round';
+    col.innerHTML = `<div class="round-title">${roundNames[ri] || 'Finale'}</div>`;
+    matches.forEach(m => {
+      const mEl = document.createElement('div');
+      mEl.className = 'tournament-match';
+      const ma = MEMBERS[m.a], mb = MEMBERS[m.b];
+      mEl.innerHTML = `
+        <div class="${m.winner === m.a ? 'winner' : 'loser'}">${ma.emoji} ${ma.name}</div>
+        <div style="color:var(--text3);font-size:10px;margin:2px 0">VS</div>
+        <div class="${m.winner === m.b ? 'winner' : 'loser'}">${mb.emoji} ${mb.name}</div>`;
+      col.appendChild(mEl);
+    });
+    grid.appendChild(col);
+  });
+
+  // Champion column
+  const champCol = document.createElement('div');
+  champCol.className = 'tournament-round';
+  champCol.innerHTML = `
+    <div class="round-title">Champion</div>
+    <div class="tournament-champion">
+      <div class="champion-label">🏆 VAINQUEUR DU TOURNOI</div>
+      <div class="champion-name">${MEMBERS[champion].emoji} ${MEMBERS[champion].name}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px">${MEMBERS[champion].desc}</div>
+    </div>`;
+  grid.appendChild(champCol);
+}
+
+// ── INIT ──
+populateSelects();
+</script>
+</body>
+</html>
