@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IKASPYROF — Profil Psychologique & LoL</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52ab;
+    --red: #e94560;
+    --red-light: #ff6b6b;
+    --gold: #f5a623;
+    --text: #e0e0e0;
+    --text-dim: #a0a0b8;
+    --card-bg: #1e1e3a;
+    --border: #2a2a4a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 40%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 40px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(83,52,131,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .avatar {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 0 30px rgba(233,69,96,0.5);
+    flex-shrink: 0;
+  }
+  .header-info h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #fff 30%, var(--red) 70%, var(--purple-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+  }
+  .header-info .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-top: 4px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-red    { background: rgba(233,69,96,0.2);  border: 1px solid var(--red);    color: var(--red-light); }
+  .badge-purple { background: rgba(83,52,131,0.3);  border: 1px solid var(--purple-light); color: #b48ee0; }
+  .badge-gold   { background: rgba(245,166,35,0.15); border: 1px solid var(--gold);   color: var(--gold); }
+  .badge-blue   { background: rgba(15,52,96,0.5);   border: 1px solid #4a90d9;        color: #7ab8f5; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+  .stats-bar-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: 0;
+  }
+  .stat-item {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 12px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--red);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 22px;
+    background: var(--red);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+  .card-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  /* PROGRESS BARS */
+  .progress-list { display: flex; flex-direction: column; gap: 10px; }
+  .progress-item { }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    font-size: 0.87rem; margin-bottom: 5px;
+    color: var(--text);
+  }
+  .progress-track {
+    height: 8px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    transition: width 0.8s ease;
+  }
+  .progress-fill.gold { background: linear-gradient(90deg, #a07020, var(--gold)); }
+
+  /* CANVAS CHART */
+  canvas { width: 100%; height: 180px; }
+
+  /* QUOTES */
+  .quote-box {
+    background: rgba(83,52,131,0.15);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #c8c8e8;
+  }
+  .quote-date { font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; font-style: normal; }
+
+  /* RAGE METER */
+  .rage-meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .rage-label { font-size: 0.8rem; color: var(--text-dim); width: 120px; }
+  .rage-dots {
+    display: flex; gap: 5px;
+  }
+  .rage-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .rage-dot.filled { background: var(--red); box-shadow: 0 0 6px rgba(233,69,96,0.6); }
+  .rage-dot.half { background: var(--gold); box-shadow: 0 0 6px rgba(245,166,35,0.4); }
+
+  /* EXPRESSION TAGS */
+  .expr-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .expr-tag {
+    background: rgba(83,52,131,0.25);
+    border: 1px solid rgba(123,82,171,0.4);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.82rem;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .expr-count {
+    background: var(--red);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* PROSE SECTION */
+  .prose-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .prose-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+  .prose-part {
+    margin-bottom: 32px;
+  }
+  .prose-part:last-child { margin-bottom: 0; }
+  .prose-part h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .prose-part h3 .num {
+    background: var(--red);
+    color: white;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .prose-part p {
+    font-size: 0.93rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .prose-part em {
+    color: #c8b8f5;
+    font-style: italic;
+  }
+  .prose-part .inline-date {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    vertical-align: middle;
+    background: rgba(83,52,131,0.2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+
+  /* PSYCHIATRIC SECTION */
+  .psych-section {
+    background: #f8f7f0;
+    color: #2a2a2a;
+    border: 2px solid #8b7355;
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 32px;
+    font-family: 'Courier New', monospace;
+    position: relative;
+  }
+  .psych-section::before {
+    content: '⚕ DOCUMENT MÉDICAL CONFIDENTIEL ⚕';
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: #8b7355;
+    color: white;
+    font-size: 0.72rem;
+    padding: 2px 12px;
+    letter-spacing: 2px;
+  }
+  .psych-header {
+    text-align: center;
+    border-bottom: 2px solid #8b7355;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  .psych-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #2a2a2a;
+  }
+  .psych-header .cabinet {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 4px;
+  }
+  .psych-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8b7355;
+    font-weight: 700;
+    margin-top: 16px;
+    margin-bottom: 4px;
+  }
+  .psych-content {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: #333;
+    border-left: 3px solid #8b7355;
+    padding-left: 12px;
+    margin-bottom: 12px;
+  }
+  .psych-diag {
+    background: #fff3cd;
+    border: 1px solid #8b6914;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #5a3e00;
+  }
+  .psych-ordonnance {
+    background: white;
+    border: 2px solid #2a5298;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .psych-ordonnance h3 {
+    color: #2a5298;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .psych-rx-item {
+    display: flex; gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    align-items: baseline;
+  }
+  .psych-rx-num {
+    background: #2a5298;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+  }
+  .psych-signature {
+    text-align: right;
+    margin-top: 16px;
+    font-style: italic;
+    color: #2a5298;
+    font-size: 0.8rem;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+
+  /* VERDICT */
+  .verdict {
+    background: linear-gradient(135deg, var(--bg2), #200a30);
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    padding: 28px 30px;
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .verdict::before {
+    content: '⚔';
+    position: absolute;
+    font-size: 8rem;
+    opacity: 0.04;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .verdict h2 {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  .verdict-line {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .verdict-line strong { color: var(--gold); }
+
+  /* MEMORABLE EVENTS */
+  .event-card {
+    background: rgba(83,52,131,0.1);
+    border: 1px solid rgba(123,82,171,0.3);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .event-card .event-date {
+    font-size: 0.72rem;
+    color: var(--red);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .event-card .event-desc {
+    font-size: 0.87rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .event-card .event-quote {
+    font-style: italic;
+    color: #c8b8f5;
+    margin-top: 6px;
+    font-size: 0.85rem;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="avatar">🌙</div>
+      <div class="header-info">
+        <h1>ikaspyrof</h1>
+        <div class="subtitle">Canal qq-only · Profil psycho-ludique complet · Période 2021–2026</div>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-red">🩸 Diana Main</span>
+      <span class="badge badge-purple">🌀 Jgl Cultiste</span>
+      <span class="badge badge-gold">⚡ Master Aspirant Chronique</span>
+      <span class="badge badge-blue">🧠 Analyste de la Défaite</span>
+      <span class="badge badge-red">💢 Niveau de Rage : 7/10</span>
+      <span class="badge badge-purple">📊 4 123 messages archivés</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STATS BAR ============ -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat-item">
+      <span class="stat-value">4 123</span>
+      <span class="stat-label">Messages total</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">~5 ans</span>
+      <span class="stat-label">Période d'activité</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">11h00</span>
+      <span class="stat-label">Pic d'activité</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">2.34</span>
+      <span class="stat-label">Msg/jour (moy.)</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">Septembre</span>
+      <span class="stat-label">Mois le + actif</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">Master</span>
+      <span class="stat-label">Objectif éternel</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAIN ============ -->
+<div class="main">
+
+  <!-- SECTION 1 : STATS / CHARTS -->
+  <h2 class="section-title">Statistiques d'activité</h2>
+  <div class="grid-2">
+
+    <!-- Hourly chart -->
+    <div class="card">
+      <div class="card-title">📊 Distribution horaire des messages</div>
+      <canvas id="hourlyChart" height="180"></canvas>
+    </div>
+
+    <!-- Champions -->
+    <div class="card">
+      <div class="card-title">🏆 Champions les plus mentionnés</div>
+      <div class="progress-list">
+        <div class="progress-item">
+          <div class="progress-header"><span>Lee Sin</span><span>31</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Diana 🌙</span><span>28</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:90%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Yasuo</span><span>14</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:45%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Viego</span><span>12</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:39%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Syndra</span><span>8</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:26%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Sylas</span><span>7</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:22%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span>Riven / Samira</span><span>6</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:19%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Expressions signature -->
+    <div class="card">
+      <div class="card-title">💬 Expressions signature (fréquence)</div>
+      <div class="expr-grid">
+        <div class="expr-tag">mdr <span class="expr-count">134</span></div>
+        <div class="expr-tag">ez <span class="expr-count">71</span></div>
+        <div class="expr-tag">xd/xdd <span class="expr-count">67</span></div>
+        <div class="expr-tag">bah <span class="expr-count">62</span></div>
+        <div class="expr-tag">int <span class="expr-count">43</span></div>
+        <div class="expr-tag">tqt <span class="expr-count">34</span></div>
+        <div class="expr-tag">bg <span class="expr-count">26</span></div>
+        <div class="expr-tag">abusé <span class="expr-count">15</span></div>
+        <div class="expr-tag">insane <span class="expr-count">15</span></div>
+        <div class="expr-tag">frr <span class="expr-count">14</span></div>
+        <div class="expr-tag">wsh <span class="expr-count">9</span></div>
+        <div class="expr-tag">ouf <span class="expr-count">10</span></div>
+      </div>
+    </div>
+
+    <!-- Rage meter -->
+    <div class="card">
+      <div class="card-title">🌡️ Jauge d'intensité émotionnelle</div>
+      <div class="rage-meter">
+        <span class="rage-label">Rage générale</span>
+        <div class="rage-dots">
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot half"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+        </div>
+      </div>
+      <div class="rage-meter">
+        <span class="rage-label">Ego / Confiance</span>
+        <div class="rage-dots">
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot half"></div>
+        </div>
+      </div>
+      <div class="rage-meter">
+        <span class="rage-label">Analyse tactique</span>
+        <div class="rage-dots">
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot half"></div><div class="rage-dot"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+        </div>
+      </div>
+      <div class="rage-meter">
+        <span class="rage-label">Fair-play affiché</span>
+        <div class="rage-dots">
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot half"></div>
+          <div class="rage-dot"></div><div class="rage-dot"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+        </div>
+      </div>
+      <div class="rage-meter">
+        <span class="rage-label">Zen attitude</span>
+        <div class="rage-dots">
+          <div class="rage-dot filled"></div><div class="rage-dot filled"></div><div class="rage-dot filled"></div>
+          <div class="rage-dot half"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+          <div class="rage-dot"></div><div class="rage-dot"></div><div class="rage-dot"></div><div class="rage-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Moments mémorables -->
+  <h2 class="section-title">Moments mémorables</h2>
+  <div class="grid-2" style="margin-bottom:32px">
+    <div>
+      <div class="event-card">
+        <div class="event-date">🏆 06/09/2024 — Journée Master</div>
+        <div class="event-desc">114 messages en une seule journée — son record absolu. Au cœur de la fin de saison, il annonce l'inoubliable :</div>
+        <div class="event-quote">« Ce week je suis master »</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date">📢 11/09/2023 — La Désillusion LP</div>
+        <div class="event-desc">Moment de lucidité douloureuse sur le LP différentiel, exprimé avec la résignation du vétéran :</div>
+        <div class="event-quote">« Chui master je fais du +20 -29 »</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date">🌙 06/01/2022 — Gloire Diana</div>
+        <div class="event-desc">Découverte avec fierté de son classement mondial sur Diana, jouée en tank — ce qui rend le titre encore plus savoureux :</div>
+        <div class="event-quote">« Yes top 23 world Diana en ayant joué tank xd »</div>
+      </div>
+    </div>
+    <div>
+      <div class="event-card">
+        <div class="event-date">💢 15/08/2021 — Le Grand Krach Mental</div>
+        <div class="event-desc">Le message le plus emblématique de tout le canal. Aucune ponctuation, aucune sémantique, juste un tourment intérieur exprimé en pur bruit blanc :</div>
+        <div class="event-quote">« eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh ujoazer ahoujgr hzbpjuarbhpjgrbhjpeagrbhpijgbhpiraezh »</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date">⚔ 14/04/2025 — Mode Dominant</div>
+        <div class="event-desc">Attaque rhétorique d'une précision chirurgicale contre un adversaire qui joue des champs utilitaires :</div>
+        <div class="event-quote">« ton niveau abominable doit forcement jouer des maokai malheureusement… »</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date">🙂 01/09/2024 — La Déprime Transparente</div>
+        <div class="event-desc">Rare moment d'autocritique sincère, exprimé avec une économie de mots qui en dit long :</div>
+        <div class="event-quote">« Je suis trop nul en ce moment… »</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DESCRIPTION DÉTAILLÉE ============ -->
+  <h2 class="section-title">Profil détaillé</h2>
+  <div class="prose-section">
+
+    <div class="prose-part">
+      <h3><span class="num">1</span> Personnalité générale sur qq-only : le sage qui bouillonne</h3>
+      <p>
+        ikaspyrof incarne une figure récurrente et bien identifiable dans l'écosystème LoL-Discord : le joueur qui se présente comme posé, analytique, légèrement condescendant envers les gens qui « ragent pour un jeu vidéo » — et qui, quelques messages plus tard, lâche un <em>« Sale merde »</em> <span class="inline-date">2023-09-14</span> ou un <em>« ce fdp a full int la game »</em> <span class="inline-date">2024-02-03</span> d'une spontanéité rafraîchissante. Cette contradiction centrale est la colonne vertébrale de son personnage sur ce canal. Il est le type qui écrit <em>« sauf que c'est toi qui rage pour un jeux vidéo »</em> <span class="inline-date">2021-09-22</span> à quelqu'un, puis qui quelques semaines plus tard remplit l'intégralité de son output clavier d'un magma de consonnes aléatoires pour exprimer ce qu'aucun mot civilisé ne pouvait contenir <span class="inline-date">2021-08-15</span>.
+      </p>
+      <p>
+        Au-delà de cette dissonance attachante, il dégage une vraie chaleur de bande entre potes. Son usage massif de <em>« bg »</em>, <em>« bro »</em>, <em>« tqt »</em> et <em>« frr »</em> montre quelqu'un de fédérateur, qui encourage ses coéquipiers et ses proches, calibre ses critiques, distribue les compliments aussi facilement que les diagnostics post-game. Il est le type de joueur qui te soutiendra sincèrement tout en ayant une opinion très précise sur pourquoi tu as perdu.
+      </p>
+    </div>
+
+    <div class="prose-part">
+      <h3><span class="num">2</span> Niveau apparent et rapport à ses propres performances</h3>
+      <p>
+        Le profil de rang dessine une trajectoire fascinante. Sur la période 2021-2026, ikaspyrof gravite clairement autour de Master — il le mentionne à plusieurs reprises comme un acquis (<em>« J'ai fait ça je suus passé master »</em> <span class="inline-date">2021-12-14</span>), comme un objectif (<em>« Inshallah je repasse master »</em> <span class="inline-date">2024-09-25</span>), et comme une position atteinte puis perdue (<em>« D1 75 lp je suis remonté un peu la »</em> <span class="inline-date">2024-10-23</span>). La déclaration <em>« 1 GAME DU MASTER »</em> <span class="inline-date">2024-09-14</span> résume à elle seule l'éternelle condition du soloq-grinder.
+      </p>
+      <p>
+        Son autocritique existe mais est rare et vite surmontée. Quand il dit <em>« Je suis trop nul en ce moment… »</em> <span class="inline-date">2024-09-01</span>, on devine que la session s'est mal passée, mais ce n'est pas une remise en question de fond — c'est une pause avant le prochain tryhard. Sa lucidité sur le LP différentiel négatif en master (<em>« je fais du +20 -29 »</em>) est calibrée : il observe le système, pas lui-même. Il s'identifie comme quelqu'un qui carries, qui guide, qui analyse — et les défaites ont presque toujours des causes externes bien identifiées.
+      </p>
+    </div>
+
+    <div class="prose-part">
+      <h3><span class="num">3</span> Têtes de turc récurrentes : les coupables du registre</h3>
+      <p>
+        La liste des accusés habituels d'ikaspyrof est longue et variée. En premier lieu, les <strong>tanks en jungle</strong> lui arrachent une aversion viscérale et constante : <em>« Les fdp qui spam les tanks en jgl »</em> <span class="inline-date">2023-10-07</span> traduit un sentiment esthétique autant qu'une frustration tactique. Pour lui, le jgl c'est un rôle de dive et d'assassin — Darius en jungle, c'est de la trahison civilisationnelle.
+      </p>
+      <p>
+        Viennent ensuite les <strong>coéquipiers qui int</strong> : le mot « int » apparaît 43 fois dans ses messages, souvent dans des formulations laconiques et denses comme <em>« ce fdp a full int la game »</em>. Les <strong>toplanes et mid-laners qui ne suivent pas</strong> figurent aussi en bonne place. La communauté du pick Bard top est ciblée nommément : <em>« Ce fdp de bardinette a créé une commu de singe avec son pick »</em> <span class="inline-date">2024-08-25</span>. Enfin, la <strong>meta brisée</strong> (mages trop forts, tanks abusés, champions « broken ») est une source permanente d'irritation, même si ikaspyrof sait aussi s'en servir — <em>« Diana Abuser que je suis, est content »</em> <span class="inline-date">2022-01-04</span> montre qu'il est parfaitement capable d'exploiter ce qu'il dénonce.
+      </p>
+    </div>
+
+    <div class="prose-part">
+      <h3><span class="num">4</span> Argot LoL personnel et style linguistique</h3>
+      <p>
+        ikaspyrof maîtrise un sociolecte LoL-Discord fluide et spontané. Son expression favorite est sans conteste <em>« mdr »</em> (134 occurrences) — un rire versatile qui sert aussi bien à célébrer qu'à désamorcer la tension. L'<em>« abusé »</em> / <em>« dans l'abus »</em> est sa façon d'évaluer ce qui dépasse la normale, que ce soit positif ou négatif. Le <em>« ez »</em> (71 occurrences) exprime le mépris ou la facilité avec l'économie maximale. <em>« Insane »</em> (15 occurrences) qualifie l'impressionnant sous toutes ses formes.
+      </p>
+      <p>
+        Son style est haché, en rafales courtes — beaucoup de messages de 2-4 mots — ponctués de temps en temps par de longues envolées analytiques qui révèlent un esprit qui réfléchit au jeu en profondeur. Il utilise <em>« macchro »</em> (macro), <em>« jgl »</em>, <em>« diff »</em>, <em>« int »</em>, <em>« bo5 »</em>, <em>« acad »</em> (académie), <em>« jcs »</em> (LFL/compétitif amateur) avec le naturel de quelqu'un immergé dans la scène depuis des années. L'orthographe est souple : typos et fautes de frappe régulières, syntaxe orale — c'est un canal de défouloir, pas une rédaction.
+      </p>
+    </div>
+
+    <div class="prose-part">
+      <h3><span class="num">5</span> Humour et rapport à la victoire / défaite</h3>
+      <p>
+        L'humour d'ikaspyrof est essentiellement situationnel et autoderision légère. Il sait rire de lui-même dans les bons moments — le <em>« top 23 world Diana en ayant joué tank xd »</em> <span class="inline-date">2022-01-06</span> est une perle d'autodérision consciente. Ses célébrations sont brèves et explosives : <em>« 1 GAME DU MASTER »</em> en capitales, <em>« OMGGGG »</em> <span class="inline-date">2022-01-04</span>, <em>« PTDRRRRRR »</em> <span class="inline-date">2024-11-04</span>. La joie est intense mais courte — comme les bonnes games de carry.
+      </p>
+      <p>
+        Face à la défaite, son registre oscille entre l'analyse clinique froide et le lâcher-prise absurde. Le message <em>« eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh... »</em> <span class="inline-date">2021-08-15</span> reste son chef-d'œuvre : quand le cerveau humain atteint ses limites verbales face au grief, il passe en mode noise. C'est profond. C'est beau. C'est Master soloq.
+      </p>
+    </div>
+
+    <div class="prose-part">
+      <h3><span class="num">6</span> Sujets hors LoL et vie quotidienne</h3>
+      <p>
+        Le canal qq-only sert aussi de chambre d'écho pour la vie sociale du groupe. Les <strong>JCS</strong> (compétitif amateur) reviennent régulièrement — ikaspyrof est visiblement impliqué dans une structure ou un groupe qui joue en compétition organisée. Il mentionne <em>« irl jcs when »</em> <span class="inline-date">2024-08-29</span>, <em>« vous avez fait une blue team ou quoi »</em> <span class="inline-date">2022-07-11</span>, suggérant un groupe de joueurs proches en dehors du jeu. La <strong>salle de sport</strong> fait une apparition (<em>« je go à la salle »</em> <span class="inline-date">2024-09-06</span>). <strong>Valorant</strong> est mentionné avec ambivalence — il affirme <em>« Valo best game »</em> <span class="inline-date">2023-06-15</span> mais admet <em>« C'est pour ça que t'aimes pas valo »</em> en parlant à quelqu'un d'autre <span class="inline-date">2024-09-23</span>. <strong>Night Red</strong> (son équipe ?) est évoquée avec une référence à ses coéquipiers de confiance. Et un <strong>escape game</strong> est proposé entre amis <span class="inline-date">2024-09-23</span> — preuve que la bande vit aussi hors écrans, parfois.
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ ÉVALUATION PSYCHIATRIQUE ============ -->
+  <h2 class="section-title">Évaluation psychiatrique</h2>
+  <div class="psych-section">
+    <div class="psych-header">
+      <h2>Cabinet de Psychiatrie Numérique<br>Dr. Lore Tilted, PsyD — Spécialiste en Addictologie Soloqueue</h2>
+      <div class="cabinet">147 rue de la Nexus — 75001 Paris · RPPS : 1337-4200-ELO · Consultation le 20/03/2026</div>
+    </div>
+
+    <div class="psych-label">Identité du patient</div>
+    <div class="psych-content">
+      Pseudonyme : <strong>ikaspyrof</strong> · Âge présumé : Adulte jeune · Occupation : Tentative de Master soloqueue (récurrente)<br>
+      Motif de consultation : Examen systématique de 4 123 messages sur canal privé Discord, période 2021-2026. Référé par : ses propres logs.
+    </div>
+
+    <div class="psych-label">Diagnostic principal (DSM-V parodique)</div>
+    <div class="psych-diag">
+      🩺 <strong>F63.89 — Trouble obsessionnel-compulsif à spectre Mastérien Chronique (TOCMC)</strong><br>
+      Comorbidités : <em>Diana Fixation Disorder (DFD)</em> · <em>Syndrome du Bouc Émissaire Stratégique (SBES)</em> · <em>Égo de Haut Elo avec Épisodes Dissociatifs de Bas Elo (EHEÈDBE)</em>
+    </div>
+
+    <div class="psych-label">Observations cliniques détaillées</div>
+    <div class="psych-content">
+      <strong>1. Fixation obsessionnelle sur l'atteinte du rang Master.</strong> Le patient présente une conviction inébranlable qu'il appartient à l'elo Master, conviction maintenue même en présence d'indicateurs contradictoires (LP négatif, défaites répétées). Cette croyance se manifeste par des déclarations cycliques : <em>« Ce week je suis master »</em> (09/2024), <em>« Inshallah je repasse master »</em> (09/2024), <em>« J'aurais été master déjà mdr »</em> (02/2022). Le patient vit dans une boucle temporelle où le Master est toujours imminent et toujours différé.
+    </div>
+    <div class="psych-content">
+      <strong>2. Identification projective à Diana.</strong> La relation du patient avec ce champion dépasse le cadre rationnel du main. Diana représente clairement une extension narcissique du moi idéal : puissante, rotationnelle, difficile à bann (<em>« bann diana ou xin en prio »</em>), et reconnaissable mondialement (<em>« top 23 world Diana »</em>). Les patches nerfant Diana déclenchent chez le sujet des réactions de deuil authentiques : <em>« Quand diana était buff 😥 »</em>. Nous observons une symbiose homme-champion cliniquement remarquable.
+    </div>
+    <div class="psych-content">
+      <strong>3. Mécanisme de défense : l'externalisation systématique.</strong> Les défaites sont quasi-systématiquement attribuées à des facteurs externes. L'int du coéquipier (43 occurrences), les picks « abusés » de l'adversaire, les tanks en jungle, la compo en face — jamais le patient lui-même. Cette stratégie adaptative lui permet de maintenir une auto-image positive tout en évacuant la frustration sur l'environnement. Seule exception notable : <em>« Je suis trop nul en ce moment… »</em> (09/2024), bref éclair de lucidité anxiogène rapidement surmonté.
+    </div>
+    <div class="psych-content">
+      <strong>4. Épisode dissociatif aigu documenté.</strong> Le 15/08/2021 à une heure non précisée, le patient a produit le message suivant : <em>« eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh ujoazer ahoujgr hzbpjuarbhpjgrbhjpeagrbhpijgbhpiraezh »</em>. Le clinicien identifie ici un état de débordement cognitif total consécutif à ce que l'on suppose être une fin de game particulièrement traumatique. La désintégration du langage est un symptôme grave et spectaculaire. Le patient a apparemment récupéré sans séquelles visibles — preuve d'une résilience remarquable.
+    </div>
+    <div class="psych-content">
+      <strong>5. Contradiction identitaire centrale (le Paradoxe de la Rage Niée).</strong> Le patient déclare explicitement que rager pour un jeu vidéo est ridicule (<em>« sauf que c'est toi qui rage pour un jeux vidéo »</em>, 2021-09-22). Il produit néanmoins 134 « mdr » de dérision, 43 « int » accusatoires, 6 « fdp » ciblés, et un épisode de dissociation keyboard-smash. Ce conflit entre l'image qu'il projette (joueur zen et analytique) et ses comportements réels (rage codifiée mais rage quand même) constitue le cœur de sa problématique identitaire.
+    </div>
+
+    <div class="psych-label">Pronostic</div>
+    <div class="psych-content">
+      Réservé. Le patient présentera vraisemblablement des épisodes récurrents de <em>« cette saison je suis master »</em> jusqu'à la fin du support de League of Legends, estimée à 2087. La fixation Diana devrait persister indépendamment des nerfs Riot. L'écriture de mémoires intitulés « Comment j'ai failli passer Master » est envisagée pour la retraite.
+    </div>
+
+    <div class="psych-ordonnance">
+      <h3>Rp — Ordonnance thérapeutique</h3>
+      <div class="psych-rx-item">
+        <span class="psych-rx-num">1</span>
+        <span><strong>Détilt 500mg</strong> — 1 comprimé après chaque defaite en ranked. Ne pas conduire ou opérer de maccro jungle dans les 30 minutes suivant la prise.</span>
+      </div>
+      <div class="psych-rx-item">
+        <span class="psych-rx-num">2</span>
+        <span><strong>Miroir de L'objectivité® (sirop)</strong> — 2 cuillères à soupe avant chaque compte-rendu de défaite. Indiqué en cas de localisation exclusive des fautes dans l'équipe adverse ou alliée.</span>
+      </div>
+      <div class="psych-rx-item">
+        <span class="psych-rx-num">3</span>
+        <span><strong>Diana-Patch Dissociateur</strong> — À appliquer lors de chaque nerf du champion. Permet d'éviter les deuils prolongés et les crises de <em>« Quand diana était buff 😥 »</em>.</span>
+      </div>
+      <div class="psych-rx-item">
+        <span class="psych-rx-num">4</span>
+        <span><strong>Groupe de parole SOLOQ ANONYMOUS</strong> — Réunions hebdomadaires. Slogan : <em>« Je m'appelle ikaspyrof et j'ai été 1 game du master »</em>. Présence fortement recommandée.</span>
+      </div>
+      <div class="psych-rx-item">
+        <span class="psych-rx-num">5</span>
+        <span><strong>Contre-indication</strong> : Ne pas administrer Yuumi, Nasus, ou tout champion de tank-jungle en sa présence. Risque d'épisode vocal aigu non-contrôlé.</span>
+      </div>
+      <div class="psych-signature">
+        Dr. Lore Tilted, PsyD<br>
+        Signé électroniquement le 20/03/2026<br>
+        <em>"Primum non int"</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VERDICT FINAL ============ -->
+  <div class="verdict">
+    <h2>⚔ Verdict Final ⚔</h2>
+    <div class="verdict-line">
+      ikaspyrof est un joueur de <strong>Master soloqueue</strong> pris dans la boucle éternelle du high-elo : trop bon pour être zen, trop humain pour être parfait.
+      Sa rage est <strong>réelle mais codifiée</strong> — elle passe par le diagnostic plutôt que par l'insulte directe, par l'analyse plutôt que par le flame brut — ce qui en fait, paradoxalement, quelqu'un de relativement fair-play dans la pratique.
+      <strong>Diana est son âme sœur numérique</strong>, une extension de lui-même qu'il a portée jusqu'au top 23 mondial en tank, exploit absurde qui dit tout sur la personnalité.
+      Au fond, il incarne le mieux la vérité ultime du soloq : <strong>le Master est toujours à une game — et cette game dure depuis 2021.</strong>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Généré le 20/03/2026 · Données issues du canal qq-only · Usage privé uniquement · Ce rapport est fictif et humoristique · Aucun joueur n'a été blessé dans sa production (sauf ses coéquipiers)
+</footer>
+
+<script>
+// Hourly chart
+(function() {
+  const canvas = document.getElementById('hourlyChart');
+  const ctx = canvas.getContext('2d');
+  
+  const hourlyData = {0:48,1:55,2:13,3:2,4:0,5:8,6:40,7:30,8:161,9:350,10:207,11:495,12:307,13:244,14:321,15:352,16:399,17:158,18:203,19:132,20:142,21:115,22:167,23:174};
+  
+  const hours = Array.from({length:24}, (_,i) => i);
+  const values = hours.map(h => hourlyData[h] || 0);
+  const maxVal = Math.max(...values);
+  
+  function draw() {
+    const W = canvas.offsetWidth;
+    const H = 180;
+    canvas.width = W;
+    canvas.height = H;
+    
+    const padL = 30, padR = 10, padT = 15, padB = 30;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const barW = chartW / 24 * 0.7;
+    const gap = chartW / 24;
+    
+    ctx.clearRect(0, 0, W, H);
+    
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = padT + (chartH / 4) * i;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    }
+    
+    // Bars
+    values.forEach((v, i) => {
+      const x = padL + gap * i + (gap - barW) / 2;
+      const barH = (v / maxVal) * chartH;
+      const y = padT + chartH - barH;
+      
+      const isPeak = i === 11;
+      const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+      if (isPeak) {
+        grad.addColorStop(0, '#ff6b6b');
+        grad.addColorStop(1, '#e94560');
+      } else if (v > 300) {
+        grad.addColorStop(0, '#b48ee0');
+        grad.addColorStop(1, '#533483');
+      } else {
+        grad.addColorStop(0, '#7b52ab');
+        grad.addColorStop(1, '#3a2060');
+      }
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(x, y, barW, barH, [2, 2, 0, 0]);
+      ctx.fill();
+      
+      // Hour labels
+      if (i % 3 === 0) {
+        ctx.fillStyle = 'rgba(160,160,184,0.7)';
+        ctx.font = '10px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText(i + 'h', x + barW/2, H - 10);
+      }
+    });
+    
+    // Y axis
+    ctx.fillStyle = 'rgba(160,160,184,0.6)';
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText(maxVal, padL - 4, padT + 10);
+    ctx.fillText('0', padL - 4, padT + chartH);
+    
+    // Peak annotation
+    const peakX = padL + gap * 11 + gap/2;
+    ctx.fillStyle = '#e94560';
+    ctx.font = 'bold 10px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('🔥 Peak', peakX, padT - 2);
+  }
+  
+  draw();
+  window.addEventListener('resize', draw);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOSSIER RISTORANTE — Profil Psychologique QQ-Only</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a35;
+    --violet: #533483;
+    --violet-light: #7b52c0;
+    --violet-dim: #2d1c55;
+    --red: #e94560;
+    --red-dim: #6b1e2d;
+    --gold: #f0a500;
+    --gold-dim: #5c4000;
+    --text: #d0cee8;
+    --text-dim: #7a7a9a;
+    --text-bright: #ffffff;
+    --border: #2a2a4a;
+    --border-bright: #533483;
+    --glow-violet: 0 0 20px rgba(83,52,131,0.5);
+    --glow-red: 0 0 20px rgba(233,69,96,0.5);
+    --glow-gold: 0 0 15px rgba(240,165,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(83,52,131,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(233,69,96,0.06) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px);
+  }
+
+  .scanline {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* ===== HEADER ===== */
+  .header {
+    position: relative;
+    padding: 3rem 2.5rem 2.5rem;
+    background: linear-gradient(135deg, var(--bg2), var(--bg3));
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--red);
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(233,69,96,0.07), transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .header-tag::before { content: '▶'; }
+
+  .header-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    letter-spacing: 0.05em;
+    line-height: 0.9;
+    color: var(--text-bright);
+    text-shadow: 0 0 40px rgba(233,69,96,0.4), 0 0 80px rgba(83,52,131,0.3);
+    margin-bottom: 0.5rem;
+  }
+
+  .header-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 2px;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .badge.red { background: rgba(233,69,96,0.15); border-color: var(--red); color: var(--red); }
+  .badge.violet { background: rgba(83,52,131,0.2); border-color: var(--violet-light); color: var(--violet-light); }
+  .badge.gold { background: rgba(240,165,0,0.12); border-color: var(--gold); color: var(--gold); }
+  .badge.gray { background: rgba(122,122,154,0.1); border-color: var(--text-dim); color: var(--text-dim); }
+
+  .header-deco {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(233,69,96,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ===== STATS GRID ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .stat-cell {
+    background: var(--bg2);
+    padding: 1.2rem 1rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--red);
+    line-height: 1;
+    text-shadow: var(--glow-red);
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.4rem;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  .section-title span.count {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+    margin-left: auto;
+  }
+
+  section { margin-bottom: 2.5rem; }
+
+  /* ===== CHART ===== */
+  .chart-wrapper {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 100px;
+    gap: 3px;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 3px;
+  }
+
+  .bar {
+    width: 100%;
+    background: var(--violet);
+    min-height: 2px;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .bar.peak { background: var(--red); box-shadow: 0 0 8px rgba(233,69,96,0.5); }
+  .bar.night { background: var(--violet-dim); }
+
+  .bar-label {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  /* ===== CARDS GRID ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--violet);
+  }
+
+  .card.red-accent::before { background: var(--red); }
+  .card.gold-accent::before { background: var(--gold); }
+
+  .card-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  /* Progress bars */
+  .prog-item {
+    margin-bottom: 0.7rem;
+  }
+  .prog-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+  }
+  .prog-count { color: var(--text-dim); font-size: 0.65rem; }
+  .prog-bar-bg {
+    height: 4px;
+    background: var(--bg3);
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--violet), var(--red));
+    transition: width 1s ease;
+  }
+
+  /* Expressions */
+  .expr-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .expr-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.7rem;
+    background: var(--bg3);
+    border-left: 2px solid var(--violet-dim);
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    font-style: italic;
+  }
+  .expr-freq {
+    background: var(--red-dim);
+    color: var(--red);
+    padding: 0.1rem 0.4rem;
+    font-size: 0.6rem;
+    font-style: normal;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--red-dim);
+    white-space: nowrap;
+  }
+
+  /* Quote moments */
+  .quote-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .quote-date {
+    font-size: 0.58rem;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .quote-text {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text-bright);
+    line-height: 1.5;
+    quotes: "«\00a0" "\00a0»";
+  }
+
+  .quote-text::before { content: open-quote; color: var(--red); }
+  .quote-text::after { content: close-quote; color: var(--red); }
+
+  /* Relations */
+  .relation-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(42,42,74,0.5);
+  }
+  .relation-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--violet-light);
+    min-width: 80px;
+  }
+  .relation-count {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    background: var(--bg3);
+    padding: 0.1rem 0.4rem;
+  }
+  .relation-desc {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ===== PROSE SECTION ===== */
+  .prose-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose-sub {
+    margin-bottom: 2rem;
+  }
+
+  .prose-sub-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    color: var(--violet-light);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .prose-sub-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--red);
+    color: white;
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    font-style: normal;
+    flex-shrink: 0;
+  }
+
+  .prose-body {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .prose-body em {
+    color: var(--text-bright);
+    font-style: italic;
+    background: rgba(83,52,131,0.15);
+    padding: 0 0.2em;
+    border-radius: 2px;
+  }
+
+  .prose-body strong {
+    color: var(--red);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* ===== PSY SECTION ===== */
+  .psy-section {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    padding: 0;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .psy-letterhead {
+    background: linear-gradient(90deg, var(--bg3), var(--bg2));
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .psy-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--text-bright);
+    line-height: 1.1;
+  }
+
+  .psy-logo small {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  .psy-ref {
+    text-align: right;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .psy-ref strong { color: var(--red); }
+
+  .psy-body {
+    padding: 2rem;
+  }
+
+  .psy-block {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg3);
+    border-left: 3px solid var(--violet);
+  }
+
+  .psy-block.alert { border-left-color: var(--red); }
+  .psy-block.note { border-left-color: var(--gold); }
+
+  .psy-block-title {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--violet-light);
+    margin-bottom: 0.6rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .psy-block.alert .psy-block-title { color: var(--red); }
+  .psy-block.note .psy-block-title { color: var(--gold); }
+
+  .psy-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .psy-text em {
+    color: var(--text-bright);
+    font-style: italic;
+  }
+
+  .psy-text strong { color: var(--red); }
+
+  .ordonnance {
+    background: rgba(240,165,0,0.05);
+    border: 1px solid rgba(240,165,0,0.25);
+    padding: 1.2rem;
+    margin-top: 1.5rem;
+  }
+
+  .ordonnance-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rx-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed rgba(240,165,0,0.1);
+    font-size: 0.75rem;
+  }
+
+  .rx-num {
+    color: var(--gold);
+    font-weight: 700;
+    min-width: 1.2rem;
+  }
+
+  .rx-name { color: var(--text-bright); }
+  .rx-dose { color: var(--text-dim); font-style: italic; }
+
+  .psy-stamp {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    border: 3px solid rgba(233,69,96,0.3);
+    padding: 0.4rem 0.8rem;
+    transform: rotate(-15deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: rgba(233,69,96,0.35);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== VERDICT ===== */
+  .verdict {
+    background: linear-gradient(135deg, var(--red-dim), rgba(83,52,131,0.4));
+    border: 1px solid var(--red);
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict::before {
+    content: '⚡';
+    position: absolute;
+    font-size: 8rem;
+    opacity: 0.04;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .verdict-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+
+  .verdict-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-bright);
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .verdict-text strong { color: var(--gold); }
+
+  .footer {
+    text-align: center;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid { grid-template-columns: 1fr; }
+    .header-deco { display: none; }
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container > * {
+    animation: fadeUp 0.5s ease both;
+  }
+  .container > *:nth-child(1) { animation-delay: 0.05s; }
+  .container > *:nth-child(2) { animation-delay: 0.1s; }
+  .container > *:nth-child(3) { animation-delay: 0.15s; }
+  .container > *:nth-child(4) { animation-delay: 0.2s; }
+  .container > *:nth-child(5) { animation-delay: 0.25s; }
+  .container > *:nth-child(6) { animation-delay: 0.3s; }
+  .container > *:nth-child(7) { animation-delay: 0.35s; }
+  .container > *:nth-child(8) { animation-delay: 0.4s; }
+
+  .rage-meter {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  .rage-seg {
+    flex: 1;
+    height: 8px;
+    background: var(--bg3);
+  }
+
+  .rage-seg.filled { background: var(--red); }
+  .rage-seg.filled.dim { background: var(--red-dim); }
+
+  .rage-label {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-deco">R</div>
+    <div class="header-tag">Dossier QQ-Only · Canal Défouloir · Analyse Comportementale</div>
+    <div class="header-name">RISTORANTE</div>
+    <div class="header-sub">Serveur Discord Privé — Canal #qq-only · Nov 2020 → Fév 2026</div>
+    <div class="badges">
+      <span class="badge red">🔥 Jungler Main</span>
+      <span class="badge violet">🌿 Défenseur de la Jungle Brisée™</span>
+      <span class="badge gold">♟️ Analyste Meta Autoproclamé</span>
+      <span class="badge gray">😤 TOP ROLE Hater Chronique</span>
+      <span class="badge red">💀 Victime des Smurfs (Auto-Déclarée)</span>
+      <span class="badge violet">🧠 Théoricien LoL Niveau Plat 4</span>
+    </div>
+    <div style="margin-top:1.2rem">
+      <div class="rage-label" style="margin-bottom:0.4rem">Niveau de rage général</div>
+      <div class="rage-meter">
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled"></div>
+        <div class="rage-seg filled dim"></div>
+        <div class="rage-seg"></div>
+        <div class="rage-seg"></div>
+        <span class="rage-label">7 / 10 — Rageur Cultivé</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-cell">
+      <div class="stat-value">12 008</div>
+      <div class="stat-label">Messages total</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-value">685</div>
+      <div class="stat-label">Jours actifs</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-value">17.5</div>
+      <div class="stat-label">Messages / jour (moy.)</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-value">321</div>
+      <div class="stat-label">Record jour (25 jan. 2022)</div>
+    </div>
+  </div>
+
+  <!-- CHART HORAIRE -->
+  <div class="chart-wrapper">
+    <div class="chart-title">Distribution horaire des messages (0h – 23h)</div>
+    <div class="bar-chart" id="hourChart"></div>
+    <div style="display:flex; gap:1rem; margin-top:0.8rem; font-size:0.6rem; color:var(--text-dim);">
+      <span>🔴 Pic : 12h (1182 msgs)</span>
+      <span>🟣 Activité soutenue : 22h–23h</span>
+      <span>💤 Quasi-silence : 4h–5h</span>
+    </div>
+  </div>
+
+  <!-- CARDS GRID 1 : Champions + Rage style -->
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-title">Champions & rôles les plus cités</div>
+      <div class="prog-item">
+        <div class="prog-header"><span>TOP (rôle / concept)</span><span class="prog-count">721</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Vi (champ / championne)</span><span class="prog-count">407</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:56%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Jungle (rôle)</span><span class="prog-count">343</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:48%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Nasus</span><span class="prog-count">96</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:24%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Rengar</span><span class="prog-count">70</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:19%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Garen</span><span class="prog-count">72</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:20%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Fiora</span><span class="prog-count">28</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:8%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>Darius</span><span class="prog-count">28</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:8%"></div></div>
+      </div>
+    </div>
+
+    <div class="card red-accent">
+      <div class="card-title">Style de rage — thermomètre</div>
+      <div class="prog-item">
+        <div class="prog-header"><span>🔥 "Broken" (tout est OP sauf lui)</span><span class="prog-count">199</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>💀 "FF" (abandon philosophical)</span><span class="prog-count">258</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:95%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>🤬 "Putain / Merde"</span><span class="prog-count">80</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:60%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>🐀 "Feeder / Troll"</span><span class="prog-count">84</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:62%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>📊 Débat meta (rage intellectuelle)</span><span class="prog-count">~400+</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:85%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>👻 Run down (pensées suicidaires LP)</span><span class="prog-count">23</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:25%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span>🧪 Rage verbale soutenue</span><span class="prog-count">63</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:40%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPRESSIONS SIGNATURE -->
+  <section>
+    <div class="section-title">Expressions Signature &amp; Argot Personnel</div>
+    <div class="two-col">
+      <div>
+        <div class="expr-list">
+          <div class="expr-item">
+            TOP ROLE TOP ROLE TOP ROLE (×∞)
+            <span class="expr-freq">~12 occurrences spam</span>
+          </div>
+          <div class="expr-item">
+            "ce perso est broken"
+            <span class="expr-freq">quotidien</span>
+          </div>
+          <div class="expr-item">
+            "la jungle est le meilleur rôle"
+            <span class="expr-freq">mantra</span>
+          </div>
+          <div class="expr-item">
+            "SANCTION SANCTION SANCTION"
+            <span class="expr-freq">~13 fois spam</span>
+          </div>
+          <div class="expr-item">
+            "smurf queue en face"
+            <span class="expr-freq">excuse récurrente</span>
+          </div>
+          <div class="expr-item">
+            "je suis seul / SEUL"
+            <span class="expr-freq">cri du cœur SoloQ</span>
+          </div>
+          <div class="expr-item">
+            "nul de chez nul"
+            <span class="expr-freq">catégorie ennemis</span>
+          </div>
+          <div class="expr-item">
+            "j'en peux plus j'ai envie de pleurer"
+            <span class="expr-freq">monologue classique</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="expr-list">
+          <div class="expr-item">
+            "run down" (verbe intransitif)
+            <span class="expr-freq">solution radicale</span>
+          </div>
+          <div class="expr-item">
+            "c ets" (typo fidèle à lui-même)
+            <span class="expr-freq">signature orthographique</span>
+          </div>
+          <div class="expr-item">
+            "les shills" (ceux qui soutiennent le rôle ennemi)
+            <span class="expr-freq">catégorie mentale</span>
+          </div>
+          <div class="expr-item">
+            "injouable" (tout rôle non-jungle)
+            <span class="expr-freq">verdict standard</span>
+          </div>
+          <div class="expr-item">
+            "pck" (because abrégé)
+            <span class="expr-freq">tic linguistique</span>
+          </div>
+          <div class="expr-item">
+            "PUTAIN MAIS" (majuscules, interjection d'ouverture)
+            <span class="expr-freq">alarme initiale</span>
+          </div>
+          <div class="expr-item">
+            "ahi" / ":risiboulbe:"
+            <span class="expr-freq">mock-laugh sarcastique</span>
+          </div>
+          <div class="expr-item">
+            "je suis aux portes du chall" (ironie)
+            <span class="expr-freq">auto-dérision</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOMENTS MEMORABLES -->
+  <section>
+    <div class="section-title">Moments Mémorables <span class="count">citations directes</span></div>
+
+    <div class="quote-card">
+      <div class="quote-date">04 sept. 2021 — 16h07 · Le Grand Monologue de la Solitude</div>
+      <div class="quote-text">PUTAIN MAIS — Je vais avoir besoin de run down soon — quelqu'un peut me donner un compte pour run down svp — je vais pas tenir là — j'en peux plus — c'est trop — je suis seul dans la game — contre 2 / 3 / 4 smurfs — je suis — seul — SEUL — j'en peux plus j'ai envie de pleurer genre — je suis seul à tenir 30 min — ça sers à rien — je gank toutes les lanes — je donne les putains de kills</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">25 jan. 2022 — 01h02 · Night Session (321 messages ce jour-là)</div>
+      <div class="quote-text">Sett reste cancer broken — Lane bully statcheck intradable et scaling de fou en teamfight — Les champions qui "counter" sett c'est des champions qui perdent les 15 premières minutes puis gagnent le 1v1 mais sont moins forts en team fight toute la game</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">16 déc. 2021 — Conception du champion parfait</div>
+      <div class="quote-text">Venez on essaye de faire le meilleur champion du jeu en prenant des trucs de tous les champions — Passif : rengar — A : rengar — Z : rengar — E : rengar — R : rengar — Ça donnerait un champion complètement broken vous pensez pas ?</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">03 oct. 2021 · La thèse sur Sett, démonstration académique</div>
+      <div class="quote-text">À quand un nerf de sett ce perso aberrant broken en 1v1 pendant les 30 premières minutes, broken en 2v2 toute la game, broken en team fight toute la game, broken en early mid late, powerspike doran shield mythique 2 items 3 items 4 items 5 items — le seul counter de sett c'est vayne top</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">22 juin 2022 · Schizophrénie méta en temps réel</div>
+      <div class="quote-text">Je viens de faire une ranked, ça faisait longtemps, et en vrai la jungle ça a pris archi avec le patch je trouve, le rôle est limite faible imo — ET NON LES SHILLS TOUJOURS PAS C EST TOUJOURS LE MEILLEUR ROLE DU JEU</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">27 oct. 2023 · Le manifeste du jungler opprimé</div>
+      <div class="quote-text">Les junglers ont : les golds, les objectifs, les champions op, la pression sur la map, la vision, l'early, le mid game, le late game, le meilleur SS du jeu, la possibilité de gagner n'importe quelle lane — Les junglers n'ont pas : le top xp de la game</div>
+    </div>
+
+    <div class="quote-card">
+      <div class="quote-date">08 août 2023 · Confiance en soi bridée nuance</div>
+      <div class="quote-text">Réalité : je smurf à ton Élo pendant que tu meurs 15 fois par game</div>
+    </div>
+  </section>
+
+  <!-- RELATIONS -->
+  <section>
+    <div class="section-title">Relations avec les Membres du Canal</div>
+    <div class="card" style="padding:1.2rem 1.5rem;">
+      <div class="card-title">Fréquence de mention & dynamique relationnelle</div>
+      <div class="relation-item">
+        <div class="relation-name">KONNO</div>
+        <div class="relation-count">93×</div>
+        <div class="relation-desc">Principal adversaire intellectuel sur la méta. Défenseur de Rengar, cible de nombreux memes. Relations d'amour-haine typique du serveur.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">MANI</div>
+        <div class="relation-count">55×</div>
+        <div class="relation-desc">Mentionné dans des contextes mixtes : gameplay, anecdotes, discussions générales. Figure régulière du groupe.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">MPB</div>
+        <div class="relation-count">51×</div>
+        <div class="relation-desc">Souvent cité lors de débats méta. Antagoniste récurrent dans les discussions "role broken". Risto et mpb s'affrontent régulièrement sur la valeur des rôles.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">SPYROF</div>
+        <div class="relation-count">24×</div>
+        <div class="relation-desc">Mentionné dans des contextes de tournoi, d'esport, de remplacement d'équipe. Figure satellite du groupe.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">RANSBERG</div>
+        <div class="relation-count">36×</div>
+        <div class="relation-desc">Cible régulière de piques légères. Mentionné comme "ng avec ses amis" — le joueur social par opposition à l'isolé soloQ de Risto.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">GK</div>
+        <div class="relation-count">81×</div>
+        <div class="relation-desc">Interlocuteur fréquent, souvent dans des échanges argumentatifs sur la méta ou le gameplay. Relation d'opposition débative productive.</div>
+      </div>
+      <div class="relation-item">
+        <div class="relation-name">MERKO</div>
+        <div class="relation-count">13×</div>
+        <div class="relation-desc">Mentionné comme "haute instance de la Faille" dans un message sarcastique. Expertise invoquée avec ironie.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESCRIPTION DÉTAILLÉE -->
+  <section>
+    <div class="section-title">Analyse Comportementale Détaillée</div>
+    <div class="prose-section">
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">1</span> Personnalité sur #qq-only : le défouloir comme rituel</div>
+        <div class="prose-body">
+          Ristorante utilise le canal #qq-only avec une régularité quasi-liturgique depuis novembre 2020 : 12 008 messages sur plus de cinq ans, une moyenne de 17,5 messages par jour sur les jours actifs. Ce chiffre ne dit pas tout — il y a des journées de silence total et des explosions volcanique comme le <strong>25 janvier 2022 (321 messages en une seule journée)</strong>, période qui correspond à une nuit blanche de débat sur Sett entamée à 1h du matin. Le canal fonctionne pour lui comme un exutoire structuré : on ne hurle pas dans le vide, on hurle à des témoins qui comprennent, qui peuvent répondre, valider ou contredire. Ce besoin de validation communautaire de ses frustrations est l'une de ses caractéristiques les plus constantes. <em>*"PUTAIN MAIS"</em> en ouverture de message, puis un développement argumentaire de plusieurs paragraphes — c'est la structure type. La rage n'est jamais brute : elle est toujours enrobée d'une tentative d'explication causale. Quelque chose a cassé dans la game. Quelqu'un était smurf. Le champion adverse était intrinsèquement injouable contre lui. L'univers conspirait. Le canal est là pour enregistrer les preuves de cette injustice cosmique.
+        </div>
+      </div>
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">2</span> Niveau apparent et rapport à ses propres performances</div>
+        <div class="prose-body">
+          Le niveau de jeu de Ristorante est un sujet complexe car il est lui-même complexe à ce sujet. D'un côté, il se réfère à ses <em>"passages en Platinum 4"</em> et à ses multiples saisons, et d'un autre côté il envisage sérieusement d'être aux portes du Challenger : <em>*"Oui je suis aux portes du chall là"</em> (22 avril 2021) — précisé ensuite avec le signe <em>:risiboulbe:</em> qui suggère une autodérision partielle. Il joue majoritairement <strong>Bruisers top</strong> — Nasus, Garen, Jax, Fiora — et se définit clairement comme <em>*"je joue quasi que des bruisers au top je précise"</em>. Son rapport aux performances personnelles est ambivalent : il reconnaît rarement ses erreurs (<em>"je ne me remets pas en question sur un dive full life non"</em>), tout en étant capable d'analyse technique poussée sur les builds, les matchups, les powerspikes. La dichotomie est fascinante — il peut passer d'une analyse itemisation Nasus de haut niveau (<em>"j'échange 10 ad 10 péné [...] contre 20% de crits non boostés par l'IE"</em>) à un post de désespoir absolu où il se déclare <em>"SEUL contre 4 smurfs"</em> dans la même session.
+        </div>
+      </div>
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">3</span> Têtes de turc récurrentes : champions, rôles, meta</div>
+        <div class="prose-body">
+          La liste des bêtes noires de Ristorante est longue mais hiérarchisée. En tête : <strong>le rôle Top</strong>, objet d'un mépris viscéral exprimé avec une régularité métronomique. Le spam <em>"top role top role top role"</em> (parfois sur plusieurs dizaines d'occurrences dans un seul message) fonctionne comme un mantra satirique — il ne déteste pas le Top en soi, il déteste l'argument que le Top serait le rôle le plus dur, le plus impactant, le plus légitime dans ses plaintes. En deuxième position : <strong>Sett</strong>, qui reçoit en octobre 2021 une analyse complète démontrant qu'il est broken en early, mid, late, 1v1, 2v2, teamfight, et que ses counters ne sont pas de vrais counters. Troisième cible : les <strong>smurfs omniprésents</strong>, qui apparaissent à chaque défaite inexplicable. Quatrième : <strong>Rengar</strong>, mais ici par procuration — c'est le champion de Konno, et critiquer Rengar c'est critiquer Konno. Enfin, <strong>le rôle ADC</strong> est régulièrement qualifié de "scaling" et "broken", tout comme le support à certaines périodes. En résumé : tout champion que Risto ne joue pas et qui gagne est statistiquement broken. Tout champion qu'il joue et qui perd est statistiquement victime du système.
+        </div>
+      </div>
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">4</span> Humour, second degré et culture du groupe</div>
+        <div class="prose-body">
+          L'humour de Ristorante est un humour de l'absurde par accumulation. Le spam de "SANCTION" en majuscules sur 30 lignes, la création du <em>"champion parfait composé de 5 capacités Rengar"</em>, le fake-message RH d'un club esport pour annoncer un recalage (<em>"vous n'avez pas été retenu pour le tournoi OUAT"</em>) — tout cela révèle une culture du gimmick répété jusqu'à l'épuisement comique. Il est aussi capable de sarcasme chirurgical : <em>*"tu fais d2 to p4 avec 1000 games"</em> est un portrait-robot de l'adversaire déguisé en question rhétorique. Son humour s'appuie beaucoup sur les contradictions des autres — quand Konno défend Rengar malgré les clips évidents, quand mpb soutient que son rôle est le plus dur, Risto saisit la contradiction et la retourne avec un sarcasme bien ajusté. Il ne fait pas de blagues sur lui-même, sauf par autodérision défensive — quand il dit <em>"je smurf à ton Elo"</em> après une défaite, c'est du déni habillé en humour.
+        </div>
+      </div>
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">5</span> Évaluation : rageur chronique ou joueur zen ?</div>
+        <div class="prose-body">
+          Ni l'un ni l'autre parfaitement — ou les deux à la fois selon les sessions. Ristorante est ce qu'on pourrait appeler un <strong>rageur analytique</strong> : il rage, mais il analyse sa rage, il la justifie, il la documente. Il ne hurle pas de slurs au hasard dans le chat — il construit des plaidoyers. Quand il dit <em>"je suis seul SEUL"</em>, c'est une performance théâtrale de la victimisation, pas de la toxicité pure. Il ne semble pas flamber ses coéquipiers en jeu (au sens de les insulter directement) — il vient QQ sur le serveur après. C'est en réalité un signe de fair-play paradoxal : la rage est externalisée dans un espace sûr plutôt qu'injectée en game. Cela dit, l'intensité de certains messages (<em>"j'en peux plus j'ai envie de pleurer"</em>, répété deux fois à quatre jours d'intervalle avec le même copier-coller) suggère un niveau de tilt qui touche à quelque chose de sincèrement douloureux. <strong>Verdict provisoire</strong> : rageur cultivé, environ 7/10 sur l'échelle, avec des pics à 9 en SoloQ smurfée et des creux à 3 quand il débat de Malphite en théorie pure.
+        </div>
+      </div>
+
+      <div class="prose-sub">
+        <div class="prose-sub-title"><span class="prose-sub-num">6</span> Sujets hors-LoL : la vie réelle fait des apparitions timides</div>
+        <div class="prose-body">
+          Le canal reste dominé à 85-90% par LoL, mais Ristorante glisse parfois des fenêtres sur sa vie hors-jeu. Il mentionne <strong>le sport</strong> à plusieurs reprises (<em>"je vais faire ma séance de sport là"</em>), ce qui contredit légèrement l'image du gamer sédentaire. Il parle de <strong>boulot et de sommeil</strong> de temps en temps, suggérant une vie d'adulte actif. Il cite des films avec approbation (<em>"excellent ce film glacing"</em>). Il aborde une fois — de façon surprenamment directe — les bienfaits du sport pour quelqu'un qui <em>"branle rien"</em>, dans un message qui ressemble à un conseil sincère à un ami. Quelques références à la <strong>musique et aux séries</strong> apparaissent. Et puis il y a ces détours philosophico-historiques surprenants : une discussion sur ce qu'il aurait fait sous l'Occupation (<em>"j'aurais pas dénoncé les juifs non plus je suis pas une salope"</em>, positionné comme argument de tolérance), ou des prises de position morales inattendues. Ces moments hors-LoL sont rares mais révèlent un individu qui pense plus large que son Élo, et qui en est lui-même conscient.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EVALUATION PSYCHIATRIQUE -->
+  <section>
+    <div class="section-title">Évaluation Psychiatrique — Second Degré</div>
+    <div class="psy-section">
+      <div class="psy-letterhead">
+        <div>
+          <div class="psy-logo">
+            CLINIQUE DU TILT CHRONIQUE
+            <small>Département Troubles Comportementaux du Joueur SoloQ · Unité QQ-Only</small>
+          </div>
+          <div style="font-size:0.65rem; color:var(--text-dim); margin-top:0.5rem; font-family:'Space Mono',monospace;">
+            Agrément fictif n° LOL-2024-BRONZEGATE • Praticien : Dr. Dossier Automatisé
+          </div>
+        </div>
+        <div class="psy-ref">
+          <strong>Patient :</strong> RISTORANTE (pseudo)<br>
+          <strong>Dossier :</strong> QQO-12008-MSG<br>
+          <strong>Période :</strong> Nov 2020 – Fév 2026<br>
+          <strong>Consultations :</strong> 685 jours observés<br>
+          <strong>Classification :</strong> CONFIDENTIEL
+        </div>
+      </div>
+
+      <div class="psy-body">
+
+        <div class="psy-block">
+          <div class="psy-block-title">§ 1 — Diagnostic principal (DSM-Fictif V)</div>
+          <div class="psy-text">
+            Le clinicien retient le diagnostic de <strong>Trouble du Spectateur Omniscient de SoloQ (TSOS)</strong>, associé à un <strong>Syndrome de Victimisation par Smurf Récurrent (SVSR)</strong> et une comorbidité de <strong>Mégalomanie Analytique Compensatrice (MAC)</strong>. Le tableau clinique est cohérent sur l'ensemble de la période d'observation. Le sujet présente une conviction inébranlable d'être à la fois le meilleur joueur de sa team ET la principale victime de l'algorithme de matchmaking. Cette contradiction ne lui pose aucun problème cognitif apparent, ce qui suggère des mécanismes de défense extrêmement développés (voir §3).
+          </div>
+        </div>
+
+        <div class="psy-block alert">
+          <div class="psy-block-title">§ 2 — Déclencheurs identifiés (Triggers primaires)</div>
+          <div class="psy-text">
+            <strong>Déclencheur 1 — La smurf queue :</strong> Tout adversaire performant est automatiquement requalifié en smurf. Le patient exprime une détresse aiguë dans ce contexte, culminant dans le célèbre monologue du 4 septembre 2021 : <em>"je suis seul dans la game contre 2/3/4 smurfs — je suis — seul — SEUL — j'en peux plus j'ai envie de pleurer genre"</em>. Ce message a été produit puis ressorti tel quel quatre jours plus tard, le 8 septembre — signe clinique d'une fixation traumatique.<br><br>
+            <strong>Déclencheur 2 — La mention du rôle Top :</strong> L'évocation de la supériorité du Top comme rôle déclenche un comportement stéréotypé de spam répétitif (<em>"top role top role top role"</em>) qui peut durer plusieurs minutes. Ce n'est pas de la colère — c'est une réponse pavlovienne codée.<br><br>
+            <strong>Déclencheur 3 — Konno défendant Rengar :</strong> La tolérance du patient s'effondre immédiatement. <em>"Tu mets un clip de rengar qui OS tu peux être sûr que konno va passer 378 minutes à t'expliquer que c'est normal"</em>. L'exaspération est documentée, datée, archivée.
+          </div>
+        </div>
+
+        <div class="psy-block">
+          <div class="psy-block-title">§ 3 — Mécanismes de défense</div>
+          <div class="psy-text">
+            Le sujet recourt à trois mécanismes de défense principaux, utilisés en couches successives :<br><br>
+            <strong>Intellectualisation :</strong> Face à une défaite, le patient ne crie pas — il analyse. Il produit des thèses complètes sur les powerspikes de Sett, les interactions d'itemisation de Nasus, la supériorité intrinsèque du rôle jungler. L'intelligence sert à éviter d'accéder à la frustration brute. <em>"À quand un nerf de sett ce perso aberrant broken [...] powerspike doran shield mythique 2 items 3 items 4 items 5 items"</em> est une œuvre d'intellectualisation pure.<br><br>
+            <strong>Externalisation :</strong> La défaite ne vient jamais de lui. Elle vient des smurfs, des champions broken, du rôle top qui décide de la game, de l'algorithme. Le patient ne dit jamais "j'ai mal joué ce dive" — il dit <em>"je ne me remets pas en question sur un dive full life non"</em> (30 avril 2023).<br><br>
+            <strong>Humour absurde :</strong> Quand la situation devient intenable, le patient invente le champion parfait composé intégralement de Rengar, ou génère 30 lignes de "SANCTION" en majuscules. C'est une dissociation positive. Cliniquement sain, bien que déconcertant pour l'entourage.
+          </div>
+        </div>
+
+        <div class="psy-block note">
+          <div class="psy-block-title">§ 4 — Observations cliniques positives</div>
+          <div class="psy-text">
+            Contre toute attente, le dossier révèle des points forts notables. Le patient <strong>ne toxifie pas en jeu</strong> — il externalise post-game sur le serveur, ce qui est une régulation émotionnelle saine. Il est capable d'<strong>autodérision</strong> (<em>"Oui je suis aux portes du chall là :risiboulbe:"</em>). Il donne des <strong>conseils sincères à ses pairs</strong> (<em>"Tu vois du monde, ça occupe ton temps, ça te fait une routine..."</em>). Il s'intéresse au sport, à l'alimentation, à la vie sociale. Et — fait remarquable — il peut admettre la faiblesse du rôle jungle EN TEMPS RÉEL tout en maintenant la position officielle du groupe (<em>"ET NON LES SHILLS TOUJOURS PAS C EST TOUJOURS LE MEILLEUR ROLE DU JEU"</em>). Ce niveau de double-pensée maîtrisée est cliniquement impressionnant.
+          </div>
+        </div>
+
+        <div class="psy-block alert">
+          <div class="psy-block-title">§ 5 — Pronostic de guérison</div>
+          <div class="psy-text">
+            <strong>Défavorable à court terme.</strong> Le patient joue depuis au moins 2020 avec la même conviction que la smurf queue est responsable de ses défaites. Cinq ans de données ne montrent aucune évolution dans la structure de ses rationalisations. La guérison complète impliquerait d'accepter que l'ELO Hell n'existe peut-être pas, que Sett n'est pas toujours broken, et que parfois un dive sous tour au niveau 5 sans flash c'est sa propre faute. La probabilité que ces trois révélations surviennent simultanément est estimée à <strong>2.3%</strong>. Cependant, le pronostic à long terme est meilleur : l'activité sur le canal diminue depuis 2021 (4533 messages) pour atteindre 192 messages sur les 2 premiers mois de 2026, suggérant soit une progression vers l'acceptation zen, soit un passage à un autre jeu tout aussi painful.
+          </div>
+        </div>
+
+        <div class="ordonnance">
+          <div class="ordonnance-title">📋 Ordonnance N° QQO-RISTO-2024</div>
+          <div class="rx-item">
+            <span class="rx-num">Rx1</span>
+            <span class="rx-name">SMURF-NIHIL 500mg</span>
+            <span class="rx-dose">— 1 comprimé avant chaque ranked, à avaler avec l'idée que l'adversaire joue peut-être juste bien</span>
+          </div>
+          <div class="rx-item">
+            <span class="rx-num">Rx2</span>
+            <span class="rx-name">TOPLANER-ACCEPTUS 250mg</span>
+            <span class="rx-dose">— cure de 6 mois, posologie : regarder 1 clip de top laner qui souffre par semaine</span>
+          </div>
+          <div class="rx-item">
+            <span class="rx-num">Rx3</span>
+            <span class="rx-name">SEULSEUL-THÉRAPIE (gélules)</span>
+            <span class="rx-dose">— en cas de crise "je suis SEUL" : appeler un ami avant de taper le message. Répété deux fois = doublement prescrit.</span>
+          </div>
+          <div class="rx-item">
+            <span class="rx-num">Rx4</span>
+            <span class="rx-name">BROKEN-DETOX (patch transdermique)</span>
+            <span class="rx-dose">— à appliquer sur le clavier. Libère lentement l'idée que 4 champions différents ne peuvent pas tous être broken simultanément</span>
+          </div>
+          <div class="rx-item">
+            <span class="rx-num">Rx5</span>
+            <span class="rx-name">RENGAR-KONNO IMMUNOGLOBULINES</span>
+            <span class="rx-dose">— injection mensuelle pour tolérer les défenses de Rengar par Konno sans développer une réaction allergique de type "378 minutes d'explication"</span>
+          </div>
+          <div style="margin-top:0.8rem; font-size:0.6rem; color:var(--text-dim); font-family:'Space Mono',monospace;">
+            ⚠ Ne pas dépasser 321 messages/jour sans surveillance médicale. Conserver à température ambiante, loin du matchmaking. Contre-indiqué en DuoQ avec des spyro.
+          </div>
+        </div>
+
+        <div class="psy-stamp">DOSSIER ARCHIVÉ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERDICT FINAL -->
+  <div class="verdict">
+    <div class="verdict-title">⚡ Verdict Final ⚡</div>
+    <div class="verdict-text">
+      Ristorante est <strong>le prototype du rageur éclairé</strong> : trop intelligent pour être simplement toxic, trop frustré pour être zen, trop attaché au groupe pour QQ dans le vide. Sur cinq ans et 12 000 messages, il a construit une œuvre cohérente — un traité sur l'injustice cosmique de la SoloQ, illustré par des cas concrets, annoté de citations et enrichi d'une théologie personnelle où la jungle est bénie et le top est maudit. <strong>Sa vraie spécialité n'est pas le LoL — c'est la rhétorique du LoL.</strong> Chaque défaite devient un plaidoyer, chaque victoire une validation de sa thèse. Il n'a peut-être jamais atteint Diamond, mais il a indubitablement atteint <strong>Challenger en Débat de Meta Privé</strong> — et c'est un titre que personne ne peut lui retirer, même avec 4 smurfs en face.
+    </div>
+  </div>
+
+  <div class="footer">
+    DOSSIER GÉNÉRÉ AUTOMATIQUEMENT · QQ-ONLY BEHAVIORAL ANALYSIS SYSTEM v2.6 · 12 008 MESSAGES ANALYSÉS · NOV 2020 → FÉV 2026
+  </div>
+
+</div>
+
+<script>
+// Bar chart
+const hourData = [291,240,52,69,13,13,71,220,193,585,622,908,1182,623,669,689,842,788,741,415,404,674,875,829];
+const maxVal = Math.max(...hourData);
+const chart = document.getElementById('hourChart');
+
+hourData.forEach((val, h) => {
+  const col = document.createElement('div');
+  col.className = 'bar-col';
+  
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  const pct = Math.max(2, Math.round((val / maxVal) * 100));
+  bar.style.height = pct + '%';
+  
+  if (val === maxVal) bar.classList.add('peak');
+  else if (h >= 0 && h <= 2) bar.classList.add('night');
+  else if (h === 22 || h === 23) bar.classList.add('');
+  
+  const label = document.createElement('div');
+  label.className = 'bar-label';
+  label.textContent = h % 2 === 0 ? h + 'h' : '';
+  
+  col.appendChild(bar);
+  col.appendChild(label);
+  chart.appendChild(col);
+});
+
+// Animate progress bars on load
+document.querySelectorAll('.prog-bar-fill').forEach(bar => {
+  const width = bar.style.width;
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = width; }, 300);
+});
+</script>
+</body>
+</html>

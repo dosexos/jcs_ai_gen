@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — riwanovic</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --red: #e94560;
+    --pink: #c23152;
+    --gold: #f0a500;
+    --teal: #00b4d8;
+    --text: #e0e0e0;
+    --muted: #8899aa;
+    --card: #1e1e3a;
+    --card2: #222244;
+    --border: #3a3a5c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    line-height: 1.7;
+    padding: 0 0 80px 0;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3e 40%, #2a0a2e 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 50px 40px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(83,52,131,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse at 20% 50%, rgba(233,69,96,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .header-top { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .avatar {
+    width: 88px; height: 88px;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; font-weight: 900;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 30px rgba(233,69,96,0.4);
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-size: 2.8rem; font-weight: 900;
+    background: linear-gradient(90deg, #fff 0%, var(--red) 60%, var(--purple) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header-text .subtitle { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .badge {
+    padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red); }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple); color: #a07aff; }
+  .badge-gold { background: rgba(240,165,0,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-teal { background: rgba(0,180,216,0.15); border: 1px solid var(--teal); color: var(--teal); }
+
+  /* === LAYOUT === */
+  .content { max-width: 1100px; margin: 0 auto; padding: 40px 20px 0 20px; }
+
+  h2 {
+    font-size: 1.5rem; font-weight: 800; color: var(--red);
+    border-left: 4px solid var(--red);
+    padding-left: 14px; margin-bottom: 22px; margin-top: 50px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* === STATS ROW === */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 30px; }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 18px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-3px); border-color: var(--purple); }
+  .stat-card .val {
+    font-size: 2.4rem; font-weight: 900;
+    background: linear-gradient(90deg, var(--red), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block;
+  }
+  .stat-card .label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+
+  /* === CHART === */
+  .chart-container {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 26px; margin-top: 24px;
+  }
+  .chart-title { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  #hourChart { width: 100%; height: 150px; }
+
+  /* === GRID === */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; margin-bottom: 0;
+  }
+  .card-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; font-weight: 700; }
+
+  /* === PROGRESS BARS === */
+  .bar-item { margin-bottom: 14px; }
+  .bar-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .bar-name { font-size: 0.9rem; color: var(--text); font-weight: 600; }
+  .bar-count { font-size: 0.8rem; color: var(--muted); }
+  .bar-track { background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-fill-red { background: linear-gradient(90deg, var(--red), var(--pink)); }
+  .bar-fill-purple { background: linear-gradient(90deg, var(--purple), #7a54d4); }
+  .bar-fill-gold { background: linear-gradient(90deg, var(--gold), #d48c00); }
+  .bar-fill-teal { background: linear-gradient(90deg, var(--teal), #0090b0); }
+
+  /* === EXPRESSIONS === */
+  .expr-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .expr-tag {
+    background: rgba(83,52,131,0.2); border: 1px solid rgba(83,52,131,0.5);
+    border-radius: 8px; padding: 6px 14px; font-size: 0.85rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .expr-tag .cnt { background: var(--red); color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 0.72rem; font-weight: 800; }
+
+  /* === QUOTES === */
+  .quote-card {
+    background: var(--card2); border-left: 3px solid var(--red); border-radius: 0 12px 12px 0;
+    padding: 16px 20px; margin-bottom: 14px;
+  }
+  .quote-text { font-size: 0.95rem; color: var(--text); font-style: italic; line-height: 1.5; }
+  .quote-meta { font-size: 0.75rem; color: var(--muted); margin-top: 8px; }
+
+  /* === RELATIONS === */
+  .relation-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .relation-item:last-child { border-bottom: none; }
+  .relation-avatar {
+    width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem; flex-shrink: 0;
+  }
+  .ra-purple { background: linear-gradient(135deg, var(--purple), #7a54d4); }
+  .ra-teal { background: linear-gradient(135deg, var(--teal), #0090b0); }
+  .ra-gold { background: linear-gradient(135deg, var(--gold), #d48c00); }
+  .ra-red { background: linear-gradient(135deg, var(--red), var(--pink)); }
+  .ra-green { background: linear-gradient(135deg, #2ecc71, #1aab5e); }
+  .relation-info .name { font-weight: 700; font-size: 0.95rem; }
+  .relation-info .role { font-size: 0.78rem; color: var(--muted); }
+  .relation-info .count { font-size: 0.75rem; color: var(--red); font-weight: 700; }
+
+  /* === RAGE METER === */
+  .rage-meter { margin: 20px 0; }
+  .rage-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+  .rage-track { height: 24px; background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; position: relative; }
+  .rage-fill {
+    height: 100%; width: 78%;
+    background: linear-gradient(90deg, #2ecc71 0%, var(--gold) 40%, var(--red) 80%, #ff0040 100%);
+    border-radius: 12px; position: relative;
+  }
+  .rage-marker { position: absolute; top: -4px; bottom: -4px; width: 4px; background: #fff; border-radius: 2px; left: 78%; box-shadow: 0 0 8px #fff; }
+
+  /* === LONG DESCRIPTION === */
+  .desc-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 36px; margin-top: 24px; }
+  .desc-section h3 { font-size: 1.1rem; font-weight: 800; color: var(--purple); margin: 28px 0 14px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .desc-section h3:first-child { margin-top: 0; }
+  .desc-section p { font-size: 0.95rem; color: #ccc; margin-bottom: 14px; line-height: 1.8; }
+  .desc-section em { color: var(--red); font-style: italic; }
+  .desc-section strong { color: var(--gold); }
+
+  /* === PSYCHIATRIC === */
+  .psych {
+    background: #111128; border: 2px solid var(--border); border-radius: 14px;
+    padding: 40px; margin-top: 24px; font-family: 'Courier New', monospace; position: relative;
+  }
+  .psych-header {
+    text-align: center; border-bottom: 2px dashed var(--border); padding-bottom: 24px; margin-bottom: 24px;
+  }
+  .psych-header .institution { font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+  .psych-header .title { font-size: 1.4rem; font-weight: 900; color: var(--teal); margin: 8px 0 4px; }
+  .psych-header .subtitle { font-size: 0.85rem; color: var(--muted); }
+  .psych-header .stamp {
+    position: absolute; top: 30px; right: 40px;
+    border: 3px solid var(--red); color: var(--red);
+    padding: 8px 14px; transform: rotate(12deg); font-size: 0.85rem; font-weight: 900;
+    letter-spacing: 1px; opacity: 0.7; text-transform: uppercase;
+  }
+  .psych-row { display: flex; gap: 20px; margin-bottom: 14px; }
+  .psych-label { color: var(--muted); min-width: 160px; font-size: 0.82rem; }
+  .psych-val { color: var(--text); font-size: 0.88rem; }
+  .psych-section-title { color: var(--teal); font-size: 1rem; font-weight: 700; margin: 22px 0 10px; text-transform: uppercase; letter-spacing: 1px; border-left: 3px solid var(--teal); padding-left: 10px; }
+  .psych p { font-size: 0.88rem; color: #bbb; margin-bottom: 12px; line-height: 1.7; }
+  .psych em { color: #dda; font-style: italic; }
+  .ordonnance {
+    background: rgba(83,52,131,0.15); border: 1px dashed var(--purple);
+    border-radius: 10px; padding: 20px; margin-top: 20px;
+  }
+  .ordonnance .rx { font-size: 2rem; color: var(--purple); font-weight: 900; }
+  .ordonnance ul { margin-left: 20px; margin-top: 10px; }
+  .ordonnance li { font-size: 0.85rem; color: #bbb; margin-bottom: 6px; }
+  .ordonnance .signature { margin-top: 20px; color: var(--muted); font-size: 0.78rem; text-align: right; }
+
+  /* === VERDICT === */
+  .verdict {
+    background: linear-gradient(135deg, rgba(233,69,96,0.12) 0%, rgba(83,52,131,0.15) 100%);
+    border: 2px solid var(--red);
+    border-radius: 14px; padding: 32px; margin-top: 24px; text-align: center;
+  }
+  .verdict h2 { text-align: center; margin: 0 0 20px; }
+  .verdict p { font-size: 1.05rem; color: #ddd; line-height: 1.9; }
+  .verdict em { color: var(--red); font-style: italic; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="avatar">🎮</div>
+      <div class="header-text">
+        <h1>riwanovic</h1>
+        <div class="subtitle">Canal <strong>#qq-only</strong> · Serveur Discord privé · Profil psycho-comportemental complet</div>
+        <div class="badges">
+          <span class="badge badge-red">🔥 Rageur Analytique</span>
+          <span class="badge badge-purple">📊 Procureur de Midlane</span>
+          <span class="badge badge-gold">🏆 Évangéliste Botlane</span>
+          <span class="badge badge-teal">🧠 Théoricien du Gap</span>
+          <span class="badge badge-red">⚖️ Juge & Partie</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ===== STATS ===== -->
+  <h2>📈 Statistiques Générales</h2>
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="val">6 370</span>
+      <div class="label">Messages envoyés</div>
+    </div>
+    <div class="stat-card">
+      <span class="val">5 ans</span>
+      <div class="label">Période d'activité</div>
+    </div>
+    <div class="stat-card">
+      <span class="val">3.29</span>
+      <div class="label">Messages / jour (moy.)</div>
+    </div>
+    <div class="stat-card">
+      <span class="val">11h</span>
+      <div class="label">Heure de pic</div>
+    </div>
+    <div class="stat-card">
+      <span class="val">2021</span>
+      <div class="label">Année la plus active</div>
+    </div>
+    <div class="stat-card">
+      <span class="val">Lundi</span>
+      <div class="label">Jour le plus actif</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-container" style="margin-top:20px;">
+    <div class="chart-title">📊 Activité par heure de la journée (nb. de messages)</div>
+    <canvas id="hourChart"></canvas>
+  </div>
+
+  <!-- ===== CHAMPIONS & THÈMES ===== -->
+  <h2>🏆 Champions & Sujets les Plus Mentionnés</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🎯 Champions mentionnés</div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Vi (+ "avis")</span><span class="bar-count">~204</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:100%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Karma</span><span class="bar-count">65</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:32%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Kaisa</span><span class="bar-count">37</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-purple" style="width:18%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Sion</span><span class="bar-count">33</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-purple" style="width:16%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Urgot</span><span class="bar-count">31</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-gold" style="width:15%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Rengar</span><span class="bar-count">23</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-gold" style="width:11%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Sett</span><span class="bar-count">22</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-teal" style="width:11%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Draven</span><span class="bar-count">18</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-teal" style="width:9%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔥 Mots-clés rage &amp; LoL</div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">OP</span><span class="bar-count">321</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:100%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">ADC</span><span class="bar-count">256</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:80%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Zebi</span><span class="bar-count">72</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-purple" style="width:22%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Broken</span><span class="bar-count">57</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-purple" style="width:18%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Int</span><span class="bar-count">54</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-gold" style="width:17%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Gap / Diff</span><span class="bar-count">83</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-gold" style="width:26%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">Nerf</span><span class="bar-count">63</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-teal" style="width:20%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span class="bar-name">FF</span><span class="bar-count">148</span></div>
+        <div class="bar-track"><div class="bar-fill bar-fill-teal" style="width:46%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RAGE METER ===== -->
+  <h2>💢 Style de Rage — Jaugomètre</h2>
+  <div class="card">
+    <div class="rage-meter">
+      <div class="rage-label">
+        <span>🧘 Zen complet</span>
+        <span>🔥 Tiltmax absolu</span>
+      </div>
+      <div class="rage-track">
+        <div class="rage-fill"></div>
+        <div class="rage-marker"></div>
+      </div>
+      <div style="text-align:center; margin-top:10px; font-size:0.85rem; color:var(--gold); font-weight:700;">
+        Niveau estimé : 78/100 — "Rageur Analytique Chronique avec pics Caps Lock"
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px;">
+      <div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase; font-weight:700;">Déclencheurs identifiés</div>
+        <ul style="list-style:none; font-size:0.88rem; color:#ccc;">
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">🎯 ADC déclaré "rôle mort" → réflexe immédiat</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">📉 Jungle adverse avec KP &gt; 50%</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">🐛 Tryndamere / Garen non nerfés</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">🏆 Quelqu'un debunk la midlane</li>
+          <li style="padding:4px 0;">⚡ Riot qui ne hotfix pas dans l'heure</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase; font-weight:700;">Mécanismes de sortie de rage</div>
+        <ul style="list-style:none; font-size:0.88rem; color:#ccc;">
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">📊 Analyse post-game immédiate</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">⚖️ Attribution précise des torts</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">🏛️ Verdict rhétorique définitif</li>
+          <li style="padding:4px 0; border-bottom:1px solid var(--border);">🐦 Partage de tweets Riot pour valider</li>
+          <li style="padding:4px 0;">🤝 Pacification soudaine "on est paix et amour"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EXPRESSIONS SIGNATURE ===== -->
+  <h2>💬 Expressions Signature</h2>
+  <div class="card">
+    <div class="card-title">Vocabulaire personnel identifié — fréquence d'apparition</div>
+    <div class="expr-grid">
+      <div class="expr-tag">C'est carré <span class="cnt">21</span></div>
+      <div class="expr-tag">Zebi <span class="cnt">72</span></div>
+      <div class="expr-tag">Le gap <span class="cnt">38</span></div>
+      <div class="expr-tag">Mid gap / Bot gap <span class="cnt">10</span></div>
+      <div class="expr-tag">Turbo broken <span class="cnt">6+</span></div>
+      <div class="expr-tag">Pazifier <span class="cnt">5+</span></div>
+      <div class="expr-tag">Astro giga méga <span class="cnt">3</span></div>
+      <div class="expr-tag">Debunk <span class="cnt">25+</span></div>
+      <div class="expr-tag">T ban <span class="cnt">8</span></div>
+      <div class="expr-tag">OTP <span class="cnt">19</span></div>
+      <div class="expr-tag">Misérable/20 <span class="cnt">1 (culte)</span></div>
+      <div class="expr-tag">Int <span class="cnt">54</span></div>
+      <div class="expr-tag">Nul sa mère <span class="cnt">3+</span></div>
+      <div class="expr-tag">Zoulette <span class="cnt">12</span></div>
+      <div class="expr-tag">Finito <span class="cnt">5+</span></div>
+      <div class="expr-tag">Manigoldesque <span class="cnt">2</span></div>
+      <div class="expr-tag">Djoufaraz <span class="cnt">2</span></div>
+      <div class="expr-tag">Loze is loze <span class="cnt">1 (légendaire)</span></div>
+      <div class="expr-tag">Paix et amour (no flame) <span class="cnt">3</span></div>
+      <div class="expr-tag">Carton rouge <span class="cnt">3</span></div>
+    </div>
+  </div>
+
+  <!-- ===== QUOTES MÉMORABLES ===== -->
+  <h2>🏛️ Moments Mémorables</h2>
+  <div class="grid-2">
+    <div>
+      <div class="quote-card">
+        <div class="quote-text">"je suis nul ma mere aurait du avorter"</div>
+        <div class="quote-meta">03/05/2021 • Moment de lucidité exceptionnelle post-int. Note : s'auto-qualifie avant les autres.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"JE DEVIENNE FOU" suivi de "PERSONNE"</div>
+        <div class="quote-meta">04/05/2021 • Deux messages. 13 secondes d'intervalle. Pas d'explication.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"PTN RIOT GO NERF LA MIDLANE LA TOPLANE ET LA BOTLANE"</div>
+        <div class="quote-meta">09/11/2021 • En caps. Demande que Riot nerf l'intégralité du jeu sauf la jungle.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"FBVYUZECSNH£µ"</div>
+        <div class="quote-meta">20/06/2023 • Message envoyé après une cascade de caps. Son clavier a plié avant lui.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"Loze is loze"</div>
+        <div class="quote-meta">29/10/2025 • Philosophie stoïcienne de fin de session. Sagesse brute.</div>
+      </div>
+    </div>
+    <div>
+      <div class="quote-card">
+        <div class="quote-text">"13/0 IL PERD LA GAME"</div>
+        <div class="quote-meta">07/11/2021 • Analyse post-game concise, factuelle, dévastateurs.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"Misérable/20"</div>
+        <div class="quote-meta">03/02/2021 • Notation sur 20 inventée. Probablement la pire note possible.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"Cette nuit les gars j'ai fais une paralysie du sommeil j'ai vu le Vlad de mpb et le azir de Gk"</div>
+        <div class="quote-meta">09/02/2025 • LoL a infiltré son inconscient. Le jeu est rentré dans ses rêves.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"nous sommes paix et amour / no flame / les mages sont borken et viktor est astro borken"</div>
+        <div class="quote-meta">23-24/01/2025 • Déclaration de paix. Durée : 58 secondes.</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">"Néanmoins 18 morts en 24 minute = clair intention de nuire à l'équipe = reprot + tban"</div>
+        <div class="quote-meta">25/02/2021 • Raisonnement juridique appliqué à la soloQ.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RELATIONS ===== -->
+  <h2>👥 Relations avec les Membres du Canal</h2>
+  <div class="card">
+    <div class="card-title">Personnages récurrents — rôle narratif dans le canal</div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-purple">M</div>
+      <div class="relation-info">
+        <div class="name">Mani / Manigoldo</div>
+        <div class="role">⚔️ Tête de turc principale — rival officiel, cible préférée de débunks</div>
+        <div class="count">212 mentions · "Le MMR doit être manigoldesque"</div>
+      </div>
+    </div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-teal">M</div>
+      <div class="relation-info">
+        <div class="name">MPB (monpotestbon)</div>
+        <div class="role">🏆 Entité quasi-divine — à la fois cible et référence absolue</div>
+        <div class="count">141 mentions · "MPB GM" / "Mpb l'a dit il brise mentalement chaque équipe"</div>
+      </div>
+    </div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-gold">E</div>
+      <div class="relation-info">
+        <div class="name">Elilos</div>
+        <div class="role">🎭 Coéquipier chaotique — objet de sollicitude ironique permanente</div>
+        <div class="count">102 mentions · "Il est jamais trop tard pour arrêter elilos"</div>
+      </div>
+    </div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-red">D</div>
+      <div class="relation-info">
+        <div class="name">Dogoz</div>
+        <div class="role">🐶 Le senpai — figure tutélaire respectée (et absente)</div>
+        <div class="count">40 mentions · "Reprends le jeu dogoz ce Channel est si vide sans toi"</div>
+      </div>
+    </div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-green">D</div>
+      <div class="relation-info">
+        <div class="name">Depardieu</div>
+        <div class="role">🎬 Le contradicteur — théoricien adverse, souvent debunké</div>
+        <div class="count">37 mentions · "Depardieu delusional zerathul flamer"</div>
+      </div>
+    </div>
+    <div class="relation-item">
+      <div class="relation-avatar ra-purple">K</div>
+      <div class="relation-info">
+        <div class="name">Kats</div>
+        <div class="role">📈 L'aspirant GM — partenaire de duo occasionnel</div>
+        <div class="count">16 mentions · "DUO AVEC KATS GM"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DESCRIPTION LONGUE ===== -->
+  <h2>📜 Analyse Comportementale Approfondie</h2>
+  <div class="desc-section">
+
+    <h3>1. La Personnalité sur le Canal — Le Procureur de la Partie</h3>
+    <p>
+      riwanovic occupe sur ce canal une position sociologique fascinante : celle du <strong>commentateur-juge permanent</strong>, dont l'activité principale n'est pas tant de raconter ses propres performances que d'analyser, disséquer, condamner ou — plus rarement — absoudre les performances de son entourage. Son rapport au canal est celui d'un éditorialiste de soloQ : il dépose ses observations dans un fil continu de messages brefs, souvent sans contexte apparent, attendant que les autres posent les questions pour livrer le verdict complet. La forme est économique (<em>"Misérable/20"</em>, 03/02/2021), mais la charge sémantique est maximale. Là où d'autres rage-postent en mode stream-of-consciousness, riwanovic structure. Il y a dans chaque message de rage une intention argumentative : prouver que <strong>la défaite n'est jamais le fruit du hasard</strong>, toujours d'une causalité identifiable, localisable, reportable.
+    </p>
+    <p>
+      Sa célébration, quand elle arrive, est tout aussi particulière. On ne trouve pas ici les "GG EZ" vulgaires ou les punchlines de victoire clinquantes. riwanovic célèbre par l'analyse confirmée : <em>"C'est carré"</em> après une game bien lue, <em>"gg tu laisses le kill a cait elle aurait son troisième item 20 secondes plus tôt"</em> même dans la victoire — critique constructive, toujours. Le bonheur de gagner passe chez lui par la validation de sa propre lecture de la partie. Si la game a été gagnée pour les mauvaises raisons, ça ne compte qu'à moitié.
+    </p>
+
+    <h3>2. Niveau Apparent et Rapport aux Performances Personnelles</h3>
+    <p>
+      riwanovic est ce joueur exceptionnel capable d'analyser avec une précision redoutable les erreurs des autres tout en entretenant une zone d'ombre savamment cultivée autour de ses propres performances. Il ne se vante pas directement — il <strong>contexte</strong>. Quand il perd, il y a toujours un jungler avec 40% de KP zac qui était afk, un toplaner qui intent une Gwen, une botlane de titans colossal en face. Ce n'est pas de la mauvaise foi — c'est une forme d'épistémologie : toute défaite mérite une explication causale, et son MOI ne fait pas partie des causes envisagées en première hypothèse. Le rare moment d'auto-flagellation (<em>"je suis nul ma mere aurait du avorter"</em>, 03/05/2021) ne dure que quelques secondes avant qu'il reprenne sa posture d'analyste. Il envisage être diamant sur le main, mentionne des classements de fin de saison, parle d'elo avec la précision d'un économiste. Il n'est clairement pas bronze — mais l'accent mis sur les fautes des coéquipiers suggère qu'il joue dans un elo où l'impact individuel est réel mais jamais suffisant à ses yeux.
+    </p>
+
+    <h3>3. Têtes de Turc Récurrentes — Le Panthéon de la Médiocrité</h3>
+    <p>
+      Riwanovic a constitué au fil des années un véritable <strong>panthéon des champions mal joués et des rôles sous-estimés</strong>. La midlane y occupe une place théologique : elle est tour à tour "turbo broken" et "doit être nerfée", ce qui ne pose apparemment aucune contradiction à son système de pensée. Le rôle ADC est son cheval de bataille existentiel — <em>"adc pire role super faible"</em> (2022) côtoie <em>"JVEUX 8 NERF SUR LES ADC"</em> (2024), prouvant que sa relation avec le rôle est le parfait exemple d'une passion-haine d'une complexité clinique. Tryndamere et Garen sont ses souffre-douleurs préférés côté champions : <em>"riot please nerf tryndamere"</em>, <em>"pitié riot games nerf garen"</em>. La jungle est un autre terrain favori — régulièrement déclarée "morte", "finito", "le rôle est mort" selon la saison et l'humeur. MPB lui sert alternativement de bouc émissaire et de divinité tutélaire selon que la game a été gagnée ou perdue.
+    </p>
+
+    <h3>4. Son Humour — La Comédie du Sérieux</h3>
+    <p>
+      L'humour de riwanovic est <strong>contextuel et autoréférentiel</strong> — il fonctionne exclusivement pour les initiés du canal. Ses blagues ne se racontent pas, elles s'accumulent sous forme de running gags : la notion de "pazification" (acte de remettre quelqu'un à sa place rhétoriquement), le concept d'une dette en LP que Depardieu lui doit avec intérêts (<em>"avec les intérêts ça fait 50 lp"</em>, 15/02/2021), l'invention d'adjectifs absurdes (<em>"manigoldesque"</em> pour qualifier un MMR catastrophique), l'introduction de <em>"djoufaraz"</em> comme concept indéfini mais évocateur. Son meilleur outil comique est le <strong>contraste entre solennité et trivialité</strong> : il rédige des attendus juridiques sur des inteux de Bronze, convoque un "procureur" imaginaire pour des LP perdus, cite des jurisprudences de saisons précédentes. Il traite League of Legends comme du droit constitutionnel. C'est absurde et brillant. <em>"Néanmoins 18 morts en 24 minute = clair intention de nuire à l'équipe = reprot + tban"</em> est la meilleure parodie de rapport de police jamais produite sur un canal Discord gaming.
+    </p>
+
+    <h3>5. Rageur Chronique ou Joueur Zen ? — Le Diagnostic Comportemental</h3>
+    <p>
+      La réponse honnête est : <strong>ni l'un ni l'autre dans le sens classique</strong>. riwanovic n'est pas le rageur clavier-punching qui envahit ton chat de "kys". Il est d'une catégorie plus sophistiquée et, à certains égards, plus inquiétante : le <strong>rageur analytique chronique</strong>, dont la rage prend la forme d'une instruction judiciaire permanente. La preuve la plus flagrante : il s'auto-corrige dans la rage. <em>"nous sommes paix et amour / no flame"</em> annonce-t-il solennellement — puis dans la même foulée constate que Viktor est "astro borken", ce qui invalide la paix en moins d'une minute. Son rapport au fair-play est ambigu : il n'insulte pas directement les adversaires, mais construit autour de chaque défaite un dossier à charge dont la conclusion implicite est toujours que quelqu'un doit répondre de ses actes devant l'Histoire. Toxic ? Non. Juste ? Jamais vraiment. Divertissant ? <strong>Absolument et constamment.</strong>
+    </p>
+
+    <h3>6. Sujets Hors-LoL — La Vie Entre Deux Games</h3>
+    <p>
+      Les irruptions du monde réel dans le canal de riwanovic sont rares mais révélatrices. La <strong>fac</strong> est mentionnée dans des contextes uniquement comparatifs ou de mockery (<em>"Il préfère flex avec ses copains de la fac"</em>) — elle existe comme coordonnée géographique du joueur adverse, pas comme réalité vécue racontée. La <strong>vie nocturne</strong> transparaît dans des horaires de connexion tardifs (0h-1h du matin, pic visible) et dans quelques allusions aux soirées à venir. Il y a un effleurement du <strong>football</strong> et du <strong>sport</strong>, quelques références culturelles (<em>"les flashbacks du Vietnam"</em> en 2023 pour évoquer une old meta), mais l'ensemble reste superficiel. Le canal #qq-only remplit sa mission : riwanovic y vient exclusivement pour League of Legends, et la réalité extérieure n'y entre qu'en contrebande, sous forme de métaphore ou d'analogie pour mieux décrire une game. Sa vie hors-jeu est comme sa jungle : on sait qu'elle existe, mais il ne nous la montre pas.
+    </p>
+
+  </div>
+
+  <!-- ===== PSYCHIATRIC ===== -->
+  <h2>🏥 Évaluation Psychiatrique — Rapport Clinique</h2>
+  <div class="psych">
+    <div class="psych-stamp">CONFIDENTIEL</div>
+    <div class="psych-header">
+      <div class="institution">Centre Hospitalier Universitaire de Soloqueue — Service de Psychiatrie Gaming</div>
+      <div class="title">RAPPORT D'EXPERTISE PSYCHIATRIQUE</div>
+      <div class="subtitle">Document établi après lecture exhaustive de 6 370 messages Discord (canal #qq-only, 2020-2026)</div>
+    </div>
+
+    <div class="psych-row"><div class="psych-label">Patient :</div><div class="psych-val">M. riwanovic (alias "Le Dog")</div></div>
+    <div class="psych-row"><div class="psych-label">Âge clinique estimé :</div><div class="psych-val">Chronologiquement adulte. Émotionnellement Silver 2.</div></div>
+    <div class="psych-row"><div class="psych-label">Durée d'observation :</div><div class="psych-val">5 ans, 3 mois, 20 jours (en continu, sans rechute de zen)</div></div>
+    <div class="psych-row"><div class="psych-label">Motif de consultation :</div><div class="psych-val">Maintien d'une activité discursive intense sur canal Discord privé malgré le jeu</div></div>
+    <div class="psych-row"><div class="psych-label">Outil diagnostique :</div><div class="psych-val">DSM-5 Gaming Edition (non-officiel, mais justifiable)</div></div>
+
+    <div class="psych-section-title">I. Diagnostics Principaux</div>
+    <p><strong style="color:var(--red)">F63.9 — Trouble du Contrôle des Impulsions Analytiques (TCIA)</strong><br>
+    Incapacité documentée à observer une partie de League of Legends sans immédiatement rédiger un rapport d'incident complet assorti de recommandations disciplinaires. Le patient a développé un système interne de notation (<em>"Misérable/20"</em>) absent de tout référentiel médical ou ludique existant. L'attribution de "carton rouge" à un joueur de jeu vidéo constitue, en l'espèce, une sublimation inversée de l'autorité arbitrale.</p>
+
+    <p><strong style="color:var(--red)">F41.1 — Trouble Anxieux Généralisé à Déclenchement Meta-Spécifique (TAGDMS)</strong><br>
+    Les pics d'activité horaire (11h et 21h) correspondent à des moments de connexion au jeu. L'absence de messages entre 3h et 6h du matin suggère une résistance partielle à l'insomnie meta-induite, bien que le message du 09/02/2025 (<em>"Cette nuit les gars j'ai fais une paralysie du sommeil j'ai vu le Vlad de mpb et le azir de Gk"</em>) révèle que le jeu a infiltré le système limbique du patient avec succès. League of Legends occupe désormais sa bande de sommeil paradoxal.</p>
+
+    <p><strong style="color:var(--red)">F60.0 — Personnalité Obsessionnelle-Compulsive à Orientation Jurisprudentielle (POCOJ)</strong><br>
+    Le patient manifeste une tendance pathologique à traduire les événements ludiques en termes de droit positif. L'établissement de "dettes de LP" avec intérêts (<em>"avec les intérêts ça fait 50 lp"</em>), la notification de ban comme sanction légale formelle (<em>"T BAN"</em>), et la construction d'un réquisitoire sur 18 morts en 24 minutes qualifiées d'"intention de nuire" constituent les marqueurs cliniques d'un individu dont le surmoi a été remplacé par un code de procédure civile de soloqueue.</p>
+
+    <div class="psych-section-title">II. Troubles Associés</div>
+    <p><strong style="color:var(--gold)">Délire de Référence Meta-Partagée (DRMP)</strong> — Croit sincèrement que ses analyses influencent ou devraient influencer les décisions de patch de Riot Games. A formulé des demandes de nerf directement à la compagnie par messages Discord adressés au canal, sans envoi effectif. Efficacité thérapeutique nulle, mais satisfaction cathartique réelle.</p>
+
+    <p><strong style="color:var(--gold)">Syndrome de Stockholm Rôle-Dépendant</strong> — Déclare régulièrement que l'ADC est le pire rôle du jeu (<em>"adc pire role super faible"</em>, 2022) tout en continuant manifestement à s'y intéresser de près (<em>"JVEUX 8 NERF SUR LES ADC"</em>, 2024). La victime s'est attachée à son bourreau et lui réclame simultanément compassion et nérf.</p>
+
+    <p><strong style="color:var(--gold)">Épisodes Brefs de Paix Illusoire</strong> — Le patient présente des épisodes cycliques de résolution (<em>"nous sommes paix et amour / no flame"</em>, 23/01/2025) d'une durée moyenne de 58 secondes avant rechute en analyse critique. Le pronostic de ces phases de rémission est négatif. Elles servent probablement de mécanisme de régulation émotionnelle permettant d'éviter le pic hypertensif qui succèderait sans elles à la constatation que Viktor est "astro borken".</p>
+
+    <div class="psych-section-title">III. Observations Cliniques Notables</div>
+    <p>Le 04/05/2021, le patient a émis deux messages consécutifs (<em>"JE DEVIENNE FOU"</em> puis <em>"PERSONNE"</em>) à 13 secondes d'intervalle, sans contexte explicite. Ce comportement répond aux critères diagnostiques d'une dissociation brève en contexte ludique, vraisemblablement provoquée par une botlane composée de "titans colossal" selon les dires du patient lui-même.</p>
+    <p>Le 20/06/2023, le patient a émis le message suivant après une série de caps : <em>"FBVYUZECSNH£µ"</em>. Ce dernier message constitue une rupture totale avec la syntaxe française et peut être interprété soit comme un bug neuronal transitoire, soit comme la découverte involontaire d'une nouvelle langue. Le caractère "£µ" en fin de séquence suggère une involontaire activation de touches mortes, confirmant que la motricité fine a cédé avant la conscience.</p>
+
+    <div class="psych-section-title">IV. Pronostic</div>
+    <p>Défavorable à court terme. Stable à moyen terme. Chronique à vie. Le patient a démontré une capacité remarquable à maintenir un niveau d'engagement discursif élevé sur 5 ans sans épuisement structurel apparent, ce qui exclut le burnout classique et suggère une <strong>addiction fonctionnelle entretenant son propre homéostat</strong>. Il ne veut pas guérir. Il veut que Riot nerf la midlane. Ce n'est pas la même chose.</p>
+
+    <div class="ordonnance">
+      <div class="rx">℞</div>
+      <div style="font-size:0.82rem; color:var(--muted); margin-top:4px; margin-bottom:12px;">ORDONNANCE THÉRAPEUTIQUE N°2024-SOLOQ-∞</div>
+      <ul>
+        <li><strong>Zebi 500mg</strong> (gélules) — 1 à 3 prises par jour en cas de défaite, non remboursé</li>
+        <li><strong>Carré® 100mg</strong> — En cas d'analyse réussie, pour renforcement du comportement positif</li>
+        <li><strong>Pazificare® Spray Nasal</strong> — Application avant chaque échange avec Manigoldo ou Depardieu</li>
+        <li><strong>LP Recovery™ (patch dermique)</strong> — 1 patch par nuit de soloQ perdante, posologie à adapter</li>
+        <li><strong>Thérapie Cognitive Comportementale (TCC) — Spécialisation "Mid Gap"</strong> : 1 séance/semaine, objectif : reconnaître que la midlane n'est pas toujours responsable</li>
+        <li><strong>Interdiction formelle</strong> de jouer entre 1h et 7h du matin sauf en cas de paralysie du sommeil avérée</li>
+      </ul>
+      <div class="signature">
+        Dr. Garen, MD, PhD — Psychiatre Spécialisé en Pathologies Riot Gaming<br>
+        CHU SoloQ Nantes · Cabinet du Lundi Soir (horaire : 22h30–06h00)<br>
+        <em>Le praticien décline toute responsabilité en cas de rechute meta-induite post-patch.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VERDICT ===== -->
+  <h2>⚔️ Verdict Final</h2>
+  <div class="verdict">
+    <p>
+      riwanovic est un <em>phénomène rare dans l'écosystème Discord</em> : un rageur doté d'une architecture intellectuelle. Sa rage n'est pas primitive — elle est <em>instruite</em>, structurée, servie froide avec des références aux saisons passées et des calculs d'intérêts LP. Il aime ce jeu autant qu'il le déteste, et ce canal est son théâtre où chaque game devient une audiencene, chaque coéquipier un justiciable, chaque victoire une validation de sa thèse. <em>En cinq ans, 6 370 messages, et une paralysie du sommeil peuplée d'azir et de vlad,</em> riwanovic a prouvé qu'on peut être simultanément le procureur, le juge, le greffier et la victime du même procès — et que c'est, quelque part, une forme d'art. <strong>Loze is loze. Mais l'analyse, elle, ne meurt jamais.</strong>
+    </p>
+  </div>
+
+</div>
+
+<!-- ===== CHART JS ===== -->
+<script>
+(function() {
+  const hourData = {0:173,1:145,2:8,3:1,4:16,5:37,6:24,7:71,8:262,9:401,10:289,11:558,12:511,13:366,14:405,15:431,16:327,17:356,18:258,19:279,20:271,21:451,22:363,23:367};
+  const hours = Array.from({length:24}, (_,i) => i);
+  const vals = hours.map(h => hourData[h] || 0);
+  const maxVal = Math.max(...vals);
+
+  const canvas = document.getElementById('hourChart');
+  const ctx = canvas.getContext('2d');
+
+  function draw() {
+    const W = canvas.offsetWidth;
+    const H = 150;
+    canvas.width = W * window.devicePixelRatio;
+    canvas.height = H * window.devicePixelRatio;
+    canvas.style.height = H + 'px';
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    ctx.clearRect(0, 0, W, H);
+    const pad = { left: 36, right: 10, top: 10, bottom: 26 };
+    const chartW = W - pad.left - pad.right;
+    const chartH = H - pad.top - pad.bottom;
+    const barW = chartW / 24;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    [0.25, 0.5, 0.75, 1].forEach(f => {
+      const y = pad.top + chartH * (1 - f);
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    });
+
+    // Bars
+    vals.forEach((v, i) => {
+      const x = pad.left + i * barW;
+      const bh = (v / maxVal) * chartH;
+      const y = pad.top + chartH - bh;
+      const isPeak = i === 11;
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + bh);
+      if (isPeak) {
+        grad.addColorStop(0, '#e94560');
+        grad.addColorStop(1, '#533483');
+      } else if (v > 350) {
+        grad.addColorStop(0, '#c23152');
+        grad.addColorStop(1, '#3a2466');
+      } else {
+        grad.addColorStop(0, '#533483aa');
+        grad.addColorStop(1, '#3a246666');
+      }
+      ctx.fillStyle = grad;
+      ctx.fillRect(x + 2, y, barW - 4, bh);
+
+      // Hour label
+      if (i % 3 === 0) {
+        ctx.fillStyle = 'rgba(136,153,170,0.8)';
+        ctx.font = '9px Segoe UI';
+        ctx.textAlign = 'center';
+        ctx.fillText(i + 'h', x + barW / 2, H - pad.bottom + 12);
+      }
+    });
+
+    // Y axis labels
+    ctx.fillStyle = 'rgba(136,153,170,0.7)';
+    ctx.font = '9px Segoe UI';
+    ctx.textAlign = 'right';
+    [0, Math.round(maxVal/2), maxVal].forEach((v, idx) => {
+      const y = pad.top + chartH * (1 - v / maxVal);
+      ctx.fillText(v, pad.left - 4, y + 3);
+    });
+  }
+
+  draw();
+  window.addEventListener('resize', draw);
+})();
+</script>
+
+</body>
+</html>
