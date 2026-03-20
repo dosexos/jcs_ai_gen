@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHAars — Dossier Complet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a3a;
+    --purple: #533483;
+    --purple-light: #7b52c4;
+    --red: #e94560;
+    --red-light: #ff6b7a;
+    --gold: #f4a261;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --border: #2a2a4a;
+    --card: #14142a;
+    --card2: #1c1c36;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #0a0a1e 0%, #1a0a2e 50%, #0a1a2e 100%);
+    padding: 60px 40px 50px;
+    border-bottom: 2px solid var(--purple);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(83,52,131,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(233,69,96,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .pseudo {
+    font-family: 'Syne', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #e8e8f0 30%, var(--purple-light) 70%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pseudo-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 5px 12px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+  }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple); color: var(--purple-light); }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red-light); }
+  .badge-gold { background: rgba(244,162,97,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-teal { background: rgba(42,200,180,0.1); border: 1px solid #2ac8b4; color: #2ac8b4; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 30px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--red-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* === CHART === */
+  .chart-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 30px;
+  }
+  .chart-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  #hourChart { width: 100%; height: 100px; }
+
+  /* === MAIN CONTENT === */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* === PART HEADER === */
+  .part {
+    margin-top: 70px;
+  }
+  .part-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .part-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    opacity: 0.12;
+    color: var(--red);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .part-title-block {}
+  .part-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .part-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .part-title span { color: var(--red); }
+
+  /* === SECTION === */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px 36px;
+    margin-bottom: 20px;
+  }
+  .section + .section { border-top: none; }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--purple-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section p { margin-bottom: 14px; color: #d0d0e8; }
+  .section p:last-child { margin-bottom: 0; }
+
+  .cite {
+    display: block;
+    font-style: italic;
+    color: var(--gold);
+    padding: 10px 16px;
+    border-left: 2px solid var(--gold);
+    background: rgba(244,162,97,0.06);
+    border-radius: 0 4px 4px 0;
+    margin: 12px 0;
+    font-size: 0.97rem;
+  }
+  .cite .date {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-style: normal;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* === PSYCHIATRY === */
+  .psych-report {
+    background: #0f1a0f;
+    border: 2px solid #3a6a3a;
+    border-radius: 4px;
+    padding: 36px 40px;
+    margin-top: 20px;
+    position: relative;
+    font-family: 'Crimson Pro', Georgia, serif;
+  }
+  .psych-header {
+    text-align: center;
+    border-bottom: 2px solid #3a6a3a;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+  .psych-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #4a9a4a;
+    margin-bottom: 8px;
+  }
+  .psych-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #a8d8a8;
+  }
+  .psych-ref {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: #4a7a4a;
+    margin-top: 4px;
+  }
+  .psych-section { margin-bottom: 22px; }
+  .psych-section h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: #4a9a4a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed #2a4a2a;
+  }
+  .psych-section p { color: #c8e8c8; margin-bottom: 10px; font-size: 1rem; }
+  .psych-diag {
+    background: rgba(74,154,74,0.1);
+    border: 1px solid #3a6a3a;
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 0.95rem;
+    color: #a8d8a8;
+  }
+  .ordonnance {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid #3a6a3a;
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .ordonnance h5 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: #4a9a4a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .ordonnance ul { list-style: none; }
+  .ordonnance li {
+    color: #c8e8c8;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(74,154,74,0.15);
+    font-size: 0.97rem;
+  }
+  .ordonnance li::before { content: "Rx "; color: #4a9a4a; font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+  .psych-stamp {
+    text-align: right;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px dashed #2a4a2a;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: #3a6a3a;
+  }
+
+  /* === TIMELINE === */
+  .timeline {
+    position: relative;
+    padding: 30px 0;
+    margin-top: 10px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--purple), var(--red), var(--purple));
+    transform: translateX(-50%);
+  }
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+  .timeline-item:nth-child(odd) .tl-content { margin-left: 0; margin-right: 60px; text-align: right; }
+  .tl-date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    border: 2px solid var(--red);
+    color: var(--red);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .tl-content {
+    width: calc(50% - 60px);
+    margin-left: 60px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .tl-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .tl-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+  .tl-canal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .tl-pol { color: var(--purple-light); }
+  .tl-qq { color: var(--red); }
+  .tl-both { color: var(--gold); }
+
+  /* === VERDICT === */
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e, #2e0a1a);
+    border: 2px solid var(--red);
+    border-radius: 8px;
+    padding: 40px 44px;
+    margin-top: 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .verdict::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(233,69,96,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .verdict-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+  .verdict-text {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .verdict-text strong { color: var(--red-light); font-style: normal; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .pseudo { font-size: 2.8rem; }
+    .container, .header { padding-left: 20px; padding-right: 20px; }
+    .section { padding: 22px 20px; }
+    .timeline::before { left: 20px; }
+    .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; }
+    .tl-date { left: 20px; transform: none; position: relative; margin-bottom: 8px; display: inline-block; }
+    .tl-content, .timeline-item:nth-child(odd) .tl-content { width: 100%; margin: 0 0 0 0; text-align: left; }
+    .psych-report { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-inner">
+    <div class="pseudo">SHAars</div>
+    <div class="pseudo-sub">Dossier d'analyse complète · 2021–2026 · Serveur privé Discord</div>
+
+    <div class="badges">
+      <span class="badge badge-purple">Officier de Gendarmerie</span>
+      <span class="badge badge-purple">Modérateur de fait</span>
+      <span class="badge badge-purple">Gauche économique</span>
+      <span class="badge badge-purple">Anti-RN structurel</span>
+      <span class="badge badge-red">OTP Rammus</span>
+      <span class="badge badge-red">Tank apologist</span>
+      <span class="badge badge-red">Critique meta permanent</span>
+      <span class="badge badge-gold">Rageur rationnel</span>
+      <span class="badge badge-teal">Citer des sources c'est son kink</span>
+      <span class="badge badge-teal">Pic d'activité 10h du matin</span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">19 876</div>
+        <div class="stat-label">Messages totaux</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">11 255</div>
+        <div class="stat-label">Canal politique</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">8 621</div>
+        <div class="stat-label">Canal QQ-only</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">~5 ans</div>
+        <div class="stat-label">Période couverte</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">57 car.</div>
+        <div class="stat-label">Moy. politique</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">37 car.</div>
+        <div class="stat-label">Moy. QQ-only</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">10h00</div>
+        <div class="stat-label">Pic horaire (pol.)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">Juil. 2024</div>
+        <div class="stat-label">Pic absolu politique</div>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-title">Activité horaire combinée (heure de la journée)</div>
+      <canvas id="hourChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTAINER ===== -->
+<div class="container">
+
+  <!-- ===== PARTIE 1 : POLITIQUE ===== -->
+  <div class="part">
+    <div class="part-header">
+      <div class="part-number">01</div>
+      <div class="part-title-block">
+        <div class="part-label">Canal #politique</div>
+        <div class="part-title">Le Débatteur, <span>l'Architecte</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">1.1</div>
+      <div class="section-title">Personnalité, style de communication et ton général</div>
+      <p>SHAars sur le canal politique, c'est l'archétype du mec qui a décidé une bonne fois pour toutes qu'il allait faire de la politique discord un truc sérieux. Son style est immédiatement identifiable : des phrases longues, souvent imparfaitement orthographiées mais conceptuellement denses, une tendance à structurer ses arguments en points numérotés, et un recours systématique aux sources externes — articles, études, données chiffrées — qu'il colle sans cérémonie dans le chat. Il écrit comme il parle, avec cette fluidité un peu négligée des gens qui pensent plus vite qu'ils ne tapent, et dont les fautes d'orthographe ne cachent jamais la rigueur de fond. La ponctuation est fonctionnelle, pas esthétique.</p>
+      <p>Son ton oscille en permanence entre le professoral patient et le sarcastique implacable. Quand quelqu'un avance un argument sans source, SHAars ne s'énerve pas — il note le manque à voix haute, parfois deux fois, parfois trois. <em>« Gk 839383 de mots toujours 0 source pour appuyer son propos »</em> — cette phrase, datant de juillet 2024, est un concentré parfait de sa méthode : comptabiliser publiquement le déficit rhétorique de l'adversaire. Ce n'est pas de la méchanceté ; c'est un standard épistémologique qu'il applique uniformément, y compris à lui-même quand il concède manquer de sources récentes.</p>
+      <p>Il a un humour discret mais réel, souvent sous forme d'ironie laconique. <em>« Il pense que les riches sont opprimés et qu'on ne devrait surtout pas les forcer à quoi que ce soit vu que si tu les laisses tranquille ils vont aider le peuple »</em> — ce type de reformulation parodique de la position adverse, sans point d'exclamation ni emoji, dit tout sur son style : chirurgical, légèrement cruel, toujours contrôlé.</p>
+      <cite>« J'ai passé deux semaines à "débattre" avec quelqu'un qui n'a cité aucune source de tout les débats. Insulte et fait du sophisme à chaque contradiction. »<span class="date">— 30 juillet 2024</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">1.2</div>
+      <div class="section-title">Positions politiques détaillées</div>
+      <p>SHAars est résolument à gauche sur l'économie, mais d'une gauche pragmatique et historiquement informée, pas idéologique. Il croit dans le rôle régulateur de l'État, dans la protection des services publics (santé, éducation, police, armée, gendarmerie — son propre employeur, ce qui confère à ses positions une authenticité particulière), et dans le fait que les politiques d'austérité fracassent toujours les mêmes. <em>« Vous allez payer moins de taxe, à la place vous allez juste payer plus les sociétés privées »</em> est une de ses formules les plus denses, prononcée en septembre 2025. Il n'est pas marxiste — il ne parle ni de lutte des classes au sens strict ni de nationalisation systématique — mais sa grille de lecture est structurellement matérialiste.</p>
+      <p>Sur l'extrême droite, SHAars est farouchement anti-RN, mais sa critique est moins émotionnelle que structurelle. Il ne hurle pas au fascisme à chaque sortie de Le Pen ; il documente la porosité entre l'extrême droite et les intérêts patronaux, cite l'histoire de comment les mouvements autoritaires ont historiquement eu besoin du soutien du capital pour accéder au pouvoir. <em>« L'extrême droite à l'origine ça ne voulait pas gagner par les urnes, mais comme l'extrême droite est patron compatible ils ont eu l'occasion de le faire à plusieurs reprises dans l'histoire grâce au pouvoir de l'argent »</em> — c'est du Gramsci vulgarisé, mais efficacement.</p>
+      <p>Sur Macron, il est critique sans être dans la dénonciation rhétorique. Il documente les casseroles, se méfie des médias détenus par des milliardaires, et a une conscience aiguë du rôle de la classe dominante dans la fabrication du consentement. Sur l'immigration, sa position est nuancée : il refuse l'amalgame identitaire de la droite mais reconnaît des problèmes réels, notamment liés aux conséquences des politiques étrangères françaises. <em>« Les immigrés actuels c'est plus de l'immigration d'asile vu qu'on a foutu leur pays en guerre pour exploiter leur ressources »</em> — logique de causalité structurelle, pas de compassion sentimentale.</p>
+      <cite>« Il n'y a pas que les hôpitaux, les médecins en secteur 3 aussi c'est du "privé" mais c'est compter dans le publique. »<span class="date">— 20 août 2024</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">1.3</div>
+      <div class="section-title">Sujets de prédilection</div>
+      <p>Le corpus politique de SHAars révèle une constellation de thèmes qu'il revient inlassablement, avec une constance qui trahit des convictions profondes plutôt que des intérêts de circonstance. L'économie politique est son terrain de prédilection absolu : les mécanismes bancaires, la fraude fiscale, le rapport capital/travail, la théorie du ruissellement qu'il démonte avec un plaisir presque sadique. Il cite le cas UBS condamné en France pour fraude fiscale organisée (3,7 milliards d'euros d'amende), évoque la courbe de Laffer avec une précision qui suggère qu'il a vraiment lu les textes. Le mot « capitalisme » apparaît 32 fois dans ses messages ; « économie » 61 fois.</p>
+      <p>En deuxième position : l'éducation et la méritocratie. SHAars a des opinions tranchées sur le système éducatif français — il critique les grandes écoles de commerce, défend les universités (Dauphine, Assas), et se méfie de la reproduction sociale déguisée en compétence. <em>« La seule différence c'est que les fils de riche fils à papa eux-mêmes dans le commerce n'y vont pas parce qu'ils ont pas le niveau et se contentent de payer leur diplôme »</em>. Troisième axe : la gestion des services publics et la privatisation rampante — EDF, Air France, les hôpitaux. L'ironie de l'officier de gendarmerie défendant le public ne lui échappe pas. Quatrièmement : la rhétorique politique et ses dérives, le sophisme comme outil de domination intellectuelle.</p>
+      <cite>« La France avec besoin de faire régner la justice je finis officier de gendarmerie à vivre à Melun. »<span class="date">— 15 janvier 2026</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">1.4</div>
+      <div class="section-title">Son rôle de modérateur — constant ou situationnel ?</div>
+      <p>SHAars est modérateur de fait mais pas de titre, ce qui est la position la plus inconfortable qui soit dans un canal de débat — suffisamment d'autorité morale pour intervenir, pas assez de pouvoir institutionnel pour clore. Il remplit ce rôle de manière hautement situationnelle : il n'est pas le gardien neutre qui arbitre des positions équivalentes, mais quelqu'un qui intervient quand les standards épistémiques s'effondrent. Autrement dit, il ne calme pas les débats — il les recadre dans les moments où la mauvaise foi ou l'incompétence argumentative menacent de les dénaturer.</p>
+      <p>Sa technique de modération est caractéristique : il note publiquement et précisément les manquements rhétoriques de son interlocuteur sans l'insulter, ce qui a pour effet de l'humilier intellectuellement plutôt que socialement. <em>« Gk sans sophisme c'est 3 au bac de philo faut le savoir »</em> — c'est de la modération déguisée en évaluation. Il documente aussi ses propres impatiences : <em>« Tu remarqueras la cohérence aussi d'ailleurs »</em> quand quelqu'un joue à être surpris par ses contradictions. Ce rôle ne disparaît jamais, mais il est sélectif : SHAars ne perd pas son temps avec tout le monde.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">1.5</div>
+      <div class="section-title">Évaluation : ragebait conscient ou clivant ?</div>
+      <p>SHAars est objectivement clivant, mais de la manière la plus difficile à réfuter : en ayant raison plus souvent qu'il n'a tort et en le sachant. Il ne cherche pas le ragebait dans le sens d'une provocateur qui jette des grenades pour voir exploser les réactions — il avance des positions documentées, structurées, avec sources à l'appui, et attend que les autres répondent à ce niveau. Quand ils ne le peuvent pas, la frustration est de leur côté, pas du sien. Ce qui rend ça légèrement clivant, c'est qu'il a une tendance à rejouer ses victoires rhétoriques à voix haute : <em>« SHAars utilise des éléments historiques et sourcés. Gk insulte et parle de trucs prouvés faux »</em> — il se cite lui-même en troisième personne, ce qui est soit du génie soit de l'arrogance selon d'où on se place.</p>
+      <p>Il est fédérateur sur le fond (beaucoup partagent ses analyses) mais diviseur sur la forme (son niveau d'exigence peut décourager la participation). Résultat net : il élève le niveau moyen du canal mais rétrécit peut-être l'espace pour la parole bancale, essentielle à tout vrai débat.</p>
+      <cite>« ( je sais que tu troll et que tu veux essayer de taper dans l'ego mais tu te rends compte que ça ne m'affecte pas ? ) »<span class="date">— 20 février 2026</span></cite>
+    </div>
+  </div>
+
+  <!-- ===== PARTIE 2 : QQ-ONLY ===== -->
+  <div class="part">
+    <div class="part-header">
+      <div class="part-number">02</div>
+      <div class="part-title-block">
+        <div class="part-label">Canal #qq-only</div>
+        <div class="part-title">Le Joueur de <span>Rammus</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">2.1</div>
+      <div class="section-title">Personnalité sur ce canal — comment il rage, comment il célèbre</div>
+      <p>Le SHAars de #qq-only est reconnaissable, mais allégé. Allégé de la contrainte épistémique, du devoir de source, du sérieux du débat d'idées. Ce qu'il reste, c'est quelque chose de plus brut, plus drôle, plus spontané — mais pas fondamentalement différent. Il rage de manière structurée, ce qui est en soi une anomalie dans un canal de défouloir LoL. Plutôt que des torrents d'insultes vagues, SHAars diagnostique. Il identifie la cause précise de la défaite, attribue les responsabilités avec une précision quasi forensique, et conclut souvent sur une formule lapidaire qui signe l'inutilité de l'adversaire ou du coéquipier.</p>
+      <p>Sa rage préférée : l'incompétence qui se méconnaît. Ce qui l'exaspère vraiment, c'est pas le gars qui fait de son mieux et perd — c'est le gars qui joue mal et qui se plaint des autres. <em>« Je sais pas c'est quoi le plus marrant entre ceux qui sont là à tabasser quelqu'un qui vient juste se plaindre dans un salon fait pour et celui qui dit ne pas en avoir quelque chose à faire mais continuer à feed »</em> — derrière la phrase un peu longue, une observation acérée sur les hypocrisies du gaming. Il célèbre avec la même économie de moyens : un emoji rammus, un "bg" lapidaire, ou un récit détaillé d'une décision tactique brillante dont il est l'auteur.</p>
+      <cite>« Je joue rammus et je gagne toute mes games en étant en 0/10 carry par ma team. »<span class="date">— 7 novembre 2022</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">2.2</div>
+      <div class="section-title">Son niveau apparent et ses performances déclarées</div>
+      <p>SHAars joue Rammus OTP, ce qui est une déclaration identitaire forte dans l'écosystème LoL. OTP Rammus, c'est choisir d'être un spécialiste de niche plutôt qu'un joueur versatile ; c'est parier que la maîtrise absolue d'un mécanisme simple mais efficace compense le manque de flexibilité. Et SHAars le fait avec une conviction totale : <em>« Je suis otp Rammus pas pour ça que je peux aller le jouer mid »</em> — la limite est posée, assumée, revendiquée. Il mentionne avoir un Excel de calculs sur les builds de Rammus, ce qui est soit la définition de la passion soit un début de pathologie légère.</p>
+      <p>Son niveau déclaré oscille entre le Diamant solide et le Master rare — il mentionne avoir atteint le Chall une fois, mais le reconstruit en 2026 comme une performance ancienne et isolée : <em>« Atteint le chall en solo une seule fois depuis n'a jamais hit au-dessus de master sans duo/truc suspect/compte boost »</em>. C'est auto-évaluatif, honnête et légèrement condescendant à la fois. Il est capable de produire des syllogismes sur la difficulté de certains champions, d'analyser la méta avec une rigueur quasi académique, et de décrire les patterns d'erreur de ses coéquipiers avec la précision d'un coach. Chez lui, le jeu est aussi un système à comprendre qu'un compétition à gagner.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">2.3</div>
+      <div class="section-title">Têtes de turc récurrentes</div>
+      <p>Rammus est mentionné 320 fois — c'est 4 fois plus que le deuxième champion le plus cité (Rengar, 80 fois). Cette disproportion dit tout : Rammus n'est pas juste un champion, c'est un alter ego, un prisme à travers lequel SHAars analyse l'ensemble du jeu. Toute discussion sur la méta finit par revenir à Rammus. Est-ce que tel item profite à Rammus ? Est-ce que tel champion est problématique contre Rammus ? Rammus est la mesure de toutes choses.</p>
+      <p>Ses têtes de turc les plus constantes : les ADC qui se croient invincibles parce qu'ils sont proches d'un tank (<em>« les ADC qui se mettent à rundown parce qu'ils sont à côté d'un tank »</em>), les défenseurs de champions qu'il considère intrinsèquement non-skillés (Cassio notamment, sujet d'un débat de plusieurs dizaines de messages avec références wiki et syllogismes), et la méta AD carry dominante qui lui revient sur les nerfs de manière cyclique. Les Kai'Sa (70 mentions) et Rengar (80 mentions) sont ses ennemis naturels dans le jeu — les champions qui contournent son gameplay de tank inarrêtable. Il a aussi une irritation particulière pour les Sun Fire Aegis sur des champions non-tanks, qu'il considère comme une perversion de la logique d'item.</p>
+      <cite>« Maintenant faut quand même le dire les ADC qui se mettent à rundown parce qu'ils sont à côté d'un tank et pensent donc que je vais me tuer en 2vs4 pour leur beau yeux faut aller se faire foutre. »<span class="date">— 10 septembre 2024</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">2.4</div>
+      <div class="section-title">Expressions signature et argot LoL personnel</div>
+      <p>Le lexique de SHAars en QQ-only est un créole singulier entre le français standard, l'argot LoL import anglais et une certaine rhétorique scolaire qu'il ne peut pas s'empêcher d'appliquer même sur Discord à 23h. Les mots « int » (intentional feeding, 124 occurrences), « ff » (forfeit, 260 occurrences) et « end » (end game, 285 occurrences) composent son vocabulaire de défaite acceptée. « Con » (351 occurrences) est sa formule de mépris universelle, applicable à un champion, un coéquipier, un adversaire, une décision de Riot, ou une interaction d'items. Il utilise aussi « bg » (bon game), « gg » discret, et un usage particulier de « free elo » pour qualifier les picks absurdement efficaces.</p>
+      <p>Sa signature la plus personnelle : le syllogisme LoL. Il est capable d'écrire <em>« ton syllogisme de bas étage ça fonctionne pas »</em> dans un canal de gaming, ou de démontrer qu'un argument sur la difficulté de Cassio est invalidé par le syllogisme utilisé pour le défendre. C'est du SHAars pur : même dans le défouloir, le rigorisme logique ne le quitte pas.</p>
+      <cite>« La seule fois où je vois du S c'est dans les notes des gens qui m'ont ratio. »<span class="date">— 17 mai 2022</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">2.5</div>
+      <div class="section-title">Évaluation : rageur chronique ou joueur zen ?</div>
+      <p>SHAars est ce qu'on pourrait appeler un rageur analytique. Il n'est pas zen — il rage, et il le fait avec conviction — mais sa rage est toujours orientée, jamais aveugle. Il ne flamme pas aléatoirement ; il identifie une erreur précise, la nomme, et passe à autre chose. C'est fondamentalement différent du rageur chronique qui accumule du ressentiment. La preuve : il est capable de défendre un coéquipier perçu à tort comme sous-performant (<em>« il n'a pas eu de chance. Il a cru qu'il avait le droit de first pick Rammus. Il a pris 3 lanes pas jouables »</em>), et de contextualiser une défaite plutôt que d'en chercher un bouc émissaire. Toxic ? Ponctuellement. Fair-play ? Structurellement, oui.</p>
+      <p>Sujets hors-LoL récurrents en #qq-only : les interactions sociales et la maladresse déclarée (<em>« comme je suis très mauvais en interaction social de base »</em>), les débats avec des membres du serveur portant sur le niveau LoL (qui se doublent souvent de disputes sur l'intelligence générale), et ponctuellement des observations politiques glissées dans le flot gaming.</p>
+    </div>
+
+    <!-- === PSYCHIATRY === -->
+    <div class="psych-report">
+      <div class="psych-header">
+        <div class="psych-title">Centre Hospitalier Universitaire Discord · Service de Gamerologie Appliquée</div>
+        <div class="psych-name">Rapport Psychiatrique Confidentiel</div>
+        <div class="psych-ref">Dossier N° QQ-2021-RAMMUS-001 · Patient : SHAars · Référent : Dr. Théodore Fontblanc, Gameropsychiatre agréé</div>
+      </div>
+
+      <div class="psych-section">
+        <h4>Motif de consultation</h4>
+        <p>Patient adressé par son équipe pour comportement atypique persistant : tendance à citer des syllogismes d'Aristote dans un canal de défouloir LoL, incapacité documentée à envoyer un message de rage sans l'étayer par au moins un argument structuré, et utilisation répétée du mot « sophisme » dans un contexte où le joueur moyen dirait « tu sucks ».</p>
+      </div>
+
+      <div class="psych-section">
+        <h4>Diagnostics retenus (DSM-5 Edition Gamer)</h4>
+        <div class="psych-diag">
+          <strong>F60.5 — Trouble Obsessionnel de la Source</strong> (TOS) : Impossibilité cliniquement significative d'avancer un argument sans référence externe. Le patient a été observé en train de demander des sources pour une affirmation faite par quelqu'un sur « comment les tanks fonctionnent dans LoL ». Sévérité : haute.
+        </div>
+        <div class="psych-diag">
+          <strong>F45.8 — Rammusisme Primaire</strong> : Attachment pathologique à un personnage de jeu vidéo défini par son rôle de boule qui roule vite. Le patient possède des tableurs Excel dédiés aux calculs de builds Rammus. Il a mentionné 320 fois ce champion en 4 ans. Il a dit un jour « je suis OTP Rammus, pas pour ça que je peux aller le jouer mid » comme si c'était une philosophie de vie. C'en est une.
+        </div>
+        <div class="psych-diag">
+          <strong>F84.0 — Syndrome du Modérateur Non-Officiel</strong> : Le patient s'autoproclamme modérateur informel sans titre, sans pouvoirs, mais avec une efficacité discutable. Symptôme principal : compter publiquement le nombre de mots d'un adversaire sans source, comme un audit fiscal émotionnel.
+        </div>
+        <div class="psych-diag">
+          <strong>F60.3 — Dissonance Identitaire Gendarme/Rageur</strong> : Le patient, officier de gendarmerie à Melun, fait régner l'ordre dans ses débats discord avec la même rigueur qu'il appliquerait à un PV. En parallèle, il écrit « faut aller se faire foutre » à des ADC. Les deux personnalités cohabitent sans conflit apparent, ce qui est cliniquement plus inquiétant que leur contradiction.
+        </div>
+      </div>
+
+      <div class="psych-section">
+        <h4>Observations cliniques</h4>
+        <p>Lors de ses phases de décompensation LoL, le patient a été entendu produire les verbalisations suivantes : <em>« hum salue j'ai deux item, tu joues tank ? Je te tri shot »</em> (mime d'un ennemi brisé, daté déc. 2021) — le patient reproduit la voix de ses adversaires, comportement disruptif mais sans dangerosité directe. Plus préoccupant : sa capacité à intégrer dans une même phrase le terme « syllogisme de bas étage » et une plainte sur le pick Rammus adverse, signant une porosité inquiétante entre registres cognitifs distincts.</p>
+        <p>Le patient présente par ailleurs une lucidité douloureuse sur ses propres limites sociales (<em>« comme je suis très mauvais en interaction social de base je me contente de regarder comment font les autres »</em>, sept. 2024), qu'il contrebalance par une confiance calibrée en ses compétences analytiques. Ce mécanisme compensatoire est fonctionnel mais épuisant pour l'entourage.</p>
+      </div>
+
+      <div class="psych-section">
+        <h4>Mécanismes de défense identifiés</h4>
+        <p><strong>Intellectualisation massive</strong> — transforme toute frustration émotionnelle en problème logique à résoudre. <strong>Déplacement sourcé</strong> — redirige les conflits interpersonnels sur des tiers documentaires (études, articles, statistiques). <strong>Humour-bouclier</strong> — utilise le sarcasme comme distance de sécurité. <strong>Auto-ironie contrôlée</strong> — se moque de lui-même avant les autres, mais très précisément, jamais sur les axes qui comptent.</p>
+      </div>
+
+      <div class="psych-section">
+        <h4>Pronostic</h4>
+        <p>Réservé mais non défavorable. Le patient ne guérira pas de son Rammusisme — les OTP ne guérissent pas, ils s'approfondissent. Sa rigueur épistémique continuera d'aliéner ceux qui débattent sans sources tout en leur étant objectivement utile. Évolution naturelle attendue : devenir progressivement la personne la plus chiante et la plus fiable du serveur, simultanément.</p>
+      </div>
+
+      <div class="ordonnance">
+        <h5>Ordonnance thérapeutique</h5>
+        <ul>
+          <li>Jouer 3 parties de Rammus par semaine sans analyser une seule décision (dose thérapeutique de chaos consenti)</li>
+          <li>S'autoriser UN argument sans source par semaine, pour entraîner la tolérance à l'imperfection</li>
+          <li>Réduire le ratio syllogismes/insultes de 100/0 à 80/20 progressivement</li>
+          <li>Arrêter de noter publiquement le nombre de mots de l'adversaire (contre-indiqué socialement)</li>
+          <li>Accepter que « int » soit une réponse complète et suffisante dans un salon QQ</li>
+          <li>Continuer à Melun — la gendarmerie a besoin de gens qui citent leurs sources</li>
+        </ul>
+      </div>
+
+      <div class="psych-stamp">
+        Signé : Dr. T. Fontblanc, Gameropsychiatre · CHU Discord-sur-Mer · Mars 2026<br>
+        Ce document est une parodie humoristique. Tout diagnostic réel nécessite une consultation sérieuse. Rammusisme n'est pas dans le DSM-5 (encore).
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PARTIE 3 : CONFRONTATION ===== -->
+  <div class="part">
+    <div class="part-header">
+      <div class="part-number">03</div>
+      <div class="part-title-block">
+        <div class="part-label">Confrontation des deux canaux</div>
+        <div class="part-title">Un seul SHAars, <span>deux modes</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">3.1</div>
+      <div class="section-title">Est-ce le même SHAars sur les deux canaux ?</div>
+      <p>La réponse courte : oui, mais en versions de compression différente. Le SHAars de #politique opère à pleine résolution — arguments développés, sources, rhétorique élaborée, patience épistémique. Le SHAars de #qq-only est le même fichier source, compressé pour le gaming : les mêmes schémas cognitifs (diagnostiquer avant d'évaluer, exiger une certaine cohérence logique même dans le débrief d'une game), mais dans un format beaucoup plus court, parfois réduit à un emoji ou une formule. La permanence du caractère à travers les deux canaux est frappante : l'ironie, la précision du mot, le refus de la victimisation, la capacité à reformuler en quelques mots la sottise de l'adversaire — c'est constant.</p>
+      <p>Ce qui change réellement : le seuil de déclenchement de la rigueur. En politique, elle est permanente et constitutive. En gaming, elle ne se manifeste que quand quelqu'un dit quelque chose de structurellement faux — un claim sur la difficulté de Cassio, une affirmation sur l'utilité d'un build. Le reste du temps, SHAars peut juste écrire « con » et c'est tout. Cette économie de moyens est une libération, pas une régression.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">3.2</div>
+      <div class="section-title">Le modérateur se retrouve-t-il en QQ ?</div>
+      <p>Partiellement, et de manière plus intéressante qu'en politique. En #qq-only, son rôle de modérateur se déplace vers quelque chose de plus proche de l'arbitre social : il défend ceux qui se font taper dessus injustement, contextualise les performances des coéquipiers plutôt que de les condamner à chaud, et intervient quand quelqu'un prend plaisir à écraser un joueur qui souffre déjà. <em>« Je sais pas c'est quoi le plus marrant entre ceux qui sont là à tabasser quelqu'un qui vient juste se plaindre dans un salon fait pour »</em> — c'est du SHAars-modérateur, appliqué à la souffrance gaming. Il ne calme pas les débats ; il défend les espaces de défouloir légitimes.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">3.3</div>
+      <div class="section-title">Convictions politiques dans le gaming — et vice versa</div>
+      <p>Le politique transparaît en QQ-only de manière ponctuelle mais cohérente. Son hostilité aux dynamiques de domination (le fort qui écrase le faible sans mérite) se lit autant dans sa critique des ADC brisés qui rundown les tanks que dans sa dénonciation des grandes fortunes qui se croient méritocrates. La politique de l'item design — Sunfire Aegis sur des non-tanks, items ADC broken — le scandalise exactement comme la privatisation des services publics : quelqu'un a trafiqué les règles du jeu en faveur d'une classe de joueurs qui n'en avait pas besoin.</p>
+      <p>Inversement, dans ses débats politiques, on trouve parfois le raisonnement du joueur de stratégie : la carte de Laffer comme un mécanisme d'équilibrage mal calibré, la politique économique comme une méta à déconstruire, l'efficacité des institutions publiques comme un tier list qu'il faut établir avec des données.</p>
+      <cite>« Anti privé, et avec besoin de faire régner la justice je finis officier de gendarmerie à vivre à Melun. »<span class="date">— 15 janvier 2026</span></cite>
+    </div>
+
+    <div class="section">
+      <div class="section-number">3.4</div>
+      <div class="section-title">Où est-il le plus lui-même ?</div>
+      <p>En #qq-only. Non parce qu'il y est plus décontracté — il l'est clairement, les messages sont plus courts, moins sérieux, souvent drôles — mais parce que la contrainte de la preuve est levée et qu'on voit ce qu'il reste quand on retire l'armure épistémique. Ce qui reste : un gars qui aime vraiment les tanks, qui a des opinions très fermes sur la logique interne des systèmes (que ce soit une méta de jeu ou une économie nationale), et qui déteste fondamentalement l'incompétence arrogante. En politique, ce dernier trait est policé par le devoir de source. En gaming, il prend la forme de ses formules les plus savoureuses.</p>
+      <p>Le canal politique est son théâtre de compétence. Le canal QQ est son espace de vérité.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">3.5</div>
+      <div class="section-title">Citations croisées — quand les deux SHAars se rejoignent</div>
+      <p>Quelques moments où les deux canaux se fondent en un seul :
+      <br>— En QQ-only, 2022 : <em>« le but de tes politiques c'est de niquer le publique pour le privatiser »</em> — glissé dans une conversation LoL, à peine en dehors de propos. Le masque tombe.
+      <br>— En politique, août 2026 : <em>« Atteint le chall en solo une seule fois depuis n'a jamais hit au-dessus de master sans duo »</em> — il parle de lui-même en troisième personne dans le canal politique, comme s'il évaluait un adversaire de débat. Le mode gaming envahit le mode sérieux.
+      <br>— En QQ, décembre 2024 : <em>« grominet hier "bon on va pas pouvoir gagner" ---> 10 secondes plus tard je dive bot+jng je tue les trois "pas besoin de kite si ils sont tous morts" »</em> — c'est la même logique que son anti-austérité : rejeter le cadrage défaitiste du problème pour proposer une solution action directe.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== PARTIE 4 : ÉVOLUTION ===== -->
+  <div class="part">
+    <div class="part-header">
+      <div class="part-number">04</div>
+      <div class="part-title-block">
+        <div class="part-label">Évolution 2021–2026</div>
+        <div class="part-title">Le temps qui <span>affine</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-number">4.1</div>
+      <div class="section-title">Comment SHAars a-t-il évolué entre 2021 et 2026 ?</div>
+      <p>La première observation structurelle : SHAars arrive sur le canal politique en 2024 (il n'y a que 2 messages en 2022, sans doute des messages isolés pré-création), et il le fait en explosion immédiate — 2 469 messages en juillet 2024 seul. Ce n'est pas une entrée progressive ; c'est une irruption. Il arrive manifestement avec des opinions déjà formées, une méthode déjà rodée, et une patience déjà limitée pour les débats non sourcés. On ne le voit pas apprendre à débattre en politique — il débarque en sachant déjà débattre.</p>
+      <p>En QQ-only, la trajectoire est plus longue et plus nuancée. Entre 2021 et 2022, le SHAars gaming est encore en construction — il teste, joue des champions variés (mentions de Nocturne, Malphite, divers assassins), débat de la méta avec une ouverture encore relative. À partir de 2022-2023, la crystallisation autour de Rammus devient totale et assumée. Le SHAars de 2024-2025 en QQ-only est moins présent (345 messages en 2025 contre 2 616 en 2022) mais plus distillé : chaque message est plus dense, l'argot plus économe, le positionnement plus stable.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">4.2</div>
+      <div class="section-title">Ses positions politiques ont-elles changé ?</div>
+      <p>Pas de radicalisation visible — plutôt une stabilisation et un approfondissement. Les thèmes de 2024 (privatisation, mécanismes bancaires, critique du ruissellement) se retrouvent en 2025 et 2026 avec plus de précision et plus de sources. Il est passé de l'argumentatif au documentaire : en 2024, il exprime des opinions avec conviction ; en 2025-2026, il colle des articles du Monde, des études INSEE, des citations historiques. Son anti-RN reste constant mais s'affine — moins de la réprobation morale, plus de l'analyse structurelle de comment les mouvements autoritaires accèdent au pouvoir. Il est devenu plus dur sur la question des médias et de leur propriété (mentions récurrentes des « journaux de milliardaires »), ce qui pourrait signaler une légère radicalisation médiatique.</p>
+      <p>Fait notable : sa vie professionnelle commence à percoler dans le canal politique à partir de 2025-2026. Il révèle vouloir finir à l'IRCGN (Institut de Recherche Criminelle de la Gendarmerie Nationale), défend la gendarmerie contre des critiques d'austérité, et assume publiquement la « cohérence » de son profil anti-privé/officier de gendarmerie. Cette intégration progressive de son identité professionnelle dans ses positions publiques est un signe de maturité.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-number">4.3</div>
+      <div class="section-title">Son rapport au jeu a-t-il évolué ?</div>
+      <p>Oui, et c'est peut-être l'évolution la plus frappante. De 2021 à 2023, le QQ-only est un espace de vie quotidienne intense — SHAars joue beaucoup, parle beaucoup de ses games, débat des champions, engage avec l'ensemble du serveur sur la méta. À partir de 2024, le volume chute drastiquement sur QQ-only (85% de baisse entre 2022 et 2025) alors que le politique explose. L'hypothèse la plus simple : la carrière d'officier de gendarmerie prend de plus en plus de temps et d'énergie, et l'activité intellectuelle migre vers le canal politique où le ratio effort/satisfaction est meilleur. Le jeu ne disparaît pas — il reste, mais comme une activité de décompression plutôt que d'investissement principal.</p>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section">
+      <div class="section-number">4.4</div>
+      <div class="section-title">Frise chronologique des moments clés</div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="tl-date">Mars 2021</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-qq">QQ-only</div>
+          <div class="tl-title">Arrivée sur QQ-only</div>
+          <div class="tl-desc">Premiers messages. SHAars joue diversement — Rammus déjà présent mais pas encore exclusif. Ton exploratoire, beaucoup d'échanges légers.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Déc. 2021 – Janv. 2022</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-qq">QQ-only</div>
+          <div class="tl-title">Pic QQ — explosion d'activité</div>
+          <div class="tl-desc">813 messages en décembre 2021, 650 en janvier 2022. Débats méta intenses, début de la cristallisation autour de Rammus. Échanges tendus avec plusieurs membres sur le niveau de jeu.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Déc. 2021</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-qq">QQ-only</div>
+          <div class="tl-title">La grande dispute de prépa</div>
+          <div class="tl-desc">Échange mémorable sur l'orthographe de "spike" et les niveaux scolaires : <em>« ça va juste te rappeler pourquoi tu es parti au bout de deux mois de prépa. »</em> Illustration parfaite du SHAars-conflit : précis, cruel, sourcé (en l'occurrence par l'histoire personnelle de l'interlocuteur).</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Mai 2022</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-qq">QQ-only</div>
+          <div class="tl-title">Deuxième grand pic QQ</div>
+          <div class="tl-desc">545 messages en mai 2022. Débats sur les items (Sunfire, items résistances magiques), disputes avec des membres du serveur. Style qui se consolide.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Juil. 2024</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-pol">Politique</div>
+          <div class="tl-title">Irruption en politique — record absolu</div>
+          <div class="tl-desc">2 469 messages en un seul mois. SHAars arrive avec ses positions déjà formées, ses sources prêtes, et une patience limitée. Débats sur les banques, la crise de 2008, la méritocratie, les grandes écoles.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Aoû.–Oct. 2024</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-qq">QQ-only</div>
+          <div class="tl-title">Retour fort en QQ</div>
+          <div class="tl-desc">1 031 messages en septembre 2024. Pic tardif QQ qui coïncide avec un probable été chargé. Débats sur Cassio, sur le niveau des coéquipiers, sur la méta ADC. Le double pic pol+QQ en 2024 suggère une période de haute activité globale.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Fév.–Mars 2025</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-pol">Politique</div>
+          <div class="tl-title">Approfondissement politique — sources primaires</div>
+          <div class="tl-desc">Montée en gamme documentaire : articles du Monde, études économiques, citations historiques. La critique du ruissellement est démontée avec des références précises. Début de l'intégration de son identité professionnelle dans les débats.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Juil. 2025</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-pol">Politique</div>
+          <div class="tl-title">Second grand pic politique</div>
+          <div class="tl-desc">1 385 messages. Discussions sur l'économie comme science sociale, la peine de mort, les médias milliardaires. SHAars y révèle vouloir finir à l'IRCGN — projection de carrière, maturation identitaire.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-date">Jan.–Mars 2026</div>
+        <div class="tl-content">
+          <div class="tl-canal tl-both">Les deux canaux</div>
+          <div class="tl-title">SHAars de maturité</div>
+          <div class="tl-desc">3 161 messages sur cette période en politique, activité QQ quasi nulle. Le pivot est consommé : officier de gendarmerie installé à Melun, positions politiques stabilisées et assumées publiquement, jeu devenu secondaire. Le SHAars de 2026 a fait ses choix.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section">
+      <div class="section-number">4.5</div>
+      <div class="section-title">Projection : le SHAars de 2031</div>
+      <p>Si les tendances se confirment, le SHAars de 2031 sera probablement capitaine de gendarmerie ou au-delà, peut-être effectivement à l'IRCGN — l'ambition déclarée est cohérente avec le profil. Sur discord, il sera vraisemblablement plus rare mais plus dense : les messages seront moins nombreux mais chaque intervention sera un événement. Il aura probablement arrêté le LoL de manière sérieuse — la courbe QQ-only suggère déjà une transition en cours — sans pour autant quitter complètement l'espace gaming, parce qu'un OTP Rammus ne meurt pas, il disparaît progressivement comme une comète qui s'éloigne.</p>
+      <p>Politiquement, le risque principal est la désillusion froide : un homme qui comprend trop bien les mécanismes de reproduction sociale et de corruption des élites peut devenir cynique. La garde-fou est son engagement professionnel concret dans un service public qu'il défend aussi en paroles — la cohérence entre la conviction et l'action est son meilleur antidote au nihilisme. Le SHAars de 2031 sera probablement encore là, avec encore moins de patience pour les débats mal sourcés, et encore plus de capacité à les résoudre en trois messages.</p>
+    </div>
+  </div>
+
+  <!-- ===== VERDICT ===== -->
+  <div class="verdict">
+    <div class="verdict-label">Verdict final global</div>
+    <div class="verdict-text">
+      SHAars est <strong>la même personne sur tous ses canaux</strong> — un homme qui fait confiance aux systèmes, aux règles et aux preuves plus qu'aux intuitions et aux autorités, ce qui le rend aussi redoutable dans un débat politique que dans une game de Rammus. Il est irritant précisément de la manière dont les gens compétents sont irritants : en rendant difficile de lui donner tort. <strong>Son évolution de 2021 à 2026 n'est pas une transformation mais une cristallisation</strong> — un caractère qui était déjà là s'est précisé, ses choix de vie ont confirmé ses convictions, et le rageur QQ-only et l'officier anti-privé se sont finalement révélés être exactement la même personne, au même endroit, depuis le début.
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== CHART JS ===== -->
+<script>
+  const pol_hours = {0:8,1:2,4:17,5:21,6:96,7:207,8:374,9:993,10:1392,11:883,12:592,13:485,14:651,15:959,16:788,17:792,18:772,19:720,20:614,21:364,22:366,23:159};
+  const qq_hours = {0:106,1:9,3:2,4:13,5:39,6:255,7:423,8:345,9:584,10:852,11:567,12:634,13:460,14:335,15:358,16:693,17:578,18:524,19:449,20:473,21:355,22:486,23:81};
+
+  const canvas = document.getElementById('hourChart');
+  const ctx = canvas.getContext('2d');
+
+  const hours = Array.from({length:24}, (_,i) => i);
+  const polData = hours.map(h => pol_hours[h] || 0);
+  const qqData = hours.map(h => qq_hours[h] || 0);
+  const maxVal = Math.max(...polData, ...qqData);
+
+  const W = canvas.offsetWidth || 800;
+  const H = 100;
+  canvas.width = W * window.devicePixelRatio;
+  canvas.height = H * window.devicePixelRatio;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  const barW = W / 24;
+  const gap = 2;
+
+  hours.forEach((h, i) => {
+    const x = i * barW;
+    const half = barW / 2 - gap;
+
+    // politique bar
+    const hPol = (polData[i] / maxVal) * (H - 20);
+    ctx.fillStyle = 'rgba(123, 82, 196, 0.8)';
+    ctx.fillRect(x + gap, H - hPol - 4, half, hPol);
+
+    // qq bar
+    const hQq = (qqData[i] / maxVal) * (H - 20);
+    ctx.fillStyle = 'rgba(233, 69, 96, 0.8)';
+    ctx.fillRect(x + half + gap * 2, H - hQq - 4, half, hQq);
+
+    // hour label every 4h
+    if (h % 4 === 0) {
+      ctx.fillStyle = '#666688';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(h + 'h', x + barW/2, H);
+    }
+  });
+
+  // Legend
+  ctx.fillStyle = 'rgba(123, 82, 196, 0.8)';
+  ctx.fillRect(10, 4, 12, 8);
+  ctx.fillStyle = '#8888aa';
+  ctx.font = '9px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('#politique', 26, 12);
+
+  ctx.fillStyle = 'rgba(233, 69, 96, 0.8)';
+  ctx.fillRect(95, 4, 12, 8);
+  ctx.fillStyle = '#8888aa';
+  ctx.fillText('#qq-only', 111, 12);
+</script>
+
+</body>
+</html>
