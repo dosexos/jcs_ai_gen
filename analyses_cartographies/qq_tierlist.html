@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QQ-Only · Tier List Officielle 2019–2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#1a1a2e;--bg2:#16213e;--card:#1e1e3a;--purple:#533483;--plite:#7b52c4;--red:#e94560;--text:#e0dff7;--muted:#9895b5;--s:#f5c842;--a:#c0c0d0;--b:#cd7f32;--c:#4a90d9;--d:#888;--f:#e94560;--border:#2a2a4a}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+/* HEADER */
+.hdr{text-align:center;padding:40px 20px 28px;background:linear-gradient(180deg,#0a0a18,var(--bg2));border-bottom:2px solid var(--red);position:relative}
+.hdr h1{font-size:clamp(32px,7vw,72px);font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,#fff 0%,var(--plite) 45%,var(--red) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.hdr p{color:var(--muted);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:8px}
+.hdr-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:20px}
+.hs{text-align:center}.hs b{display:block;font-size:28px;font-weight:900;color:var(--plite)}.hs span{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,24,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-inner{display:flex;min-width:max-content;max-width:1100px;margin:0 auto}
+.tab{font-size:10px;font-family:'Segoe UI',sans-serif;text-transform:uppercase;letter-spacing:1px;padding:13px 14px;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--red);border-bottom-color:var(--red)}
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:32px 16px 80px}
+/* REVEAL */
+.reveal-zone{text-align:center;margin-bottom:32px}
+.rbtn{font-size:16px;font-weight:800;letter-spacing:2px;padding:14px 40px;background:linear-gradient(135deg,var(--purple),var(--red));color:#fff;border:none;border-radius:4px;cursor:pointer;box-shadow:0 0 24px rgba(233,69,96,.35);transition:transform .2s,box-shadow .2s}
+.rbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(233,69,96,.55)}
+.rbtn.done{opacity:.5;cursor:default;transform:none}
+/* VIEWS */
+.view{display:none}.view.on{display:block}
+.view-desc{font-size:11px;color:var(--muted);font-family:monospace;letter-spacing:.5px;margin-bottom:20px}
+/* TIER */
+.tier-row{display:flex;align-items:stretch;margin-bottom:8px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+.tier-lbl{width:56px;min-width:56px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;flex-shrink:0}
+.t-s .tier-lbl{background:linear-gradient(180deg,#b8920a,var(--s));color:#1a1a2e}
+.t-a .tier-lbl{background:linear-gradient(180deg,#8a8a9a,var(--a));color:#1a1a2e}
+.t-b .tier-lbl{background:linear-gradient(180deg,#7a4e10,var(--b));color:#fff}
+.t-c .tier-lbl{background:linear-gradient(180deg,#1e4a8a,var(--c));color:#fff}
+.t-d .tier-lbl{background:linear-gradient(180deg,#444,var(--d));color:#fff}
+.t-f .tier-lbl{background:linear-gradient(180deg,#900,var(--f));color:#fff}
+.tier-cards{flex:1;display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:rgba(255,255,255,.02);align-content:center}
+/* CARD */
+.card{width:100px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 6px;text-align:center;cursor:pointer;opacity:0;transform:translateY(16px) scale(.9);transition:border-color .2s,box-shadow .2s;position:relative}
+.card.show{opacity:1;transform:none;transition:opacity .4s cubic-bezier(.34,1.56,.64,1),transform .4s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--red);box-shadow:0 6px 20px rgba(233,69,96,.2);transform:translateY(-3px) scale(1.03)}
+.card.show:hover{transform:translateY(-3px) scale(1.03)}
+.cav{width:38px;height:38px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid var(--border)}
+.cpseudo{font-size:9px;font-weight:700;letter-spacing:.5px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbadges{display:flex;flex-direction:column;gap:2px;align-items:center}
+.cbadge{font-size:7.5px;padding:2px 5px;border-radius:8px;border:1px solid;white-space:nowrap;max-width:94px;overflow:hidden;text-overflow:ellipsis}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:10px;max-width:560px;width:100%;max-height:82vh;overflow-y:auto;transform:translateY(16px) scale(.96);transition:transform .25s}
+.overlay.on .modal{transform:none}
+.mhdr{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.mav{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid var(--red)}
+.mtitle h2{font-size:22px;font-weight:900;background:linear-gradient(90deg,#fff,var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.mtitle p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.mclose{margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;flex-shrink:0;transition:background .2s}
+.mclose:hover{background:rgba(233,69,96,.2);color:var(--red)}
+.mbody{padding:20px 22px}
+.mbody .just{font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:14px}
+.mbody .just strong{color:var(--text)}
+.mquote{background:#131328;border-left:3px solid var(--plite);border-radius:0 6px 6px 0;padding:10px 14px;font-size:11px;font-family:monospace;color:var(--text);font-style:italic}
+.mquote small{display:block;font-size:9px;color:var(--muted);margin-top:4px;font-style:normal}
+/* OVERALL */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin:32px 0 40px;flex-wrap:wrap}
+.pod{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pod-name{font-size:11px;font-weight:700;text-align:center}
+.pod-score{font-size:26px;font-weight:900}
+.pod-plat{background:var(--card);border:1px solid var(--border);border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;padding:8px}
+.p1 .pod-plat{width:110px;height:80px;border-top:3px solid var(--s)}.p1 .pod-score{color:var(--s)}
+.p2 .pod-plat{width:90px;height:56px;border-top:3px solid var(--a)}.p2 .pod-score{color:var(--a)}
+.p3 .pod-plat{width:90px;height:42px;border-top:3px solid var(--b)}.p3 .pod-score{color:var(--b)}
+.rank-list{display:flex;flex-direction:column;gap:6px}
+.rank-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:10px 14px;cursor:pointer;transition:border-color .2s}
+.rank-item:hover{border-color:var(--plite)}
+.rn{font-size:20px;font-weight:900;color:var(--muted);width:28px;flex-shrink:0;text-align:center}
+.rav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.rinfo{flex:1;min-width:0}
+.rinfo strong{font-size:12px;font-weight:700;display:block}
+.rinfo span{font-size:10px;color:var(--muted)}
+.rscore{font-size:24px;font-weight:900;color:var(--red);flex-shrink:0}
+.rbar{width:60px;height:3px;background:var(--border);border-radius:2px;flex-shrink:0}
+.rbar-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--red));border-radius:2px}
+/* AWARDS */
+.awards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px}
+.award-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.award-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.aw1::before{background:var(--s)}.aw2::before{background:#e94560}.aw3::before{background:var(--plite)}.aw4::before{background:#4caf50}.aw5::before{background:#00bcd4}.aw6::before{background:#9c27b0}.aw7::before{background:#ff6b35}
+.aw-icon{font-size:24px;margin-bottom:6px}
+.aw-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:4px}
+.aw-winner{font-size:22px;font-weight:900;margin-bottom:6px}
+.aw-reason{font-size:11px;color:var(--muted);line-height:1.5}
+/* SECTION TITLE */
+.stitle{font-size:24px;font-weight:900;letter-spacing:2px;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.stitle::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+@media(max-width:500px){.card{width:82px}.tier-lbl{width:40px;min-width:40px;font-size:22px}.pod-plat{padding:6px}.p1 .pod-plat{width:90px;height:64px}.p2 .pod-plat,.p3 .pod-plat{width:76px}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>QQ-ONLY TIER LIST</h1>
+  <p>Serveur Discord Privé · Canal #qq-only · 2019–2026 · Jugement Sans Appel</p>
+  <div class="hdr-stats">
+    <div class="hs"><b>18</b><span>Membres</span></div>
+    <div class="hs"><b>8</b><span>Critères</span></div>
+    <div class="hs"><b>~150k</b><span>Messages</span></div>
+    <div class="hs"><b>6+ ans</b><span>Souffrance</span></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="tab on" onclick="sw('rage',this)">😤 Rage</button>
+    <button class="tab" onclick="sw('skill',this)">🎮 Skill</button>
+    <button class="tab" onclick="sw('content',this)">😂 Contenu</button>
+    <button class="tab" onclick="sw('toxicity',this)">☢️ Toxicité</button>
+    <button class="tab" onclick="sw('original',this)">🎭 Originalité</button>
+    <button class="tab" onclick="sw('entertain',this)">🏆 Entertainment</button>
+    <button class="tab" onclick="sw('lucidity',this)">🧠 Lucidité</button>
+    <button class="tab" onclick="sw('psych',this)">🏥 Psychiatrie</button>
+    <button class="tab" onclick="sw('overall',this)">⭐ Général</button>
+  </div>
+</nav>
+
+<div class="main">
+<div class="reveal-zone">
+  <button class="rbtn" id="rbtn" onclick="reveal()">🎬 RÉVÉLER LE CLASSEMENT</button>
+</div>
+
+<!-- ===== RAGE ===== -->
+<div id="v-rage" class="view on">
+  <p class="view-desc">Du plus calme au plus incontrôlable. Intensité, fréquence, CAPS, crises documentées IRL.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('elilos','rage')" style="--ac:linear-gradient(135deg,#533483,#e94560)"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">27 575 msgs</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">578 msgs/jour</span></div></div>
+    <div class="card" onclick="om('ransberg','rage')" style="--ac:linear-gradient(135deg,#7b0000,#e94560)"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">~20k msgs</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Fondateur rage</span></div></div>
+    <div class="card" onclick="om('bluzzie','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Peine de mort IRL</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">289 msgs peak</span></div></div>
+    <div class="card" onclick="om('aaaurelien','rage')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">DELETE EXHAUST</span><span class="cbadge" style="border-color:#7b52c4;color:#7b52c4">Verset coranique</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('pauloo','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Rage index 78</span></div></div>
+    <div class="card" onclick="om('mpb','rage')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">32k msgs total</span></div></div>
+    <div class="card" onclick="om('riwanovic','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">78/100 rage</span></div></div>
+    <div class="card" onclick="om('shinya','rage')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">8/10 intensité</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('depardieu','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Rage académique</span></div></div>
+    <div class="card" onclick="om('ristorante','rage')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">7/10 cultivé</span></div></div>
+    <div class="card" onclick="om('egide','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">75/100 calibré</span></div></div>
+    <div class="card" onclick="om('manigoldo','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">~78% zen sinon</span></div></div>
+    <div class="card" onclick="om('goxydou','rage')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">72/100</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('merko','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Rage légitimée</span></div></div>
+    <div class="card" onclick="om('udf','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">7/10 structurel</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">7/10 sage</span></div></div>
+  </div></div>
+  <div class="tier-row t-d"><div class="tier-lbl">D</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','rage')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Rage lucide</span></div></div>
+    <div class="card" onclick="om('shaars','rage')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sarcastique froid</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== SKILL ===== -->
+<div id="v-skill" class="view">
+  <p class="view-desc">Rang atteint, compréhension réelle du jeu, cohérence discours/résultats.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Master 500LP</span></div></div>
+    <div class="card" onclick="om('mpb','skill')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">GM référence</span></div></div>
+    <div class="card" onclick="om('elilos','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Diamond stable</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('manigoldo','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Master 312LP</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Master aspirant</span></div></div>
+    <div class="card" onclick="om('goxydou','skill')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Ex-Master</span></div></div>
+    <div class="card" onclick="om('ransberg','skill')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">D1 peak</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('egide','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Gold-Plat solide</span></div></div>
+    <div class="card" onclick="om('pauloo','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Chasseur Diamond</span></div></div>
+    <div class="card" onclick="om('merko','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Émeraude→Master</span></div></div>
+    <div class="card" onclick="om('riwanovic','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Plat-Diamond</span></div></div>
+    <div class="card" onclick="om('depardieu','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Analyse solide</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('ristorante','skill')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Plat 4 théoricien</span></div></div>
+    <div class="card" onclick="om('bluzzie','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Plat→Diamond</span></div></div>
+    <div class="card" onclick="om('aaaurelien','skill')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Ego > Rank</span></div></div>
+    <div class="card" onclick="om('udf','skill')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">OTP Shaco</span></div></div>
+  </div></div>
+  <div class="tier-row t-d"><div class="tier-lbl">D</div><div class="tier-cards">
+    <div class="card" onclick="om('shinya','skill')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Gold 4 éternel</span></div></div>
+    <div class="card" onclick="om('shaars','skill')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">OTP Rammus</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== CONTENU ===== -->
+<div id="v-content" class="view">
+  <p class="view-desc">Créativité verbale, citations mémorables, génie comique involontaire.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('bluzzie','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Thérapie artisanale</span></div></div>
+    <div class="card" onclick="om('ransberg','content')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">~20k msgs de lore</span></div></div>
+    <div class="card" onclick="om('shinya','content')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Copypasta 666</span></div></div>
+    <div class="card" onclick="om('ristorante','content')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Champion parfait=Rengar</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('aaaurelien','content')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Verset coranique</span></div></div>
+    <div class="card" onclick="om('mpb','content')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Philosophe bi-canal</span></div></div>
+    <div class="card" onclick="om('manigoldo','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">ADN de victoire</span></div></div>
+    <div class="card" onclick="om('riwanovic','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Loze is loze</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('elilos','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Volume brut</span></div></div>
+    <div class="card" onclick="om('depardieu','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">pazification™</span></div></div>
+    <div class="card" onclick="om('pauloo','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Réquisitoires</span></div></div>
+    <div class="card" onclick="om('goxydou','content')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Analyse dense</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('merko','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Avocat stats</span></div></div>
+    <div class="card" onclick="om('egide','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Conseiller ELO</span></div></div>
+    <div class="card" onclick="om('udf','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Prostituée des JCS</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Bruit blanc cultiste</span></div></div>
+  </div></div>
+  <div class="tier-row t-d"><div class="tier-lbl">D</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','content')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sobre & précis</span></div></div>
+    <div class="card" onclick="om('shaars','content')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sources > Drama</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== TOXICITÉ ===== -->
+<div id="v-toxicity" class="view">
+  <p class="view-desc">Insultes directes, diagnostics non-sollicités, comportement in-game documenté.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('bluzzie','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Soft int avoué</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Frappe images</span></div></div>
+    <div class="card" onclick="om('egide','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Suicidez-vous tous</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Argumenté</span></div></div>
+    <div class="card" onclick="om('elilos','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Open mid smurf</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">0 honte</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('ransberg','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">CAPS ciblés</span></div></div>
+    <div class="card" onclick="om('ristorante','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Run-down compulsif</span></div></div>
+    <div class="card" onclick="om('pauloo','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">KYSKYSKYS×150</span></div></div>
+    <div class="card" onclick="om('aaaurelien','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Crucifiés (tanks)</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('riwanovic','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Avorter regret</span></div></div>
+    <div class="card" onclick="om('mpb','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Rhétorique assassine</span></div></div>
+    <div class="card" onclick="om('shinya','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Tilt voiture IRL</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('depardieu','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Contrôlé</span></div></div>
+    <div class="card" onclick="om('goxydou','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Sanction verbale</span></div></div>
+    <div class="card" onclick="om('manigoldo','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Verdict systémique</span></div></div>
+    <div class="card" onclick="om('merko','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Condescendance douce</span></div></div>
+  </div></div>
+  <div class="tier-row t-f"><div class="tier-lbl">F</div><div class="tier-cards">
+    <div class="card" onclick="om('udf','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Ironie douce</span></div></div>
+    <div class="card" onclick="om('dorian','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Cri primal/an</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">4/10 in-game</span></div></div>
+    <div class="card" onclick="om('shaars','toxicity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Fair-play total</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== ORIGINALITÉ ===== -->
+<div id="v-original" class="view">
+  <p class="view-desc">Singularité du style, inventivité des expressions, cas psychiatrique unique.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('aaaurelien','original')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Dieu-procureur</span><span class="cbadge" style="border-color:#7b52c4;color:#7b52c4">Rage théologique</span></div></div>
+    <div class="card" onclick="om('shinya','original')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Le iaible diable</span><span class="cbadge" style="border-color:#7b52c4;color:#7b52c4">19 games = sobre</span></div></div>
+    <div class="card" onclick="om('riwanovic','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Loze is loze</span><span class="cbadge" style="border-color:#7b52c4;color:#7b52c4">Misérable/20</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('ristorante','original')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Rengar ×5 sorts</span></div></div>
+    <div class="card" onclick="om('bluzzie','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Frappe d'images</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">eargjobkêriz...</span></div></div>
+    <div class="card" onclick="om('manigoldo','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Alphatitude/champ</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('depardieu','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">pazification™</span></div></div>
+    <div class="card" onclick="om('ransberg','original')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Médiocrité utile</span></div></div>
+    <div class="card" onclick="om('mpb','original')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Rage pol × LoL</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('elilos','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Marabouté</span></div></div>
+    <div class="card" onclick="om('pauloo','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Poème 14 vers</span></div></div>
+    <div class="card" onclick="om('merko','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Debunk™</span></div></div>
+    <div class="card" onclick="om('goxydou','original')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">pck & no troll</span></div></div>
+  </div></div>
+  <div class="tier-row t-d"><div class="tier-lbl">D</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sobre classique</span></div></div>
+    <div class="card" onclick="om('udf','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">"top gagne" mantra</span></div></div>
+    <div class="card" onclick="om('egide','original')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">chancla classique</span></div></div>
+    <div class="card" onclick="om('shaars','original')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Source = arme</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== ENTERTAINMENT ===== -->
+<div id="v-entertain" class="view">
+  <p class="view-desc">Régularité, imprévisibilité, densité narrative, qui rend le canal vivant.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('elilos','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Colonne vertébrale</span></div></div>
+    <div class="card" onclick="om('ransberg','entertain')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Fondateur mythique</span></div></div>
+    <div class="card" onclick="om('mpb','entertain')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Némésis universelle</span></div></div>
+    <div class="card" onclick="om('aaaurelien','entertain')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Retraite royale</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('bluzzie','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Citations explosives</span></div></div>
+    <div class="card" onclick="om('shinya','entertain')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">5 ans continus</span></div></div>
+    <div class="card" onclick="om('manigoldo','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Procureur comique</span></div></div>
+    <div class="card" onclick="om('ristorante','entertain')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Monologue épique</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('depardieu','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">7+ ans continus</span></div></div>
+    <div class="card" onclick="om('riwanovic','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">JE DEVIENNE FOU</span></div></div>
+    <div class="card" onclick="om('pauloo','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">7 ans non-stop</span></div></div>
+    <div class="card" onclick="om('egide','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Tattoo promesse</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('goxydou','entertain')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Régulier dense</span></div></div>
+    <div class="card" onclick="om('shaars','entertain')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Éducatif</span></div></div>
+    <div class="card" onclick="om('merko','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Sparring stats</span></div></div>
+  </div></div>
+  <div class="tier-row t-d"><div class="tier-lbl">D</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sobre & efficace</span></div></div>
+    <div class="card" onclick="om('udf','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Régulier sans pics</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','entertain')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Sympa discret</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== LUCIDITÉ ===== -->
+<div id="v-lucidity" class="view">
+  <p class="view-desc">S = très lucide sur son niveau. F = déni total, ego cosmique.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Compile ses 20 dernières</span></div></div>
+    <div class="card" onclick="om('shinya','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Auto-dérision 9/10</span></div></div>
+    <div class="card" onclick="om('merko','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Stats avant avis</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('ikaspyrof','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">"je suis trop nul"</span></div></div>
+    <div class="card" onclick="om('goxydou','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">"plus je joue, plus nul"</span></div></div>
+    <div class="card" onclick="om('depardieu','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Self-awareness 45%</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('shaars','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Concède ses limites</span></div></div>
+    <div class="card" onclick="om('egide','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Lucide sur les autres</span></div></div>
+    <div class="card" onclick="om('mpb','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Capable d'auto-critique</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('bluzzie','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Lucidité refermée</span></div></div>
+    <div class="card" onclick="om('pauloo','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Lucide sur les autres</span></div></div>
+    <div class="card" onclick="om('udf','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">80% mental 20% skill</span></div></div>
+    <div class="card" onclick="om('manigoldo','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Rapport d'audit rare</span></div></div>
+    <div class="card" onclick="om('riwanovic','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Juridique & torts</span></div></div>
+  </div></div>
+  <div class="tier-row t-f"><div class="tier-lbl">F</div><div class="tier-cards">
+    <div class="card" onclick="om('aaaurelien','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Dieu parmi hommes</span></div></div>
+    <div class="card" onclick="om('ransberg','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Perf ≠ résultats</span></div></div>
+    <div class="card" onclick="om('ristorante','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Plat4 → portes chall</span></div></div>
+    <div class="card" onclick="om('elilos','lucidity')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Log toxic = trophée</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== PSYCHIATRIE ===== -->
+<div id="v-psych" class="view">
+  <p class="view-desc">S = consultation urgente. F = équilibré. Basé sur les évaluations des profils.</p>
+  <div class="tier-row t-s"><div class="tier-lbl">S</div><div class="tier-cards">
+    <div class="card" onclick="om('elilos','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="cpseudo">elilos</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Rage vocale IRL</span><span class="cbadge" style="border-color:#f5c842;color:#f5c842">Marabouté</span></div></div>
+    <div class="card" onclick="om('aaaurelien','psych')"><div class="cav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="cpseudo">aaaurelien</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Grandiose confirmé</span></div></div>
+    <div class="card" onclick="om('ristorante','psych')"><div class="cav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="cpseudo">ristorante</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Run-down ×23</span></div></div>
+    <div class="card" onclick="om('ransberg','psych')"><div class="cav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="cpseudo">ransberg</div><div class="cbadges"><span class="cbadge" style="border-color:#e94560;color:#e94560">Biais cognitif pur</span></div></div>
+  </div></div>
+  <div class="tier-row t-a"><div class="tier-lbl">A</div><div class="tier-cards">
+    <div class="card" onclick="om('bluzzie','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="cpseudo">bluzzie</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Frappe physique</span></div></div>
+    <div class="card" onclick="om('riwanovic','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="cpseudo">riwanovic</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">LoL dans les rêves</span></div></div>
+    <div class="card" onclick="om('shinya','psych')"><div class="cav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="cpseudo">shinya</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Algo anti-Rengar</span></div></div>
+    <div class="card" onclick="om('egide','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="cpseudo">_egide</div><div class="cbadges"><span class="cbadge" style="border-color:#c0c0d0;color:#c0c0d0">Suicidez-vous tous</span></div></div>
+  </div></div>
+  <div class="tier-row t-b"><div class="tier-lbl">B</div><div class="tier-cards">
+    <div class="card" onclick="om('pauloo','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="cpseudo">pauloo</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">KYSIS mécanique</span></div></div>
+    <div class="card" onclick="om('mpb','psych')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="cpseudo">mpb</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Pétain gif argument</span></div></div>
+    <div class="card" onclick="om('depardieu','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="cpseudo">depardieu01</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">261 msgs/jour</span></div></div>
+    <div class="card" onclick="om('goxydou','psych')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="cpseudo">goxydou</div><div class="cbadges"><span class="cbadge" style="border-color:#cd7f32;color:#cd7f32">Run-down account</span></div></div>
+  </div></div>
+  <div class="tier-row t-c"><div class="tier-lbl">C</div><div class="tier-cards">
+    <div class="card" onclick="om('merko','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="cpseudo">merk0</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Stats > feelings</span></div></div>
+    <div class="card" onclick="om('udf','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="cpseudo">udyrdefeu</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">ENT en 5 soloQ</span></div></div>
+    <div class="card" onclick="om('ikaspyrof','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="cpseudo">ikaspyrof</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">Bruit blanc rare</span></div></div>
+    <div class="card" onclick="om('manigoldo','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="cpseudo">manigoldo</div><div class="cbadges"><span class="cbadge" style="border-color:#4a90d9;color:#4a90d9">ADN de win hubris</span></div></div>
+  </div></div>
+  <div class="tier-row t-f"><div class="tier-lbl">F</div><div class="tier-cards">
+    <div class="card" onclick="om('dorian','psych')"><div class="cav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="cpseudo">dorian</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Lucide & équilibré</span></div></div>
+    <div class="card" onclick="om('shaars','psych')"><div class="cav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="cpseudo">SHAars</div><div class="cbadges"><span class="cbadge" style="border-color:#888;color:#888">Stable & sourcé</span></div></div>
+  </div></div>
+</div>
+
+<!-- ===== GÉNÉRAL ===== -->
+<div id="v-overall" class="view">
+  <p class="view-desc">Score composite agrégé sur les 8 critères. Entertainment ×1.3, Rage ×1.2, autres ×1.0.</p>
+
+  <div class="podium">
+    <div class="pod p2"><div class="pod-name" style="color:var(--a)">ransberg</div><div class="pod-score">87</div><div class="pod-plat" style="color:var(--a)">2</div></div>
+    <div class="pod p1"><div class="pod-name" style="color:var(--s)">elilos</div><div class="pod-score">91</div><div class="pod-plat" style="color:var(--s)">1</div></div>
+    <div class="pod p3"><div class="pod-name" style="color:var(--b)">aaaurelien</div><div class="pod-score">84</div><div class="pod-plat" style="color:var(--b)">3</div></div>
+  </div>
+
+  <div class="rank-list">
+    <div class="rank-item" onclick="om('elilos','overall')"><div class="rn" style="color:var(--s)">1</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">🔥</div><div class="rinfo"><strong>elilos</strong><span>Colonne vertébrale · 27 575 msgs · Marabouté · Système de rage complet</span></div><div class="rscore">91</div><div class="rbar"><div class="rbar-fill" style="width:91%"></div></div></div>
+    <div class="rank-item" onclick="om('ransberg','overall')"><div class="rn" style="color:var(--a)">2</div><div class="rav" style="background:linear-gradient(135deg,#7b0000,#e94560)">💀</div><div class="rinfo"><strong>ransberg</strong><span>Fondateur · ~20k msgs · Personnage canonique · Biais cognitif pur</span></div><div class="rscore">87</div><div class="rbar"><div class="rbar-fill" style="width:87%"></div></div></div>
+    <div class="rank-item" onclick="om('aaaurelien','overall')"><div class="rn" style="color:var(--b)">3</div><div class="rav" style="background:linear-gradient(135deg,#1a3a1a,#e94560)">😤</div><div class="rinfo"><strong>aaaurelien</strong><span>Verset coranique · Dieu parmi hommes · Rage architecturée</span></div><div class="rscore">84</div><div class="rbar"><div class="rbar-fill" style="width:84%"></div></div></div>
+    <div class="rank-item" onclick="om('bluzzie','overall')"><div class="rn">4</div><div class="rav" style="background:linear-gradient(135deg,#533483,#ff6b35)">💢</div><div class="rinfo"><strong>bluzzie</strong><span>Contenu S-tier · Frappe d'images · Diagnostic clinique artisanal</span></div><div class="rscore">81</div><div class="rbar"><div class="rbar-fill" style="width:81%"></div></div></div>
+    <div class="rank-item" onclick="om('mpb','overall')"><div class="rn">5</div><div class="rav" style="background:linear-gradient(135deg,#0f3460,#e94560)">⚡</div><div class="rinfo"><strong>mpb</strong><span>32k msgs · GM référence · Bi-canal · Némésis universelle</span></div><div class="rscore">79</div><div class="rbar"><div class="rbar-fill" style="width:79%"></div></div></div>
+    <div class="rank-item" onclick="om('shinya','overall')"><div class="rn">6</div><div class="rav" style="background:linear-gradient(135deg,#1a1a2e,#e94560)">🌋</div><div class="rinfo"><strong>shinya</strong><span>Copypasta 666 · Gold 4 éternel · Rageur encyclopédique · 5 ans</span></div><div class="rscore">76</div><div class="rbar"><div class="rbar-fill" style="width:76%"></div></div></div>
+    <div class="rank-item" onclick="om('manigoldo','overall')"><div class="rn">7</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">⚔️</div><div class="rinfo"><strong>manigoldo</strong><span>Master 312LP · Procureur ADC · 7 ans · ADN de victoire</span></div><div class="rscore">74</div><div class="rbar"><div class="rbar-fill" style="width:74%"></div></div></div>
+    <div class="rank-item" onclick="om('ristorante','overall')"><div class="rn">8</div><div class="rav" style="background:linear-gradient(135deg,#2a0a20,#e94560)">🔥</div><div class="rinfo"><strong>ristorante</strong><span>Monologue de solitude · Rengar ×5 sorts · Run-down compulsif</span></div><div class="rscore">72</div><div class="rbar"><div class="rbar-fill" style="width:72%"></div></div></div>
+    <div class="rank-item" onclick="om('pauloo','overall')"><div class="rn">9</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">🗡️</div><div class="rinfo"><strong>pauloo</strong><span>Rage index 78 · 7 ans · Réquisitoires épiques · Analyste de souffrance</span></div><div class="rscore">70</div><div class="rbar"><div class="rbar-fill" style="width:70%"></div></div></div>
+    <div class="rank-item" onclick="om('riwanovic','overall')"><div class="rn">10</div><div class="rav" style="background:linear-gradient(135deg,#533483,#c23152)">📊</div><div class="rinfo"><strong>riwanovic</strong><span>Loze is loze · Misérable/20 · Paralysie du sommeil LoL</span></div><div class="rscore">68</div><div class="rbar"><div class="rbar-fill" style="width:68%"></div></div></div>
+    <div class="rank-item" onclick="om('depardieu','overall')"><div class="rn">11</div><div class="rav" style="background:linear-gradient(135deg,#533483,#4a90d9)">🎮</div><div class="rinfo"><strong>depardieu01</strong><span>6.7 ans · Rage académique · pazification · Néologismes custom</span></div><div class="rscore">65</div><div class="rbar"><div class="rbar-fill" style="width:65%"></div></div></div>
+    <div class="rank-item" onclick="om('egide','overall')"><div class="rn">12</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">⚡</div><div class="rinfo"><strong>_egide</strong><span>Tattoo promesse · Sage de la Flamme · Conseiller Ransberg officiel</span></div><div class="rscore">63</div><div class="rbar"><div class="rbar-fill" style="width:63%"></div></div></div>
+    <div class="rank-item" onclick="om('goxydou','overall')"><div class="rn">13</div><div class="rav" style="background:linear-gradient(135deg,#0f3460,#e94560)">♟</div><div class="rinfo"><strong>goxydou</strong><span>Ex-Master · Analyse dense · 4 ans · Ez permanent</span></div><div class="rscore">61</div><div class="rbar"><div class="rbar-fill" style="width:61%"></div></div></div>
+    <div class="rank-item" onclick="om('merko','overall')"><div class="rn">14</div><div class="rav" style="background:linear-gradient(135deg,#533483,#00b4d8)">🐱</div><div class="rinfo"><strong>merk0</strong><span>Avocat stats · Debunk compulsif · Humour absurde 78%</span></div><div class="rscore">59</div><div class="rbar"><div class="rbar-fill" style="width:59%"></div></div></div>
+    <div class="rank-item" onclick="om('udf','overall')"><div class="rn">15</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">🃏</div><div class="rinfo"><strong>udyrdefeu</strong><span>OTP Shaco · Prostituée des JCS · Analyste structurel</span></div><div class="rscore">55</div><div class="rbar"><div class="rbar-fill" style="width:55%"></div></div></div>
+    <div class="rank-item" onclick="om('ikaspyrof','overall')"><div class="rn">16</div><div class="rav" style="background:linear-gradient(135deg,#533483,#e94560)">🌙</div><div class="rinfo"><strong>ikaspyrof</strong><span>Sage qui explose · Master oscillant · Fédérateur discret</span></div><div class="rscore">53</div><div class="rbar"><div class="rbar-fill" style="width:53%"></div></div></div>
+    <div class="rank-item" onclick="om('dorian','overall')"><div class="rn">17</div><div class="rav" style="background:linear-gradient(135deg,#533483,#00d4ff)">🏆</div><div class="rinfo"><strong>dorian</strong><span>Master 500LP · Rageur lucide · Meilleur skill · Trop sobre pour le canal</span></div><div class="rscore">51</div><div class="rbar"><div class="rbar-fill" style="width:51%"></div></div></div>
+    <div class="rank-item" onclick="om('shaars','overall')"><div class="rn">18</div><div class="rav" style="background:linear-gradient(135deg,#0f3460,#533483)">🎓</div><div class="rinfo"><strong>SHAars</strong><span>19k msgs sérieux · Sources toujours · Fair-play total · Hors catégorie</span></div><div class="rscore">44</div><div class="rbar"><div class="rbar-fill" style="width:44%"></div></div></div>
+  </div>
+
+  <div style="margin-top:48px">
+    <h2 class="stitle">🏅 Mentions Spéciales</h2>
+    <div class="awards-grid">
+      <div class="award-card aw1"><div class="aw-icon">🥇</div><div class="aw-title">MVP DE LA RAGE</div><div class="aw-winner">elilos</div><div class="aw-reason">27 575 messages. Record de 578 en un jour. "Je veux mourir" ×59. Rage vocale IRL documentée par lui-même. Le canal mesure sa rage à son étalon.</div></div>
+      <div class="award-card aw2"><div class="aw-icon">🤡</div><div class="aw-title">CLOWN DU CANAL</div><div class="aw-winner">ristorante</div><div class="aw-reason">Propose le champion parfait : Rengar sur tous les sorts. Declare Sett broken de 0 à 5 items. Croit être "aux portes du chall" depuis Plat 4. Génie comique involontaire.</div></div>
+      <div class="award-card aw3"><div class="aw-icon">🏥</div><div class="aw-title">URGENCE PSYCHIATRIQUE</div><div class="aw-winner">elilos</div><div class="aw-reason">Rage vocale IRL avérée. 5 838 messages après minuit. Autodiagnostic : "marabouté par la soloQ". Partage ses logs toxiques smurf fièrement. Score 9.2/10.</div></div>
+      <div class="award-card aw4"><div class="aw-icon">😴</div><div class="aw-title">MEMBRE LE PLUS ZEN</div><div class="aw-winner">SHAars</div><div class="aw-reason">Toxicité F-tier (meilleur score). Jamais de CAPS gratuits. Insulte maximale : compter publiquement les mots sans source de l'adversaire. Modérateur de fait non-élu.</div></div>
+      <div class="award-card aw5"><div class="aw-icon">🎯</div><div class="aw-title">RAGEUR LE PLUS PRÉCIS</div><div class="aw-winner">merk0</div><div class="aw-reason">Analyse stats 91%. Cite les winrates master+ avant de rage. Rappelle les chiffres exacts à chaque contre-argument. La rage doit se légitimer statistiquement.</div></div>
+      <div class="award-card aw6"><div class="aw-icon">💎</div><div class="aw-title">DIAMANT BRUT</div><div class="aw-winner">dorian</div><div class="aw-reason">Master 500LP, top 1650 S7. 17e au classement entertainment à cause de sa sobriété. Pénalisé par son équilibre dans un canal de chaos. Le meilleur joueur, le moins bruyant.</div></div>
+      <div class="award-card aw7"><div class="aw-icon">🔥</div><div class="aw-title">CONTENU INVOLONTAIRE</div><div class="aw-winner">shinya</div><div class="aw-reason">Copypasta "le iaible diable" réutilisé 4× en 5 ans. "19 parties = sobriété". Théorie de l'algo Riot anti-mains Rengar. Picasso des rageposts sans le savoir.</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeIfBg(event)">
+  <div class="modal" id="modal">
+    <div class="mhdr">
+      <div class="mav" id="m-av">🔥</div>
+      <div class="mtitle"><h2 id="m-name">—</h2><p id="m-sub">—</p></div>
+      <button class="mclose" onclick="close_m()">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="just" id="m-just">—</div>
+      <div class="mquote"><span id="m-quote">—</span><small id="m-date">—</small></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const D = {
+  elilos:{av:'🔥',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'S #1',j:'27 575 messages, record de 578/jour, 21% envoyés après minuit. Rage vocale IRL documentée par lui-même : frappe son bureau à 6h en reproduisant exactement ce qu\'il écrit sur le canal. Système de rage complet avec sa propre grammaire.',q:'"Hier soir j\'ai ragé en tapant comme un débile sur mon bureau. Quand je rage, je dis exactement la même chose que ce que j\'écris sur le qq..."',d:'15 janv. 2022'},
+    skill:{t:'S #3',j:'Diamond stable avec 820 mentions Kai\'Sa. Compréhension méta réelle. Cependant carry drive 9.5 vs esprit d\'équipe 3.0 — et il partage ses logs smurf toxic fièrement (open mid, idc c\'est mon smurf).',q:'"gagner sans difficulté c\'est un comportement de zemel"',d:'5 mars 2023'},
+    content:{t:'B',j:'Volume massif mais répétitif sur les mêmes structures. Éclairs de génie verbaux (marabouté, zemel). La documentation de sa rage IRL comme si c\'était normal est son meilleur contenu accidentel.',q:'"je suis marabouté par la soloQ en mode ça m\'a retourné le cerveau"',d:'27 janv. 2021'},
+    toxicity:{t:'S #3',j:'Archive et partage ses propres logs toxiques smurf sans honte. "Open mid / idc c\'est mon smurf / can we ff". La toxicité in-game documentée ET revendiquée le classe hors norme.',q:'"BORDEL JAI QU\'UNE SEULE ENVIE C\'EST QUE CE MEC VOLE UN AVION ET VIENNE SE CRASHER SUR VOTRE PUTAIN DE CENTRE DE TRISOMIQUES"',d:'19 mai 2019'},
+    original:{t:'C',j:'Quelques néologismes (marabouté, zemel) mais son style de rage reste dans les canons classiques — CAPS, boucles répétitives, insultes directes. Volume exceptionnel, packaging standard.',q:'"je suis marabouté par la soloQ"',d:'2021'},
+    entertain:{t:'S #1',j:'La colonne vertébrale du canal. 27 575 messages sur 5 ans. Chaque nouveau membre est calibré à son étalon. Ses crises sont des événements collectifs. Impossible à déloger.',q:'"JE VEUX MOURIRJE VEUX MOURIRJE VEUX MOURIR..." — répété sans espace à la vitesse de la désespérance',d:'22 fév. 2021'},
+    lucidity:{t:'F',j:'Archive ses comportements toxiques comme des trophées. Lucide sur les mécaniques mais aveugle sur sa contribution au chaos. Son seul aveu de lucidité : "marabouté" — sans changement de comportement.',q:'"Perso marabouté c\'est genre ça m\'a retourné le cerveau"',d:'2021'},
+    psych:{t:'S #1',j:'Rage vocale documentée IRL (frappe bureau à 6h). 5 838 messages après minuit. "Je veux mourir" ×59. Autodiagnostic : marabouté. Partage logs toxic fièrement. Score urgence 9.2/10.',q:'"Sachant que quand je rage, je dis exactement la même chose que ce que j\'écris sur le qq..."',d:'2022'},
+    overall:{t:'#1 — 91/100',j:'Domine par la combinaison unique de volume exceptionnel (27 575 msgs), régularité sur 5 ans, et niveau de rage qui constitue la référence absolue du canal. Sa faiblesse en lucidité génère du contenu précieux. Indétrônable.',q:'"je suis marabouté par la soloQ"',d:'2021'}},
+  ransberg:{av:'💀',bg:'linear-gradient(135deg,#7b0000,#e94560)',
+    rage:{t:'S #2',j:'~20 000 messages sur 3 ans. Rage fulgurante en CAPS à 14h un mercredi, puis analyse calme 30 secondes plus tard. Spectre émotionnel remarquable : ses victoires sont des événements cosmiques, ses défaites des injustices structurelles.',q:'"MASTER 150LP ALL DOGS MASTER 150LP ALL DOGS..." — spam en boucle après une promotion',d:'Oct. 2021'},
+    skill:{t:'A',j:'Diamond 1 peak. Compréhension réelle du jeu (macro, mécaniques, impact). Tryndamere OTP dans un méta défavorable explique ses hauts et très bas. La lucidité technique s\'effondre quand il est personnellement impliqué.',q:'"je joue tryndamere fdp / pendant ce temps je joue tryndamere"',d:'Nov. 2020'},
+    content:{t:'S #2',j:'~20k messages qui couvrent un spectre émotionnel remarquable. Il est à la fois l\'accusé, le procureur et le juge de ses games. Chaque défaite est une injustice structurelle du jeu vidéo. Fondateur du lore du canal.',q:'"la médiocrité de mes performances n\'a aucune importance sur le résultat de la game je trouve ça formidable"',d:'Avr. 2021'},
+    toxicity:{t:'A',j:'CAPS ciblés, insultes précises, analyses post-défaite en 17 messages. Intense mais jamais aussi débridé que bluzzie ou egide. "tu hardstuck l\'élo que je smurf" résume son arsenal.',q:'"dans 400 games je suis grand master"',d:'Mars 2021'},
+    original:{t:'B',j:'"La médiocrité de mes performances n\'a aucune importance" est un instant classique. Mais son style reste dans les codes de la rage LoL classique. La cohérence de son déni est sa forme d\'originalité.',q:'"en réalité j\'ai pas 15 mais 16 lp"',d:'Mars 2019'},
+    entertain:{t:'S #2',j:'Le fondateur. Sans Ransberg, le canal n\'a pas la même mythologie. ~20k messages de lore pur sur 3 ans. Personnage canonique que tous les autres membres referencent encore en 2026.',q:'"la médiocrité de mes performances n\'a aucune importance sur le résultat de la game je trouve ça formidable"',d:'Avr. 2021'},
+    lucidity:{t:'F',j:'"la médiocrité de mes performances n\'a aucune importance sur le résultat de la game" — citation qui résume tout. Compte ses LP à l\'unité près mais déconnecte performance et classement. Biais cognitif pur.',q:'"dans 400 games je suis grand master"',d:'Mars 2021'},
+    psych:{t:'S #4',j:'Biais cognitif pur documenté sur 3 ans. Déconnexion totale performance/classement. Projection de Grand Master sans base réelle. Le canal comme tribunal permanent où il fixe toutes les règles.',q:'"tu hardstuck l\'élo que je smurf"',d:'2020'},
+    overall:{t:'#2 — 87/100',j:'Deuxième grâce au statut fondateur, au volume massif sur 3 ans, et à la richesse du lore personnel. Sa lucidité catastrophique est compensée par la qualité du contenu qu\'elle génère.',q:'"la médiocrité de mes performances n\'a aucune importance sur le résultat de la game je trouve ça formidable"',d:'Avr. 2021'}},
+  aaaurelien:{av:'😤',bg:'linear-gradient(135deg,#1a3a1a,#e94560)',
+    rage:{t:'S #4',j:'Rage en trois strates : verbale (INSUPPORTABLE), analytique (longues démonstrations), et philosophique (textes quasi-testamentaires). Le spam "DELETESHIELDBOWDELETESHIELDBOW" ×50 comme mantra purificateur. Il rage quand il perd ET quand il gagne insuffisamment.',q:'"La rétribution juste pour ceux qui jouent des TANKS est d\'être tués, ou crucifiés..."',d:'03 avr. 2023'},
+    skill:{t:'C',j:'Ego en S, rank en C. "Meilleur ADC de la planète" → "meilleur bard d\'Europe" en 2 mois — la progression géographique ne suit pas le ladder. Rare moment de lucidité immédiatement réprimé.',q:'"Non, mes 80ms et mes 60fps sont une excuse facile a ma médiocrité"',d:'06 déc. 2021'},
+    content:{t:'A',j:'Le verset coranique anti-tank, la taxonomie des rôles (toplaner = tarlouze insecure), les annonces royales de retraite définitive (spoiler : il revient). Contenu à valeur ajoutée malgré la répétitivité thématique.',q:'"Mes chers sujets, C\'est avec une grande émotion que je vous annonce mon départ définif du royaume."',d:'28 avr. 2024'},
+    toxicity:{t:'A',j:'"Tarlouzes", crucifixion pour les joueurs de tanks, annonces de départ royal. Intense mais structuré — jamais aussi bas que bluzzie ou egide. La toxicité a un système idéologique.',q:'"je suis le meilleur bard d\'europe"',d:'14 fév. 2022'},
+    original:{t:'S #1',j:'Verset coranique appliqué à League of Legends. "Dieu parmi les hommes" comme auto-description sérieuse. Spam DELETE ×50 comme mantra. Taxonomie des rôles LoL comme révélation divine. Genre nouveau : la rage théologique du MOBA.',q:'"pcque je suis dieu parmi les hommes"',d:'28 août 2023'},
+    entertain:{t:'S #4',j:'Les annonces royales de retraite suivies de retours discrets sont de l\'entertainment pur. Son arc narratif de Dieu-procureur-roi est le meilleur scénario du canal.',q:'"Mes chers sujets, C\'est avec une grande émotion que je vous annonce aujourd\'hui mon départ définif du royaume."',d:'28 avr. 2024'},
+    lucidity:{t:'F',j:'"je suis le meilleur adc de cette planète" → "je suis le meilleur bard d\'europe". Diagnostic de grandiose confirmé par lui-même sans qu\'il en tire aucune leçon. La lucidité momentanée est immédiatement réprimée.',q:'"Non, mes 80ms et mes 60fps sont une excuse facile a ma médiocrité"',d:'06 déc. 2021'},
+    psych:{t:'S #2',j:'Grandiose diagnostiqué. Ego géographiquement progressif (planète → Europe). Lucidité momentanée réprimée. Retraites définitives répétées. Pattern cliniquement cohérent.',q:'"je suis le meilleur adc de cette planète"',d:'02 déc. 2021'},
+    overall:{t:'#3 — 84/100',j:'Podium assuré par la rage architecturée unique, l\'ego cosmique, et l\'originalité S-tier. La lucidité catastrophique et l\'originalité exceptionnelle se compensent parfaitement.',q:'"pcque je suis dieu parmi les hommes"',d:'28 août 2023'}},
+  bluzzie:{av:'💢',bg:'linear-gradient(135deg,#533483,#ff6b35)',
+    rage:{t:'S #3',j:'289 messages en record journalier. Peine de mort proposée pour deux feeders. AAAAAAAAAAAAA ×200 caractères pour exprimer la joie d\'une montée Or 1. La spontanéité totale de quelqu\'un pour qui c\'est une réaction naturelle.',q:'"no fake je suis président là je rétablis la peine de mort juste pour ces deux fils de pute"',d:'10 janv. 2021'},
+    skill:{t:'C',j:'Plat→Diamond selon le profil. Compréhension du jeu en développement. Rengar OTP avec bonne maîtrise mais la progression reste lente. Rare moment de lucidité : "Pourquoi je dodge pas les compo full ad contre malphite..."',q:'"(j\'ai soft int mes 6 dernières games mais c\'est pas toxic)"',d:'30 avr. 2021'},
+    content:{t:'S #1',j:'Le diagnostic clinique de 9 pathologies sur un joueur de Tahm Kench top. La révélation de la thérapie artisanale (frapper l\'image du champion). La parenthèse légale du soft-int sans ironie. Chaque citation est une œuvre d\'art brut.',q:'"Perso j\'ai imprimé une image de chaque perso de lol, et dès qu\'un mec me int je frappe de toutes mes forces l\'image de son champion"',d:'2 déc. 2020'},
+    toxicity:{t:'S #1',j:'Soft-int avoué "(c\'est pas toxic)". Diagnostic trisomie 21 + cancer des couilles sur un inconnu. Peine de mort pour feeders. Thérapie artisanale de frappe d\'images physiques. Toxicité physique documentée — cas unique.',q:'"Joueur de Tahm Kench top = Abandonné par sa daronne + tabassé + trisomie 21 + asperger + cancer des couilles"',d:'31 déc. 2020'},
+    original:{t:'A',j:'La frappe d\'images de champions est unique dans l\'histoire du gaming. La parenthèse légale du soft-int est du génie accidentel. Mais le fond de la rage reste dans les canons classiques.',q:'"Perso j\'ai imprimé une image de chaque perso de lol..."',d:'2020'},
+    entertain:{t:'A',j:'Citations explosives qui alimentent le canal pour des semaines. La révélation de la thérapie artisanale est le type de contenu qu\'on répète à table. Régularité sur 5.5 ans.',q:'"Joueur de Tahm Kench top = [diagnostic complet]"',d:'Déc. 2020'},
+    lucidity:{t:'C',j:'"Pourquoi je dodge pas les compo full ad contre malphite... j\'ai juste à dodge j\'évite une lose à 100%" — rare moment de lucidité vite oublié. Le soft-int "c\'est pas toxic" montre une conscience sans acceptation réelle.',q:'"Pourquoi je dodge pas... j\'ai juste a dodge j\'évite une lose à 100%"',d:'11 janv. 2021'},
+    psych:{t:'A',j:'Frappe d\'images physique comme coping mechanism. Peine de mort comme réaction immédiate à un feeder. Soft-int rationalisé sans culpabilité. Le comportement physique (frappe) le distingue de tous les autres.',q:'"Perso j\'ai imprimé une image de chaque perso de lol..."',d:'2020'},
+    overall:{t:'#4 — 81/100',j:'Top 4 grâce au contenu S-tier et à la toxicité S-tier. Chaque citation est unique. Skill plus modéré et régularité inférieure à elilos/ransberg/mpb le maintiennent à 4.',q:'"(j\'ai soft int mes 6 dernières games mais c\'est pas toxic)"',d:'30 avr. 2021'}},
+  mpb:{av:'⚡',bg:'linear-gradient(135deg,#0f3460,#e94560)',
+    rage:{t:'A',j:'Rageur cyclique, pas chronique. 15 113 messages qq-only. Rage froide et clinique / absurde et lyrique / philologique (5RYHDHJ). Le "syndrome MPB" : veut le débat intense mais se réserve le droit de claquer la porte.',q:'"Hihi je vais run down parce que ma mère est une pute et que je suis pas désiré" — ironique évidemment',d:'Juin 2021'},
+    skill:{t:'S #2',j:'GM référence selon tout le canal. Cité comme étalon absolu de skill. "MPB GM" / "Mpb l\'a dit il brise mentalement chaque équipe" — la référence collective non-contestée.',q:'"Je crois que si je veux passer master j\'ai pas le choix"',d:'Fév. 2023'},
+    content:{t:'A',j:'Le registre politique-LoL hybride, FRENCH DREAMER, "Les cheminots c\'est les adc de LoL". Bi-canal philosophe avec vraie personnalité narrative. Formules mémorables et comparaisons conceptuelles uniques.',q:'"Les cheminots c\'est les adc de LoL"',d:'Mars 2023'},
+    toxicity:{t:'B',j:'Rhétorique assassine, analyse chirurgicale de l\'adversaire. Il ne flame pas les inconnus en jeu — il flamme ses amis avec précision statistique. Plus analytique que brutal.',q:'"Sur tous les Dieux et tous mes ancêtres je jure que je n\'ai jamais vu quelqu\'un aussi limité intellectuellement, j\'abandonne"',d:'2024'},
+    original:{t:'B',j:'La mixture politique/LoL est unique. PAZed, goatesque, weak side god — néologismes distinctifs. Mais la rage LoL elle-même reste dans les canons classiques.',q:'"T\'es la version Monoprix du Joat, c\'est carré"',d:'2022'},
+    entertain:{t:'S #3',j:'32 541 messages total. Némésis universelle citée par 12/18 membres. Sa présence est structurante même quand il ne parle pas. Le canal se calibre à lui.',q:'"niquez vos mères les adc"',d:'2019'},
+    lucidity:{t:'B',j:'Capable de construire des thèses et de concéder des contre-arguments. Mais le "syndrome MPB" — fermer le débat quand ça résiste — est une forme de déni. Lucidité partielle.',q:'"Rappel que mon objectif quand je parle n\'est pas de convaincre mais d\'avoir potentiellement tort"',d:'2024'},
+    psych:{t:'B',j:'Gif Pétain comme argument. Insulte à 23h après argumentaire en 4 points structurés. Cyclique mais stable. "Un coach excellent piégé dans le corps d\'un joueur D2".',q:'"La mondialisation décompose l\'humain."',d:'2025'},
+    overall:{t:'#5 — 79/100',j:'Volume total le plus élevé (32 541) mais dilué sur deux canaux. GM référence en skill. Némésis universelle en entertainment. Le split d\'attention politique/qq le pénalise légèrement.',q:'"Les cheminots c\'est les adc de LoL"',d:'Mars 2023'}},
+  shinya:{av:'🌋',bg:'linear-gradient(135deg,#1a1a2e,#e94560)',
+    rage:{t:'A',j:'Intensité 8/10, théorisation rage 9.5/10. Chaque défaite génère une autopsie complète. Zen intérieur 2/10 — il n\'y a presque pas de Shinya calme. Mais pas le plus explosif du groupe.',q:'"chaque fois jsuis en 5/0 / jme dis jpeux courir sur les gens / mais NON"',d:'20 oct. 2021'},
+    skill:{t:'D',j:'"Deux saisons d\'affilées que je dépasse pas gold 4" — énoncé avec la sérénité d\'un moine qui a accepté son karma. Sa compréhension du jeu est correcte mais ses performances ne suivent pas.',q:'"deux saisons d\'affilés que je dépasse pas gold 4"',d:'15 nov. 2022'},
+    content:{t:'S #3',j:'Le copypasta "le iaible diable" réutilisé 4× en 5 ans sans modification. "19 parties = sobriété". L\'algo Riot anti-mains Rengar. Le tilt au permis de conduire. Picasso des rageposts sans le savoir.',q:'"J\'essaye de pas trop spam le jeu pour pas faire d\'overdose (rarement plus de 19 games par jour)"',d:'10 mars 2021'},
+    toxicity:{t:'B',j:'Toxicité in-game 4/10 (faible). Mais le tilt au permis de conduire ("chaque millimètre compte donc ta voiture jvais te la col[ler]") prouve que la rage déborde dans la réalité.',q:'"il m\'a dit pas besoin de coller la voiture et jlui ai rep que si chaque millimètres compte donc ta voiture jvais te la col[ler]"',d:'24 oct. 2024'},
+    original:{t:'S #2',j:'Copypasta 666 réutilisé 4× en 5 ans. "Le iaible diable". Algo anti-Rengar Riot. Tilt au permis. "19 parties = sobriété". Shinya a inventé sa propre mythologie personnelle.',q:'"je vois / le iaible diable / par la fenetre / il vient me chercher"',d:'20 oct. 2021'},
+    entertain:{t:'A',j:'5 ans de présence régulière. Le copypasta 666 réutilisable par tout le canal. La philosophie de vie "19 parties = sobriété". Source fiable de contenu mémorable.',q:'"rarement plus de 19 games par jour"',d:'2021'},
+    lucidity:{t:'S #2',j:'Auto-dérision documentée à 9/10. "deux saisons d\'affilées que je dépasse pas gold 4" exprimé avec sérénité. "Je suis trop nul en ce moment" sincère. Il sait. Il accepte. Et il joue quand même.',q:'"deux saisons d\'affilés que je dépasse pas gold 4"',d:'15 nov. 2022'},
+    psych:{t:'A',j:'Théorie du complot personnel (algo Riot anti-Rengar). Tilt au permis. "jvai mcoupé les veine". La frontière entre le jeu et la réalité est poreuse. Rapport au tilt qui dépasse le gaming.',q:'"je pense que y\'a un algo anti main rengar, chaque game ils nous envoient des détraqués pour mettre notre mental a l\'épreuve"',d:'4 fév. 2022'},
+    overall:{t:'#6 — 76/100',j:'Top 6 grâce au contenu S-tier et à l\'originalité S-tier. Le skill D et la rage A le maintiennent hors podium. Mais son lore personnel est le plus riche du canal après ransberg.',q:'"jte stacks des smics en me branlant en TT... je préfère 100 fois ma vie que la tienne, tu me paye pour trade je refuse"',d:'14 sept. 2024'}},
+  manigoldo:{av:'⚔️',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'B',j:'~78% zen stratégique. Il rage contre des systèmes (rôle ADC, meta, supports inutiles), pas des individus au hasard. Style procureur : liste les chefs d\'accusation, cite les preuves, prononce la sentence.',q:'"Pour un jeu sain il faudrait que l\'ADC puisse dire au JGL et au supp exactement quoi faire avec les pings et si ils obéissent pas → ban 14j."',d:'26 août 2024'},
+    skill:{t:'A',j:'Master 312LP documenté. Connaissance approfondie du rôle ADC. Références pro régulières (Gumayusi, Hans Sama). Cohérence réelle entre le discours et le rang.',q:'"Quand t\'as la win dans l\'ADN, on en oublie presque ce que peuvent ressentir les gueux."',d:'26 nov. 2024'},
+    content:{t:'A',j:'"Quand t\'as la win dans l\'ADN, on en oublie presque ce que peuvent ressentir les gueux." — après une victoire ordinaire. Le classement de virilité par champion (2019). La proposition de ban 14j pour désobéissance.',q:'"Draven = +15 points d\'alphatitude. Bruiser = -10. Assassin = -15."',d:'13 mars 2019'},
+    toxicity:{t:'C',j:'Manigoldo sanctionne les systèmes, pas les individus. "INT à vue", "pazifier", "SANCTION" sont des catégories analytiques plutôt que des insultes directes.',q:'"pazifier", "SANCTION"',d:'2019-2026'},
+    original:{t:'A',j:'Le classement de virilité par champion (2019) est un monument. "ADN de victoire" comme biologie personnelle. La théologie draven. Système d\'alphatitude inventé de toutes pièces.',q:'"Draven = +15 points d\'alphatitude. Bruiser = -10. Assassin = -15."',d:'13 mars 2019'},
+    entertain:{t:'A',j:'7 ans de présence. Le procureur comique est un archétype récurrent. La dualité juge-austère/joie-théâtrale démesurée crée des moments imprévisibles et mémorables.',q:'"Quand t\'as la win dans l\'ADN, on en oublie presque ce que peuvent ressentir les gueux."',d:'Nov. 2024'},
+    lucidity:{t:'C',j:'Sa remise en question rare est formulée comme un "rapport d\'audit" — précision chirurgicale, mais toujours dans la même posture de certitude. Lucide sur ses victoires, moins sur ses défaites.',q:'"J\'ai compris quel était ma destinée : redevenir OTP Draven, meilleur perso de League."',d:'Fév. 2021'},
+    psych:{t:'C',j:'Hubris ADC documenté. "ADN de victoire" comme biologie personnelle. Stable dans l\'ensemble. La proposition de ban 14j pour désobéissance montre un rapport au jeu... particulier.',q:'"Pour un jeu sain il faudrait que l\'ADC puisse dire au JGL exactement quoi faire... si ils obéissent pas → ban 14j."',d:'2024'},
+    overall:{t:'#7 — 74/100',j:'7e grâce à Master 312LP, 7 ans d\'activité, et la qualité du contenu procureur. Son niveau de rage modéré et sa toxicité moyenne le maintiennent hors top 6.',q:'"Quand t\'as la win dans l\'ADN, on en oublie presque ce que peuvent ressentir les gueux."',d:'26 nov. 2024'}},
+  ristorante:{av:'🔥',bg:'linear-gradient(135deg,#2a0a20,#e94560)',
+    rage:{t:'B',j:'7/10 "Rageur Cultivé". Style documenté et argumenté. 258 mentions de FF (abandon philosophique). 23 pensées de run-down documentées. Il explique toujours pourquoi il rage.',q:'"PUTAIN MAIS — je suis seul dans la game — contre 2/3/4 smurfs — je suis — seul — SEUL — j\'en peux plus j\'ai envie de pleurer"',d:'4 sept. 2021'},
+    skill:{t:'C',j:'Les théories sont élaborées, le rang est Plat 4. L\'écart entre les deux est entertainant en lui-même. "Je suis aux portes du chall" (ironie auto-déclarée).',q:'"je suis aux portes du chall" (auto-dérision)',d:'2022'},
+    content:{t:'S #4',j:'Propose le champion parfait : Rengar sur tous les sorts. Thèse Sett broken à 0, 1, 2, 3, 4, 5 items. Monologue de solitude du 4 sept. 2021. La cohérence interne de ses absurdités est S-tier.',q:'"Passif: rengar — A: rengar — Z: rengar — E: rengar — R: rengar — Ça donnerait un champion complètement broken vous pensez pas ?"',d:'16 déc. 2021'},
+    toxicity:{t:'A',j:'Run-down compulsif documenté (23 occurrences). Demande des comptes à des membres pour run-down. "SANCTION SANCTION SANCTION". La limite entre le jeu et la vraie détresse est floue.',q:'"Je vais avoir besoin de run down soon — quelqu\'un peut me donner un compte pour run down svp"',d:'4 sept. 2021'},
+    original:{t:'A',j:'Champion parfait = Rengar ×5 avec logique interne impeccable. Sett broken à tous les stades avec démonstration. "SEUL — SEUL" comme climax narratif. "Les shills" comme catégorie ennemie.',q:'"Passif: rengar — A: rengar — Z: rengar — E: rengar — R: rengar"',d:'2021'},
+    entertain:{t:'A',j:'12 008 messages. Record de 321 en un jour. Le monologue de solitude reste dans les mémoires. Les théories contradictoires sont collectionnées par les autres membres.',q:'"SEUL — SEUL — j\'en peux plus j\'ai envie de pleurer"',d:'2021'},
+    lucidity:{t:'F',j:'"Je viens de faire une ranked, la jungle est limite faible imo — ET NON LES SHILLS TOUJOURS PAS C\'EST TOUJOURS LE MEILLEUR ROLE DU JEU" — contradiction dans la même phrase. Plat 4 "aux portes du chall".',q:'"ET NON LES SHILLS TOUJOURS PAS C\'EST TOUJOURS LE MEILLEUR ROLE DU JEU"',d:'22 juin 2022'},
+    psych:{t:'S #3',j:'Run-down compulsif documenté. "j\'en peux plus j\'ai envie de pleurer" multiple fois. La contradiction jungle-best-role/jungle-faible dans la même phrase est cliniquement fascinante.',q:'"Je vais avoir besoin de run down soon — quelqu\'un peut me donner un compte pour run down svp"',d:'2021'},
+    overall:{t:'#8 — 72/100',j:'8e grâce au contenu S-tier et à l\'originalité A-tier. Sa lucidité F et son skill C le pénalisent. 12 008 messages sur 5 ans montrent une vraie régularité.',q:'"SEUL — SEUL"',d:'4 sept. 2021'}},
+  pauloo:{av:'🗡️',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'A',j:'11 151 messages. Rage index 78/100. Rage par conviction : argumente, hiérarchise les responsabilités, produit des réquisitoires. KYSKYSKYS ×150 caractères. "COMMENT CEST POSSIBLE DE SE SUICIDER EN BOUCLE" ×5 messages consécutifs.',q:'"KYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYS…" [150+ caractères]',d:'29 juin 2023'},
+    skill:{t:'B',j:'Main Rengar avec compréhension réelle. "Chasseur de Diamond" — l\'objectif est en sight même s\'il n\'est pas régulièrement atteint. Meilleur que la moyenne, pas au top.',q:'"après je préfère faire 13 années d\'école de co que 13 années de lol et penser que degenazirdu28 est le meilleur joueur d\'azir euw"',d:'13 janv. 2025'},
+    content:{t:'B',j:'Les réquisitoires complets contre les membres du canal sont sa marque. Le "poème en 14 vers" sur la losers Q est un chef-d\'œuvre involontaire. L\'argument nucléaire scolaire.',q:'"je suis tombé avec un autiste / je run down la game pour qu\'on finisse à 10 min / je relance dès qu\'il leave / et j\'retombe avec lui 🙂"',d:'4 sept. 2021'},
+    toxicity:{t:'A',j:'KYSKYSKYS ×150. Run-down avouée et documentée. Réquisitoires contre les membres du canal nommément. 7 ans de conviction toxique régulière.',q:'"KYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYSKYS…"',d:'2023'},
+    original:{t:'C',j:'Le poème en 14 vers sur la losers Q est une exception brillante. "L\'argument nucléaire scolaire" est unique. Sinon, rage relativement classique dans sa forme.',q:'"je suis tombé avec un autiste / je run down la game"',d:'2021'},
+    entertain:{t:'B',j:'7 ans sans interruption. Régularité absolue. Les réquisitoires alimentent les archives régulièrement. Fidélité totale au canal sur la plus longue durée.',q:'"Rappelle des faits : Ransberg, stuck gold depuis le début de sa vie..."',d:'15 fév. 2021'},
+    lucidity:{t:'C',j:'Très lucide sur les autres (GK, Ransberg, MPB). Moins lucide sur lui-même — le run-down pour forcer un matchup spécifique est une forme de déni rationalisé.',q:'"je run down la game pour qu\'on finisse à 10 min / je relance dès qu\'il leave / et j\'retombe avec lui 🙂"',d:'2021'},
+    psych:{t:'B',j:'KYSIS en boucle mécanique. Run-down avouée. "COMMENT CEST POSSIBLE DE SE SUICIDER EN BOUCLE" ×5 messages. Spirale existentielle documentée en poème 14 vers.',q:'"COMMENT CEST POSSIBLE DE SE SUICIDER EN BOUCLE" ×5 messages consécutifs',d:'19 août 2019'},
+    overall:{t:'#9 — 70/100',j:'9e grâce à 7 ans de présence continue et une rage index 78/100 solide. La lucidité variable et le skill B le maintiennent hors top 8.',q:'"je suis tombé avec un autiste / la losers Q n\'existe pas btw 🙂 / J\'ai un WR positif / donc Riot m\'envoie des turks"',d:'4 sept. 2021'}},
+  riwanovic:{av:'📊',bg:'linear-gradient(135deg,#533483,#c23152)',
+    rage:{t:'A',j:'78/100. Déclencheurs précis : ADC déclaré mort, quelqu\'un qui debunk la midlane, Riot qui ne hotfix pas dans l\'heure. Sa rage a une taxonomie précise et une durée de vie courte.',q:'"JE DEVIENNE FOU" suivi de "PERSONNE" — deux messages, 13 secondes, pas d\'explication.',d:'4 mai 2021'},
+    skill:{t:'B',j:'Procureur de midlane avec compréhension réelle. Raisonnement juridique appliqué à la soloQ : "18 morts en 24 minutes = clair intention de nuire = reprot + tban".',q:'"Néanmoins 18 morts en 24 minute = clair intention de nuire à l\'équipe = reprot + tban"',d:'25 fév. 2021'},
+    content:{t:'A',j:'Paralysie du sommeil LoL. "Loze is loze". "Misérable/20". "FBVYUZECSNH£µ" (son clavier a plié avant lui). "nous sommes paix et amour / no flame / les mages sont borken" — durée 58 secondes.',q:'"Cette nuit j\'ai fais une paralysie du sommeil j\'ai vu le Vlad de mpb et le azir de Gk"',d:'9 fév. 2025'},
+    toxicity:{t:'B',j:'"je suis nul ma mere aurait du avorter" (auto-qualificatif avant les autres). Le clavier qui plie. La notation "Misérable/20" inventée pour qualifier ses coéquipiers.',q:'"je suis nul ma mere aurait du avorter"',d:'3 mai 2021'},
+    original:{t:'S #3',j:'"Loze is loze" (stoïcisme brut). "Misérable/20" (notation inventée). Paralysie du sommeil LoL. "JE DEVIENNE FOU" + "PERSONNE" en 13 secondes. Paix et amour → borken en 58 secondes. Chaque message potentiellement culte.',q:'"nous sommes paix et amour / no flame / les mages sont borken et viktor est astro borken"',d:'23-24 janv. 2025'},
+    entertain:{t:'B',j:'5 ans de présence. "Loze is loze" est maintenant dans le lexique du canal. La paralysie du sommeil est une citation qui dure. L\'imprévisibilité totale crée des moments mémorables.',q:'"Loze is loze"',d:'29 oct. 2025'},
+    lucidity:{t:'C',j:'Attribue les torts avec précision juridique sur les autres. Moins sur lui-même. "18 morts = intention de nuire" — raisonnement externe. Mais "je suis nul ma mere aurait du avorter" montre une autocritique existentielle brève.',q:'"Néanmoins 18 morts en 24 minute = clair intention de nuire"',d:'2021'},
+    psych:{t:'A',j:'LoL a infiltré ses rêves (paralysie du sommeil). "PTN RIOT GO NERF LA MIDLANE LA TOPLANE ET LA BOTLANE" — nerf l\'intégralité du jeu. 58 secondes de paix et amour.',q:'"Cette nuit j\'ai fais une paralysie du sommeil j\'ai vu le Vlad de mpb et le azir de Gk"',d:'9 fév. 2025'},
+    overall:{t:'#10 — 68/100',j:'10e grâce aux citations mémorables (Loze is loze, Misérable/20) et à l\'originalité S-tier. Sa rage A et son skill B sont solides. Sous-estimé par le volume plus faible.',q:'"Loze is loze"',d:'29 oct. 2025'}},
+  depardieu:{av:'🎮',bg:'linear-gradient(135deg,#533483,#4a90d9)',
+    rage:{t:'B',j:'6.7 ans. Rage encadrée dans un raisonnement pseudo-rigoureux. 261 messages en une journée. Les CAPS arrivent seulement pour l\'urgence absolue. "TOP ROLE TOP ROLE..." ×12 spam à des semaines d\'écart.',q:'"TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE..." [×3 à des semaines d\'écart]',d:'30 déc. 2021'},
+    skill:{t:'B',j:'Analyse méta-pertinente, compréhension théoriecraft, suivi de la scène pro. Blâme Riot 82%, blâme les équipiers 75%, self-awareness 45%. Le ratio est honnête.',q:'"j\'ai jamais win une game où je me suis cassé, c\'est la démonstration de ma capacité d\'analyse"',d:'10 déc. 2020'},
+    content:{t:'B',j:'Pazification, merguez, hostage, délu — un vocabulaire unique qui a potentiellement contaminé d\'autres membres. L\'étudiant en droit qui cite des TD à 1h39 du matin est un archétype.',q:'"en fait je me mets tjrs en situation sur le fil du rasoir par exemple je sèche mes premiers td comme ça je n\'ai plus de joker et je suis full focus"',d:'06 déc. 2020 — 01h39'},
+    toxicity:{t:'C',j:'Rage académique contrôlée. Les insultes existent mais dans un cadre argumentatif. "low elo ape", "délu", "hostage" — insultes avec système théorique.',q:'"les islamo gauchistes peuvent peut être me dire pk maokai 1v9 machine du haut de ses deux items break complètement le jeu"',d:'1er août 2024'},
+    original:{t:'B',j:'Pazification, merguez, hostage sont des néologismes distinctifs. L\'étudiant en droit qui manage son absentéisme par la soloQ est un archétype unique dans le canal.',q:'"paz sur toi néanmoins"',d:'2020-2026'},
+    entertain:{t:'B',j:'6.7 ans continus. Néologismes potentiellement adoptés par le canal. Présence tutélaire et volcanique. La rage académique est son identité stable.',q:'"en dépit de ent"',d:'2020-2026'},
+    lucidity:{t:'A',j:'Self-awareness à 45%. Analyse post-défaite à 97% mais félicite ses mates à 12%. Lucidité suffisante pour mesurer son biais, pas pour le corriger.',q:'"j\'ai jamais win une game où je me suis cassé, c\'est la démonstration de ma capacité d\'analyse"',d:'10 déc. 2020'},
+    psych:{t:'B',j:'261 messages en une journée. La fusion études de droit / soloQ / TD séchés est un équilibre fragile. Rage stratosphérique selon son propre profil.',q:'"en fait je me mets tjrs en situation sur le fil du rasoir"',d:'06 déc. 2020'},
+    overall:{t:'#11 — 65/100',j:'11e — 7.7 ans d\'activité continue est sa force principale. La rage académique et les néologismes custom (pazification, merguez, hostage) créent un univers propre.',q:'"paz sur toi néanmoins"',d:'2020-2026'}},
+  egide:{av:'⚡',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'B',j:'75/100. "Rage Calibrée avec Lucidité". Il insulte avec des arguments. Il connaît votre WR, votre mauvais pathing ET votre mauvaise itemization avant de vous faire la morale.',q:'"Ton positionnement est a CHIER, littéralement. Tu te fait engage de nul part [...] Ta macrogame bordel ?"',d:'1er avr. 2025'},
+    skill:{t:'B',j:'Gold–Platine solide avec compréhension réelle (freeze, macro, powerspikes). Recommande Kai\'Sa comme champion de climb universel. "Conseiller Ransberg officiel" — les credentials existent.',q:'"si tu veux monter pq tu spam juste pas kaisa ?"',d:'29 août 2021'},
+    content:{t:'C',j:'La promesse de tattoo "ransberg sur ma fesse droite" est mémorable. "Macron était challenger 2000 lp" — instant classique. Mais l\'essentiel est du conseil ELO plus que du contenu entertaining.',q:'"Si tu arrives d4 en full solo queue je me tatoue ransberg sur ma fesse droite"',d:'5 juil. 2021'},
+    toxicity:{t:'S #2',j:'"Suicidez vous tous sans exception" (2021). "J\'leur ai dit qu\'ils n\'étaient pas un bénéfice pour la planète et qu\'ils feraient mieux de se suicider assez vite" (2024). Particularité : il argumente sa haine avec des paragraphes structurés.',q:'"J\'leur ai dit qu\'ils n\'étaient pas un bénéfice pour la planète et qu\'ils feraient mieux de se suicider assez vite si c\'est pour continuer de jouer d\'une pareille maniere"',d:'30 sept. 2024'},
+    original:{t:'D',j:'La :chancla: comme unité de mesure de l\'état mental est mignonne mais limitée. Pas de système aussi élaboré que aaaurelien ou shinya. Sa rage est calibrée, pas créative.',q:'"suicidez vous tous sans exception"',d:'26 oct. 2021'},
+    entertain:{t:'B',j:'La promesse de tattoo, les conseils non sollicités à Ransberg, les "suicidez-vous" argumentés créent des moments mémorables réguliers sur 6 ans.',q:'"Si tu arrives d4 en full solo queue je me tatoue ransberg sur ma fesse droite"',d:'5 juil. 2021'},
+    lucidity:{t:'B',j:'Très lucide sur les autres (connaît leurs stats avant de les conseiller). Moins sur lui-même — le conseiller non-sollicité permanent est une forme de déni de ses propres limites.',q:'"je suis pas ta conseillere en elo mais si tu veux monter pq tu spam juste pas kaisa ?"',d:'29 août 2021'},
+    psych:{t:'A',j:'"Suicidez vous tous sans exception". Instructions de suicide argumentées en 2024. La promesse de tattoo comme engagement irrationnel. La rage calibrée ne l\'empêche pas de franchir des lignes.',q:'"suicidez vous tous sans exception"',d:'26 oct. 2021'},
+    overall:{t:'#12 — 63/100',j:'12e — le Sage de la Flamme avec 5 899 messages sur 6 ans. Rage calibrée analytique mais moins de volume que les top membres. La toxicité S-tier et le contenu C-tier se compensent.',q:'"Si tu arrives d4 en full solo queue je me tatoue ransberg sur ma fesse droite"',d:'5 juil. 2021'}},
+  goxydou:{av:'♟',bg:'linear-gradient(135deg,#0f3460,#e94560)',
+    rage:{t:'B',j:'72/100. Rageur analytique confirmé. 288 messages en pic journalier. Rage principalement à l\'heure du déjeuner (11h-15h = 35% de l\'activité totale). "Broken" = tout ce qui le tue, systématiquement.',q:'"C\'est dingue. Plus je joue à LoL. Plus je suis nul."',d:'25 août 2021'},
+    skill:{t:'A',j:'Ex-Master. "Toujours pas été gap par un top laner en dessous de 300 LP mais toujours impossible de chain win et de monter master" — conscience aiguë du plafond.',q:'"Toujours pas été gap par un top laner en dessous de 300 LP mais toujours impossible de chain win"',d:'28 juil. 2021'},
+    content:{t:'B',j:'"No troll et je vais parler 100% sérieux" avant chaque thèse impopulaire. Les 15 messages d\'analyse après une game. La demande de sucer Yoneir pour qu\'un ami arrête LoL.',q:'"quand t\'as ton nouveau PC je t\'en conjure je demande à Yoneir de te sucer s\'il le faut et je peux même m\'y mettre mais joue à Cyberpunk 2077"',d:'5 sept. 2024'},
+    toxicity:{t:'C',j:'"Sanction verbale" — gronde les mauvais comportements sans descendre dans les diagnostics cliniques. "C\'est vraiment une putain de honte ce niveau de jeu négatif" reste dans les clous.',q:'"C\'est vraiment une putain de honte ce niveau de jeu négatif"',d:'2 nov. 2021'},
+    original:{t:'C',j:'"pck" (91×) comme abréviation centrale universelle. "ez" (135×) comme cri de victoire universel. "fr / no troll" comme marqueurs de sincérité. Style personnel mais pas révolutionnaire.',q:'"No troll et je vais parler 100% sérieux"',d:'2 oct. 2024'},
+    entertain:{t:'C',j:'4 ans de présence dense. L\'analyse du midi est son format signature. Régulier sans être imprévisible — son style est trop consistant pour surprendre.',q:'"C\'est dingue. Plus je joue à LoL. Plus je suis nul."',d:'25 août 2021'},
+    lucidity:{t:'A',j:'"C\'est dingue. Plus je joue à LoL. Plus je suis nul." — moment de conscience brève rapidement oublié. Mais il a conscience de son plafond (Master jamais atteint malgré le skill lane).',q:'"C\'est dingue. Plus je joue à LoL. Plus je suis nul."',d:'25 août 2021'},
+    psych:{t:'B',j:'Demande un compte pour run down (sept. 2021). La crise existentielle de 288 messages en un jour. L\'intensité des sessions midi suggère une dépendance structurée.',q:'"Je vais avoir besoin de run down soon. quelqu\'un peut me donner un compte pour run down svp. je vais pas tenir là."',d:'11 sept. 2021'},
+    overall:{t:'#13 — 61/100',j:'13e — Ex-Master et 4 ans de présence dense. Sa rage analytique est de qualité mais manque de moments mémorables uniques pour monter plus haut.',q:'"C\'est dingue. Plus je joue à LoL. Plus je suis nul."',d:'25 août 2021'}},
+  merko:{av:'🐱',bg:'linear-gradient(135deg,#533483,#00b4d8)',
+    rage:{t:'C',j:'Intensité 72%. La rage ne se contente pas d\'exister : elle doit se légitimer statistiquement. Il convoque des winrates avant d\'insulter. "Juste je suis un putain de sac a merde" — rare moment d\'introspection.',q:'"Juste je suis un putain de sac a merde"',d:'5 sept. 2024'},
+    skill:{t:'B',j:'Émeraude aspirant Master. Analyse stats 91%. Rappelle les chiffres exacts à tout moment. La compréhension théorique dépasse le rang atteint.',q:'"Rappel que orianna a moins de ratio AP sur tous ses sorts + ult qu\'un auto + double q de rengar"',d:'7 oct. 2023'},
+    content:{t:'C',j:'Avocat des stats. Debunk compulsif. Humour absurde 78%. "Gk c Hitler prime a vouloir 14j parce que t\'as pick un truc off méta" — formule mémorable isolée.',q:'"Gk c Hitler prime a vouloir 14j parce que t\'as pick un truc off méta"',d:'7 août 2024'},
+    toxicity:{t:'C',j:'Condescendance analytique bienveillante. "bientôt 1M pts sur Draven mais séjourne en platine" — l\'insulte passe par les statistiques, jamais par les insultes directes.',q:'"ils ont tous le putain de main character syndrome"',d:'24 mai 2023'},
+    original:{t:'C',j:'"Debunk" comme mode relationnel principal (43×). "premier degré" comme marqueur de sincérité (19×). "astrobroken" (4×). Style reconnaissable mais pas révolutionnaire.',q:'"Moi je pense premier degré que les junglers ne devraient pas avoir le droit de gank ducoup"',d:'11 oct. 2023'},
+    entertain:{t:'C',j:'Sparring stats régulier. Relation Manigoldo-debunk est une source de contenu répétable. Mais le format analytique limite les moments d\'imprévisibilité.',q:'"bientôt 1M pts sur Draven mais séjourne en platine"',d:'2025'},
+    lucidity:{t:'S #3',j:'Auto-critique 8% — les chiffres ne mentent que sur les autres. Mais "Juste je suis un putain de sac a merde" est sincère. La lucidité objective prime sur l\'ego.',q:'"Juste je suis un putain de sac a merde"',d:'5 sept. 2024'},
+    psych:{t:'C',j:'Stats > feelings. La rage est rationalisée statistiquement, ce qui est paradoxalement plus sain que les autres membres. Stable dans l\'ensemble.',q:'"Juste je suis un putain de sac a merde"',d:'2024'},
+    overall:{t:'#14 — 59/100',j:'14e — Avocat stats et debunk compulsif. Son humour absurde 78% et sa lucidité S-tier sont ses forces. Le volume modéré et l\'originalité C le maintiennent dans le bas du classement.',q:'"Gk c Hitler prime a vouloir 14j parce que t\'as pick un truc off méta"',d:'7 août 2024'}},
+  udf:{av:'🃏',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'C',j:'7/10 structurel. Rageur analytique : la rage passe par le constat et la théorie avant le mot d\'insulte. "5 soloq et déjà envie de me ENT" — temps record pour atteindre le seuil critique.',q:'"5 soloq et déjà envie de me ENT"',d:'27 juin 2023'},
+    skill:{t:'C',j:'OTP Shaco support. "Mon prime c shaco boite à prout en acad" — auto-description avec fierté inexplicable. "Jsuis la prostituée des jcs" — bilan carrière lucide.',q:'"Mon prime c shaco boite à prout en acad"',d:'9 fév. 2026'},
+    content:{t:'C',j:'"Jsuis la prostituée des jcs" (2024). "Mais Clairement si shaco support n\'est plus jouable je stop complétement" — ultimatum à Riot toujours pas appliqué. Contenu honnête et attachant.',q:'"Jsuis la prostituée des jcs"',d:'18 oct. 2024'},
+    toxicity:{t:'F',j:'Ironie douce, pas de flamme directe. "c trop marrant shaco supp" comme posture par défaut. Anti-patron : préfère rire de la situation plutôt qu\'insulter les responsables.',q:'"c trop marrant shaco supp"',d:'2023'},
+    original:{t:'D',j:'"le meilleur top gagne toujours" (14+ fois) comme mantra de stabilisation. "soloq 80% mental 20% skill" comme axiome fondateur. Cohérent mais pas révolutionnaire.',q:'"soloq 80% mental 20% skill"',d:'20 juin 2023'},
+    entertain:{t:'D',j:'Régulier sans pics. 7 093 messages depuis 2023. Le style Shaco-analyste est plaisant mais prévisible. Pas de moment mémorable qui transcende le contexte.',q:'"Jsuis la prostituée des jcs"',d:'2024'},
+    lucidity:{t:'C',j:'"soloq 80% mental 20% skill" — axiome qui s\'applique à lui-même en premier. Conscient de ses limites. Mais l\'ultimatum Shaco non-appliqué montre les limites de cette lucidité.',q:'"soloq 80% mental 20% skill"',d:'2023'},
+    psych:{t:'C',j:'"5 soloq et déjà envie de me ENT" — temps record. Le mantra "le meilleur top gagne toujours" comme mécanisme de stabilisation psychologique. Fonctionnel.',q:'"5 soloq et déjà envie de me ENT"',d:'27 juin 2023'},
+    overall:{t:'#15 — 55/100',j:'15e — OTP Shaco et prostituée des JCS. Attachant et honnête. Sa régularité depuis 2023 et son style ironic-analytique lui valent une place stable dans le milieu de tableau.',q:'"Jsuis la prostituée des jcs"',d:'18 oct. 2024'}},
+  ikaspyrof:{av:'🌙',bg:'linear-gradient(135deg,#533483,#e94560)',
+    rage:{t:'C',j:'7/10. Le sage qui bouillonne : se présente comme posé, condescendant envers ceux qui "ragent pour un jeu vidéo" — puis lâche "eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh" quelques semaines plus tard.',q:'"eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh ujoazer ahoujgr hzbpjuarbhpjgrbhjpeagrbhpijgbhpiraezh"',d:'15 août 2021'},
+    skill:{t:'A',j:'Gravite autour de Master sur la période 2021-2026. "1 GAME DU MASTER" (2024). Top 23 monde Diana en tank — le titre encore plus savoureux. Maîtrise réelle malgré l\'oscillation.',q:'"Yes top 23 world Diana en ayant joué tank xd"',d:'6 janv. 2022'},
+    content:{t:'C',j:'Le bruit blanc de 2021 est cultiste. "Ce week je suis master" (114 messages en une journée). Contenu plus mémorable sur ses pics que sur sa moyenne.',q:'"eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh..."',d:'15 août 2021'},
+    toxicity:{t:'F',j:'Toxicité in-game 4/10. Distribue les compliments aussi facilement que les diagnostics post-game. "tqt" et "bg" dominent. La contradiction sage/explosion est au cœur de son profil.',q:'"sauf que c\'est toi qui rage pour un jeux vidéo"',d:'22 sept. 2021'},
+    original:{t:'A',j:'Le bruit blanc de 2021 (consonnes aléatoires pour exprimer ce qu\'aucun mot ne peut contenir). La contradiction sage-qui-explose est son originalité centrale.',q:'"eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh..."',d:'15 août 2021'},
+    entertain:{t:'D',j:'Sympa et fédérateur mais discret. 4 123 messages sur 5 ans = volume modéré. Les pics (114 msgs/jour) sont rares et liés aux fins de saison.',q:'"Ce week je suis master"',d:'6 sept. 2024'},
+    lucidity:{t:'A',j:'"Chui master je fais du +20 -29" — lucidité douloureuse sur le LP différentiel. "Je suis trop nul en ce moment" sincère. Conscient du système sans se blâmer excessivement.',q:'"Chui master je fais du +20 -29"',d:'11 sept. 2023'},
+    psych:{t:'C',j:'Le bruit blanc est un symptôme rare. La contradiction sage/explosion est gérée. Dans l\'ensemble stable et fédérateur. Pas de pattern pathologique documenté.',q:'"eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh..."',d:'15 août 2021'},
+    overall:{t:'#16 — 53/100',j:'16e — Sage qui bouillonne. Master oscillant. Fédérateur discret. Son originalité (bruit blanc) et sa lucidité A-tier sont ses forces. Volume modéré et impact limité le maintiennent bas.',q:'"eargjobkêrizhpjgbihbpgeaziubheagvrbyiuhpbhuogezabh..."',d:'15 août 2021'}},
+  dorian:{av:'🏆',bg:'linear-gradient(135deg,#533483,#00d4ff)',
+    rage:{t:'D',j:'Sa rage existe mais est sobre. "Mon adc vient de lock sivir dans alistar" — trois mots, le silence de quelqu\'un qui a tout vu. Record absolu : 400+ AAAAAAAAAAAAA en mars 2023. Une fois en 7 ans.',q:'"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]AAAAAAAAHHHHHHHHHHH[...]HHHHHHH" — 400+ caractères',d:'23 mars 2023'},
+    skill:{t:'S #1',j:'Master 500LP. Top 1650 en S7. Analyse en macro, wave management, path, trades, stack passifs. Compile ses 20 dernières games pour trouver des patterns. Meilleur joueur documenté du canal.',q:'"Monter master 500 lp me rendre compte que ça change rien que +80% des games sont full pain"',d:'Mars 2025'},
+    content:{t:'D',j:'Analyses justes et citations techniques précises. Mais pas de lore, pas d\'éclats mémorables, pas de copypastas réutilisables. Sobre à l\'excès pour un canal de défouloir.',q:'"Par contre le grab clutch que j\'ai mis sur nemay quand il jouait kalista là on le met pas hein"',d:'4 sept. 2021'},
+    toxicity:{t:'F',j:'Le cri de 400+ A est sa seule transgression documentée. Pour le reste : constats froids, pas d\'insultes personnelles, pas de diagnostics. Il flame sur Discord plutôt qu\'en jeu — une soupape saine.',q:'"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA..." — une fois en 7 ans',d:'2023'},
+    original:{t:'D',j:'Style cohérent et sobre. Rafales courtes, understatement, absurde décalé. Pas d\'inventivité particulière dans la forme — la rage classique du joueur compétitif lucide.',q:'"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA..."',d:'2023'},
+    entertain:{t:'D',j:'Paradoxe : meilleur skill, moins d\'entertainment. Ses célébrations sont un "nice". La sobriété n\'alimente pas les archives. Pour monter : être moins bon serait plus entertaining.',q:'"de rien pour les services"',d:'2021'},
+    lucidity:{t:'S #1',j:'Compile ses 20 dernières games pour trouver des patterns. Analyse macro et micro avec la même rigueur. Sa lucidité génère sa rage — il voit ce qui ne va pas et ne peut rien faire.',q:'"J\'ai check mes 20 dernieres games, celles que je win mon top est bien ou ne int pas au moins"',d:'3 mai 2021'},
+    psych:{t:'F',j:'La lucidité protège. Voit les problèmes, les exprime, passe à autre chose. Pas de patterns pathologiques documentés. Le membre le plus équilibré du canal après SHAars.',q:'[analyse froide et passage à autre chose]',d:'2019-2026'},
+    overall:{t:'#17 — 51/100',j:'Paradoxe total : meilleur skill du canal, 17e au classement entertainment. La tier list mesure l\'impact sur le canal, pas le skill LoL. Dorian joue un autre jeu que les autres membres.',q:'"Monter master 500 lp me rendre compte que ça change rien que +80% des games sont full pain"',d:'Mars 2025'}},
+  shaars:{av:'🎓',bg:'linear-gradient(135deg,#0f3460,#533483)',
+    rage:{t:'D',j:'Rage uniquement via ironie chirurgicale froide. Sa technique : noter publiquement et précisément les manquements rhétoriques sans insulter. "Gk 839383 de mots toujours 0 source" est son insulte maximale.',q:'"Gk 839383 de mots toujours 0 source pour appuyer son propos"',d:'Juil. 2024'},
+    skill:{t:'D',j:'OTP Rammus avec Excel de calculs sur les builds. A atteint le Chall une fois, reconstruit comme performance ancienne et isolée. Connaissance théorique méta-approfondie. Spécialiste de niche assumé.',q:'"Je joue rammus et je gagne toute mes games en étant en 0/10 carry par ma team."',d:'7 nov. 2022'},
+    content:{t:'D',j:'Contenu de qualité mais pas mémorable pour un canal de rage. Pas de copypastas, pas de citations épiques. Des arguments. Respectable mais peu archivable.',q:'"J\'ai passé deux semaines à débattre avec quelqu\'un qui n\'a cité aucune source de tout les débats."',d:'30 juil. 2024'},
+    toxicity:{t:'F',j:'Seul membre avec toxicité F-tier (la meilleure note). Jamais de CAPS non structurés. Jamais de diagnostic clinique non sollicité. Modérateur de fait sans mandat officiel.',q:'"Gk 839383 de mots toujours 0 source pour appuyer son propos"',d:'Juil. 2024'},
+    original:{t:'D',j:'Sa forme d\'originalité est le refus de l\'originalité — il fait le contraire de tous les autres membres. Originalité par négation. "Le syllogisme LoL" en canal de gaming.',q:'"ton syllogisme de bas étage ça fonctionne pas"',d:'2022'},
+    entertain:{t:'C',j:'19 876 messages dont 11 255 sur politique. Il anime le débat plutôt qu\'il ne produit du spectacle. Son ironie est trop subtile pour les archives d\'un canal de rage.',q:'"Je joue rammus et je gagne toute mes games en étant en 0/10 carry par ma team."',d:'7 nov. 2022'},
+    lucidity:{t:'B',j:'Concède quand il manque de sources. Reconnaît ses limites épistémiques. Applique ses standards épistémologiques à lui-même. La lucidité la plus systématique du canal.',q:'"( je sais que tu troll et que tu veux essayer de taper dans l\'ego mais tu te rends compte que ça ne m\'affecte pas ? )"',d:'20 fév. 2026'},
+    psych:{t:'F',j:'Stable et sourcé. Gestion de la frustration par l\'argumentation structurée. Pas de patterns pathologiques. Le canal de rage est pour lui un espace de débat, pas un défouloir thérapeutique.',q:'[gestion de frustration par l\'argumentation]',d:'2021-2026'},
+    overall:{t:'#18 — 44/100',j:'Dernier — non par manque de qualité, mais parce que la tier list mesure l\'impact sur un canal de RAGE. SHAars est le moins rageur. C\'est le prix de l\'équilibre dans un univers de chaos.',q:'"Gk 839383 de mots toujours 0 source pour appuyer son propos"',d:'Juil. 2024'}}
+};
+
+const CRIT_NAMES = {
+  rage:'😤 Niveau de Rage',skill:'🎮 Skill Apparent',content:'😂 Qualité du Contenu',
+  toxicity:'☢️ Toxicité',original:'🎭 Originalité',entertain:'🏆 Entertainment',
+  lucidity:'🧠 Lucidité',psych:'🏥 Urgence Psychiatrique',overall:'⭐ Classement Général'
+};
+
+let revealed = false;
+
+function sw(id, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById('v-' + id).classList.add('on');
+  el.classList.add('on');
+}
+
+function reveal() {
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('rbtn').classList.add('done');
+  document.getElementById('rbtn').textContent = '✓ Classement Révélé';
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((c, i) => {
+    setTimeout(() => c.classList.add('show'), i * 40);
+  });
+}
+
+function om(member, crit) {
+  const m = D[member];
+  const c = m[crit];
+  if (!m || !c) return;
+  document.getElementById('m-av').style.background = m.bg;
+  document.getElementById('m-av').textContent = m.av;
+  document.getElementById('m-name').textContent = member;
+  document.getElementById('m-sub').textContent = CRIT_NAMES[crit] + ' · Tier ' + c.t;
+  document.getElementById('m-just').innerHTML = c.j;
+  document.getElementById('m-quote').textContent = c.q;
+  document.getElementById('m-date').textContent = c.d;
+  document.getElementById('overlay').classList.add('on');
+}
+
+function close_m() {
+  document.getElementById('overlay').classList.remove('on');
+}
+
+function closeIfBg(e) {
+  if (e.target === document.getElementById('overlay')) close_m();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close_m(); });
+</script>
+</body>
+</html>
