@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 Tier List Discord — Serveur Politique</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-l: #9b72cf;
+    --red: #e94560;
+    --red-l: #ff6b81;
+    --text: #e0e0f0;
+    --text-dim: #8080a0;
+    --card: #1e2040;
+    --card-border: #2e3060;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ──── HEADER ──── */
+  .header {
+    background: linear-gradient(135deg, #0d0d1f 0%, #1a1a2e 40%, #2a1040 100%);
+    border-bottom: 3px solid var(--red);
+    padding: 28px 32px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(233,69,96,.12) 0%, transparent 60%);
+  }
+  .header-inner { position: relative; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .header h1 { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
+  .header h1 span { color: var(--red); }
+  .header-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+
+  .header-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 700;
+    cursor: pointer; border: none; letter-spacing: .5px; text-transform: uppercase;
+    transition: all .15s; outline: none;
+  }
+  .btn-reset { background: rgba(83,52,131,.4); border: 1px solid var(--purple); color: var(--purple-l); }
+  .btn-reset:hover { background: rgba(83,52,131,.7); }
+  .btn-reveal { background: linear-gradient(135deg, var(--purple), var(--red)); color: #fff; border: none; box-shadow: 0 0 20px rgba(233,69,96,.35); }
+  .btn-reveal:hover { box-shadow: 0 0 32px rgba(233,69,96,.6); transform: scale(1.04); }
+
+  /* ──── TABS ──── */
+  .tabs-wrap { background: var(--bg2); border-bottom: 1px solid var(--card-border); overflow-x: auto; }
+  .tabs { display: flex; max-width: 1200px; margin: 0 auto; padding: 0 24px; gap: 2px; }
+  .tab {
+    padding: 13px 16px; font-size: 12px; font-weight: 600; color: var(--text-dim);
+    cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
+    transition: all .15s; letter-spacing: .3px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--red-l); border-bottom-color: var(--red); }
+
+  /* ──── MAIN ──── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+  /* ──── TIER LIST ──── */
+  .tier-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .tier-row {
+    display: flex; gap: 8px; border-radius: 10px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.06); transition: box-shadow .2s;
+  }
+  .tier-row:hover { box-shadow: 0 0 0 1px rgba(255,255,255,.1); }
+
+  .tier-label {
+    width: 58px; min-width: 58px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 900;
+    font-size: 22px; letter-spacing: -1px; padding: 12px 6px;
+    user-select: none;
+  }
+  .tier-label .tier-name { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: .7; margin-top: 2px; }
+
+  .tier-S .tier-label { background: #2a1f00; color: var(--gold); }
+  .tier-A .tier-label { background: #1a2a10; color: #7fff50; }
+  .tier-B .tier-label { background: #101a2e; color: #5aadff; }
+  .tier-C .tier-label { background: #1a1a1a; color: #aaaaaa; }
+  .tier-D .tier-label { background: #1e1010; color: #aa6644; }
+  .tier-F .tier-label { background: #200808; color: #e94560; }
+
+  .tier-content {
+    flex: 1; background: rgba(255,255,255,.03); padding: 8px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    min-height: 68px;
+  }
+  .tier-content.drag-over {
+    background: rgba(233,69,96,.08);
+    outline: 2px dashed rgba(233,69,96,.5);
+    outline-offset: -2px;
+  }
+
+  /* ──── MEMBER CARDS ──── */
+  .member-card {
+    width: 72px; border-radius: 10px; overflow: hidden; cursor: grab;
+    background: var(--card); border: 1px solid var(--card-border);
+    transition: transform .12s, box-shadow .12s, border-color .12s;
+    position: relative; user-select: none;
+    flex-shrink: 0;
+  }
+  .member-card:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,.5); }
+  .member-card.dragging { opacity: .45; transform: scale(.9); cursor: grabbing; }
+  .member-card.placing { animation: popIn .4s cubic-bezier(.18,1.6,.4,1) forwards; }
+
+  @keyframes popIn {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);  opacity: 1; }
+  }
+
+  .card-avatar {
+    height: 48px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: #fff;
+    position: relative;
+  }
+  .card-pseudo {
+    text-align: center; font-size: 10px; font-weight: 700;
+    padding: 4px 3px 6px; color: var(--text); line-height: 1.2;
+    background: rgba(0,0,0,.3);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .card-badges {
+    display: flex; justify-content: center; gap: 2px; flex-wrap: wrap;
+    padding: 0 3px 5px; min-height: 18px;
+  }
+  .card-badge {
+    font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .2px; white-space: nowrap;
+    overflow: hidden; max-width: 65px; text-overflow: ellipsis;
+  }
+
+  /* ──── POOL ──── */
+  .pool-section { margin-top: 24px; }
+  .pool-title { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .pool {
+    background: rgba(255,255,255,.03); border: 1px dashed rgba(255,255,255,.12);
+    border-radius: 10px; padding: 12px; display: flex; flex-wrap: wrap; gap: 8px;
+    min-height: 68px;
+  }
+  .pool.drag-over {
+    background: rgba(83,52,131,.08);
+    border-color: rgba(83,52,131,.5);
+  }
+
+  /* ──── TOOLTIP ──── */
+  .tooltip-box {
+    position: fixed; background: #0d0d1f; border: 1px solid var(--purple);
+    border-radius: 10px; padding: 12px 14px; max-width: 260px; font-size: 12px;
+    line-height: 1.55; pointer-events: none; z-index: 9999;
+    box-shadow: 0 8px 24px rgba(0,0,0,.7); color: var(--text);
+    opacity: 0; transition: opacity .15s;
+  }
+  .tooltip-box.visible { opacity: 1; }
+  .tooltip-pseudo { font-weight: 800; color: var(--red-l); margin-bottom: 6px; font-size: 13px; }
+  .tooltip-tier { font-size: 10px; color: var(--purple-l); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .tooltip-text { color: #bbb; }
+
+  /* ──── PODIUM (global tab) ──── */
+  .podium { display: flex; justify-content: center; align-items: flex-end; gap: 16px; margin: 32px 0; }
+  .podium-slot { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .podium-block {
+    width: 120px; border-radius: 8px 8px 0 0; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 900; color: rgba(255,255,255,.4);
+  }
+  .podium-1 .podium-block { height: 110px; background: linear-gradient(to top, #3a2800, #5a3c00); border: 2px solid var(--gold); color: var(--gold); }
+  .podium-2 .podium-block { height: 80px; background: linear-gradient(to top, #1e1e1e, #2e2e2e); border: 2px solid var(--silver); color: var(--silver); }
+  .podium-3 .podium-block { height: 60px; background: linear-gradient(to top, #2a1500, #3a2000); border: 2px solid var(--bronze); color: var(--bronze); }
+
+  .podium-name { font-size: 13px; font-weight: 800; margin-top: 10px; }
+  .podium-score { font-size: 11px; color: var(--text-dim); }
+
+  .ranking-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  .ranking-table th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px; border-bottom: 1px solid var(--card-border); }
+  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; }
+  .ranking-table tr:hover td { background: rgba(255,255,255,.03); }
+  .rank-num { font-weight: 900; width: 36px; }
+  .rank-bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--purple), var(--red)); }
+
+  .score-pill {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-weight: 800; font-size: 12px;
+  }
+
+  /* ──── ANIMATIONS reveal ──── */
+  @keyframes flyIn {
+    from { transform: scale(0) rotate(720deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+  }
+  .fly-in { animation: flyIn .5s cubic-bezier(.18,1.6,.4,1) forwards; }
+
+  /* ──── RESPONSIVE ──── */
+  @media (max-width: 600px) {
+    .member-card { width: 62px; }
+    .tier-label { width: 46px; min-width: 46px; font-size: 18px; }
+    .tabs { padding: 0 8px; }
+    .tab { padding: 10px 10px; font-size: 11px; }
+  }
+
+  /* ──── FLASH / CONFETTI ──── */
+  .flash { animation: flash .3s ease; }
+  @keyframes flash { 0%,100% { filter: none; } 50% { filter: brightness(2); } }
+
+  .star { position: fixed; font-size: 20px; pointer-events: none; z-index: 9998; animation: starFall 1.5s ease-in forwards; }
+  @keyframes starFall { from { opacity: 1; transform: translateY(0) rotate(0); } to { opacity: 0; transform: translateY(300px) rotate(720deg); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>🏆 Tier List <span>Discord Politique</span></h1>
+      <div class="header-sub">Serveur privé francophone · 16 membres · Déc. 2021 – Mars 2026 · Drag &amp; drop pour réorganiser</div>
+    </div>
+    <div class="header-btns">
+      <button class="btn btn-reset" onclick="resetTierList()">🔄 Reset</button>
+      <button class="btn btn-reveal" onclick="revealAll()">🎬 Révéler le classement officiel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <div class="tab active" onclick="switchCrit(0)">🧠 Arguments</div>
+    <div class="tab" onclick="switchCrit(1)">🎣 Ragebait</div>
+    <div class="tab" onclick="switchCrit(2)">😂 Humour</div>
+    <div class="tab" onclick="switchCrit(3)">👑 Influence</div>
+    <div class="tab" onclick="switchCrit(4)">🎯 Cohérence</div>
+    <div class="tab" onclick="switchCrit(5)">☢️ Toxicité</div>
+    <div class="tab" onclick="switchCrit(6)">💡 Originalité</div>
+    <div class="tab" onclick="switchCrit(7)">🏆 Utilité</div>
+    <div class="tab" onclick="switchCrit(8)" style="color:#ffd700;font-weight:800;">★ Classement Global</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content">
+  <!-- dynamically rendered -->
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip-box" id="tooltip">
+  <div class="tooltip-pseudo" id="tt-pseudo"></div>
+  <div class="tooltip-tier" id="tt-tier"></div>
+  <div class="tooltip-text" id="tt-text"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+
+const MEMBERS = [
+  {
+    id: 'forandos', pseudo: 'forandos', initials: 'FO', color: '#5b8aff',
+    badges: ['Libéral','Décliniste','Data-driven'],
+    tips: {
+      0: "12 693 msgs, citations OCDE/FMI/Figaro régulières. Raisonne par les chiffres. Concède quand pris en défaut. Erreur rare mais assumée.",
+      1: "Ragebait calibré, jamais grossier. Ironie plausiblement premier degré — on ne sait jamais s'il trolls ou non. C'est l'art.",
+      2: "Humour froid et second degré permanent. One-liners secs qui font mouche. Timing excellent.",
+      3: "Pourvoyeur principal de stats et de cadres analytiques. Fixe souvent l'agenda des sujets économiques.",
+      4: "Trajectoire libérale-décliniste cohérente sur 4 ans. Sans rupture idéologique majeure. Évolution graduelle assumée.",
+      5: "Débat constructif, pas de personal attacks. Ton un peu condescendant mais jamais haineux.",
+      6: "Analogie Rome/USA, fédéralisme suisse, Yarvin/Moldbug — pensée réelle, pas des mèmes réchauffés.",
+      7: "Apporte des données primaires, des angles originaux, structure les débats économiques. Indispensable."
+    }
+  },
+  {
+    id: 'lydd', pseudo: 'RATS | Lyd', initials: 'LY', color: '#a78bfa',
+    badges: ['Marxiste','Capitaliste','Dialecticien'],
+    tips: {
+      0: "19 458 msgs, méta-analyses académiques citées en débat (JEEA, CE, Bourdieu). Demande les définitions avant tout. Rigueur réelle.",
+      1: "Utilise la condescendance et le 'define tes termes' comme arme. Provoque en faisant semblant d'être pédagogue.",
+      2: "Humour binaire marxisme-SCI. 'Je suis un petit bourgeois macroniste' — autodérision calibrée, efficace.",
+      3: "Fort impact dans les débats immigration, économie, droit. Ses tirades font office de référence dans le groupe.",
+      4: "Tension interne marxisme/rentier assumée et nommée. Cohérent dans l'analyse, contradictoire dans la pratique — il le sait.",
+      5: "Condescendance assumée mais rarement toxique. 'Walklah' et insultes rares, calibrées.",
+      6: "Vraiment peu commun : utilise Marx ET l'immobilier comme grilles d'analyse simultanées. La tension est sa marque.",
+      7: "Indispensable sur les sujets juridiques et politiques. Ses sources élèvent le niveau général."
+    }
+  },
+  {
+    id: 'shaars', pseudo: 'RATS | SHAars', initials: 'SH', color: '#3a9fff',
+    badges: ['Gaulliste','Sourceur','Officier'],
+    tips: {
+      0: "11 255 msgs, demande des sources 95% du temps. Cour de cassation, INSEE, Wikipedia systématique. Concède quand c'est factuel.",
+      1: "Mauvaise foi détectée immédiatement. Sophisme nommé systématiquement. Peut irriter mais le ragebait n'est pas son truc.",
+      2: "Humour involontaire dans ses contradictions (anticapitaliste + 135k en bourse). Chancla GIF comme running gag.",
+      3: "Très influent en 2024 (4086 msgs). Cadre les débats sur l'armée, le mérite, la fraude fiscale.",
+      4: "Paradoxes vécus (gaulliste-rotarien, public-bourse) jamais résolus mais nommés. Honnêteté sur ses propres contradictions.",
+      5: "Classifie les gens ('teubé', 'sophiste') mais sans attaques basses. Condescendant, pas haineux.",
+      6: "Gaullisme de gauche anticapitaliste — position rare et cohérente. Cum-cum, IKEA : angles peu traités ailleurs.",
+      7: "Tient un rôle d'encyclopédiste sourceur. Indispensable pour la rigueur factuelle du groupe."
+    }
+  },
+  {
+    id: 'kaspei', pseudo: 'Kaspei', initials: 'KA', color: '#e94560',
+    badges: ['Libéral','Pédagogue','Troll calibré'],
+    tips: {
+      0: "3571 msgs. Argumentaire structuré, sources citées, angles fermés un par un. Grande confiance dans sa préparation — justifiée.",
+      1: "Troll calibré assumé. Ping pong avec mpb ritualisé. Sait exactement ce qu'il fait. Jamais de ragebait grossier.",
+      2: "'Ça m'extermine', 'j'ai envie de me jeter par la fenêtre' — frustration exprimée avec humour sec. Très efficace.",
+      3: "Très influent en 2022 (présidentielle). Corrige les amalgames, fixe les cadres libéraux. Référence constitutionnelle.",
+      4: "Libéral économique cohérent sur 5 ans. Prédictions vérifiables (victoire RN 2024 annoncée en 2023). Iron consistency.",
+      5: "Quasi aucune toxicité. Frustration contenue, jamais de personal attacks ni d'insultes.",
+      6: "Nucléaire, constitutionnalisme, fédéralisme : angles précis peu couverts. Lisnard comme modèle — original pour l'époque.",
+      7: "Pédagogue indispensable pour les sujets économiques et institutionnels. Élève le niveau."
+    }
+  },
+  {
+    id: 'sinnoh', pseudo: '.sinnoh', initials: 'SI', color: '#7c6af7',
+    badges: ['Monarchiste','Catholique','Libéral classique'],
+    tips: {
+      0: "6911 msgs. Nietzsche, Acton, Hoppe cités en débat réel. Démonstrations chiffrées CH/SG/FR. Sources lues, pas vitrine.",
+      1: "Ragebait inexistant. Son arme : la formule qui frappe, pas la provocation vaine.",
+      2: "'Continue les insultes igo.' Timing solide, autodérision, absurde autoréférentiel. Humour de qualité.",
+      3: "Référence sur théologie politique, régionalisme, fiscalité. Ses prises de position structurent certains débats.",
+      4: "Monarchisme divin + libéralisme classique = formule sienne, constante sur 4 ans. Cohérence maximale.",
+      5: "1 insulte rendue sur 4 ans. Calme sous pression. Hauteur maintenue.",
+      6: "Anti-démocratie assumé, monarchiste de droit divin en 2025 — position unique sur le serveur. Penseur indépendant.",
+      7: "Apporte une perspective théologique et libérale classique introuvable ailleurs. Enrichit considérablement."
+    }
+  },
+  {
+    id: 'maw', pseudo: 'Maw Lotov', initials: 'MA', color: '#c084fc',
+    badges: ['Ironiste','Prof EN','Debunker'],
+    tips: {
+      0: "2147 msgs. Lien de debunk immédiat systématique. Pas de grandes tirades mais précision factuelle. Prof = rigueur de fond.",
+      1: "Ironie de 2° degré systématique. Provoque en feignant de valider. Maîtrise fine du ping pong rhétorique.",
+      2: "'Macronlunettes' comme ponctuation — running gag qui dure. 'Feur' comme blague réflexe. Humour léger mais constant.",
+      3: "Construction en miroir gauche/droite = influence forte dans la mise en perspective des débats. Normalise la nuance.",
+      4: "Vote Jadot → blanc → anti-RN. Critique LFI ET RN. Position gauche modérée stable et assumée.",
+      5: "Quasi aucune toxicité. Débat propre, ironie maîtrisée. Un des moins toxiques du serveur.",
+      6: "'Peut-on être de gauche et faire de la musculation ?' — pose les questions que personne n'ose. Originalité de l'angle.",
+      7: "Le debunkeur-balanceur. Apporte la nuance quand les débats partent en extrême. Utilité réelle."
+    }
+  },
+  {
+    id: 'merko', pseudo: 'merk0', initials: 'ME', color: '#2de2e6',
+    badges: ['Anti-libéral','Pamphlétaire','Réformiste'],
+    tips: {
+      0: "2535 msgs. Piketty, keynésianisme, déterminisme social. Ancre ses opinions dans des cadres théoriques. Assertif mais fondé.",
+      1: "'Je chie à la gueule d'Adam Smith' — ragebait assumé mais avec un fond réel. Attaque les positions, parfois les personnes.",
+      2: "Emoji 🙂 post-sarcasme systématique. Formules absolues qui font sourire par leur excès. Efficace.",
+      3: "Influence forte dans les débats économiques et sociaux en 2023. Lance les sujets et attend la contradiction.",
+      4: "Anti-libéral et réformiste institutionnel constants. VIe République, vote blanc — cohérence idéologique réelle.",
+      5: "'Mpb t'es prof, tu bosses 20h semaine...' — attaque ad hominem quand la patience s'épuise. Toxicité occasionnelle.",
+      6: "Position anti-libérale radicale + réformisme institutionnel = rare combinaison. Pas un mouton.",
+      7: "Pamphlets qui animent le débat. Utile pour challenger les libéraux. Absence depuis juin 2025 = vide."
+    }
+  },
+  {
+    id: 'yoob', pseudo: 'yoobastard', initials: 'YO', color: '#f97316',
+    badges: ['Boucher','Empiriste','Pragmatique'],
+    tips: {
+      0: "7929 msgs. Données de terrain (prix Rungis, marchés Paris) plutôt qu'études. Pragmatisme lucide. Pas de sophismes.",
+      1: "Ragebait nul. Il pose une vérité pratique et laisse les autres se débrouiller. Passif-lucide.",
+      2: "<:philippot:> x∞ comme seul GIF. Lassitude connaissante qui fait rire par l'absurde. Ton dominant.",
+      3: "Voix du terrain dans les débats. Son ancrage Belleville + Rungis donne un poids aux observations sociologiques.",
+      4: "Souverainisme pragmatique stable. Anti-LFI constant. Observe sans s'emballer. Trajectoire cohérente.",
+      5: "Pas toxique. Lassitude résignée, jamais haine. Ton le plus calme du serveur.",
+      6: "Boucher à Belleville avec un master biochimie jamais utilisé. Profil unique, regard unique, angle unique.",
+      7: "La voix du réel : prix, quartier, terrain. Contre-balancier indispensable aux théoriciens."
+    }
+  },
+  {
+    id: 'mpb', pseudo: 'monpotestbon', initials: 'MP', color: '#e94560',
+    badges: ['Controverse','Noctambule','Nationaliste'],
+    tips: {
+      0: "17 428 msgs. Longues tirades structurées mais positions qui évoluent beaucoup. Cohérence interne fragile sur le temps long.",
+      1: "Ragebait involontaire souvent, conscient parfois. Cible favorite d'Arok. Sujets polémiques par excellence.",
+      2: "Parodie Cyrano en alexandrins réponse à une accusation d'extrême droite — moment de génie isolé.",
+      3: "Volume massif = présence forte. Mais les positions fluctuent, ce qui dilue l'influence à long terme.",
+      4: "Zemmour → RN → 'conservateur gauche éco' → 'nationaliste' = trajectoire sinueuse. Dit ne jamais avoir voté RN au 1er tour. Tension avec le corpus.",
+      5: "Séances de 378 messages nocturnes. Pas d'insultes directes mais la charge émotionnelle est réelle.",
+      6: "Parodie Cyrano + nationalisme + gauche éco + méritocratie = cocktail peu courant. Originalité réelle.",
+      7: "Volume et engagement constants. Moteur de discussion. Utilité réelle malgré l'inconsistance."
+    }
+  },
+  {
+    id: 'arok', pseudo: '.arok.', initials: 'AR', color: '#9b72cf',
+    badges: ['Libéral','Anti-golem','Banquier'],
+    tips: {
+      0: "4392 msgs. Lexique analytique (méritocratie, libéral, système) mais arguments souvent personnels. Rigueur irrégulière.",
+      1: "Appeler quelqu'un 'golem' est son ragebait signature. Cibler mpb systématiquement = provocation calculée.",
+      2: "Lexique hybride argot internet + analyse. 'Golem originel' pour mpb — complicité conflictuelle amusante.",
+      3: "Influence notable dans les débats politiques 2023. Contredit en citation directe, impactant.",
+      4: "Libéral-conservateur qui critique le grand remplacement tout en le reformulant. Tension non résolue.",
+      5: "Attitude de mépris ('golems') condescendante. Toxicité modérée mais récurrente.",
+      6: "Libéralisme économique + critique de la méritocratie de façade = tension intéressante mais peu développée.",
+      7: "Participation irrégulière, contributions analytiques réelles mais espacées."
+    }
+  },
+  {
+    id: 'zoller', pseudo: 'zoller.lol', initials: 'ZO', color: '#ff7c3a',
+    badges: ['Droite libérale','Pongiste','Futur favorisé'],
+    tips: {
+      0: "12 115 msgs. Sources rares (Le Parisien x4). Arguments souvent d'opinion ou d'expérience perso. Pas rigoureux.",
+      1: "Ragebait massif et assumé : 'attardés', 'gauchiasses', provocation décomplexée. Mais concède après 40 messages.",
+      2: "OSS 117, Ronaldin, ambiguïté 1er/2nd degré entretenue. Humour absurde efficace. Très drôle dans les bons jours.",
+      3: "Influence forte en 2024 (5410 msgs). Oriente les sujets immigration, immobilier, LFI. Volume = présence.",
+      4: "'Globalement à droite, pas pour mes intérêts perso' puis 'futur favorisé' qui parle pour ses intérêts. Tension notable.",
+      5: "'Attardé', 'gauchiasse', 'bouseux' — vocabulaire offensif régulier. Toxicité réelle même assumée.",
+      6: "Ni vraiment original ni totalement mouton. Droite libérale standard avec le ping pong comme quirk personnel.",
+      7: "Volume et débats animés. Utile pour l'ambiance, moins pour la rigueur intellectuelle."
+    }
+  },
+  {
+    id: 'raydo', pseudo: 'Raydo', initials: 'RY', color: '#f5a623',
+    badges: ['Nationaliste','Provoc conscient','Lecteur'],
+    tips: {
+      0: "2116 msgs. Références intellectuelles réelles mais souvent utilisées pour habiller une intuition. Sophismes fréquents.",
+      1: "Ragebait conscient et assumé. CAPSLOCK, rants dramatiques. Se vante d'avoir eu raison à postériori.",
+      2: "'Mon prédateur naturel c'est si j'arrivais en France en 2021...' — humour survivaliste décalé. Hits et misses.",
+      3: "Très influent en 2023 (83% de son activité). Fixe des sujets polarisants. Effet boule de neige fréquent.",
+      4: "Nationaliste-souverainiste catholique stable. Mais les positions extrêmes fragilisent la crédibilité.",
+      5: "'Le macronisme c'est un nazisme à la française' — rhétorique excessive. Toxicité intellectuelle.",
+      6: "Catholicisme pratiquant + nationalisme + prises de 'pilules' + survivalisme = profil réellement unique.",
+      7: "Polarise et dynamise. Provoque les meilleurs débats par exagération. Parti en janvier 2026 = vide."
+    }
+  },
+  {
+    id: 'dorian', pseudo: 'Dorian', initials: 'DO', color: '#60a0e9',
+    badges: ['Observateur','One-liner','Anti-golem'],
+    tips: {
+      0: "1481 msgs. One-liners précis, peu de développements. Économie de mots mais densité d'info réelle. Sources ponctuelles.",
+      1: "Ragebait passif : pose une observation désagréable et laisse les autres s'enflammer. Subtil.",
+      2: "issou, golmon, finito — lexique JVC utilisé avec timing. 'Le pire c'est que finito' = nihilisme comique.",
+      3: "Influence faible (présence intermittente, 1 msg/jour). Mais ses interventions sont souvent marquantes.",
+      4: "Droite populiste pragmatique cohérente. Anti-woke constant. Trajectoire stable.",
+      5: "Ton sec mais non haineux. Nihilisme ambiant mais pas d'attaques directes.",
+      6: "Pharmacie + IT + argot JVC + droite pragmatique = combinaison peu fréquente. Regard de terrain.",
+      7: "Présence intermittente mais les interventions pointues apportent une valeur réelle."
+    }
+  },
+  {
+    id: 'udf', pseudo: 'UDF', initials: 'UD', color: '#7b52b8',
+    badges: ['Centre-droit','Anti-boomer','Provocateur'],
+    tips: {
+      0: "1925 msgs. Raisonnement structuré mais hyperboles fréquentes qui décrédibilisent. Avocat du diable compulsif.",
+      1: "'Haïr les vieux c'est très important' — ragebait assumé comme axiome. Provocation fin en soi parfois.",
+      2: "Dark comedy, hyperboles violentes comme registre comique. South Park energy. Drôle mais clivant.",
+      3: "Influence modérée. Secteur retraites = expertise de terrain, angle rarement couvert.",
+      4: "Centre-droit pragmatique stable. Vote comme pire-des-solutions. Méfiance transpartisane constante.",
+      5: "Hyperboles violentes ('les exterminer tous') — dark comedy ou pas, l'ambiguïté génère de la toxicité.",
+      6: "Expérience directe syndicale + anti-boomer radical = angles peu répandus. Originalité réelle.",
+      7: "Expertise retraites utile. Apport modéré mais spécialisé."
+    }
+  },
+  {
+    id: 'yabaphi', pseudo: 'yabaphi', initials: 'YA', color: '#ff6b6b',
+    badges: ['RN sympa','Complotiste','Justice obsédé'],
+    tips: {
+      0: "4657 msgs. Instinct et ressenti dominants, pas la bibliothèque. Raisonnement contextuel narratif, rarement technique.",
+      1: "Ragebait sporadique et brut — CAPSLOCK, excitation visible. Pas de finesse. Souvent involontaire.",
+      2: "'CETTE GO M'A TUEE / ASSASINNEE' en capslock — humour oral brut. Efficace dans l'instant, fatigant sur la durée.",
+      3: "Influence sur les sujets faits divers, justice, identitaire. Orientations souvent clivantes.",
+      4: "Droite identitaire stable mais 'complotiste lucide' = positions difficiles à tenir dans le temps.",
+      5: "Parenthèses triples sur certains noms, obsession Jack Lang/réseaux pédos — toxicité réelle et documentée.",
+      6: "Complotisme + identitaire + humour absurde oral + Béarn indépendant — profil original mais dangereux.",
+      7: "Apport limité sur la rigueur. Dynamise les sujets faits divers et justice, polarise les débats identitaires."
+    }
+  },
+  {
+    id: 'foudulabo', pseudo: 'le fou du labo', initials: 'FL', color: '#3dffc0',
+    badges: ['Chercheur précaire','Gauche radicale','Absurdiste'],
+    tips: {
+      0: "6272 msgs. Formation scientifique visible : corrélation ≠ causalité même en débat informel. Sources avec biais nommés.",
+      1: "🥸 et :ronaldin: comme guillemets ironiques. Ironie socratique. Ragebait quasi absent — il préfère l'absurde.",
+      2: "Analyse sérieuse → suite de lettres aléatoires dans les minutes suivantes. Tic ritualisé brillant.",
+      3: "Influence forte sur les sujets économie/précarité/recherche. Sa situation personnelle donne de la crédibilité.",
+      4: "Gauche de classe ancrée dans le vécu. 14 mois de données mais position pleinement formée dès l'arrivée.",
+      5: "Presque aucune toxicité. L'absurde remplace la colère. Modèle de bonne foi.",
+      6: "'Extrême giga gauche, j'ai partagé un sandwich l'autre jour.' Ironie comme emballage d'une conviction réelle.",
+      7: "Apporte la voix de la précarité étudiante/chercheure, angle rare. Enrichit massivement en 14 mois."
+    }
+  }
+];
+
+// ─── Tier assignments per criterion (0=Arguments, 1=Ragebait, 2=Humour, 3=Influence, 4=Cohérence, 5=Toxicité, 6=Originalité, 7=Utilité)
+// Tiers: S=5, A=4, B=3, C=2, D=1, F=0
+const DEFAULT_TIERS = {
+  // 0 - Arguments (rigueur, sources, logique)
+  0: {
+    S: ['forandos','lydd','kaspei'],
+    A: ['shaars','sinnoh','foudulabo'],
+    B: ['merko','yoob','maw'],
+    C: ['arok','mpb','udf'],
+    D: ['dorian','raydo','zoller'],
+    F: ['yabaphi']
+  },
+  // 1 - Ragebait (subtil → grossier)
+  1: {
+    S: ['zoller','raydo','yabaphi'],
+    A: ['mpb','arok','merko'],
+    B: ['kaspei','lydd','udf'],
+    C: ['forandos','maw','shaars'],
+    D: ['dorian','sinnoh','yoob'],
+    F: ['foudulabo']
+  },
+  // 2 - Humour
+  2: {
+    S: ['zoller','maw','sinnoh'],
+    A: ['foudulabo','yoob','kaspei'],
+    B: ['lydd','merko','forandos'],
+    C: ['arok','mpb','raydo'],
+    D: ['dorian','udf','shaars'],
+    F: ['yabaphi']
+  },
+  // 3 - Influence
+  3: {
+    S: ['lydd','forandos','kaspei'],
+    A: ['mpb','shaars','zoller'],
+    B: ['raydo','maw','arok'],
+    C: ['merko','sinnoh','foudulabo'],
+    D: ['yoob','dorian','udf'],
+    F: ['yabaphi']
+  },
+  // 4 - Cohérence intellectuelle
+  4: {
+    S: ['sinnoh','kaspei','forandos'],
+    A: ['lydd','yoob','maw'],
+    B: ['shaars','foudulabo','merko'],
+    C: ['arok','dorian','udf'],
+    D: ['zoller','raydo','mpb'],
+    F: ['yabaphi']
+  },
+  // 5 - Toxicité (S = le plus toxique, F = le moins)
+  5: {
+    S: ['yabaphi','raydo','zoller'],
+    A: ['mpb','merko','udf'],
+    B: ['arok','lydd','shaars'],
+    C: ['forandos','kaspei','dorian'],
+    D: ['yoob','maw','sinnoh'],
+    F: ['foudulabo']
+  },
+  // 6 - Originalité
+  6: {
+    S: ['sinnoh','lydd','yoob'],
+    A: ['foudulabo','forandos','raydo'],
+    B: ['kaspei','shaars','maw'],
+    C: ['merko','arok','udf'],
+    D: ['mpb','dorian','zoller'],
+    F: ['yabaphi']
+  },
+  // 7 - Utilité
+  7: {
+    S: ['forandos','lydd','kaspei'],
+    A: ['sinnoh','shaars','foudulabo'],
+    B: ['yoob','maw','merko'],
+    C: ['arok','mpb','zoller'],
+    D: ['dorian','udf','raydo'],
+    F: ['yabaphi']
+  }
+};
+
+// Score mapping for global ranking
+const TIER_SCORES = { S: 6, A: 5, B: 4, C: 3, D: 2, F: 1 };
+// For toxicité (crit 5), invert : S=1, F=6
+const TOX_SCORES = { S: 1, A: 2, B: 3, C: 4, D: 5, F: 6 };
+
+const CRIT_LABELS = [
+  '🧠 Qualité des arguments',
+  '🎣 Niveau de ragebait',
+  '😂 Humour',
+  '👑 Influence',
+  '🎯 Cohérence intellectuelle',
+  '☢️ Toxicité',
+  '💡 Originalité',
+  '🏆 Utilité',
+  '★ Classement global'
+];
+
+const TIER_META = {
+  S: { label: 'S', name: 'Légendaire', bg: 'linear-gradient(135deg,#3a2800,#5a3c00)', color: '#ffd700' },
+  A: { label: 'A', name: 'Excellent', bg: 'linear-gradient(135deg,#1a2a10,#243614)', color: '#7fff50' },
+  B: { label: 'B', name: 'Bon', bg: 'linear-gradient(135deg,#101828,#18263c)', color: '#5aadff' },
+  C: { label: 'C', name: 'Moyen', bg: 'linear-gradient(135deg,#1a1a1a,#282828)', color: '#aaaaaa' },
+  D: { label: 'D', name: 'Faible', bg: 'linear-gradient(135deg,#1e1010,#2c1c1c)', color: '#aa6644' },
+  F: { label: 'F', name: 'Catastrophique', bg: 'linear-gradient(135deg,#200808,#300e0e)', color: '#e94560' }
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentCrit = 0;
+// userTiers[crit][tier] = [id, id, ...]
+let userTiers = {};
+
+function initUserTiers() {
+  for (let c = 0; c < 8; c++) {
+    userTiers[c] = { S:[], A:[], B:[], C:[], D:[], F:[], pool:[] };
+    for (const tier of ['S','A','B','C','D','F']) {
+      userTiers[c][tier] = [...(DEFAULT_TIERS[c][tier] || [])];
+    }
+  }
+}
+initUserTiers();
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function getMember(id) { return MEMBERS.find(m => m.id === id); }
+
+function computeGlobalScores() {
+  const scores = {};
+  MEMBERS.forEach(m => { scores[m.id] = 0; });
+  for (let c = 0; c < 8; c++) {
+    const sc = c === 5 ? TOX_SCORES : TIER_SCORES;
+    for (const [tier, ids] of Object.entries(userTiers[c])) {
+      if (tier === 'pool') continue;
+      const v = sc[tier] || 3;
+      ids.forEach(id => { if (scores[id] !== undefined) scores[id] += v; });
+    }
+  }
+  return scores;
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════════
+let dragId = null;
+let dragCrit = null;
+let dragFrom = null; // tier key
+
+function makeDraggable(el, id, crit, fromKey) {
+  el.draggable = true;
+  el.addEventListener('dragstart', e => {
+    dragId = id; dragCrit = crit; dragFrom = fromKey;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  el.addEventListener('dragend', () => el.classList.remove('dragging'));
+}
+
+function makeDropZone(el, toKey) {
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault();
+    el.classList.remove('drag-over');
+    if (dragId && dragCrit === currentCrit) {
+      // Remove from source
+      const src = userTiers[dragCrit][dragFrom];
+      const idx = src.indexOf(dragId);
+      if (idx > -1) src.splice(idx, 1);
+      // Add to dest
+      if (!userTiers[dragCrit][toKey]) userTiers[dragCrit][toKey] = [];
+      userTiers[dragCrit][toKey].push(dragId);
+      renderCurrent();
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function buildCard(id, crit) {
+  const m = getMember(id);
+  if (!m) return null;
+  const el = document.createElement('div');
+  el.className = 'member-card';
+  el.dataset.id = id;
+  el.style.borderColor = m.color + '60';
+
+  const badges = m.badges.slice(0, 2).map(b =>
+    `<span class="card-badge" style="background:${m.color}22;color:${m.color};border:1px solid ${m.color}44">${b}</span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="card-avatar" style="background:linear-gradient(135deg,${m.color}44,${m.color}22)">
+      <span style="color:${m.color}">${m.initials}</span>
+    </div>
+    <div class="card-pseudo">${m.pseudo}</div>
+    <div class="card-badges">${badges}</div>
+  `;
+
+  // Tooltip
+  el.addEventListener('mouseenter', ev => showTooltip(ev, id, crit));
+  el.addEventListener('mousemove', ev => moveTooltip(ev));
+  el.addEventListener('mouseleave', () => hideTooltip());
+
+  return el;
+}
+
+function renderCurrent() {
+  if (currentCrit === 8) { renderGlobal(); return; }
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+
+  const list = document.createElement('div');
+  list.className = 'tier-list';
+
+  for (const tier of ['S','A','B','C','D','F']) {
+    const row = document.createElement('div');
+    row.className = `tier-row tier-${tier}`;
+
+    const label = document.createElement('div');
+    label.className = 'tier-label';
+    label.innerHTML = `${tier}<div class="tier-name">${TIER_META[tier].name}</div>`;
+    row.appendChild(label);
+
+    const content = document.createElement('div');
+    content.className = 'tier-content';
+    makeDropZone(content, tier);
+
+    (userTiers[currentCrit][tier] || []).forEach(id => {
+      const card = buildCard(id, currentCrit);
+      if (card) {
+        makeDraggable(card, id, currentCrit, tier);
+        content.appendChild(card);
+      }
+    });
+
+    row.appendChild(content);
+    list.appendChild(row);
+  }
+
+  main.appendChild(list);
+
+  // Pool section (unplaced)
+  const poolIds = userTiers[currentCrit].pool || [];
+  // Also collect any unassigned members
+  const allPlaced = new Set(['S','A','B','C','D','F'].flatMap(t => userTiers[currentCrit][t] || []));
+  const unplaced = MEMBERS.map(m=>m.id).filter(id => !allPlaced.has(id));
+  if (unplaced.length > 0 || poolIds.length > 0) {
+    const sec = document.createElement('div');
+    sec.className = 'pool-section';
+    sec.innerHTML = '<div class="pool-title">⬛ Non classés — glissez vers un tier</div>';
+    const pool = document.createElement('div');
+    pool.className = 'pool';
+    makeDropZone(pool, 'pool');
+    [...poolIds, ...unplaced].forEach(id => {
+      const card = buildCard(id, currentCrit);
+      if (card) { makeDraggable(card, id, currentCrit, 'pool'); pool.appendChild(card); }
+    });
+    sec.appendChild(pool);
+    main.appendChild(sec);
+  }
+}
+
+function renderGlobal() {
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+
+  const scores = computeGlobalScores();
+  const sorted = Object.entries(scores).sort((a,b) => b[1]-a[1]);
+  const maxScore = sorted[0][1];
+
+  // Podium
+  const podium = document.createElement('div');
+  podium.className = 'podium';
+
+  const podiumOrder = [1, 0, 2]; // 2nd, 1st, 3rd
+  const heights = ['80px','110px','60px'];
+  const emojis = ['🥈','🥇','🥉'];
+  const cls = ['podium-2','podium-1','podium-3'];
+
+  podiumOrder.forEach((pos, i) => {
+    const [id, score] = sorted[pos];
+    const m = getMember(id);
+    const slot = document.createElement('div');
+    slot.className = `podium-slot ${cls[i]}`;
+    slot.innerHTML = `
+      <div class="podium-block" style="height:${heights[i]};border-color:${m.color}">${emojis[i]}</div>
+      <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,${m.color}44,${m.color}22);border:3px solid ${m.color};display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:${m.color};margin:10px auto 0">${m.initials}</div>
+      <div class="podium-name" style="color:${m.color}">${m.pseudo}</div>
+      <div class="podium-score">${score} pts</div>
+    `;
+    podium.appendChild(slot);
+  });
+  main.appendChild(podium);
+
+  // Full ranking table
+  const tbl = document.createElement('table');
+  tbl.className = 'ranking-table';
+  tbl.innerHTML = `<thead><tr>
+    <th>#</th><th>Membre</th><th>Score total</th><th>Barre</th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  sorted.forEach(([id, score], i) => {
+    const m = getMember(id);
+    const pct = Math.round(score / maxScore * 100);
+    const tr = document.createElement('tr');
+    const medals = ['🥇','🥈','🥉'];
+    tr.innerHTML = `
+      <td class="rank-num" style="color:${m.color}">${medals[i] || (i+1)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,${m.color}44,${m.color}22);border:2px solid ${m.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:${m.color};flex-shrink:0">${m.initials}</div>
+          <span style="font-weight:700">${m.pseudo}</span>
+        </div>
+      </td>
+      <td><span class="score-pill" style="background:${m.color}22;color:${m.color};border:1px solid ${m.color}44">${score} pts</span></td>
+      <td style="width:35%"><div class="rank-bar" style="width:${pct}%;background:linear-gradient(90deg,${m.color}88,${m.color})"></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+  main.appendChild(tbl);
+}
+
+// ═══════════════════════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════════════════════
+let ttTimeout;
+const ttBox = () => document.getElementById('tooltip');
+
+function showTooltip(ev, id, crit) {
+  const m = getMember(id);
+  const box = ttBox();
+  document.getElementById('tt-pseudo').textContent = m.pseudo;
+
+  // Find current tier
+  let tierLabel = '';
+  for (const [t, ids] of Object.entries(userTiers[crit])) {
+    if (t !== 'pool' && ids.includes(id)) { tierLabel = `Tier ${t} — ${CRIT_LABELS[crit]}`; break; }
+  }
+  document.getElementById('tt-tier').textContent = tierLabel;
+  document.getElementById('tt-text').textContent = m.tips[crit] || '';
+
+  box.classList.add('visible');
+  moveTooltip(ev);
+}
+
+function moveTooltip(ev) {
+  const box = ttBox();
+  const x = ev.clientX + 16;
+  const y = ev.clientY + 16;
+  box.style.left = Math.min(x, window.innerWidth - 280) + 'px';
+  box.style.top = Math.min(y, window.innerHeight - 160) + 'px';
+}
+
+function hideTooltip() {
+  ttBox().classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════
+function switchCrit(n) {
+  currentCrit = n;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  renderCurrent();
+}
+
+function resetTierList() {
+  initUserTiers();
+  renderCurrent();
+}
+
+function revealAll() {
+  initUserTiers();
+  // Animate
+  renderCurrent();
+  const cards = document.querySelectorAll('.member-card');
+  cards.forEach((c, i) => {
+    c.style.opacity = '0';
+    setTimeout(() => {
+      c.style.opacity = '1';
+      c.classList.add('placing');
+      setTimeout(() => c.classList.remove('placing'), 500);
+    }, i * 60);
+  });
+
+  // Confetti burst
+  for (let i = 0; i < 18; i++) {
+    setTimeout(() => spawnStar(), i * 80);
+  }
+}
+
+function spawnStar() {
+  const stars = ['⭐','🎯','🔥','💥','✨','🏆','👑','💡'];
+  const el = document.createElement('div');
+  el.className = 'star';
+  el.textContent = stars[Math.floor(Math.random() * stars.length)];
+  el.style.left = (10 + Math.random() * 80) + 'vw';
+  el.style.top = (10 + Math.random() * 40) + 'vh';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderCurrent();
+</script>
+</body>
+</html>
