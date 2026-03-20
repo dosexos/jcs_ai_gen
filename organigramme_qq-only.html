@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>qq-only — Organigramme des Relations · Mars 2021</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52c4;
+    --red: #e94560;
+    --red-light: #ff6b85;
+    --text: #e2e2e2;
+    --text-dim: #9a9ab0;
+    --green: #4ecca3;
+    --yellow: #f5d061;
+    --blue: #4fc3f7;
+    --mauve: #ce93d8;
+    --card-bg: rgba(22,33,62,0.92);
+    --card-border: rgba(83,52,131,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 50%, #533483 100%);
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 2px solid var(--purple);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(233,69,96,0.12) 0%, transparent 60%);
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: #fff;
+    position: relative;
+  }
+  header h1 span { color: var(--red); }
+  header p {
+    color: var(--text-dim);
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    position: relative;
+  }
+  .header-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .hstat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hstat .val { font-size: 1.6rem; font-weight: 800; color: var(--red); line-height: 1; }
+  .hstat .lbl { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ─── LEGEND ─── */
+  .legend-bar {
+    background: var(--bg2);
+    padding: 0.75rem 2rem;
+    display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;
+    border-bottom: 1px solid rgba(83,52,131,0.3);
+  }
+  .legend-bar span { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 0.3rem; }
+  .leg-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; color: var(--text-dim); }
+  .leg-line { width: 28px; height: 3px; border-radius: 2px; }
+
+  /* ─── GRAPH AREA ─── */
+  #graph-container {
+    width: 100%;
+    height: 600px;
+    background: radial-gradient(ellipse at center, #1e1e3a 0%, #1a1a2e 70%);
+    position: relative;
+    overflow: hidden;
+  }
+  #graph-container svg { width: 100%; height: 100%; }
+
+  .controls {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+  .ctrl-btn {
+    background: rgba(83,52,131,0.7);
+    border: 1px solid var(--purple);
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--purple); }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip {
+    position: fixed;
+    background: rgba(10,10,25,0.97);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.82rem;
+    max-width: 280px;
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    line-height: 1.5;
+  }
+  .tooltip .tt-name { font-size: 1rem; font-weight: 800; color: var(--red); margin-bottom: 0.4rem; }
+  .tooltip .tt-label { color: var(--purple-light); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .tooltip .tt-row { color: var(--text-dim); margin-bottom: 0.15rem; }
+  .tooltip .tt-row b { color: var(--text); }
+  .tooltip .tt-quote { color: var(--text-dim); font-style: italic; margin-top: 0.5rem; padding-top: 0.4rem; border-top: 1px solid rgba(83,52,131,0.4); font-size: 0.78rem; line-height: 1.4; }
+
+  /* ─── MAIN CONTENT ─── */
+  .content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid rgba(233,69,96,0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ─── HIERARCHY ─── */
+  .hierarchy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .h-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .h-card::before {
+    content: attr(data-rank);
+    position: absolute;
+    top: -0.4rem;
+    right: 0.5rem;
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(233,69,96,0.07);
+    line-height: 1;
+  }
+  .h-card .hc-name { font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 0.25rem; }
+  .h-card .hc-msgs { font-size: 0.78rem; color: var(--red); font-weight: 700; }
+  .h-card .hc-role { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.3rem; line-height: 1.4; }
+  .h-card .hc-tags { margin-top: 0.5rem; display: flex; gap: 0.3rem; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .tag-red { background: rgba(233,69,96,0.2); color: var(--red-light); border: 1px solid rgba(233,69,96,0.3); }
+  .tag-purple { background: rgba(83,52,131,0.3); color: var(--purple-light); border: 1px solid rgba(123,82,196,0.3); }
+  .tag-green { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+  .tag-blue { background: rgba(79,195,247,0.15); color: var(--blue); border: 1px solid rgba(79,195,247,0.3); }
+  .tag-yellow { background: rgba(245,208,97,0.15); color: var(--yellow); border: 1px solid rgba(245,208,97,0.3); }
+
+  /* ─── CLUSTERS ─── */
+  .clusters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .cluster-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid transparent;
+  }
+  .cluster-card.green { border-left-color: var(--green); }
+  .cluster-card.purple { border-left-color: var(--purple-light); }
+  .cluster-card.yellow { border-left-color: var(--yellow); }
+  .cluster-card.red { border-left-color: var(--red); }
+  .cluster-card.blue { border-left-color: var(--blue); }
+  .cluster-card h3 { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.3rem; color: #fff; }
+  .cluster-card .members { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+  .cluster-card .members b { color: var(--purple-light); }
+  .cluster-card p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+
+  /* ─── RIVALRY / COMPLICITY CARDS ─── */
+  .rel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .rel-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.1rem 1.3rem;
+    position: relative;
+  }
+  .rel-card.rivalry { border-top: 3px solid var(--red); }
+  .rel-card.complicity { border-top: 3px solid var(--green); }
+  .rel-card .rel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.6rem;
+  }
+  .rel-card .rel-pair {
+    font-size: 1rem;
+    font-weight: 900;
+    color: #fff;
+  }
+  .rel-card .rel-pair .vs { color: var(--red); margin: 0 0.3rem; }
+  .rel-card .rel-pair .amp { color: var(--green); margin: 0 0.3rem; }
+  .rel-card .rel-score {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .rel-card.rivalry .rel-score { background: rgba(233,69,96,0.2); color: var(--red-light); }
+  .rel-card.complicity .rel-score { background: rgba(78,204,163,0.2); color: var(--green); }
+  .rel-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 0.6rem; }
+  .quote-block {
+    background: rgba(15,15,30,0.7);
+    border-left: 3px solid var(--purple);
+    padding: 0.5rem 0.7rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0.4rem 0;
+  }
+  .quote-block em { font-style: italic; color: var(--text-dim); font-size: 0.78rem; line-height: 1.5; display: block; }
+  .quote-block .q-author { font-size: 0.72rem; color: var(--purple-light); font-weight: 700; margin-top: 0.2rem; }
+
+  /* ─── SATELLITES ─── */
+  .sat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .sat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    min-width: 160px;
+  }
+  .sat-card .sat-name { font-weight: 800; color: var(--text-dim); font-size: 0.9rem; }
+  .sat-card .sat-msgs { font-size: 0.75rem; color: var(--red); margin-bottom: 0.3rem; }
+  .sat-card p { font-size: 0.75rem; color: var(--text-dim); line-height: 1.4; }
+
+  /* ─── MOMENTS ─── */
+  .moments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .moment-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem 1.3rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1rem;
+    align-items: start;
+  }
+  .moment-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: rgba(233,69,96,0.3);
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+  .moment-card h3 { font-size: 0.95rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem; }
+  .moment-card .moment-meta { font-size: 0.75rem; color: var(--purple-light); margin-bottom: 0.4rem; }
+  .moment-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid rgba(83,52,131,0.3);
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* ─── NODE / LINK STYLES ─── */
+  .node circle { stroke-width: 2; cursor: grab; transition: filter 0.2s; }
+  .node circle:active { cursor: grabbing; }
+  .node:hover circle { filter: brightness(1.3) drop-shadow(0 0 8px currentColor); }
+  .node text { font-size: 11px; fill: #e2e2e2; font-weight: 700; pointer-events: none; text-shadow: 0 1px 3px #000; }
+  .link { stroke-opacity: 0.65; transition: stroke-opacity 0.2s; }
+  .link:hover { stroke-opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>qq<span>-only</span> · Organigramme des Relations</h1>
+  <p>Analyse des dynamiques sociales · Canal défouloir LoL / gaming · Serveur privé francophone</p>
+  <div class="header-stats">
+    <div class="hstat"><span class="val">5 259</span><span class="lbl">Messages</span></div>
+    <div class="hstat"><span class="val">23</span><span class="lbl">Membres actifs</span></div>
+    <div class="hstat"><span class="val">14j</span><span class="lbl">1–14 mars 2021</span></div>
+    <div class="hstat"><span class="val">13</span><span class="lbl">Pic simultané</span></div>
+    <div class="hstat"><span class="val">367</span><span class="lbl">Max msgs/heure</span></div>
+  </div>
+</header>
+
+<div class="legend-bar">
+  <span>Relations :</span>
+  <div class="leg-item"><div class="leg-line" style="background:#e94560"></div> Tension / Rage mutuelle</div>
+  <div class="leg-item"><div class="leg-line" style="background:#4ecca3"></div> Affinité / Complicité</div>
+  <div class="leg-item"><div class="leg-line" style="background:#f5d061"></div> Neutre / Occasionnel</div>
+  <div class="leg-item"><div class="leg-line" style="background:#ce93d8"></div> Ragebait / Troll ciblé</div>
+  <div class="leg-item"><div class="leg-line" style="background:#4fc3f7"></div> Duo de jeu récurrent</div>
+  <div class="leg-item" style="margin-left:1rem"><div style="width:14px;height:14px;border-radius:50%;background:#e94560;opacity:0.7"></div> Taille ∝ nb messages</div>
+</div>
+
+<div id="graph-container">
+  <svg id="graph"></svg>
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-reset">↺ Reset</button>
+    <button class="ctrl-btn" id="btn-freeze">❄ Freeze</button>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<div class="content">
+
+  <!-- HIERARCHY -->
+  <div class="section-title">⚡ Hiérarchie d'Influence</div>
+  <div class="hierarchy-grid">
+
+    <div class="h-card" data-rank="1">
+      <div class="hc-name">monpotestbon</div>
+      <div class="hc-msgs">800 msgs · Initiateur #3</div>
+      <div class="hc-role">Théoricien du groupe. Lance les débats item/meta, tient des positions polémiques avec conviction. Cible principale des rageurs, jamais le premier à céder. Joue principalement jungle/support.</div>
+      <div class="hc-tags">
+        <span class="tag tag-red">Cible #1</span>
+        <span class="tag tag-purple">Meta lord</span>
+        <span class="tag tag-yellow">Défensif</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="2">
+      <div class="hc-name">bluzzie</div>
+      <div class="hc-msgs">691 msgs · Initiateur #1</div>
+      <div class="hc-role">Locomotive du canal. Lance le plus de conversations, commente tout, souvent en mode spectateur des dramas des autres. Raillery calibrée, humour pince-sans-rire. ADC main.</div>
+      <div class="hc-tags">
+        <span class="tag tag-red">Top initiateur</span>
+        <span class="tag tag-green">Commentateur</span>
+        <span class="tag tag-blue">ADC</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="3">
+      <div class="hc-name">elilos</div>
+      <div class="hc-msgs">616 msgs · Initiateur #2</div>
+      <div class="hc-role">Analyste technique du groupe. Déroule des arguments détaillés sur les matchups. Omniprésent dans les debates, répond à monpotestbon sur presque chaque sujet. Support/mage.</div>
+      <div class="hc-tags">
+        <span class="tag tag-purple">Analyste</span>
+        <span class="tag tag-green">Multi-club</span>
+        <span class="tag tag-yellow">Débatteur</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="4">
+      <div class="hc-name">.pauloo.</div>
+      <div class="hc-msgs">584 msgs · Initiateur #4</div>
+      <div class="hc-role">Rageur principal. Explose après ses parties, rage contre tout le monde à tour de rôle, mais avec une logique interne cohérente. Critique méta pointue, mauvais gagnant et mauvais perdant.</div>
+      <div class="hc-tags">
+        <span class="tag tag-red">Rage king</span>
+        <span class="tag tag-red">Critique</span>
+        <span class="tag tag-yellow">Soloq focus</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="5">
+      <div class="hc-name">manigoldo1500</div>
+      <div class="hc-msgs">336 msgs · Initiateur #13</div>
+      <div class="hc-role">Réacteur stratégique. Peu d'initiations mais réponses incisives. Ragebait maîtrisé, commentaire sarcastique, toujours au centre des joutes verbales avec bluzzie. ADC/support.</div>
+      <div class="hc-tags">
+        <span class="tag tag-purple">Ragebait</span>
+        <span class="tag tag-green">Duo bluzzie</span>
+        <span class="tag tag-yellow">Sarcastique</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="6">
+      <div class="hc-name">depardieu01</div>
+      <div class="hc-msgs">132 msgs · Initiateur #7</div>
+      <div class="hc-role">Présence régulière mais discrète. Impliqué dans les discussions meta, duo fréquent avec manigoldo. Ton calme, intervient sur des sujets ciblés (Qiyana, assassins).</div>
+      <div class="hc-tags">
+        <span class="tag tag-blue">Duo mani</span>
+        <span class="tag tag-yellow">Discret</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="7">
+      <div class="hc-name">shxnya</div>
+      <div class="hc-msgs">124 msgs · Initiateur #9</div>
+      <div class="hc-role">Joueur technique, avis tranchés sur les matchups jungle. Intervient par bursts, souvent en réaction à une game. Lié à elilos et .pauloo. dans les débats.</div>
+      <div class="hc-tags">
+        <span class="tag tag-purple">Jungle expert</span>
+        <span class="tag tag-yellow">Burst activ.</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="8">
+      <div class="hc-name">_egide</div>
+      <div class="hc-msgs">116 msgs · Initiateur #8</div>
+      <div class="hc-role">Binôme de salomeos. Réacteur symétrique, échanges courts et denses. Pratiquement absent des grandes joutes mais très présent dans le duo satellite _egide/salomeos.</div>
+      <div class="hc-tags">
+        <span class="tag tag-blue">Duo salomeos</span>
+        <span class="tag tag-yellow">Réactif</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="9">
+      <div class="hc-name">roystar</div>
+      <div class="hc-msgs">88 msgs</div>
+      <div class="hc-role">Présence épisodique mais liée à monpotestbon. Réagit aux dramas sans les initier. Ton léger, souvent emoji/courts messages. Soloq commentateur.</div>
+      <div class="hc-tags">
+        <span class="tag tag-green">Ami mpb</span>
+        <span class="tag tag-yellow">Observateur</span>
+      </div>
+    </div>
+
+    <div class="h-card" data-rank="10">
+      <div class="hc-name">ristorante</div>
+      <div class="hc-msgs">85 msgs</div>
+      <div class="hc-role">Profil satellite du cluster central. Réponses courtes, présent lors des pics collectifs. Lié à bluzzie de façon ponctuelle.</div>
+      <div class="hc-tags">
+        <span class="tag tag-yellow">Satellite</span>
+        <span class="tag tag-yellow">Passif</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLUSTERS -->
+  <div class="section-title">🔗 Clusters & Sous-groupes</div>
+  <div class="clusters-grid">
+
+    <div class="cluster-card green">
+      <h3>🟢 Le Noyau Central — Les 5 Pillars</h3>
+      <div class="members"><b>monpotestbon · bluzzie · elilos · .pauloo. · manigoldo1500</b></div>
+      <p>Le groupe moteur du canal. Ces cinq membres génèrent à eux seuls l'essentiel des interactions (>600 échanges croisés). Présents lors de quasiment chaque session active. Débattent de tout : meta LoL, picks, niveaux respectifs, life. Tension et complicité coexistent en permanence. Bluzzie et elilos jouent régulièrement ensemble ; pauloo et manigoldo ont une rivalité douce mais récurrente.</p>
+    </div>
+
+    <div class="cluster-card blue">
+      <h3>🔵 Le Duo Périphérique</h3>
+      <div class="members"><b>salomeos · _egide</b></div>
+      <p>Paire très liée (41 interactions directes) mais peu intégrée aux dynamiques du noyau. Leurs échanges sont denses entre eux, détachés du reste. Présents lors des pics collectifs mais ne lancent jamais de gros débats. Semblent se connaître IRL ou hors Discord.</p>
+    </div>
+
+    <div class="cluster-card purple">
+      <h3>🟣 Le Cluster Dépardieu/Mani</h3>
+      <div class="members"><b>manigoldo1500 · depardieu01</b></div>
+      <p>Duo de jeu récurrent (30 interactions), probablement souvent en game ensemble. Partagent des avis communs sur la meta ADC et les picks assassin. depardieu01 est le seul membre envers qui manigoldo adopte un ton clairement bienveillant.</p>
+    </div>
+
+    <div class="cluster-card yellow">
+      <h3>🟡 Les Satellites du Centre</h3>
+      <div class="members"><b>roystar · casoar · dosinge · shxnya · ristorante</b></div>
+      <p>Membres réguliers mais en orbite. Réactifs plutôt qu'initiateurs. Roystar et casoar gravitent autour de monpotestbon. Shxnya s'intègre ponctuellement au noyau via elilos et pauloo. Dosinge lance des conversations isolées sans générer de fil.</p>
+    </div>
+
+    <div class="cluster-card red">
+      <h3>🔴 Les Fantômes Actifs</h3>
+      <div class="members"><b>lizepter · doromea · shaars · robin_tak · miaeln · sorrymessedup · glacing · mawlotov · katsounet · poupi_s</b></div>
+      <p>Présents lors du pic du 13 mars et/ou de sessions ponctuelles. Peu ou pas de liens inter-membres visibles. Présence épisodique, contribution faible au graphe de relations. Certains (lizepter, sorrymessedup) initiaient des conversations qui ne prenaient pas.</p>
+    </div>
+
+  </div>
+
+  <!-- RIVALRIES -->
+  <div class="section-title">🔴 Top 5 Rivalités & Tensions</div>
+  <div class="rel-grid">
+
+    <div class="rel-card rivalry">
+      <div class="rel-header">
+        <div class="rel-pair">.pauloo. <span class="vs">vs</span> monpotestbon</div>
+        <div class="rel-score">🔴 Tension haute</div>
+      </div>
+      <p>La rivalry principale du canal. .pauloo. rage régulièrement contre monpotestbon après des duos ratés, lui reprochant de "inting", de jouer des builds incohérents ou de prendre de mauvaises décisions. Monpotestbon répond systématiquement avec un simple <em>"?"</em> ou en retournant le blame. La tension atteint son pic le 13 mars : pauloo accepte un duo, se retrouve en game avec lui, et explose immédiatement.</p>
+      <div class="quote-block">
+        <em>"pourquoi j'ai proposé à mpb de duo / il me int ce fils de pute"</em>
+        <span class="q-author">.pauloo. — 13/03 13:44</span>
+      </div>
+      <div class="quote-block">
+        <em>"t'es nul frère / t'es nul / à chier" — "? / tu sais faire autre chose que push ou pas"</em>
+        <span class="q-author">.pauloo. et monpotestbon — 13/03 13:50</span>
+      </div>
+      <p style="margin-top:0.5rem">Sujet de friction central : niveau de jeu relatif, décisions en game (push vs engage), et la validité des builds. La joute est récurrente mais sans rupture réelle — ils continuent à jouer ensemble.</p>
+    </div>
+
+    <div class="rel-card rivalry">
+      <div class="rel-header">
+        <div class="rel-pair">bluzzie <span class="vs">vs</span> manigoldo1500</div>
+        <div class="rel-score">🟣 Ragebait structurel</div>
+      </div>
+      <p>Tension de surface masquant une vraie complicité sous-jacente. Manigoldo cible bluzzie de façon quasi-systématique — il commente ses performances, son niveau, ses décisions — mais sans animosité véritable. Bluzzie réplique souvent en ampliant le drama pour le spectacle. Les deux jouent régulièrement ensemble malgré ça.</p>
+      <div class="quote-block">
+        <em>"Jamais joué avec Bluzzie et j'espère à ne jamais avoir à surmonter ça"</em>
+        <span class="q-author">manigoldo1500 — 06/03</span>
+      </div>
+      <div class="quote-block">
+        <em>"ntm bluzzie loose à la 1e game c'est uninstall instant" — "jvais juste dodge les duoq avec bluzzie"</em>
+        <span class="q-author">manigoldo1500 — 07/03 (avant de jouer avec lui)</span>
+      </div>
+      <p style="margin-top:0.5rem">Friction sur : winrate en duo, choix de champion, timing de kills. Spectacle pour le canal autant que vraie tension.</p>
+    </div>
+
+    <div class="rel-card rivalry">
+      <div class="rel-header">
+        <div class="rel-pair">bluzzie <span class="vs">vs</span> elilos</div>
+        <div class="rel-score">🔴 Débat technique</div>
+      </div>
+      <p>Opposés réguliers dans les débats meta. Bluzzie adopte des positions pratiques (ce qui marche en soloq) ; elilos déroule des analyses matchup détaillées. La tension monte surtout sur les picks improbables et le niveau de jeu perçu. Bluzzie a une tendance à taguer elilos pour valider une critique ou pointer une absurdité.</p>
+      <div class="quote-block">
+        <em>"Mdrrrr Karma MPB les deux low elo du qq only"</em>
+        <span class="q-author">bluzzie — 13/03 13:48</span>
+      </div>
+      <p style="margin-top:0.5rem">Sujets de friction : champions viables ou non, pertinence des analyses théoriques vs pratique du jeu en soloq bas/mid elo.</p>
+    </div>
+
+    <div class="rel-card rivalry">
+      <div class="rel-header">
+        <div class="rel-pair">elilos <span class="vs">vs</span> monpotestbon</div>
+        <div class="rel-score">🟡 Friction douce</div>
+      </div>
+      <p>Binôme qui s'oppose autant qu'il converge. Tous deux ont des positions fortes sur la meta, et ni l'un ni l'autre ne cède facilement. Les moments de désaccord sont fréquents (matchups, items, picks) mais les échanges restent techniques plutôt que personnels. La tension est intellectuelle plus qu'émotionnelle.</p>
+      <div class="quote-block">
+        <em>"d'accord / donc MPB arrive pas à 1v9 une game en silver / et vient s'en plaindre"</em>
+        <span class="q-author">elilos — 10/03 23:30</span>
+      </div>
+      <p style="margin-top:0.5rem">Friction : divergence d'analyse sur les smurf accounts, le niveau des joueurs de l'entourage, la responsabilité individuelle en soloq.</p>
+    </div>
+
+    <div class="rel-card rivalry">
+      <div class="rel-header">
+        <div class="rel-pair">manigoldo <span class="vs">vs</span> .pauloo.</div>
+        <div class="rel-score">🟣 Troll ciblé récurrent</div>
+      </div>
+      <p>Manigoldo utilise .pauloo. comme cible de ragebait ponctuel. La tension se manifeste par des paris perdus, des pronostics délibérément négatifs sur les performances de pauloo, et des piques sarcastiques. Pauloo répond parfois sèchement ("sinon je te ban") mais sans escalade sérieuse.</p>
+      <div class="quote-block">
+        <em>"ok mpb mais le fait est que tu es une merde sur rakan / paix sur toi néanmoins en dépit de ent"</em>
+        <span class="q-author">manigoldo1500 — 06/03</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPLICITIES -->
+  <div class="section-title">🟢 Top 5 Complicités</div>
+  <div class="rel-grid">
+
+    <div class="rel-card complicity">
+      <div class="rel-header">
+        <div class="rel-pair">elilos <span class="amp">&</span> monpotestbon</div>
+        <div class="rel-score">🟢 Duo théoriciens</div>
+      </div>
+      <p>La relation la plus dense du canal (177 interactions). Ces deux-là partagent la même passion pour l'analyse meta poussée. Ils s'affrontent souvent mais convergent régulièrement — et quand ils sont d'accord sur un sujet, leur analyse commune domine la conversation. Elilos est le seul membre qui répond systématiquement aux monologues meta de monpotestbon.</p>
+      <div class="quote-block">
+        <em>"Mais à arme égale garen encule à sec kai'sa" — "le mec appuie sur E mon champion existe plus en teamfight pendant 6 secondes"</em>
+        <span class="q-author">elilos / monpotestbon — matchup debates récurrents</span>
+      </div>
+      <p style="margin-top:0.5rem">Complicité sur : passion commune pour le theorycrafting, analyses longues, discussions items. Ils jouent aussi régulièrement ensemble (comptes fresh, DuoQ).</p>
+    </div>
+
+    <div class="rel-card complicity">
+      <div class="rel-header">
+        <div class="rel-pair">bluzzie <span class="amp">&</span> manigoldo1500</div>
+        <div class="rel-score">🟢 Frères ennemis</div>
+      </div>
+      <p>Deuxième paire la plus interactive (99 échanges). Malgré les piques de manigoldo, les deux jouent ensemble régulièrement et partagent la même vibe de commentary cynique. Bluzzie tient ses engagements ("j'avais dit oui à bluzzie vrai rajel tient parole"). Ils se soutiennent discrètement lors des grandes discussions.</p>
+      <div class="quote-block">
+        <em>"j'avais dit oui a bluzzie vrai rajel tient parole" / "Aya les règles bancale"</em>
+        <span class="q-author">manigoldo & bluzzie — 07/03</span>
+      </div>
+      <div class="quote-block">
+        <em>"AHAHHAHAHAAH" (en réponse à un lien de manigoldo)</em>
+        <span class="q-author">bluzzie — 07/03 13:57</span>
+      </div>
+    </div>
+
+    <div class="rel-card complicity">
+      <div class="rel-header">
+        <div class="rel-pair">salomeos <span class="amp">&</span> _egide</div>
+        <div class="rel-score">🔵 Micro-monde propre</div>
+      </div>
+      <p>Binôme autonome. Leurs échanges (41 interactions) existent presque en parallèle des dynamiques principales. Salomeos cherche régulièrement la validation de _egide sur ses performances ou ses clips ("check en bas à droite vers 3s"). _egide répond avec des commentaires posés sur les picks et la méta. Leur complicité est la plus douce du canal — pas de rage, pas de ragebait.</p>
+      <div class="quote-block">
+        <em>"Je suis deg personne a trouvé mon message dans la vidéo dans annonce" — puis salomeos cherche _egide pour le lui montrer</em>
+        <span class="q-author">salomeos — 07/03 11:05</span>
+      </div>
+    </div>
+
+    <div class="rel-card complicity">
+      <div class="rel-header">
+        <div class="rel-pair">.pauloo. <span class="amp">&</span> elilos</div>
+        <div class="rel-score">🟢 Convergence rage</div>
+      </div>
+      <p>103 interactions — troisième paire la plus active. Pauloo et elilos convergent régulièrement pour critiquer les autres membres (notamment monpotestbon ou les anonymes en soloq). Ils valident mutuellement leurs analyses sur le skill level du groupe. Tension émergente quand pauloo est en mode rage absolu, mais globalement très positif.</p>
+      <div class="quote-block">
+        <em>"ptn ca me fume que rans et MPB soient au même elo"</em>
+        <span class="q-author">elilos — 10/03 23:15</span>
+      </div>
+    </div>
+
+    <div class="rel-card complicity">
+      <div class="rel-header">
+        <div class="rel-pair">monpotestbon <span class="amp">&</span> roystar</div>
+        <div class="rel-score">🟢 Soutien discret</div>
+      </div>
+      <p>32 interactions directes. Roystar est l'un des rares membres à avoir une relation quasi-exclusivement positive avec monpotestbon. Il réagit à ses récits de game sans le critiquer, souvent via emoji ou validation courte. Monpotestbon lui répond sur un ton plus détendu qu'avec les autres membres du noyau.</p>
+    </div>
+
+  </div>
+
+  <!-- SATELLITES -->
+  <div class="section-title">🌑 Membres Satellites</div>
+  <div class="sat-grid">
+    <div class="sat-card">
+      <div class="sat-name">lizepter</div>
+      <div class="sat-msgs">51 msgs · 7 initiations</div>
+      <p>Lance des conversations qui ne prennent pas. Réponses rares du noyau. Présent lors des sessions mais peu intégré.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">doromea</div>
+      <div class="sat-msgs">58 msgs · 1 initiation</div>
+      <p>Présent lors du pic 13 mars. Profil passif, peu de liens directs avec le noyau, principalement réactif.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">shaars</div>
+      <div class="sat-msgs">58 msgs · 3 initiations</div>
+      <p>Sessions brèves, peu de fil conversationnel. Parfois présent lors des grandes joutes sans y prendre part activement.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">robin_tak</div>
+      <div class="sat-msgs">40 msgs · 0 initiation</div>
+      <p>Profil purement réactif. Présent lors des moments collectifs uniquement. Aucune initiation enregistrée.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">miaeln</div>
+      <div class="sat-msgs">21 msgs</div>
+      <p>Apparitions éclairs. Commentaires courts sur les games en cours. Peu de liens inter-membres.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">sorrymessedup</div>
+      <div class="sat-msgs">21 msgs · 2 initiations</div>
+      <p>Actif lors du pic 11 mars. Quelques initiations sans suite. Gravitates autour du noyau sans s'y intégrer.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">glacing</div>
+      <div class="sat-msgs">20 msgs</div>
+      <p>Présent uniquement lors du pic 13 mars. Emoji, réactions courtes. Quasi invisible sinon.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">dosinge</div>
+      <div class="sat-msgs">78 msgs · 8 initiations</div>
+      <p>Initiateur fréquent mais sans ancrage relationnel fort. Conversations qui démarrent sans attirer le noyau.</p>
+    </div>
+    <div class="sat-card">
+      <div class="sat-name">mawlotov · katsounet · poupi_s</div>
+      <div class="sat-msgs">21-25 msgs chacun</div>
+      <p>Présence anecdotique. Réactions courtes lors des pics. Pas de liens identifiables dans le graphe d'interactions.</p>
+    </div>
+  </div>
+
+  <!-- MOMENTS COLLECTIFS -->
+  <div class="section-title">💥 Moments Collectifs Marquants</div>
+  <div class="moments-list">
+
+    <div class="moment-card">
+      <div class="moment-num">1</div>
+      <div>
+        <h3>Le Grand Débat du 7 Mars — 8h de session, 9 membres simultanés</h3>
+        <div class="moment-meta">07/03 · 12h00 → 17h00 · 762 messages · Pic à 267 msgs/30min</div>
+        <p>La session la plus longue et la plus intense de la période. Démarrée par des récits de games matinales, elle évolue en un marathon de débats meta : viabilité des assassins vs tanky (garen jungle, rengar conq), builds ADC (vayne, seraphine), et un débat central sur le niveau réel des membres du groupe. bluzzie, elilos, .pauloo., manigoldo et shxnya sont tous présents. Plusieurs pics de rage interdépendants : une game de bluzzie vs garen jungle, les builds de depardieu01, et un thread sur les smurfs. manigoldo décrète plusieurs fois qu'il "arrête frère" avant de continuer pendant 3h.</p>
+      </div>
+    </div>
+
+    <div class="moment-card">
+      <div class="moment-num">2</div>
+      <div>
+        <h3>Le Pic Absolu — 13 mars 14h, 13 membres simultanés</h3>
+        <div class="moment-meta">13/03 · 13h30 → 17h00 · ~510 messages · Record historique du canal</div>
+        <p>Pic d'activité absolu de la période. Démarré par la rage de .pauloo. après un duo raté avec monpotestbon, le fil attire rapidement tous les membres actifs. Le drama de la game (jungle decisions, scuttle bot, push vs engage) dégénère en discussion générale sur le niveau du groupe. bluzzie sort les op.gg comparés, mawlotov réagit en mode spectateur, glacing et robin_tak rejoignent pour les émotes. C'est le seul moment où les 13 membres core sont actifs simultanément — le pic d'activité justifie la réputation du canal comme "pic historique mars 2021".</p>
+      </div>
+    </div>
+
+    <div class="moment-card">
+      <div class="moment-num">3</div>
+      <div>
+        <h3>Le Débat du Smurf — 10 mars nuit</h3>
+        <div class="moment-meta">10/03 · 23h00 → 11/03 01h00 · ~252 messages</div>
+        <p>Conversation nocturne initiée par elilos sur le niveau de monpotestbon comparé à "Ransberg" (un joueur externe apparemment en contact avec le groupe). Le fil dérive sur la question : est-ce qu'être au même elo qu'un joueur avec 10x moins de games est honteux ? monpotestbon se défend en racontant une game de smurf où il perd face à un Ryze-Yuumi boosted. elilos et d'autres membres le pointent du doigt avec un humour mi-sincère. Session nocturne très dense à 2-3 membres actifs mais très engagés.</p>
+      </div>
+    </div>
+
+    <div class="moment-card">
+      <div class="moment-num">4</div>
+      <div>
+        <h3>Le Marathon du 11 Mars — 12 membres en 3h</h3>
+        <div class="moment-meta">11/03 · 16h00 → 19h00 · 308 messages · 12 membres</div>
+        <p>Deuxième plus grand rassemblement de la période. Pic post-soirée de jeu : récits de games, débats sur les picks du moment (seraphine, vayne), et joutes sur le duo elilos/monpotestbon fresh account. lizepter, sorrymessedup, katsounet et shaars font une apparition rare lors de cette session qui démarre sur un récap de game de bluzzie.</p>
+      </div>
+    </div>
+
+    <div class="moment-card">
+      <div class="moment-num">5</div>
+      <div>
+        <h3>La Session Philosophique du 3 Mars — nuit profonde</h3>
+        <div class="moment-meta">03/03 · 02h30 → 04h00 · ~77 messages</div>
+        <p>Étonnante session nocturne à 2-3 membres (monpotestbon, elilos, et quelques autres) qui dérive d'un débat LoL vers de la philosophie — elilos et monpotestbon discutent de ne pas juger l'histoire du passé avec la morale du présent, en référence à un personnage historique controversé. "j'essaye de faire un pseudo cool mais peintre autrichien c'est trop long" conclut elilos. Le canal à son mode le plus absurde.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  Organigramme généré sur 5 259 messages · 1–14 mars 2021 · Canal qq-only · Serveur privé francophone
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  D3.js Force-Directed Graph
+// ─────────────────────────────────────────────
+
+const nodes = [
+  { id: "monpotestbon",  msgs: 800, role: "Théoricien / Meta lord", type: "Jungle/Support", group: 1 },
+  { id: "bluzzie",       msgs: 691, role: "Locomotive du canal",    type: "ADC / Commentateur", group: 1 },
+  { id: "elilos",        msgs: 616, role: "Analyste technique",     type: "Support/Mage", group: 1 },
+  { id: ".pauloo.",      msgs: 584, role: "Rageur principal",       type: "Soloq / Critique", group: 1 },
+  { id: "manigoldo1500", msgs: 336, role: "Ragebait & Sarcastique", type: "ADC / Support", group: 1 },
+  { id: "depardieu01",   msgs: 132, role: "Duo de manigoldo",       type: "Assassin main", group: 2 },
+  { id: "shxnya",        msgs: 124, role: "Expert jungle",          type: "Jungle top", group: 2 },
+  { id: "_egide",        msgs: 116, role: "Binôme de salomeos",     type: "Support passif", group: 3 },
+  { id: "roystar",       msgs:  88, role: "Ami de monpotestbon",    type: "Soloq observateur", group: 2 },
+  { id: "ristorante",    msgs:  85, role: "Satellite central",      type: "Présence douce", group: 4 },
+  { id: "casoar",        msgs:  85, role: "Satellite monpotestbon", type: "Réactif", group: 4 },
+  { id: "dosinge",       msgs:  78, role: "Initiateur sans ancrage","type": "Solitaire", group: 4 },
+  { id: "salomeos",      msgs:  70, role: "Binôme de _egide",       type: "Cherche validation", group: 3 },
+  { id: "doromea",       msgs:  58, role: "Passif du 13 mars",      type: "Fantôme actif", group: 4 },
+  { id: "shaars",        msgs:  58, role: "Périphérique",           type: "Sessions brèves", group: 4 },
+  { id: "lizepter",      msgs:  51, role: "Initiateur sans retour", type: "Satellite lointain", group: 4 },
+  { id: "robin_tak",     msgs:  40, role: "Purement réactif",       type: "0 initiation", group: 4 },
+  { id: "poupi_s",       msgs:  25, role: "Apparition rare",        type: "Fantôme", group: 4 },
+  { id: "katsounet",     msgs:  23, role: "Flash du 11 mars",       type: "Éphémère", group: 4 },
+  { id: "mawlotov",      msgs:  23, role: "Réacteur emoji",         type: "Spectateur", group: 4 },
+  { id: "miaeln",        msgs:  21, role: "Commentaires courts",    type: "Éphémère", group: 4 },
+  { id: "sorrymessedup", msgs:  21, role: "11 mars seulement",      type: "Occasionnel", group: 4 },
+  { id: "glacing",       msgs:  20, role: "13 mars seulement",      type: "Éphémère", group: 4 },
+];
+
+// link types: 0=tension/rage, 1=affinité, 2=neutre, 3=ragebait, 4=duo
+const links = [
+  // Core dense links
+  { source: "elilos",        target: "monpotestbon",  value: 177, type: 1, desc: "Duo théoriciens. 177 échanges — relation la plus dense. S'affrontent sur la meta mais convergent toujours.", anecdote: "Session nuit du 03/03: débat LoL → philosophie → \"peintre autrichien c'est trop long\"" },
+  { source: ".pauloo.",      target: "elilos",        value: 103, type: 1, desc: "Convergence de rage. Valident mutuellement leur analyse du niveau du groupe, ciblent MPB ensemble.", anecdote: "\"ptn ca me fume que rans et MPB soient au même elo\" — elilos approuvé par pauloo" },
+  { source: "bluzzie",       target: "manigoldo1500", value:  99, type: 3, desc: "Frères ennemis. Manigoldo ragebait bluzzie systématiquement mais ils jouent ensemble régulièrement.", anecdote: "Manigoldo dit \"j'espère ne jamais avoir à surmonter jouer avec Bluzzie\" puis le tag 3h après pour jouer" },
+  { source: "bluzzie",       target: "elilos",        value:  86, type: 0, desc: "Débat technique récurrent. Positions pratique vs théorique sur la meta. Bluzzie tague elilos pour valider ses critiques.", anecdote: "\"Mdrrrr Karma MPB les deux low elo du qq only\" — bluzzie 13/03" },
+  { source: ".pauloo.",      target: "monpotestbon",  value:  71, type: 0, desc: "Rivalité principale. Rage post-duo intense, blame mutuel, tension sur le niveau de jeu.", anecdote: "\"pourquoi j'ai proposé à mpb de duo / il me int ce fils de pute\" — 13/03 13:44" },
+  { source: ".pauloo.",      target: "manigoldo1500", value:  65, type: 3, desc: "Ragebait ciblé de manigoldo sur pauloo. Piques sarcastiques, pronostics négatifs délibérés.", anecdote: "\"ok mpb mais le fait est que tu es une merde sur rakan / paix sur toi néanmoins\"" },
+  { source: "elilos",        target: "manigoldo1500", value:  56, type: 2, desc: "Relation neutre à légèrement positive. Pas de rivalité déclarée, échanges ponctuels sur la meta.", anecdote: "Discussions sur le rush de compte fresh elilos/manigoldo en duoQ" },
+  { source: "bluzzie",       target: "monpotestbon",  value:  55, type: 0, desc: "Tension douce. Bluzzie commente les performances de MPB, signale les contradictions (\"stop les rankeds sauf duoQ\")", anecdote: "\"Aya les règles bancale bien joué\" après MPB fait un duo ranked malgré sa promesse" },
+  { source: "_egide",        target: "salomeos",      value:  41, type: 4, desc: "Binôme autonome. Leurs échanges existent en parallèle du reste du canal. Complicité posée.", anecdote: "salomeos cherche _egide pour lui montrer son apparition en vidéo dans #annonce" },
+  { source: ".pauloo.",      target: "bluzzie",       value:  38, type: 2, desc: "Relation neutre à positive. Pauloo se range du côté de bluzzie dans les débats vs MPB.", anecdote: "Convergence fréquente pour pointer les incohérences de monpotestbon" },
+  { source: "elilos",        target: "shxnya",        value:  34, type: 1, desc: "Affinité technique. Partagent des avis similaires sur le jungle et les matchups.", anecdote: "Shxnya : \"rengar conq ça fume cho, tu l'invade il joue pas\"" },
+  { source: "monpotestbon",  target: "roystar",       value:  32, type: 1, desc: "Soutien discret. Roystar valide MPB sans le critiquer, ton plus détendu que le reste.", anecdote: "Roystar réagit aux récits de games de MPB sans rentrer dans le blame" },
+  { source: "manigoldo1500", target: "monpotestbon",  value:  32, type: 2, desc: "Neutre/occasionnel. Manigoldo commente MPB mais moins directement que pauloo ou bluzzie.", anecdote: "Interactions dans les debates collectifs, rarement en tête-à-tête" },
+  { source: "depardieu01",   target: "manigoldo1500", value:  30, type: 4, desc: "Duo de jeu régulier. Probablement en game ensemble souvent. Seule relation bienveillante de manigoldo.", anecdote: "Discussions fréquentes sur Qiyana et assassins, manigoldo répond posément à depardieu" },
+  { source: ".pauloo.",      target: "shxnya",        value:  27, type: 1, desc: "Affinité ponctuelle. S'accordent sur les picks et les décisions de jeu.", anecdote: "Interactions dans les sessions 07/03 sur le meta jungle" },
+  { source: "monpotestbon",  target: "casoar",        value:  26, type: 2, desc: "Relation satellite. Casoar gravite autour de MPB sans interaction centrale.", anecdote: "Présent lors des sessions de MPB, réactions courtes" },
+  { source: "bluzzie",       target: "depardieu01",   value:  21, type: 2, desc: "Neutre. Interactions lors des sessions collectives, pas de lien direct fort.", anecdote: "Présents ensemble lors du marathon 07/03" },
+  { source: "bluzzie",       target: "ristorante",    value:  21, type: 2, desc: "Neutre/occasionnel. Ristorante présent lors des sessions bluzzie sans lien direct.", anecdote: "Co-présence dans les pics collectifs" },
+  { source: "elilos",        target: "roystar",       value:  20, type: 2, desc: "Présence croisée dans les sessions communes.", anecdote: "Interactions brèves lors des débats collectifs" },
+  { source: ".pauloo.",      target: "depardieu01",   value:  19, type: 2, desc: "Présence commune dans les sessions intenses.", anecdote: "07/03 et 11/03 — présents ensemble lors des marathons" },
+];
+
+// ─── RENDER ───
+const container = document.getElementById("graph-container");
+const W = container.clientWidth || 900;
+const H = container.clientHeight || 600;
+
+const svg = d3.select("#graph")
+  .attr("viewBox", `0 0 ${W} ${H}`)
+  .call(d3.zoom().scaleExtent([0.3, 3]).on("zoom", ({transform}) => g.attr("transform", transform)));
+
+const g = svg.append("g");
+
+// Color scales
+const linkColor = (type) => {
+  const colors = ["#e94560","#4ecca3","#f5d061","#ce93d8","#4fc3f7"];
+  return colors[type] || "#9a9ab0";
+};
+
+const nodeColor = (d) => {
+  if (d.group === 1) return "#e94560";
+  if (d.group === 2) return "#7b52c4";
+  if (d.group === 3) return "#4fc3f7";
+  return "#3a3a5a";
+};
+
+const nodeFill = (d) => {
+  if (d.group === 1) return "rgba(233,69,96,0.25)";
+  if (d.group === 2) return "rgba(123,82,196,0.2)";
+  if (d.group === 3) return "rgba(79,195,247,0.2)";
+  return "rgba(40,40,70,0.3)";
+};
+
+const maxMsgs = d3.max(nodes, d => d.msgs);
+const rScale = d3.scaleSqrt().domain([0, maxMsgs]).range([6, 30]);
+
+// ─── LINKS ───
+const link = g.append("g").selectAll("line")
+  .data(links)
+  .join("line")
+  .attr("class", "link")
+  .attr("stroke", d => linkColor(d.type))
+  .attr("stroke-width", d => Math.max(1, Math.sqrt(d.value / 20)))
+  .style("cursor", "pointer");
+
+// ─── NODES ───
+const node = g.append("g").selectAll(".node")
+  .data(nodes)
+  .join("g")
+  .attr("class", "node")
+  .call(d3.drag()
+    .on("start", (event, d) => { if (!event.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+    .on("drag",  (event, d) => { d.fx = event.x; d.fy = event.y; })
+    .on("end",   (event, d) => { if (!event.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+  );
+
+node.append("circle")
+  .attr("r", d => rScale(d.msgs))
+  .attr("fill", d => nodeFill(d))
+  .attr("stroke", d => nodeColor(d))
+  .attr("stroke-width", d => d.group === 1 ? 2.5 : 1.5);
+
+node.append("text")
+  .attr("text-anchor", "middle")
+  .attr("dy", d => rScale(d.msgs) + 13)
+  .text(d => d.id)
+  .style("font-size", d => d.group === 1 ? "11px" : "9px")
+  .style("fill", d => d.group === 1 ? "#e2e2e2" : "#9a9ab0");
+
+// ─── SIMULATION ───
+const sim = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id(d => d.id).distance(d => 300 / Math.sqrt(d.value / 20 + 1)).strength(0.7))
+  .force("charge", d3.forceManyBody().strength(-200))
+  .force("center", d3.forceCenter(W / 2, H / 2))
+  .force("collision", d3.forceCollide().radius(d => rScale(d.msgs) + 18))
+  .on("tick", () => {
+    link
+      .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+
+// ─── TOOLTIP ───
+const tooltip = document.getElementById("tooltip");
+
+node.on("mouseover", (event, d) => {
+  tooltip.style.display = "block";
+  tooltip.innerHTML = `
+    <div class="tt-name">${d.id}</div>
+    <div class="tt-label">Profil joueur</div>
+    <div class="tt-row"><b>${d.msgs}</b> messages · Groupe ${d.group === 1 ? "Noyau" : d.group === 2 ? "Secondaire" : d.group === 3 ? "Satellite lié" : "Périphérique"}</div>
+    <div class="tt-row"><b>Rôle :</b> ${d.role}</div>
+    <div class="tt-row"><b>Type :</b> ${d.type}</div>
+  `;
+}).on("mousemove", (event) => {
+  const tx = Math.min(event.clientX + 15, window.innerWidth - 300);
+  const ty = Math.min(event.clientY + 15, window.innerHeight - 150);
+  tooltip.style.left = tx + "px";
+  tooltip.style.top  = ty + "px";
+}).on("mouseout", () => { tooltip.style.display = "none"; });
+
+link.on("mouseover", (event, d) => {
+  const typeLabels = ["Tension / Rage mutuelle","Affinité / Complicité","Neutre / Occasionnel","Ragebait / Troll ciblé","Duo de jeu récurrent"];
+  tooltip.style.display = "block";
+  tooltip.innerHTML = `
+    <div class="tt-name">${d.source.id} ↔ ${d.target.id}</div>
+    <div class="tt-label">${typeLabels[d.type]}</div>
+    <div class="tt-row"><b>${d.value}</b> interactions directes</div>
+    <div class="tt-row">${d.desc}</div>
+    ${d.anecdote ? `<div class="tt-quote">${d.anecdote}</div>` : ""}
+  `;
+}).on("mousemove", (event) => {
+  const tx = Math.min(event.clientX + 15, window.innerWidth - 300);
+  const ty = Math.min(event.clientY + 15, window.innerHeight - 200);
+  tooltip.style.left = tx + "px";
+  tooltip.style.top  = ty + "px";
+}).on("mouseout", () => { tooltip.style.display = "none"; });
+
+// ─── CONTROLS ───
+let frozen = false;
+document.getElementById("btn-freeze").addEventListener("click", () => {
+  frozen = !frozen;
+  if (frozen) {
+    sim.stop();
+    document.getElementById("btn-freeze").textContent = "▶ Unfreeze";
+  } else {
+    sim.alphaTarget(0.1).restart();
+    setTimeout(() => sim.alphaTarget(0), 2000);
+    document.getElementById("btn-freeze").textContent = "❄ Freeze";
+  }
+});
+document.getElementById("btn-reset").addEventListener("click", () => {
+  nodes.forEach(d => { d.x = W/2 + (Math.random()-0.5)*100; d.y = H/2 + (Math.random()-0.5)*100; d.vx = 0; d.vy = 0; });
+  sim.alpha(1).restart();
+  svg.transition().duration(400).call(d3.zoom().transform, d3.zoomIdentity);
+});
+
+</script>
+</body>
+</html>
