@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossier Dorian — Profil Discord</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a3a;
+    --purple: #533483;
+    --purple-light: #7b52c1;
+    --purple-dark: #2e1d50;
+    --red: #e94560;
+    --red-dark: #a02340;
+    --gold: #f0a500;
+    --cyan: #00d4ff;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --border: rgba(83, 52, 131, 0.4);
+    --card-bg: rgba(26, 26, 58, 0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  .header {
+    position: relative;
+    padding: 60px 40px 50px;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0d2e 40%, #2e1020 100%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--red), var(--purple), transparent);
+  }
+  .header-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .avatar-ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+  }
+  .header-info h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, #fff 0%, var(--purple-light) 50%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-info .subtitle {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid;
+  }
+  .badge-purple { background: rgba(83,52,131,0.25); border-color: var(--purple); color: var(--purple-light); }
+  .badge-red { background: rgba(233,69,96,0.15); border-color: var(--red); color: #ff6b85; }
+  .badge-gold { background: rgba(240,165,0,0.15); border-color: var(--gold); color: var(--gold); }
+  .badge-cyan { background: rgba(0,212,255,0.1); border-color: var(--cyan); color: var(--cyan); }
+  .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  /* STATS BAR */
+  .stats-section {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 30px 40px;
+  }
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 24px;
+    align-items: start;
+  }
+  .stat-box {
+    text-align: center;
+    padding: 20px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* CHART */
+  .chart-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 40px 0;
+  }
+  .chart-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 80px;
+    padding: 0 0 20px;
+    position: relative;
+  }
+  .bar-chart::after {
+    content: '';
+    position: absolute;
+    bottom: 20px; left: 0; right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .bar { 
+    width: 100%; 
+    background: linear-gradient(180deg, var(--purple-light), var(--purple-dark));
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .bar:hover { background: linear-gradient(180deg, var(--red), var(--red-dark)); }
+  .bar-label { font-size: 0.55rem; color: var(--text-muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
+
+  /* MAIN */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 50px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--red);
+    background: rgba(233,69,96,0.1);
+    border: 1px solid rgba(233,69,96,0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .section-tag {
+    margin-left: auto;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .cards-grid-2 { grid-template-columns: 1fr 1fr; }
+  .cards-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--purple), var(--red));
+  }
+  .card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--purple-light);
+    margin-bottom: 12px;
+  }
+  .card-body {
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .card-body p { margin-bottom: 10px; }
+  .card-body p:last-child { margin-bottom: 0; }
+  .card.full-width { grid-column: 1 / -1; }
+
+  /* QUOTE STYLE */
+  .quote {
+    font-style: italic;
+    color: var(--gold);
+    border-left: 2px solid var(--gold);
+    padding-left: 12px;
+    margin: 10px 0;
+    font-size: 0.8rem;
+  }
+  .quote-date {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-left: 8px;
+    font-style: normal;
+  }
+
+  /* SUBSECTION */
+  .subsection {
+    margin-bottom: 32px;
+  }
+  .subsection-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection-title::before {
+    content: '▸';
+    color: var(--purple-light);
+    font-size: 0.8rem;
+  }
+
+  /* PSYCHIATRY CARD */
+  .psych-card {
+    background: linear-gradient(135deg, rgba(12,8,20,0.95), rgba(20,8,14,0.95));
+    border: 1px solid rgba(233,69,96,0.4);
+    border-radius: 10px;
+    padding: 30px;
+    font-family: 'DM Mono', monospace;
+    position: relative;
+    overflow: hidden;
+  }
+  .psych-card::after {
+    content: 'CONFIDENTIEL';
+    position: absolute;
+    top: 20px; right: -30px;
+    transform: rotate(15deg);
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(233,69,96,0.25);
+    letter-spacing: 0.2em;
+    pointer-events: none;
+  }
+  .psych-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(233,69,96,0.3);
+  }
+  .psych-field { font-size: 0.75rem; }
+  .psych-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; }
+  .psych-val { color: var(--text); margin-top: 2px; }
+  .psych-section {
+    margin-bottom: 20px;
+  }
+  .psych-section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    border-bottom: 1px solid rgba(233,69,96,0.2);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .psych-body { font-size: 0.8rem; color: var(--text); line-height: 1.9; }
+  .dx-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+  }
+  .dx-code {
+    background: rgba(233,69,96,0.15);
+    border: 1px solid rgba(233,69,96,0.3);
+    color: var(--red);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    white-space: nowrap;
+    font-family: 'Space Mono', monospace;
+  }
+  .rx-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(83,52,131,0.1);
+    border: 1px solid rgba(83,52,131,0.2);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+  }
+  .rx-icon { color: var(--purple-light); font-size: 1rem; }
+  .stamp {
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--purple), var(--red), var(--purple-dark));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--purple);
+    background: var(--bg);
+  }
+  .tl-dot.red { border-color: var(--red); }
+  .tl-dot.gold { border-color: var(--gold); }
+  .tl-year {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--purple-light);
+    margin-bottom: 4px;
+  }
+  .tl-body { font-size: 0.8rem; color: var(--text); }
+
+  /* VERDICT */
+  .verdict {
+    background: linear-gradient(135deg, var(--purple-dark), #1a0820);
+    border: 1px solid var(--purple);
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .verdict::before {
+    content: '❝';
+    position: absolute;
+    top: 10px; left: 20px;
+    font-size: 5rem;
+    color: rgba(83,52,131,0.2);
+    font-family: serif;
+    line-height: 1;
+  }
+  .verdict-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .verdict-text {
+    font-size: 0.9rem;
+    line-height: 2;
+    color: var(--text);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .verdict-text strong {
+    color: var(--gold);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 40px 0;
+  }
+
+  /* HIGHLIGHTS */
+  .highlight { color: var(--red); font-weight: 700; }
+  .highlight-purple { color: var(--purple-light); font-weight: 700; }
+  .highlight-gold { color: var(--gold); }
+
+  /* CHAMPS TAGS */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .tag-purple { background: rgba(83,52,131,0.3); color: var(--purple-light); border: 1px solid rgba(83,52,131,0.5); }
+  .tag-red { background: rgba(233,69,96,0.2); color: #ff8096; border: 1px solid rgba(233,69,96,0.4); }
+  .tag-gold { background: rgba(240,165,0,0.15); color: var(--gold); border: 1px solid rgba(240,165,0,0.3); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .header { padding: 40px 20px; }
+    .header-grid { grid-template-columns: 1fr; gap: 20px; }
+    .main { padding: 20px; }
+    .cards-grid-2, .cards-grid-3 { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .psych-header { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-grid">
+    <div class="avatar-ring">
+      <div class="avatar-inner">🎮</div>
+    </div>
+    <div class="header-info">
+      <p class="subtitle">Dossier Psycho-Discordien · Analyse Complète</p>
+      <h1>dosinge / Dorian</h1>
+      <div class="badges">
+        <span class="badge badge-red"><span class="badge-dot"></span>Rageur Technique</span>
+        <span class="badge badge-purple"><span class="badge-dot"></span>Pragmatique HL</span>
+        <span class="badge badge-gold"><span class="badge-dot"></span>Master+ atteint</span>
+        <span class="badge badge-cyan"><span class="badge-dot"></span>Observateur Politique</span>
+        <span class="badge badge-red"><span class="badge-dot"></span>Anti-Par-Cœur</span>
+        <span class="badge badge-purple"><span class="badge-dot"></span>Dev / Santé</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="stat-box">
+      <div class="stat-num">5 924</div>
+      <div class="stat-label">Messages total</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">4 443</div>
+      <div class="stat-label">Canal qq-only</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">1 481</div>
+      <div class="stat-label">Canal politique</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">~7 ans</div>
+      <div class="stat-label">Période totale (2019–2026)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">13h</div>
+      <div class="stat-label">Pic d'activité qq-only</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">1.87</div>
+      <div class="stat-label">Moy. msg/jour qq-only</div>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-section" style="margin-top:20px;">
+    <div class="chart-title">Distribution horaire — canal qq-only (messages par heure)</div>
+    <div class="bar-chart" id="barChart"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- PARTIE 1 : QQ-ONLY -->
+  <div class="section-header">
+    <span class="section-num">PARTIE 1</span>
+    <span class="section-title">Profil Canal qq-only</span>
+    <span class="section-tag">4 443 messages · 2019–2025</span>
+  </div>
+
+  <!-- 1.1 Personnalité -->
+  <div class="subsection">
+    <div class="subsection-title">1.1 — Personnalité sur le canal : rage, célébration, rapport au jeu</div>
+    <div class="cards-grid" style="grid-template-columns: 1fr;">
+      <div class="card">
+        <div class="card-body">
+          <p>Dorian incarne un archétype rare dans l'écosystème discordien du League of Legends : le <span class="highlight">rageur lucide</span>. Il sait exactement ce qui ne va pas, il peut l'analyser avec précision, et c'est précisément cette lucidité qui rend sa rage si intense. Il ne crie pas dans le vide — il crie contre quelque chose de réel et d'identifiable. Sa frustration n'est jamais irrationnelle : elle est toujours ancrée dans une lecture correcte de la game, ce qui la rend d'autant plus explosive quand les autres ne suivent pas.</p>
+          <p>La rage de Dorian se manifeste en plusieurs intensités. Au niveau 1 : la constatation sèche. <em class="quote">"Mon adc vient de lock sivir dans alistar"</em><span class="quote-date">[28 mai 2023]</span> — trois mots, un constat, le silence de quelqu'un qui a tout vu. Au niveau 2 : le commentaire acéré avec une note d'humour noir. Au niveau 3 : le CAPS LOCK total, la frappe clavier, les points de suspension qui n'en finissent pas. Son record absolu reste ce chef-d'œuvre de l'expression de la détresse :</p>
+          <div class="quote">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]AAAAAAAAHHHHHHHHHHH[...]HHHHHHH"<span class="quote-date"> [23 mars 2023]</span> — 400+ caractères de pur cri primal.</div>
+          <p>À l'inverse, ses célébrations sont sobres à l'extrême. Un "nice", un émoji Jesus, parfois un "de rien pour les services" après un bon play. Il ne se vante pas, il constate. Quand il gagne une lane ou fait un grab clutch remarquable, il le mentionne en passant, comme une information technique :</p>
+          <div class="quote">"Par contre le grab clutch que j'ai mis sur nemay quand il jouait kalista là on le met pas hein"<span class="quote-date"> [4 sept. 2021]</span></div>
+          <p>Ce rapport asymétrique entre la démesure de la rage et la sobriété des célébrations en dit long sur sa psychologie : les victoires sont normales, les défaites injustes. C'est le biais cognitif du joueur compétitif poussé à sa forme la plus pure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 Niveau -->
+  <div class="subsection">
+    <div class="subsection-title">1.2 — Son niveau apparent et son rapport aux performances</div>
+    <div class="cards-grid cards-grid-2">
+      <div class="card">
+        <div class="card-icon">🏆</div>
+        <div class="card-title">Rang & Trajectoire</div>
+        <div class="card-body">
+          <p>Dorian est clairement un joueur de haut niveau, bien au-dessus de la masse. Il mentionne avoir atteint <span class="highlight-gold">Master 500 LP</span>, avoir été <span class="highlight-gold">Top 1650 en S7</span>, et en 2023 il vise et atteint des paliers master régulièrement. Il joue sur main <em>et</em> sur smurf, ce qui lui donne une double perspective : voir comment les "singes" jouent en bas du ladder tout en essayant de performer au sommet.</p>
+          <div class="quote">"Monter master 500 lp me rendre compte que ça change rien que +80% des games sont full pain"<span class="quote-date"> [mars 2025]</span></div>
+          <p>Sa révélation tardive sur LoL est particulièrement lucide : même en montant haut dans l'échelle, la soloq reste fondamentalement une expérience frustrante. Cette prise de conscience marque un tournant dans son rapport au jeu.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Analyse Technique</div>
+        <div class="card-body">
+          <p>Ses messages révèlent une compréhension fine du jeu : il parle <span class="highlight-purple">macro, wave management, path, trades, stack passifs</span>. Quand il explique un matchup, c'est avec la précision d'un joueur qui a vraiment réfléchi à chaque interaction. Il critique ses coéquipiers non pas sur leur score mais sur des erreurs de décision précises : mauvais placement, mauvaise gestion des ressources, pick hors-meta.</p>
+          <div class="quote">"J'ai check mes 20 dernieres games, celles que je win mon top est bien ou ne int pas au moins"<span class="quote-date"> [3 mai 2021]</span></div>
+          <p>Il analyse, il compile des données, il cherche des patterns. Ce n'est pas du tout le rageur qui blâme aveuglément — c'est quelqu'un qui veut comprendre. Et c'est justement quand la compréhension ne suffit pas que la frustration explose.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 Têtes de turc -->
+  <div class="subsection">
+    <div class="subsection-title">1.3 — Ses têtes de turc récurrentes</div>
+    <div class="cards-grid cards-grid-3">
+      <div class="card">
+        <div class="card-icon">⚔️</div>
+        <div class="card-title">Champions Détestés</div>
+        <div class="card-body">
+          <p>Dorian a une <span class="highlight">liste noire de champions</span> qui revient régulièrement. Yone est dans le top (mentionné comme "persoent" — personnellement détesté). Les ADC immobiles type Jinx/Sivir dans des compositions qui demandent du peel. Les champions "inutuables qui tuaient tout le monde" sont régulièrement cités avec un mélange d'admiration amère et de dégoût.</p>
+          <div class="tag-list">
+            <span class="tag tag-red">Yone</span><span class="tag tag-red">Rengar</span><span class="tag tag-red">Yasuo</span><span class="tag tag-red">Elise</span><span class="tag tag-purple">ADC immobiles</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🐒</div>
+        <div class="card-title">Le Coéquipier Archétype</div>
+        <div class="card-body">
+          <p>Le coéquipier idéal de Dorian n'existe pas. Dans les faits, il rencontre en boucle : l'<span class="highlight">autofill</span> qui "ferme la gueule et run down", le top "no impact", le jungler qui "pue à chaque game", l'ADC qui "tilt split toute la game", le support qui cried trop tôt. Le mot <span class="highlight">"singes"</span> est son terme générique pour désigner ce profil d'incompétence volontaire.</p>
+          <div class="quote">"Ces gros singes qui montent avec 0 macro"<span class="quote-date"> [mars 2023]</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Riot & L'Algorithme</div>
+        <div class="card-body">
+          <p>Riot Games et son matchmaking occupent une place particulière dans la mythologie personnelle de Dorian. La <span class="highlight">loserqueue</span> est une réalité pour lui, pas une excuse. Il documenta même une expérience de climb pour "prouver" l'existence de la loserqueue :</p>
+          <div class="quote">"On cherche à fix la loser queue aussi mais ça c'est plus compliqué"<span class="quote-date"> [7 juin 2023]</span> — en référence à sa "prise de possession" fictive de Riot.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 Expressions & Argot -->
+  <div class="subsection">
+    <div class="subsection-title">1.4 — Expressions signature et argot LoL personnel</div>
+    <div class="card">
+      <div class="card-body">
+        <p>Dorian a un lexique bien à lui, mélange de termes LoL standardisés et d'inventions personnelles. Voici son dictionnaire non-officiel :</p>
+        <div class="cards-grid cards-grid-2" style="margin-top: 16px;">
+          <div>
+            <p><span class="highlight-gold">"Singes"</span> — terme générique pour tout joueur de niveau insuffisant. Utilisé sans distinction de race, purement méritocratique dans son esprit.</p>
+            <p><span class="highlight-gold">"Int"</span> (verb intransitif) — feedder intentionnellement ou non intentionnellement par incapacité. "Il int" = il est catastrophique.</p>
+            <p><span class="highlight-gold">"Dog/Doggesque"</span> — très mauvais. "La gueule des mates c'est doggesque".</p>
+            <p><span class="highlight-gold">"Sad queue"</span> — la loserqueue subjective, quand tout le monde perd autour de toi.</p>
+          </div>
+          <div>
+            <p><span class="highlight-gold">"Free lose / Free win"</span> — jeux où l'issue est prédéterminée indépendamment de ta performance.</p>
+            <p><span class="highlight-gold">"Run down"</span> — courir en ligne droite vers les ennemis pour feeder. Le péché capital.</p>
+            <p><span class="highlight-gold">"Mental boom"</span> — crack psychologique d'un joueur. Toujours imminent pour ses coéquipiers.</p>
+            <p><span class="highlight-gold">"Se couper les couilles"</span> — réservé aux situations de jeu les plus désespérées : <em>"les games ça donne envie de se couper les couilles"</em> [juin 2023].</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.5 Humour & Style -->
+  <div class="subsection">
+    <div class="subsection-title">1.5 — Humour et style dans le contexte décontracté</div>
+    <div class="cards-grid cards-grid-2">
+      <div class="card">
+        <div class="card-icon">😂</div>
+        <div class="card-title">Humour par l'Absurde</div>
+        <div class="card-body">
+          <p>L'humour de Dorian sur qq-only fonctionne par <span class="highlight-purple">understatement et absurde décalé</span>. Sa construction humoristique favorite : l'énoncé bureaucratique du scandaleux. Par exemple, quand un voisin reçoit sa commande Picnic par erreur et ne dit rien :</p>
+          <div class="quote">"Les bougs ont fait semblant de rien. Je rentre on me dit que j'ai pas livré les bonnes personnes ahi. Les salops"<span class="quote-date"> [fév. 2025]</span></div>
+          <p>Le "ahi" est sa ponctuation émotionnelle universelle — ni rire ni consternation pure, quelque chose entre les deux. Il utilise aussi les émojis comme des ponctuations de dead face : &lt;:jesus:&gt; pour la consternation, &lt;:issou:&gt; pour le désespoir accepté.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎭</div>
+        <div class="card-title">Style Conversationnel</div>
+        <div class="card-body">
+          <p>Dorian parle en <span class="highlight">rafales courtes</span>. Rarement plus d'une phrase par message, souvent moins. Il découpe sa pensée en fragments : une observation, une réaction, une conclusion — trois messages distincts. Ce style crée un rythme particulier, presque un monologue intérieur rendu public.</p>
+          <p>Il n'hésite pas à <span class="highlight">contredire les autres joueurs</span> avec une désinvolture totale. "T'es juste CHANCEUX", "C'est incohérent ce que tu dis", "Ferme la bouffon" — toujours direct, jamais agressif au-delà du nécessaire. Sa limite est l'irrespect sincère : il peut insulter quelqu'un sur LoL mais proteste quand quelqu'un manque de respect dans un tournoi amical.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.6 Évaluation -->
+  <div class="subsection">
+    <div class="subsection-title">1.6 — Rageur chronique ou joueur zen ? Toxic ou fair-play ?</div>
+    <div class="card">
+      <div class="card-body">
+        <p>La réponse honnête est : <span class="highlight">rageur technique fair-play</span>. Dorian est rageur dans le sens où ses émotions sont intenses et visibles, mais il ne flambe pas ses coéquipiers in-game — il vient raguer sur Discord à la place, ce qui est une soupape saine. Il distingue clairement le flame en jeu (qu'il juge contreproductif) de l'analyse post-game (qu'il juge nécessaire).</p>
+        <div class="quote">"Je flamerai pas dessus sinon"<span class="quote-date"> [4 sept. 2021]</span> — après un play discutable d'un coéquipier.</div>
+        <p>Il reporte les joueurs qui intentent, qui wast des bans inutiles, qui afk — les cas véritablement toxiques. Mais il ne se considère pas infaillible non plus : il reconnaît ses biais, ses chains lose, ses périodes de tilt. <span class="highlight-purple">Il est dans le top 2% de la population de rageurs les plus analytiques.</span> Sa toxicité est une toxicité d'expert frustré par les amateurs, pas d'un personnage narcissique incapable d'autoréflexion.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.7 Sujets hors LoL -->
+  <div class="subsection">
+    <div class="subsection-title">1.7 — Sujets hors LoL récurrents sur qq-only</div>
+    <div class="cards-grid cards-grid-3">
+      <div class="card">
+        <div class="card-icon">💼</div>
+        <div class="card-title">Emploi & Précarité</div>
+        <div class="card-body">
+          <p>La difficulté à retrouver du travail après sa coupure santé est omniprésente en 2025. Il cherche une alternance en compta, rate des entretiens, observe le marché de l'emploi se rétrécir. Son témoignage sur le marché dev post-IA est précieux :</p>
+          <div class="quote">"Totalement bouché sauf si t'as full xp 5 ans+"<span class="quote-date"> [oct. 2025]</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏥</div>
+        <div class="card-title">Santé</div>
+        <div class="card-body">
+          <p>Dorian a traversé plusieurs années difficiles médicalement : scoliose, pieds plats, problème d'yeux (divergence oculaire), et surtout des <span class="highlight">apnées du sommeil</span> non diagnostiquées pendant longtemps car il n'avait aucun facteur de risque classique. Cette expérience l'a rendu sensible aux problèmes systémiques de santé.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Intelligence Artificielle</div>
+        <div class="card-body">
+          <p>L'IA est un sujet qui lui tient à cœur — pas par fascination technique mais par impact concret sur sa vie professionnelle. Il suit l'évolution des modèles, reconnaît que Claude 4 est à 0% sur le "kill test", et a même utilisé ChatGPT pour analyser ses résultats médicaux avec succès.</p>
+          <div class="quote">"J'ai filé le doc de mon médecin avec le récap à chat gpt, il a sorti toute les hypotheses qu'on avait + une pertinente"<span class="quote-date"> [oct. 2025]</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.8 PSYCHIATRIE -->
+  <div class="subsection">
+    <div class="subsection-title">1.8 — Évaluation Psychiatrique (Second Degré)</div>
+    <div class="psych-card">
+      <div style="text-align:center; margin-bottom: 20px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.1em; color: var(--text-muted);">CLINIQUE NEUROPSYCHIATRIQUE</div>
+        <div style="font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-muted);">UNITÉ DE PATHOLOGIE DU JOUEUR EN SOLOQ — SERVICE D'URGENCES PSYCHO-ELO</div>
+        <div style="width: 60%; height: 1px; background: var(--border); margin: 12px auto;"></div>
+      </div>
+      <div class="psych-header">
+        <div class="psych-field"><div class="psych-label">Patient</div><div class="psych-val">DOSINGE, Dorian · 29 ans</div></div>
+        <div class="psych-field"><div class="psych-label">Rang</div><div class="psych-val">Master — 500 LP (période haute)</div></div>
+        <div class="psych-field"><div class="psych-label">Durée du suivi</div><div class="psych-val">4 443 messages analysés (2019–2025)</div></div>
+        <div class="psych-field"><div class="psych-label">Motif de consultation</div><div class="psych-val">Rage récurrente, loserqueue persistante, cris de 400+ caractères</div></div>
+      </div>
+
+      <div class="psych-section">
+        <div class="psych-section-title">I. Diagnostics (DSM-LoL-R, 4ème édition)</div>
+        <div class="dx-item"><span class="dx-code">F45.3</span> <span><strong>Trouble de l'Attribution Causale Asymétrique</strong> — Le patient attribue systématiquement ses victoires à sa propre compétence et ses défaites à des facteurs exogènes (coéquipiers, algorithme, Riot Games). Critère rempli sur 6 ans continus de données.</span></div>
+        <div class="dx-item"><span class="dx-code">F42.1</span> <span><strong>Trouble Obsessionnel de la Macro</strong> — Pensées intrusives récurrentes concernant la gestion des vagues, les camps de jungle non pris, les objectifs non contestés. Le patient ne peut pas regarder une game sans calculer mentalement l'efficacité de chaque décision.</span></div>
+        <div class="dx-item"><span class="dx-code">F60.7</span> <span><strong>Personnalité à Soupape Discordienne</strong> — Le sujet canalise intégralement ses affects négatifs en jeu vers un canal Discord dédié ("qq-only"), évitant ainsi de flamber in-game. Mécanisme adaptatif remarquablement sain mais chronophage.</span></div>
+        <div class="dx-item"><span class="dx-code">F31.9</span> <span><strong>Cyclothymie Elo-Dépendante</strong> — Alternance régulière entre phases de "dead cat bounce" (remontée illusoire) et plongées en "losing queue". Le patient a une conscience clinique de ce phénomène sans pouvoir s'en extraire.</span></div>
+      </div>
+
+      <div class="psych-section">
+        <div class="psych-section-title">II. Observations Cliniques</div>
+        <div class="psych-body">
+          <p>À l'examen, le patient présente une intelligence émotionnelle supérieure à la moyenne des rageurs LoL (percentile 94). Il distingue correctement le "flame constructif" du "flame destructif", applique cette distinction en jeu, et externalise ses frustrations dans un espace dédié plutôt que de les projeter sur autrui — comportement atypiquement mature pour un joueur de sa morphologie émotionnelle.</p>
+          <p>Le délire de persécution algorithmique (<em>"la loserqueue existe"</em>) est présent mais bien encadré. Le patient reconnaît lui-même les limites de cette théorie, l'invoque comme outil explicatif plutôt que comme certitude absolue. Il n'est pas en rupture avec la réalité — il est simplement en conflit permanent avec elle.</p>
+          <p>Observation notable : le patient a finalement <strong>arrêté LoL</strong> après 10 ans, en 2025, après avoir atteint Master 500 LP et constaté que cela "ne change rien". Ce dénouement philosophique indique une résolution saine du cycle : il a atteint son objectif, vérifié que le bonheur n'était pas dedans, et est passé à autre chose. Pronostic favorable.</p>
+        </div>
+      </div>
+
+      <div class="psych-section">
+        <div class="psych-section-title">III. Mécanismes de Défense Identifiés</div>
+        <div class="psych-body">
+          <p><strong>1. L'Intellectualisation</strong> — face à la défaite, Dorian produit une analyse détaillée des erreurs de ses coéquipiers, transformant la douleur émotionnelle en exercice cognitif.</p>
+          <p><strong>2. Le Dodge Préventif</strong> — évitement anticipatoire face aux lobbies "qui puent la merde". Mécanisme d'adaptation efficace au prix de -3 LP.</p>
+          <p><strong>3. Le Smurf Thérapeutique</strong> — création d'un compte alternatif pour "jouer sans pression", qui devient rapidement une nouvelle source de frustration. Boucle de Sisyphe LoL classique.</p>
+          <p><strong>4. L'Humour Nihiliste</strong> — l'utilisation de "ahi", de GIFs sardoche, et de métaphores absurdes pour désamorcer les pics émotionnels intenses avant qu'ils ne deviennent pathologiques.</p>
+        </div>
+      </div>
+
+      <div class="psych-section">
+        <div class="psych-section-title">IV. Ordonnance Recommandée</div>
+        <div class="rx-item"><span class="rx-icon">💊</span> <strong>TFT 200mg</strong> — 2 sets par soirée. Forme alternative de MOBA sans coéquipiers humains directs. Déjà prescrit avec succès (patient confirmé Challenger TFT sur certains sets).</div>
+        <div class="rx-item"><span class="rx-icon">🧗</span> <strong>Escalade 3x/semaine</strong> — Déjà en cours. Continuer. Activité physique sociale sans possibilité de "feed" ou de "run down". Fortement recommandé.</div>
+        <div class="rx-item"><span class="rx-icon">🚫</span> <strong>LoL 0mg</strong> — Sevrage total maintenu. Rechute à éviter à tout prix. En cas de rechute, doser avec un ADC Sivir dans Alistar pour créer une aversion conditionnée durable.</div>
+        <div class="rx-item"><span class="rx-icon">📺</span> <strong>Sardoche Clips (usage externe)</strong> — Visionnage thérapeutique en cas de rechute des idées noires. Le patient a déjà démontré des anticorps efficaces contre ce vecteur.</div>
+      </div>
+
+      <div class="stamp">
+        Signé Dr. Claude Sonnet · Clinique du Joueur · Faculté de Psychologie Discordienne · 20 mars 2026<br>
+        <em>"Le pronostic est favorable. Le patient a survécu à 10 ans de soloq — c'est cliniquement remarquable."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTIE 2 : POLITIQUE -->
+  <div class="section-header">
+    <span class="section-num">PARTIE 2</span>
+    <span class="section-title">Profil Canal Politique</span>
+    <span class="section-tag">1 481 messages · 2022–2026</span>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">2.1 — Pourquoi si peu ? Désintérêt, prudence ou hors-terrain ?</div>
+    <div class="card">
+      <div class="card-body">
+        <p>Avec 1 481 messages sur presque 4 ans, Dorian est présent mais discret sur le canal politique. Cette modération relative n'est pas du désintérêt — ses interventions montrent clairement qu'il suit les débats et a des opinions définies. C'est plutôt une question de <span class="highlight">positionnement stratégique</span> et de style.</p>
+        <p>Premièrement, le canal politique est occupé par des personnalités très verbeux (RATS avec 1 530 messages, Zoller avec 1 350, Lyd avec 1 032). Dorian, dont le style naturel est la punchline courte, résiste à la tentation du mur de texte. Il intervient quand il a quelque chose de précis à dire, pas pour tenir un monologue.</p>
+        <p>Deuxièmement, une prudence réelle est visible : <em>"J'ai envie de dire des trucs mais pas envie d'avoir gilbert chez moi"</em> [avril 2022] — il auto-censure ses opinions les plus clivantes, conscient des conséquences potentielles. Cette prudence diminue progressivement après 2023, signe d'une confiance croissante dans l'espace discordien.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">2.2 — Quand il intervient : sujets et ton</div>
+    <div class="cards-grid cards-grid-2">
+      <div class="card">
+        <div class="card-icon">🏛️</div>
+        <div class="card-title">Sujets de Prédilection</div>
+        <div class="card-body">
+          <p>Ses interventions se concentrent sur des sujets concrets avec impact sur sa vie quotidienne : le <span class="highlight">marché du travail</span> (emploi dev, IA, alternance), les <span class="highlight">libertés individuelles</span> (pass sanitaire, surveillance), les <span class="highlight">questions démographiques</span> et d'identité nationale, le <span class="highlight">rapport entre générations</span> (boomers vs jeunes), et les <span class="highlight">questions de couple et natalité</span>.</p>
+          <div class="tag-list">
+            <span class="tag tag-purple">Emploi & IA</span>
+            <span class="tag tag-red">Pass sanitaire</span>
+            <span class="tag tag-gold">Immigration</span>
+            <span class="tag tag-purple">Boomers</span>
+            <span class="tag tag-red">Natalité & Couple</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Son Positionnement</div>
+        <div class="card-body">
+          <p>Dorian est difficile à classer dans une catégorie politique simple. Il est <span class="highlight">droitier sur les questions identitaires et migratoires</span>, tient des propos très critiques sur l'immigration non-européenne et l'islam. Il est <span class="highlight">anti-système</span> (critique féroce de Macron, méfiant des institutions), et <span class="highlight">libéral pragmatique</span> sur les libertés individuelles et l'économie. Il préfère "tout cramer pour repartir sur des bases saines" à toute option électorale traditionnelle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">2.3 — Convictions profondes ou réactions à chaud ?</div>
+    <div class="card">
+      <div class="card-body">
+        <p>Une analyse longitudinale révèle que Dorian a des <span class="highlight">convictions stables</span> sur certains sujets (les boomers ont eu le cheat code et vivent trop bien, l'IA va détruire l'emploi tertiaire, l'immigration non-européenne crée des problèmes d'intégration) et des <span class="highlight">positions plus réactionnelles</span> sur d'autres (le pass sanitaire, les manifs de 2023 qui lui semblent moins graves que le covid).</p>
+        <p>Ce qui le distingue des autres membres du canal : il ne cherche pas à "avoir raison" dans le débat. Il pose ses observations, parfois avec crudité, mais sans s'engager dans les débats interminables que font un Lyd ou un RATS. Quand le débat devient circulaire, il sort :</p>
+        <div class="quote">"Je suis sur mon elo mon smurf tema le qi de l'adc"<span class="quote-date"> — en partant du canal politique à mi-débat [2023]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">2.4 — Citations marquantes</div>
+    <div class="cards-grid cards-grid-2">
+      <div class="card">
+        <div class="quote">"Merci aux Golems qui ont ouvert la boîte de Pandore en acceptant toutes les mesures covid maintenant on va tous eat ze bugs"<span class="quote-date"> [6 sept. 2022]</span></div>
+        <div class="quote">"On est à un stade ou meme ca je m'en bas les couilles, que ca soit le pen ou merluche j'aurais préféré ca x 99999 à macron"<span class="quote-date"> [9 juin 2022]</span></div>
+      </div>
+      <div class="card">
+        <div class="quote">"C'est le seul jeu de ma vie où je regrette d'y avoir passé autant de temps. M'a fallu dix ans perso. Monter master 500 lp me rendre compte que ça change rien"<span class="quote-date"> [19 mars 2025]</span></div>
+        <div class="quote">"Faudrait tout revoir à part les maths [...] Déjà à notre époque c'est ouf le nb de trucs de golmons qu'on nous a fait apprendre par coeur"<span class="quote-date"> [7 fév. 2026]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTIE 3 : CONFRONTATION -->
+  <div class="section-header">
+    <span class="section-num">PARTIE 3</span>
+    <span class="section-title">Confrontation des Deux Canaux</span>
+    <span class="section-tag">Le même Dorian en deux miroirs</span>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">3.1 — Un seul Dorian, deux contextes</div>
+    <div class="card">
+      <div class="card-body">
+        <p>La question de savoir si c'est le "même Dorian" sur les deux canaux a une réponse claire : <span class="highlight">oui, fondamentalement</span>. Les marqueurs stylistiques sont identiques — les "ahi", les "issou", les observations sèches, le refus des longues dissertations, l'humour par understatement. Ce qui change c'est l'intensité émotionnelle.</p>
+        <p>Sur qq-only, Dorian est en mode <em>performance + émotions brutes</em> : le jeu active ses mécanismes de frustration et de satisfaction avec une intensité que la vie réelle n'atteint que rarement. Sur politique, il est en mode <em>observation distanciée</em> : il regarde le monde comme il regarde ses replays — en cherchant les erreurs macro, les mauvaises décisions, les joueurs qui "int".</p>
+        <p>La continuité est frappante dans son rapport aux institutions. Riot Games = le gouvernement. Le matchmaking biaisé = le système administratif kafkaïen. Les "singes" en soloq = les "golems" en politique. Le vocabulaire change, la grille d'analyse reste la même.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">3.2 — Ce que chaque canal révèle de l'autre</div>
+    <div class="cards-grid cards-grid-2">
+      <div class="card">
+        <div class="card-icon">🔮</div>
+        <div class="card-title">Ce que politique révèle de qq-only</div>
+        <div class="card-body">
+          <p>Le canal politique révèle que la frustration de Dorian en soloq n'est pas isolée — elle s'inscrit dans une frustration générale d'un jeune adulte confronté à un <span class="highlight">système qui ne récompense pas l'effort et la compétence</span>. Sa rage contre les coéquipiers "qui int" et contre les fonctionnaires "qui font rien" émane de la même source : l'incompréhension face à l'incompétence protégée.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Ce que qq-only révèle de politique</div>
+        <div class="card-body">
+          <p>Le canal qq-only révèle que Dorian est, dans le fond, un <span class="highlight">méritocrate frustré</span>. Sur LoL, il croit que le meilleur joueur devrait gagner. Sa vision politique s'articule autour de la même logique : ceux qui travaillent, s'adaptent, s'améliorent devraient être récompensés. La discrimination positive, le clientélisme, l'incompétence protégée lui sont aussi insupportables qu'un ADC qui afk split.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">3.3 — Citations croisées : les deux facettes se rejoignent</div>
+    <div class="card">
+      <div class="card-body">
+        <div class="cards-grid cards-grid-2">
+          <div>
+            <p style="font-size:0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">QQ-ONLY</p>
+            <div class="quote">"Mon jeu instant freeze crash [...] J'ai reco 5 * meme chose"<span class="quote-date"> [mars 2021]</span></div>
+            <div class="quote">"C'est pas normal qu'un role puisse hostage les 4 autres"<span class="quote-date"> [mars 2023]</span></div>
+            <div class="quote">"Y a au moins 30 persos tu crois j'ai que ca a foutre de te faire la liste"<span class="quote-date"> [avril 2022]</span></div>
+          </div>
+          <div>
+            <p style="font-size:0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">POLITIQUE</p>
+            <div class="quote">"Le problème c'est que ce malaise on l'a oui"<span class="quote-date"> [août 2022]</span> — idem en soloq.</div>
+            <div class="quote">"Pour le coup non je pense qu'un mec avec un 90 de qi peut avoir plus de bon sens qu'un mec à 110"<span class="quote-date"> [juin 2024]</span></div>
+            <div class="quote">"Je crois que c'est le même objectif que quand tu fracasses ton bureau après une soloq qui a mal tourné sur lol"<span class="quote-date"> [sept. 2025]</span> — Dorian lui-même faisant le pont entre les deux canaux.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTIE 4 : ÉVOLUTION -->
+  <div class="section-header">
+    <span class="section-num">PARTIE 4</span>
+    <span class="section-title">Évolution dans le Temps</span>
+    <span class="section-tag">2019 → 2026</span>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">4.1 — Frise Chronologique</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2019 — L'Ère Fondatrice</div>
+        <div class="tl-body">
+          <p>Dorian arrive sur le serveur avec 1 390 messages, sa phase la plus active en volume relatif. Il est en mode <span class="highlight-purple">pleine hyperfixation LoL</span> — chaque game commentée, chaque pick analysé, les emojis discordiens utilisés à profusion. Le style est plus brut, moins maîtrisé. Il n'a pas encore développé son économie de la frustration. Son niveau de jeu est déjà haut (il vise diamant) mais il n'a pas encore atteint master.</p>
+          <div class="quote">"LIBEREZ MOI DU PLAT PUTAIN"<span class="quote-date"> [19 mars 2019]</span> — sa façon de crier sa montée en elo, pure authenticité.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-year">2020 — La Creux</div>
+        <div class="tl-body">
+          <p>Seulement 371 messages — une chute drastique. Années covid, vie qui change de rythme. Il est encore présent mais moins intense. Sa lecture du jeu s'approfondit mais il passe moins de temps à la commenter. La période Covid le marque : il développe déjà des opinions sur les mesures sanitaires qui éclateront plus tard sur le canal politique.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-year">2021 — La Renaissance</div>
+        <div class="tl-body">
+          <p>Retour en force avec 1 416 messages — son second pic historique. Il est en phase de découverte de builds non-conventionnels (Zyra soutien, Sona Lucian), explore des rôles annexes, défend ses picks contre les critiques. Il développe son identité de "joueur technique" qui fait des trucs en dehors de la meta et fait ses preuves. Sa confiance en lui atteint un pic, tout comme ses skills analytiques.</p>
+          <div class="quote">"Top 1650 joueurs s7 sache le"<span class="quote-date"> [14 sept. 2021]</span> — rare moment d'autosatisfaction pleinement assumée.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2022 — La Fatigue</div>
+        <div class="tl-body">
+          <p>Seulement 245 messages sur qq-only, mais apparition sur le canal politique. Ce glissement est révélateur : Dorian commence à s'ennuyer de LoL et déplace son énergie analytique vers le monde réel. Ses problèmes de santé (apnées, scoliose) commencent à affecter son quotidien. Il est moins enflammé sur LoL, plus observateur sur la politique.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-year">2023 — Le Dernier Grand Flame</div>
+        <div class="tl-body">
+          <p>984 messages de retour — presque un retour aux sources. Mais le style a changé : plus de structure, moins de spontanéité brute. Il joue sur smurf, documente des "specimens" de joueurs catastrophiques avec leurs OP.GG, propose des ranks à ses amis. C'est son dernier grand effort investi dans LoL. Il teste des builds, analyse la meta, mais on sent une forme d'<span class="highlight">épuisement de fond</span> sous l'énergie de surface.</p>
+          <div class="quote">"Aux portes du gm into -300 lp"<span class="quote-date"> [juin 2023]</span> — le summum et la chute en une phrase.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-year">2024–2025 — La Transition</div>
+        <div class="tl-body">
+          <p>Quasi silence sur qq-only (37 messages). Dorian a arrêté LoL. Il se consacre au canal politique avec intensité (890 messages sur ces deux années). Sa vie connaît une instabilité réelle : problèmes de santé réglés mais rebond professionnel difficile, recherche d'alternance, job de livreur Picnic. Sur le canal politique, il est plus prolixe, plus direct, moins dans la prudence de 2022. Il partage sa vie quotidienne avec franchise.</p>
+          <div class="quote">"J'ai démarré un temps partiel chez picnic cette semaine je livre des courses à domicile [...] Je me suis fait cuck je me suis trompé d'une maison"<span class="quote-date"> [fév. 2025]</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-year">2026 — La Maturité Ironique</div>
+        <div class="tl-body">
+          <p>Dorian en 2026 est reconnaissable mais différent. Il a 29 ans, a traversé des galères réelles (santé, emploi), et son regard sur le monde est plus amer mais aussi plus paisible. Sur le canal politique, il est devenu un observateur lucide plutôt qu'un réactant. Sur qq-only, il revient ponctuellement mais avec le détachement de quelqu'un qui a réglé ses comptes avec le jeu. La boucle est bouclée : il feed Claude avec ses messages Discord et en rit.</p>
+          <div class="quote">"M'a fallu dix ans perso [pour arrêter LoL]. Monter master 500 lp me rendre compte que ça change rien"<span class="quote-date"> [mars 2025]</span></div>
+          <div class="quote">"J'ai feed claude avec un mois de messages d'ici et je lui ai donné des questions"<span class="quote-date"> [18 mars 2026]</span> — le moment méta ultime.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">4.2 — Projection : le Dorian de 2031</div>
+    <div class="card">
+      <div class="card-body">
+        <p>En extrapolant les trajectoires observées : Dorian en 2031 a probablement trouvé une stabilité professionnelle dans un domaine hybride tech/santé ou tech/compta où son pragmatisme est valorisé. Il a largement abandonné LoL sauf pour quelques sessions nostalgiques. Il joue à TFT ou à un autre jeu avec une composante moins punitive sur le facteur équipe.</p>
+        <p>Politiquement, sa radicalisation identitaire visible en 2024 (propos sur l'immigration, l'islam) aura soit évolué vers une forme de conservatisme structuré soit stagné dans un désenchantement diffus, selon son environnement social. Sa vision de l'IA sera confirmée — il sera probablement parmi les premiers à l'avoir intégrée pragmatiquement dans son travail.</p>
+        <p>Sur Discord, il sera moins actif — il a déjà commencé à "décrocher" des dynamiques de ragebait. Il répond ponctuellement, avec des punchlines toujours affûtées, les italiens aux péages restant une référence permanente du serveur.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT FINAL -->
+  <div class="verdict">
+    <div class="verdict-title">⚡ Verdict Final</div>
+    <div class="verdict-text">
+      Dorian est un <strong>méritocrate contraint dans un monde qui refuse de récompenser le mérite</strong> — que ce soit sur la carte de LoL ou dans le marché de l'emploi français de 2025. Sa rage est proportionnelle à sa compétence : seul quelqu'un qui comprend vraiment les règles peut être aussi furieux quand les autres refusent de les suivre. <strong>Il est le type même du joueur qui méritait de ne pas rester en plat</strong> — et il a fini par en sortir, mais trop tard pour y trouver la paix. Sa sagesse de fond, construite par 10 ans de soloq et 4 ans de débats discordiens, est celle d'un homme qui sait exactement <strong>ce qui ne va pas et pourquoi — et qui a appris à vivre avec</strong>, un "ahi" à la fois.
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Bar chart
+const hourlyData = {0:113,1:92,2:3,3:0,4:0,5:12,6:6,7:62,8:130,9:144,10:248,11:266,12:315,13:353,14:347,15:263,16:352,17:228,18:337,19:314,20:290,21:220,22:226,23:122};
+const maxVal = Math.max(...Object.values(hourlyData));
+const chart = document.getElementById('barChart');
+for (let h = 0; h < 24; h++) {
+  const v = hourlyData[h] || 0;
+  const pct = Math.max((v / maxVal) * 56, v > 0 ? 3 : 0);
+  const col = document.createElement('div');
+  col.className = 'bar-col';
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  bar.style.height = pct + 'px';
+  if (h >= 12 && h <= 16) {
+    bar.style.background = 'linear-gradient(180deg, #e94560, #a02340)';
+  }
+  bar.title = `${h}h: ${v} msgs`;
+  const label = document.createElement('div');
+  label.className = 'bar-label';
+  label.textContent = h % 4 === 0 ? h + 'h' : '';
+  col.appendChild(bar);
+  col.appendChild(label);
+  chart.appendChild(col);
+}
+</script>
+</body>
+</html>
