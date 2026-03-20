@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — _egide | qq-only</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52ab;
+    --red: #e94560;
+    --red-light: #ff6b8a;
+    --gold: #f5a623;
+    --text: #e0e0e0;
+    --text-dim: #9a9ab0;
+    --card: #1e1e3a;
+    --card2: #242444;
+    --border: #2e2e5e;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 50%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(83,52,131,0.3) 0%, transparent 60%);
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-top { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .avatar {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; font-weight: 900; color: white;
+    box-shadow: 0 0 30px rgba(233,69,96,0.5);
+    flex-shrink: 0;
+  }
+  .header-text h1 { font-size: 2.4rem; font-weight: 900; letter-spacing: 2px; }
+  .header-text h1 span { color: var(--red); }
+  .header-text .subtitle { color: var(--text-dim); font-size: 0.9rem; margin-top: 0.3rem; letter-spacing: 1px; }
+  .badges { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+  .badge {
+    padding: 0.3rem 0.9rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .badge-purple { background: var(--purple); color: white; }
+  .badge-red { background: var(--red); color: white; }
+  .badge-gold { background: var(--gold); color: #1a1a2e; }
+  .badge-outline { border: 1px solid var(--purple-light); color: var(--purple-light); }
+  .verdict-strip {
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.2rem;
+    background: rgba(233,69,96,0.1);
+    border-left: 3px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  /* LAYOUT */
+  .main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+  section { margin-bottom: 3rem; }
+  .section-title {
+    font-size: 1.2rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--red); border-bottom: 1px solid var(--border);
+    padding-bottom: 0.6rem; margin-bottom: 1.5rem;
+  }
+
+  /* STATS GRID */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.2rem; text-align: center;
+  }
+  .stat-card .val { font-size: 2rem; font-weight: 900; color: var(--red); line-height: 1.1; }
+  .stat-card .lbl { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
+
+  /* CHART */
+  .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+  .chart-title { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 120px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
+  .bar {
+    width: 100%; border-radius: 3px 3px 0 0;
+    background: linear-gradient(180deg, var(--red) 0%, var(--purple) 100%);
+    transition: opacity 0.2s;
+    min-height: 2px;
+  }
+  .bar:hover { opacity: 0.7; }
+  .bar-label { font-size: 0.6rem; color: var(--text-dim); }
+
+  /* CARDS GRID */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+  .card h3 { font-size: 0.85rem; color: var(--red); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+
+  /* PROGRESS BARS */
+  .prog-item { margin-bottom: 0.8rem; }
+  .prog-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .prog-label .name { color: var(--text); }
+  .prog-label .count { color: var(--text-dim); font-size: 0.75rem; }
+  .prog-bar-bg { background: var(--bg); border-radius: 4px; height: 8px; overflow: hidden; }
+  .prog-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--purple), var(--red)); }
+
+  /* EXPRESSIONS */
+  .expr-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .expr-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0.8rem; background: var(--card2); border-radius: 6px; }
+  .expr-name { font-family: 'Courier New', monospace; font-size: 0.9rem; color: var(--gold); }
+  .expr-freq { font-size: 0.75rem; color: var(--text-dim); }
+  .expr-bar-mini { width: 60px; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+  .expr-bar-mini-fill { height: 100%; background: var(--red); border-radius: 2px; }
+
+  /* CITATIONS */
+  .citations-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .citation {
+    border-left: 3px solid var(--purple);
+    padding: 0.7rem 1rem;
+    background: var(--card2);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+  .citation .date { font-style: normal; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.3rem; }
+  .citation.highlight { border-left-color: var(--red); }
+
+  /* RAGE METER */
+  .rage-meter { text-align: center; padding: 1rem 0; }
+  .rage-dial { position: relative; width: 140px; height: 70px; margin: 0 auto 0.8rem; }
+  .rage-dial svg { width: 100%; height: 100%; }
+  .rage-level { font-size: 1.5rem; font-weight: 900; color: var(--red); }
+  .rage-label { font-size: 0.75rem; color: var(--text-dim); }
+
+  /* PROSE SECTION */
+  .prose { max-width: 100%; }
+  .prose-section { margin-bottom: 2rem; }
+  .prose-section h3 {
+    font-size: 1rem; font-weight: 800; color: var(--purple-light);
+    margin-bottom: 0.8rem; padding-left: 0.8rem;
+    border-left: 3px solid var(--purple);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .prose-section p { color: var(--text); font-size: 0.92rem; line-height: 1.75; margin-bottom: 0.6rem; }
+  .prose-section em { color: var(--gold); font-style: italic; }
+  .prose-section strong { color: var(--red-light); }
+
+  /* MEDICAL REPORT */
+  .medical-wrap {
+    background: #f8f5e4;
+    color: #2a2020;
+    border-radius: 8px;
+    padding: 2rem;
+    font-family: 'Courier New', monospace;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
+    position: relative;
+  }
+  .medical-wrap::before {
+    content: 'CONFIDENTIEL';
+    position: absolute; top: 1rem; right: 1.5rem;
+    color: rgba(200,0,0,0.25); font-size: 1.5rem; font-weight: 900;
+    letter-spacing: 3px; transform: rotate(-15deg);
+  }
+  .medical-header { text-align: center; border-bottom: 2px solid #2a2020; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .medical-header h2 { font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; }
+  .medical-header p { font-size: 0.75rem; color: #555; }
+  .medical-field { display: flex; gap: 1rem; margin-bottom: 0.5rem; font-size: 0.82rem; }
+  .medical-field label { font-weight: 700; min-width: 140px; }
+  .medical-section { margin-top: 1.2rem; }
+  .medical-section h3 { font-size: 0.85rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+  .medical-section p { font-size: 0.8rem; line-height: 1.7; margin-bottom: 0.5rem; }
+  .medical-section em { color: #8b0000; }
+  .ordonnance {
+    background: white; border: 1px solid #ccc; border-radius: 4px;
+    padding: 1rem; margin-top: 1.2rem;
+  }
+  .ordonnance h3 { font-size: 0.85rem; font-weight: 900; margin-bottom: 0.8rem; }
+  .ordonnance li { font-size: 0.8rem; margin-left: 1.2rem; margin-bottom: 0.3rem; }
+  .signature { margin-top: 1.5rem; text-align: right; font-size: 0.8rem; font-style: italic; }
+
+  /* VERDICT */
+  .verdict-box {
+    background: linear-gradient(135deg, var(--bg3), #2a0a3e);
+    border: 1px solid var(--red);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+  }
+  .verdict-box h2 { font-size: 1.5rem; font-weight: 900; color: var(--red); margin-bottom: 1rem; letter-spacing: 2px; }
+  .verdict-box p { font-size: 1rem; line-height: 1.8; color: var(--text); max-width: 700px; margin: 0 auto; }
+  .verdict-box strong { color: var(--gold); }
+
+  /* RELATIONS */
+  .relation-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; padding: 0.6rem; background: var(--card2); border-radius: 6px; }
+  .relation-name { font-weight: 700; color: var(--purple-light); min-width: 90px; font-size: 0.9rem; }
+  .relation-desc { font-size: 0.8rem; color: var(--text-dim); flex: 1; }
+  .relation-heat { font-size: 1rem; }
+
+  footer { text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="avatar">E</div>
+      <div class="header-text">
+        <h1>_<span>egide</span></h1>
+        <div class="subtitle">#qq-only · Serveur privé · Analyste Soloq & Conseiller Non Sollicité</div>
+        <div class="badges">
+          <span class="badge badge-red">⚡ Rageur Philosophe</span>
+          <span class="badge badge-purple">🎯 Main ADC</span>
+          <span class="badge badge-gold">👑 Conseiller Ransberg Officiel</span>
+          <span class="badge badge-outline">📊 Théoricien Meta</span>
+          <span class="badge badge-outline">🩺 Médecin du rang</span>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-strip">
+      « Je suis pas ta conseillere en elo mais si tu veux monter pq tu spam juste pas kaisa ? » — _egide, 2021, après 47 défaites consécutives de Ransberg au support
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- STATS -->
+  <section>
+    <div class="section-title">📊 Statistiques</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val">5 899</div><div class="lbl">Messages totaux</div></div>
+      <div class="stat-card"><div class="val">6 ans</div><div class="lbl">Période d'activité</div></div>
+      <div class="stat-card"><div class="val">16,2</div><div class="lbl">Msgs / jour (moy.)</div></div>
+      <div class="stat-card"><div class="val">203</div><div class="lbl">Record 1 journée<br><span style="font-size:0.6rem;color:#9a9ab0">17 mars 2021</span></div></div>
+      <div class="stat-card"><div class="val">14h</div><div class="lbl">Heure de pointe</div></div>
+      <div class="stat-card"><div class="val">626</div><div class="lbl">Msgs en 1 mois<br><span style="font-size:0.6rem;color:#9a9ab0">Avril 2021</span></div></div>
+      <div class="stat-card"><div class="val">3 042</div><div class="lbl">Msgs en 2021<br><span style="font-size:0.6rem;color:#9a9ab0">L'année dorée</span></div></div>
+      <div class="stat-card"><div class="val">100%</div><div class="lbl">Auteur unique<br><span style="font-size:0.6rem;color:#9a9ab0">Canal monologue</span></div></div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY CHART -->
+  <section>
+    <div class="section-title">🕐 Activité horaire</div>
+    <div class="chart-wrap">
+      <div class="chart-title">Nombre de messages par heure (00h → 23h)</div>
+      <div class="bar-chart" id="hourChart"></div>
+    </div>
+  </section>
+
+  <!-- CARDS GRID -->
+  <section>
+    <div class="section-title">🎮 Analyse en détail</div>
+    <div class="cards-grid">
+
+      <!-- Champions -->
+      <div class="card">
+        <h3>🏆 Champions / Sujets les plus mentionnés</h3>
+        <div id="champBars"></div>
+      </div>
+
+      <!-- Expressions -->
+      <div class="card">
+        <h3>🗣️ Expressions signature</h3>
+        <div class="expr-list">
+          <div class="expr-item"><span class="expr-name">bah</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:100%"></div></div><span class="expr-freq">62×</span></div>
+          <div class="expr-item"><span class="expr-name">chancla 🩴</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:98%"></div></div><span class="expr-freq">77×</span></div>
+          <div class="expr-item"><span class="expr-name">broken</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:95%"></div></div><span class="expr-freq">73×</span></div>
+          <div class="expr-item"><span class="expr-name">rat 🐀</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:50%"></div></div><span class="expr-freq">38×</span></div>
+          <div class="expr-item"><span class="expr-name">mdr</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:65%"></div></div><span class="expr-freq">51×</span></div>
+          <div class="expr-item"><span class="expr-name">putain</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:61%"></div></div><span class="expr-freq">47×</span></div>
+          <div class="expr-item"><span class="expr-name">fréro</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:18%"></div></div><span class="expr-freq">14×</span></div>
+          <div class="expr-item"><span class="expr-name">ouffisime</span><div class="expr-bar-mini"><div class="expr-bar-mini-fill" style="width:2%"></div></div><span class="expr-freq">1× (hapax)</span></div>
+        </div>
+      </div>
+
+      <!-- Rage Meter -->
+      <div class="card">
+        <h3>🌡️ Jauge de rage</h3>
+        <div class="rage-meter">
+          <svg viewBox="0 0 200 110" style="width:180px;height:95px;display:block;margin:0 auto 0.5rem">
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#27ae60"/>
+                <stop offset="40%" style="stop-color:#f5a623"/>
+                <stop offset="100%" style="stop-color:#e94560"/>
+              </linearGradient>
+            </defs>
+            <!-- Background arc -->
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2e2e5e" stroke-width="16" stroke-linecap="round"/>
+            <!-- Filled arc - 75% rage -->
+            <path d="M 20 100 A 80 80 0 0 1 157 38" fill="none" stroke="url(#rg)" stroke-width="16" stroke-linecap="round"/>
+            <!-- Needle -->
+            <line x1="100" y1="100" x2="148" y2="40" stroke="#e94560" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="6" fill="#e94560"/>
+            <!-- Labels -->
+            <text x="16" y="116" fill="#27ae60" font-size="10" text-anchor="middle">Zen</text>
+            <text x="100" y="12" fill="#f5a623" font-size="10" text-anchor="middle">Moyen</text>
+            <text x="184" y="116" fill="#e94560" font-size="10" text-anchor="middle">Enfer</text>
+          </svg>
+          <div class="rage-level">75/100</div>
+          <div class="rage-label">« Rage Calibrée avec Lucidité »</div>
+          <p style="font-size:0.75rem;color:#9a9ab0;margin-top:0.8rem;line-height:1.5">Rageur oui, mais analytique. Il insulte avec des arguments. Il connaît votre WR, votre mauvais pathing ET votre mauvaise itemization.</p>
+        </div>
+      </div>
+
+      <!-- Relations -->
+      <div class="card">
+        <h3>👥 Relations avec les membres</h3>
+        <div class="relation-item">
+          <span class="relation-name">Ransberg</span>
+          <span class="relation-desc">Cible principale, cobaye elo, ami sincère. 82 mentions. Egide l'aime trop pour le laisser rester Gold.</span>
+          <span class="relation-heat">🔥🔥🔥🔥</span>
+        </div>
+        <div class="relation-item">
+          <span class="relation-name">Elilos</span>
+          <span class="relation-desc">Le contradicteur. Débats meta, winrate d'Akali, légitimité de l'OTP. 33 mentions.</span>
+          <span class="relation-heat">⚡⚡⚡</span>
+        </div>
+        <div class="relation-item">
+          <span class="relation-name">Gouh</span>
+          <span class="relation-desc">Mentionné avec respect mêlé de pique. 7 mentions.</span>
+          <span class="relation-heat">⚡⚡</span>
+        </div>
+        <div class="relation-item">
+          <span class="relation-name">Mathias</span>
+          <span class="relation-desc">Convoqué en remplacement, contesté. 6 mentions.</span>
+          <span class="relation-heat">⚡</span>
+        </div>
+        <div class="relation-item">
+          <span class="relation-name">Zink / Kicor</span>
+          <span class="relation-desc">Membres de fond, cités avec déférence ou ironie.</span>
+          <span class="relation-heat">😶</span>
+        </div>
+      </div>
+
+      <!-- Memorable quotes -->
+      <div class="card" style="grid-column: span 2;">
+        <h3>⭐ Moments mémorables</h3>
+        <div class="citations-list">
+          <div class="citation highlight">
+            <div class="date">05 juillet 2021</div>
+            « Si tu arrives d4 en full solo queue je me tatoue ransberg sur ma fesse droite »
+          </div>
+          <div class="citation">
+            <div class="date">29 août 2021</div>
+            « je suis pas ta conseillere en elo mais si tu veux monter pq tu spam juste pas kaisa ? »
+          </div>
+          <div class="citation highlight">
+            <div class="date">04 décembre 2020</div>
+            « Macron était challenger 2000 lp »
+          </div>
+          <div class="citation">
+            <div class="date">26 juin 2020</div>
+            « quand on a pas 100% winrate avec l'abomination qu'est aphelios »
+          </div>
+          <div class="citation highlight">
+            <div class="date">01 avril 2025 — The Magnum Opus</div>
+            « Ton positionnement est a CHIER, littéralement. Tu te fait engage de nul part [...] Ta macrogame bordel ? Parlons-en. Ta team est au nash, t'es botlane ? Ta microgame n'en parlons pas. »
+          </div>
+          <div class="citation">
+            <div class="date">26 octobre 2021</div>
+            « suicidez vous tous sans exception »
+          </div>
+          <div class="citation">
+            <div class="date">30 septembre 2024</div>
+            « J'leur ai dit qu'ils n'étaient pas un bénéfice pour la planète et qu'ils feraient mieux de se suicider assez vite si c'est pour continuer de jouer d'une pareille maniere »
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROSE DESCRIPTION -->
+  <section>
+    <div class="section-title">📖 Analyse psycho-ludique approfondie</div>
+    <div class="prose">
+
+      <div class="prose-section">
+        <h3>1. La personnalité sur le canal — Le Sage de la Flamme</h3>
+        <p>_egide n'est pas un simple rageur de soloq. C'est un <strong>phénomène discursif</strong> : un individu capable, dans le même souffle, de sortir une analyse froide et pertinente sur l'itemization ADC en 2024, et d'enchaîner immédiatement avec <em>« suicidez vous tous sans exception »</em> (26 octobre 2021). Sa rage est calibrée, ordonnée, presque académique. Il ne hurle pas dans le vide — il <em>argumente</em> sa haine. Là où un tilté ordinaire sort un « nul » et passe à autre chose, egide produit des paragraphes structurés avec introduction, développement et conclusion explosive.</p>
+        <p>Ce canal est son espace cathartique, son journal de bord, son tribunal. Il y dépose ses sentences comme un juge fatigué qui a vu trop de parties de Silver pourries. Son rapport au jeu est passionnel mais lucide — il sait exactement pourquoi il perd, pourquoi les autres perdent, et il a cette frustration particulière de l'individu qui <em>voit</em> les erreurs en temps réel mais ne peut rien faire. Ce n'est pas de l'ignorance qui l'alimente, c'est la connaissance.</p>
+      </div>
+
+      <div class="prose-section">
+        <h3>2. Niveau apparent et rapport aux performances</h3>
+        <p>egide joue principalement <strong>ADC</strong>, avec une obsession notable pour Kai'Sa (28 mentions), qu'il recommande lui-même comme champion de climb universel. Son niveau de jeu apparent est celui d'un joueur <strong>Gold–Platine solide</strong> qui a une compréhension réelle du jeu : il parle de freeze, de macro, de gestion de lane, de powerspikes d'items avec précision. Il poste des patchnotes Kai'Sa, commente les PBE, calcule les ratios. Ce n'est pas un joueur qui subit le méta — il l'analyse.</p>
+        <p>Cela dit, il reste piégé dans ce <strong>plafond émotionnel</strong> caractéristique des joueurs compétents sans débouché : <em>« t'es plafonned depuis X saisons »</em> (30 août 2021) — phrase qu'il sort à Ransberg mais qui sonne comme une projection. Il connaît les solutions théoriques mais la soloq demeure hostile. Son nemesis n'est pas l'ennemi d'en face, c'est l'aléatoire du matchmaking et les supports qui ne connaissent pas le mot <em>« freeze »</em>.</p>
+      </div>
+
+      <div class="prose-section">
+        <h3>3. Les têtes de turc — Un panthéon de frustrations</h3>
+        <p>La galaxie des nemesis d'egide est vaste et bien documentée. Au sommet du panthéon : <strong>Ransberg</strong>, 82 mentions, qui occupe une place unique entre objet de soin, cible de moquerie affectueuse et cobaye d'expériences elo involontaires. egide lui dédie des analyses complètes, lui propose des strategies de climb, lui promet un tatouage (<em>« je me tatoue ransberg sur ma fesse droite »</em>, 5 juillet 2021) — et passe ensuite l'essentiel de son temps à documenter ses échecs avec un mélange de tendresse et de désespoir.</p>
+        <p>Viennent ensuite les <strong>toplaners</strong>, probablement le groupe ethnique qu'il déteste le plus dans l'univers : <em>« tous les main top valent deux ligues de moins »</em>, <em>« omg les joueurs de top mais suicidez vous »</em>. Le <strong>support adverse</strong> est également un déclencheur classique, tout comme la <strong>meta jugée brisée</strong> (Aphelios qualifié d'<em>« abomination »</em> dès 2020), les <strong>champions "nuls"</strong> joués par des alliés (<em>« jouer cait alors que jinx existe »</em>), et plus généralement tout joueur qui <em>push h24</em> sans comprendre le freeze.</p>
+      </div>
+
+      <div class="prose-section">
+        <h3>4. Lexique personnel — Le patois d'egide</h3>
+        <p>egide possède un vocabulaire distinctif qui mêle argot LoL standard, inventions personnelles et recycling de mèmes internes. Son marqueur de départ de phrase le plus fréquent est <em>« bah »</em> (62 occurrences), utilisé dans tous les contextes — accord, désaccord, résignation, attaque. Il a une affection particulière pour l'emoji 🩴 (<strong>chancla</strong>, 77 occurrences), qui constitue son expression de réprobation suprême : plus un chanclazo, c'est plus du troll, c'est un verdict.</p>
+        <p>Le mot <strong>« broken »</strong> revient 73 fois — il ne l'utilise pas pour signifier puissant, mais comme un diagnostic de déséquilibre moral du jeu. <em>« rat »</em> (38 occurrences) est son terme générique pour désigner le comportement fuyant, lâche, peu glorieux, que ce soit une stratégie de split push passive ou un joueur qui refuse le fight. L'expression <em>« ouffisime »</em> apparaît exactement une fois, en 2020 — hapax légomenon de son œuvre, utilisée sur un ton de déception contenue.</p>
+      </div>
+
+      <div class="prose-section">
+        <h3>5. Humour — Le comique de l'absurde analytique</h3>
+        <p>L'humour d'egide est particulier : il est <strong>deadpan, absurdiste et souvent involontairement révélateur</strong>. Ses meilleures sorties surviennent quand il essaie d'être sérieux. <em>« Macron était challenger 2000 lp »</em> (4 décembre 2020) — dit comme une évidence, sans contexte explicite, dans une conversation LoL. L'idée d'une <em>Yuumi mid accrochée à lui en perma pour garder le passif MS »</em> (24 avril 2021) est présentée comme une <em>« idée de fou pour monter »</em>, avec le sérieux d'un coach LCS.</p>
+        <p>Son humour est également <strong>autoconscient par moments</strong> : il sait qu'il est en train de faire une diatribe, et il continue quand même. La longueur et la précision de son magnum opus d'avril 2025 — qui liste méthodiquement chaque faute de positioning, de macro, de micro et de gestion de lane sur plusieurs paragraphes — est à la fois une œuvre d'art de la rage et une performance comique involontaire.</p>
+      </div>
+
+      <div class="prose-section">
+        <h3>6. Hors LoL — Les éclipses thématiques</h3>
+        <p>Le canal est à 85% League of Legends pur, mais quelques sujets hors-jeu émergent régulièrement. L'<strong>école d'ingénieurs</strong> revient plusieurs fois, avec un mélange de respect distant et d'ironie (<em>« Meanwhile ingénieur se touchent la biteù »</em>, 2021 ; <em>« el famoso ecole d'ingé c dur »</em>). Il mentionne <strong>Montpellier</strong>, un projet de <strong>van</strong>, des potes en école d'ingé. Une vie existe en dehors de la soloq, mais elle ne mérite que des apparitions fugaces dans ce canal.</p>
+        <p>Les <strong>débats sociaux</strong> font une apparition en mai 2023, avec des positions tranchées sur les scandales Twitter et la culture du tribunal en ligne. egide y montre la même tendance argumentative que sur le jeu : il ne dit pas juste <em>« c'est nul »</em>, il démonte la logique interne du phénomène. Enfin, l'<strong>esport</strong> est commenté sporadiquement, toujours avec l'œil critique du connaisseur qui trouve les casters trop indulgents.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MEDICAL REPORT -->
+  <section>
+    <div class="section-title">🩺 Rapport psychiatrique</div>
+    <div class="medical-wrap">
+      <div class="medical-header">
+        <h2>CENTRE SPÉCIALISÉ EN PATHOLOGIES VIDÉOLUDIQUES ET TROUBLES SOLOQ</h2>
+        <p>Unité de Soins Intensifs — Service des Addictions Rankées | Dr. P. Matchmaking, PsyD, PhD, ELO 2100</p>
+        <p style="margin-top:0.3rem">Rapport clinique n° QQ-2025-EGIDE · STRICTEMENT CONFIDENTIEL</p>
+      </div>
+
+      <div class="medical-field"><label>Patient :</label><span>_egide, pseudo Discord, identité réelle non connue du praticien</span></div>
+      <div class="medical-field"><label>Date d'examen :</label><span>Continu depuis mars 2019, dernier épisode documenté : juillet 2025</span></div>
+      <div class="medical-field"><label>Source :</label><span>5 899 messages produits sur canal #qq-only, analysés in extenso</span></div>
+      <div class="medical-field"><label>Motif de consultation :</label><span>Incapacité à regarder un toplaner jouer sans ressentir une douleur thoracique</span></div>
+
+      <div class="medical-section">
+        <h3>I. Diagnostics principaux (DSM-5-LoL)</h3>
+        <p><strong>F65.8 — Syndrome du Conseiller Non Sollicité Chronique (SCNSC) :</strong> Le patient présente une compulsion irrépressible à émettre des recommandations stratégiques précises et non demandées. Observation clinique : <em>« je suis pas ta conseillere en elo mais si tu veux monter pq tu spam juste pas kaisa »</em> (2021-08-29). Notons la dénégation introductrice caractéristique — le patient commence par nier être un conseiller avant de délivrer une consultation structurée en plusieurs points. Mécanisme de défense classifié : <em>disclaimeur rhétorique.</em></p>
+        <p><strong>F42.3 — Trouble Obsessionnel-Compulsif de la Macro :</strong> Le patient ne peut pas observer une partie sans identifier et verbaliser chaque erreur de positionnement, gestion de lane, timing d'agression et itemization. L'épisode du 1er avril 2025 constitue un épisode aigu : sept paragraphes consécutifs détaillant les fautes de macro, micro, positionnement, TP, gestion de mana et réflexes d'un seul joueur. À noter : cet épisode survient un jour de poisson d'avril, ce qui n'est vraisemblablement pas une coïncidence.</p>
+        <p><strong>F91.2 — Trouble Oppositionnel-Analytique avec Spécialisation Toplaner :</strong> Hostilité ciblée et documentée envers les joueurs de top lane, sans rémission depuis 2020. Symptôme pathognomonique : la capacité à autofill top, stomp la lane, et simultanément affirmer que le rôle ne requiert aucun skill. Apparemment, cela ne constitue pas une contradiction dans son système cognitif.</p>
+      </div>
+
+      <div class="medical-section">
+        <h3>II. Diagnostics secondaires</h3>
+        <p><strong>Z63.4 — Trouble de la Relation Parasociale Elo-Mutualisée (cas Ransberg) :</strong> Attachement intense, documenté sur 82 mentions s'étalant sur 4 ans, à un individu tiers dont l'évolution elo constitue une source de satisfaction et de souffrance alternées. Le patient suit la progression de ce sujet avec une précision que la plupart des gens réservent à leurs enfants. Il a proposé un tatouage à titre de gage. Le pronostic de guérison de cette relation est mauvais : les deux parties semblent y trouver leur compte.</p>
+        <p><strong>F60.5 — Personnalité "méta-encyclopédique" avec hyper-documentation :</strong> Le patient archive et partage des patchnotes, des statistiques PBE, des calculs de ratios AD et des comparaisons d'items avec une fréquence incompatible avec une vie sociale normale. On notera le copy-paste intégral de changelogs Kai'Sa en janvier 2021, qui représente le summum clinique de ce trouble.</p>
+      </div>
+
+      <div class="medical-section">
+        <h3>III. Observations cliniques notables</h3>
+        <p>Le patient présente une <strong>labilité émotionnelle rapide mais non aléatoire</strong> — ses transitions de la rage à l'humour sont structurées par la logique interne de la situation. Il n'insulte pas les gens au hasard ; il insulte les gens après avoir démontré pourquoi ils méritent d'être insultés. C'est, techniquement parlant, de la rage <em>éthique.</em></p>
+        <p>On note également une <strong>capacité de mentalisation préservée</strong> : il sait qu'il rage, il le dit parfois, et ça ne change rien. <em>« no rageù »</em> (17 mars 2021) — le ù final trahissant une main sur le clavier encore tremblante de l'épisode précédent.</p>
+        <p>Fait clinique remarquable : le patient est capable, dans la même journée du 17 mars 2021 (son record de 203 messages), de produire une analyse pertinente sur la montée en puissance des supports actifs ET d'avoir ce que nous diagnostiquons comme un épisode dissociatif lié à un gank raté.</p>
+      </div>
+
+      <div class="ordonnance">
+        <h3>Rp — ORDONNANCE N° QQ-2025-004</h3>
+        <ul>
+          <li><strong>Chancla-thérapie</strong> 1× / défaite : Appliquer emoji 🩴 sur interlocuteur avant de répondre. Réduire progressivement à 2× / semaine d'ici 6 mois.</li>
+          <li><strong>Kaisa-spam</strong> : 600 games minimum avant tout changement de champion. Ne pas négocier.</li>
+          <li><strong>Séance hebdomadaire</strong> de lecture à voix haute de ses propres analyses à un public non-joueur. Objectif : comprendre le regard extérieur.</li>
+          <li><strong>Interdit clinique</strong> : Regarder un toplaner farmer sans support émotionnel qualifié présent.</li>
+          <li><strong>Pronostic :</strong> Favorable mais non guéri. Le patient restera ce qu'il est, et c'est probablement pour le mieux pour l'écosystème du canal.</li>
+        </ul>
+      </div>
+
+      <div class="signature">
+        Dr. P. Matchmaking — Spécialiste en Pathologies Rankées<br>
+        <em>« Le jeu n'est pas brisé. Vous l'êtes. »</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERDICT FINAL -->
+  <section>
+    <div class="section-title">⚡ Verdict final</div>
+    <div class="verdict-box">
+      <h2>LE VERDICT</h2>
+      <p>_egide est le <strong>phénomène rare du rageur intelligent</strong> — celui qui ne perd pas ses moyens mais les ordonne en armes. En six ans et 5 899 messages, il a bâti un corpus d'une cohérence redoutable : une théorie du jeu, une hiérarchie des péchés LoL, et un amour chronique pour Ransberg qu'il n'admettra jamais officiellement. <strong>Toxic sur la forme, fair-play sur le fond</strong> — il veut que ses alliés s'améliorent, même s'il leur dit d'une façon qui nécessiterait une médiation. Son véritable champion signature n'est pas Kai'Sa : c'est <strong>la raison elle-même</strong>, malheureusement jouée dans un jeu qui lui en offre peu l'occasion.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Rapport généré automatiquement · Canal #qq-only · 2019–2025 · 5 899 messages analysés · _egide © tous droits réservés de se plaindre
+</footer>
+
+<script>
+// HOUR CHART
+const hourData = {0:64,1:11,2:1,4:1,5:3,6:6,7:65,8:303,9:212,10:565,11:485,12:325,13:383,14:757,15:441,16:429,17:412,18:258,19:302,20:175,21:301,22:288,23:112};
+const maxVal = Math.max(...Object.values(hourData));
+const chartEl = document.getElementById('hourChart');
+for (let h = 0; h < 24; h++) {
+  const val = hourData[h] || 0;
+  const pct = (val / maxVal) * 100;
+  const wrap = document.createElement('div');
+  wrap.className = 'bar-wrap';
+  wrap.innerHTML = `<div class="bar" style="height:${pct}%" title="${h}h: ${val} msgs"></div><div class="bar-label">${h}</div>`;
+  chartEl.appendChild(wrap);
+}
+
+// CHAMP BARS
+const champs = [
+  {name:'Kai\'Sa', count:28},
+  {name:'Twitch', count:22},
+  {name:'Garen', count:20},
+  {name:'Varus', count:20},
+  {name:'Nilah', count:19},
+  {name:'Sivir', count:18},
+  {name:'Yuumi', count:18},
+  {name:'Karma', count:17},
+  {name:'Jinx', count:16},
+  {name:'Taric', count:15},
+];
+const maxChamp = champs[0].count;
+const champEl = document.getElementById('champBars');
+champs.forEach(c => {
+  const pct = (c.count / maxChamp) * 100;
+  champEl.innerHTML += `<div class="prog-item">
+    <div class="prog-label"><span class="name">${c.name}</span><span class="count">${c.count} fois</span></div>
+    <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+});
+</script>
+</body>
+</html>

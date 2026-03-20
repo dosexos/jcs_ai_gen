@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — depardieu01 | Dossier qq-only</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #12122a;
+    --bg3: #1a1a35;
+    --card: #1e1e3a;
+    --card2: #252545;
+    --purple: #533483;
+    --purple-light: #7a4fd6;
+    --purple-glow: rgba(83,52,131,0.4);
+    --red: #e94560;
+    --red-light: #ff6b85;
+    --red-glow: rgba(233,69,96,0.3);
+    --gold: #f4c430;
+    --cyan: #00d4ff;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --border: rgba(83,52,131,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #0a0a1e 0%, #1a0a2e 50%, #0a1a2e 100%);
+    border-bottom: 2px solid var(--red);
+    padding: 50px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, var(--purple-glow) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, var(--red-glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .header-pseudo {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--purple-light), var(--red-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    text-shadow: none;
+  }
+
+  .header-sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 6px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 24px;
+    position: relative;
+  }
+
+  .badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .badge-purple { background: var(--purple); color: white; border: 1px solid var(--purple-light); }
+  .badge-red { background: rgba(233,69,96,0.2); color: var(--red-light); border: 1px solid var(--red); }
+  .badge-gold { background: rgba(244,196,48,0.15); color: var(--gold); border: 1px solid var(--gold); }
+  .badge-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid var(--cyan); }
+  .badge-gray { background: rgba(136,136,170,0.15); color: var(--text-muted); border: 1px solid rgba(136,136,170,0.3); }
+
+  /* ─── LAYOUT ──────────────────────────────────────────────────── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    border-left: 4px solid var(--red);
+    padding-left: 14px;
+    margin-bottom: 24px;
+    margin-top: 50px;
+  }
+
+  /* ─── STATS GRID ──────────────────────────────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-3px); }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ─── CHART CONTAINER ──────────────────────────────────────────── */
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+  }
+
+  .chart-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* ─── CARDS GRID ──────────────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+
+  .card-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple-light);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── PROGRESS BARS ──────────────────────────────────────────── */
+  .progress-item {
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+
+  .progress-count { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+
+  .progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    transition: width 0.6s ease;
+  }
+
+  .progress-fill.alt { background: linear-gradient(90deg, var(--red), var(--gold)); }
+
+  /* ─── QUOTE ──────────────────────────────────────────────────── */
+  .quote-block {
+    background: var(--bg3);
+    border-left: 3px solid var(--red);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-style: italic;
+    color: var(--text);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .quote-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 6px;
+    font-style: normal;
+  }
+
+  /* ─── RAGE METER ──────────────────────────────────────────────── */
+  .rage-meter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .rage-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rage-label { width: 130px; font-size: 0.82rem; color: var(--text); }
+  .rage-bar-bg { flex: 1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; }
+  .rage-bar-fill { height: 100%; border-radius: 5px; }
+  .rage-pct { width: 40px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ─── PROSE SECTION ──────────────────────────────────────────── */
+  .prose-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+  }
+
+  .prose-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--red-light);
+    margin-top: 32px;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose-section h3:first-child { margin-top: 0; }
+
+  .prose-section p {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: #cccce0;
+    margin-bottom: 14px;
+  }
+
+  .prose-section em {
+    color: var(--gold);
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: rgba(244,196,48,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ─── MEDICAL SECTION ──────────────────────────────────────────── */
+  .medical {
+    background: #fafaf5;
+    color: #111;
+    border-radius: 14px;
+    padding: 36px 40px;
+    font-family: 'Times New Roman', Georgia, serif;
+    line-height: 1.8;
+    border: 2px solid #ccc;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .medical::before {
+    content: '⚕';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 180px;
+    opacity: 0.04;
+    color: #000;
+  }
+
+  .medical-header {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+
+  .medical-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #222;
+  }
+
+  .medical-header p { font-size: 0.82rem; color: #555; margin-top: 4px; }
+
+  .medical-field {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 8px 16px;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+  }
+
+  .medical-field-label { font-weight: 700; color: #333; }
+  .medical-field-val { color: #111; }
+
+  .medical h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: underline;
+  }
+
+  .medical p { font-size: 0.88rem; margin-bottom: 10px; color: #222; }
+
+  .medical em { font-style: italic; color: #444; }
+
+  .medical .ordonnance {
+    background: #f0f0e8;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 0.85rem;
+  }
+
+  .medical .ordonnance h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .medical .ordonnance li {
+    margin-left: 20px;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+
+  .medical .signature {
+    text-align: right;
+    margin-top: 30px;
+    font-size: 0.82rem;
+    color: #555;
+    font-style: italic;
+  }
+
+  /* ─── VERDICT ──────────────────────────────────────────────────── */
+  .verdict {
+    background: linear-gradient(135deg, #1a0a2e, #2a0a1a);
+    border: 2px solid var(--red);
+    border-radius: 14px;
+    padding: 30px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verdict::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, var(--red-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .verdict p {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.9;
+    color: #f0e0e0;
+    position: relative;
+  }
+
+  .verdict strong {
+    color: var(--red-light);
+  }
+
+  .verdict .verdict-title {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────────────── */
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  canvas { max-height: 200px; }
+
+  .tag {
+    display: inline-block;
+    background: rgba(83,52,131,0.2);
+    border: 1px solid var(--purple);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--purple-light);
+    margin: 3px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    margin: 50px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ HEADER ═══════════════════════════════ -->
+<div class="header">
+  <div class="header-pseudo">depardieu01</div>
+  <div class="header-sub">#qq-only &nbsp;·&nbsp; Canal Défouloir &nbsp;·&nbsp; 2019–2026</div>
+  <div class="badges">
+    <span class="badge badge-purple">🎮 Analyste SoloQ Compulsif</span>
+    <span class="badge badge-red">🔥 Niveau de Rage : STRATOSPHÉRIQUE</span>
+    <span class="badge badge-gold">📊 ADC Main Revendicatif</span>
+    <span class="badge badge-cyan">🧠 Théoricien du Meta</span>
+    <span class="badge badge-gray">⚖️ Étudiant en Droit (partiellement)</span>
+    <span class="badge badge-red">☢️ Ennemi Juré de Riot Games</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ STATS ═══════════════════════════════ -->
+<div class="container">
+
+  <div class="section-title">📊 Statistiques Générales</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">7 819</div>
+      <div class="stat-label">Messages Totaux</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">6.7</div>
+      <div class="stat-label">Années d'Activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">3.2</div>
+      <div class="stat-label">Msg / Jour (moy.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">261</div>
+      <div class="stat-label">Record Journalier (25 mai 2021)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">16h</div>
+      <div class="stat-label">Heure de Pointe</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">Feb. 2021</div>
+      <div class="stat-label">Mois le Plus Actif (725 msg)</div>
+    </div>
+  </div>
+
+  <!-- HOURLY CHART -->
+  <div class="chart-card">
+    <div class="chart-title">🕐 Distribution Horaire des Messages</div>
+    <canvas id="hourChart"></canvas>
+  </div>
+
+  <!-- ═══════════════════════════════ CARDS GRID ═══════════════════ -->
+  <div class="section-title">🃏 Fiches Analytiques</div>
+  <div class="cards-grid">
+
+    <!-- Champions mentionnés -->
+    <div class="card">
+      <div class="card-title">⚔️ Champions les Plus Mentionnés</div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Garen</span><span class="progress-count">41</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Azir</span><span class="progress-count">32</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Lee Sin</span><span class="progress-count">29</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:71%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Nasus</span><span class="progress-count">27</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:66%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Jinx</span><span class="progress-count">26</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:63%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Zed</span><span class="progress-count">25</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:61%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Rengar</span><span class="progress-count">22</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:54%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Viktor</span><span class="progress-count">21</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:51%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Corki</span><span class="progress-count">21</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:51%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Cassiopeia</span><span class="progress-count">21</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:51%"></div></div>
+      </div>
+    </div>
+
+    <!-- Vocabulaire de rage -->
+    <div class="card">
+      <div class="card-title">💥 Vocabulaire de Combat</div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"broken"</span><span class="progress-count">89</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"MPB"</span><span class="progress-count">106</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"merde"</span><span class="progress-count">44</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:49%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"putain"</span><span class="progress-count">42</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:47%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"fdp"</span><span class="progress-count">37</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:42%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"diff"</span><span class="progress-count">27</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:30%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"nul"</span><span class="progress-count">31</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:35%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"paz"</span><span class="progress-count">21</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:24%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"hostage"</span><span class="progress-count">12</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:13%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>"merguez"</span><span class="progress-count">8</span></div>
+        <div class="progress-bar"><div class="progress-fill alt" style="width:9%"></div></div>
+      </div>
+    </div>
+
+    <!-- Style de rage -->
+    <div class="card">
+      <div class="card-title">🌡️ Thermomètre de l'Âme</div>
+      <div class="rage-meter">
+        <div class="rage-row">
+          <span class="rage-label">Analyse post-défaite</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:97%; background: linear-gradient(90deg,#533483,#e94560);"></div></div>
+          <span class="rage-pct">97%</span>
+        </div>
+        <div class="rage-row">
+          <span class="rage-label">Blâme Riot Games</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:82%; background: linear-gradient(90deg,#e94560,#f4c430);"></div></div>
+          <span class="rage-pct">82%</span>
+        </div>
+        <div class="rage-row">
+          <span class="rage-label">Blâme les équipiers</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:75%; background: linear-gradient(90deg,#e94560,#ff6b85);"></div></div>
+          <span class="rage-pct">75%</span>
+        </div>
+        <div class="rage-row">
+          <span class="rage-label">Self-awareness</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:45%; background: linear-gradient(90deg,#00d4ff,#533483);"></div></div>
+          <span class="rage-pct">45%</span>
+        </div>
+        <div class="rage-row">
+          <span class="rage-label">Célébration victoire</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:30%; background: linear-gradient(90deg,#f4c430,#00d4ff);"></div></div>
+          <span class="rage-pct">30%</span>
+        </div>
+        <div class="rage-row">
+          <span class="rage-label">Félicite ses mates</span>
+          <div class="rage-bar-bg"><div class="rage-bar-fill" style="width:12%; background: linear-gradient(90deg,#00d4ff,#f4c430);"></div></div>
+          <span class="rage-pct">12%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moments mémorables -->
+    <div class="card">
+      <div class="card-title">💎 Citations Cultes</div>
+
+      <div class="quote-block">
+        « les islamo gauchistes peuvent peut être me dire pk maokai 1v9 machine du haut de ses deux items break complètement le jeu pendant que les adc faibles 4 items sont useless »
+        <div class="quote-date">01 août 2024</div>
+      </div>
+
+      <div class="quote-block">
+        « TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE TOP ROLE... »
+        <div class="quote-date">30 décembre 2021 [×3 à des semaines d'écart]</div>
+      </div>
+
+      <div class="quote-block">
+        « PUTAIN MAIS FRANCHEMENT BELLE LOGIQUE RIOT GAMES / ON VOIT CA NUL PART »
+        <div class="quote-date">05 décembre 2020</div>
+      </div>
+
+      <div class="quote-block">
+        « j'ai jamais win une game où je me suis cassé, c'est la démonstration de ma capacité d'analyse et je perds pas mon temps avec des délu qui m'hostage »
+        <div class="quote-date">10 décembre 2020</div>
+      </div>
+
+      <div class="quote-block">
+        « Qu'est ce que riot a sorti qui est sain pour le jeu selon la vision étriquée de merde elo 2 trick autistic champ »
+        <div class="quote-date">15 avril 2021</div>
+      </div>
+    </div>
+
+    <!-- Expressions signature -->
+    <div class="card">
+      <div class="card-title">🔤 Expressions Signature</div>
+      <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:14px;">Néologismes, dialectismes et tics langagiers identifiés sur corpus 7819 messages</p>
+      <div>
+        <span class="tag">paz</span>
+        <span class="tag">pazification</span>
+        <span class="tag">hostage</span>
+        <span class="tag">merguez</span>
+        <span class="tag">broken asf</span>
+        <span class="tag">diff</span>
+        <span class="tag">délu</span>
+        <span class="tag">MPB</span>
+        <span class="tag">ransberg</span>
+        <span class="tag">low elo ape</span>
+        <span class="tag">non cap</span>
+        <span class="tag">paz sur toi néanmoins</span>
+        <span class="tag">en dépit de ent</span>
+        <span class="tag">creation d'espace</span>
+        <span class="tag">inting</span>
+        <span class="tag">QQ</span>
+        <span class="tag">atm</span>
+        <span class="tag">fdp</span>
+        <span class="tag">top tiers delusional</span>
+        <span class="tag">smurf Q</span>
+        <span class="tag">nathell team</span>
+        <span class="tag">PUTAIN [caps lock]</span>
+      </div>
+
+      <div style="margin-top:18px;">
+        <div class="card-title" style="margin-bottom:10px;">🎭 Rôles du Dramatis Personæ</div>
+        <p style="font-size:0.83rem; color:var(--text-muted); line-height:1.8;">
+          <strong style="color:var(--red-light)">MPB</strong> — La némésis. 106 mentions. Joueur du groupe, cible récurrente de critiques analytiques et de moqueries affectueuses.<br>
+          <strong style="color:var(--purple-light)">Ransberg</strong> — L'adversaire interne. Cité en contexte de rivalité ELO et de débats passionnés.<br>
+          <strong style="color:var(--gold)">Elilos / Dorian / Smoggi</strong> — Les "<em>pazifiés</em>", victimes emblématiques du classement interne.
+        </p>
+      </div>
+    </div>
+
+    <!-- Activité hors LoL -->
+    <div class="card">
+      <div class="card-title">🌍 Vie Hors SoloQ</div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">Sujets identifiés hors gameplay LoL pur</p>
+
+      <div class="progress-item">
+        <div class="progress-label"><span>Études de Droit (TD, fac, codes)</span><span class="progress-count">présence notable</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Esport pro (LEC, LCS, LCK)</span><span class="progress-count">fréquent</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Débats meta / théoriecraft</span><span class="progress-count">omniprésent</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Vie quotidienne / anecdotes</span><span class="progress-count">modéré</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Gestion d'équipe / orga custom</span><span class="progress-count">présent (2024-2025)</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Blagues & humour absurde</span><span class="progress-count">continu</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+      </div>
+
+      <div class="quote-block" style="margin-top:16px;">
+        « en fait je me mets tjrs en situation où je suis sur le fil du rasoir par exemple je sèche mes premiers td comme ça je n'ai plus de joker et je suis full focus »
+        <div class="quote-date">06 décembre 2020 — 01h39 du matin</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════ SECTION PROSE ══════════════════════════════ -->
+  <div class="section-title">📖 Analyse Approfondie</div>
+
+  <div class="prose-section">
+
+    <h3>1. Personnalité sur le Canal — Gestion de la Rage et de la Victoire</h3>
+    <p>
+      depardieu01 est une présence à la fois tutélaire et volcanique dans ce canal. Sur 6,7 années d'activité sans interruption majeure, il a maintenu un rythme moyen de 3,2 messages par jour, pouvant exploser à 261 en une seule journée lors des 25 mai 2021. Son mode de communication par défaut est le commentaire analytique : il ne ragera presque jamais à vide, mais encadrera systématiquement son indignation dans un raisonnement pseudo-rigoureux. Là où un autre joueur écrirait simplement <em>"nul ce champ"</em>, depardieu01 produira un paragraphe de 4 lignes avec contexte méta, comparaison historique et pronostic de nerfs Riot.
+    </p>
+    <p>
+      Sa rage est structurée, presque académique dans sa forme, mais bouillonnante dans son fond. Il n'est pas du genre à écrire en mode full caps sans raison — quand les majuscules arrivent, c'est que quelque chose d'extraordinairement frustrant s'est produit : <em>"PUTAIN MAIS FRANCHEMENT BELLE LOGIQUE RIOT GAMES"</em> (5 décembre 2020) ou encore <em>"MAIS RIOT NERFEZ TRYNDA"</em> (1er février 2021) et le chef-d'œuvre en trois messages consécutifs <em>"RIOT / RIOT / RIOT FAITES QUELQUE CHOSE"</em>. Ces éruptions sont des marqueurs de bascule émotionnelle totale, d'autant plus mémorables qu'elles contrastent avec son style habituellement châtié.
+    </p>
+    <p>
+      Les victoires, en revanche, génèrent peu d'écriture. depardieu01 est fondamentalement un homme de la défaite — non pas qu'il perde plus qu'il ne gagne, mais parce que la victoire ne stimule pas son besoin d'analyse. Une défaite est une thèse à soutenir, un bug du monde à documenter, une erreur de game design à instrumentaliser. Une victoire est simplement conforme à l'ordre naturel des choses.
+    </p>
+
+    <h3>2. Niveau de Jeu et Auto-Évaluation</h3>
+    <p>
+      Sur la question de son propre niveau, depardieu01 adopte une posture cohérente : il se place clairement au-dessus des joueurs qu'il critique, tout en restant suffisamment vague pour ne jamais être directement contredit. Les rares références à son propre ELO sont indirectes — il parle de <em>"mon elo"</em> comme d'un étalon de référence contre lequel mesurer des adversaires (<em>"si un jour je devais me faire boxer par un vlad de mon elo sah je me remettrai en question"</em> — mai 2022). Il évoque un <em>"peak Master 100LP"</em> en décembre 2020, formulé de façon désinvolte comme si c'était une information banale à donner.
+    </p>
+    <p>
+      Son rapport à l'analyse tactique révèle un niveau de compréhension du jeu réel et significatif. Ses commentaires sur les matchups, les builds, les winrates et les interactions de kits ne sont pas du bruit de surface : il comprend réellement les mécaniques sous-jacentes de League of Legends, distingue les effets de la méta des problèmes de game design, et identifie correctement les forces et faiblesses des champions qu'il commente. Ce n'est pas le discours d'un joueur Gold qui se prend pour un pro, mais celui d'un joueur haut-plat/diamant qui a passé des centaines d'heures à disséquer le jeu.
+    </p>
+    <p>
+      Son principal marqueur de joueur sérieux : il ne confond presque jamais un problème de skill personnel avec un problème de champion. Quand il dit qu'un champion est <em>"broken"</em>, il s'appuie sur des éléments concrets — winrate, kit, items synergiques. Il peut se montrer inflexible sur certains points (son rapport ambigu aux ADC et à leur force dans la méta), mais il actualise ses positions avec la méta changeante, signe d'un mind actif.
+    </p>
+
+    <h3>3. Têtes de Turc Récurrentes — Champions, Équipiers et Riot Games</h3>
+    <p>
+      Les ennemis de depardieu01 sont nombreux, bien classés et inégalement justifiés. Côté champions, <strong>Garen</strong> domine curieusement les mentions (41 fois), souvent associé à des discussions sur les coéquipiers ou adversaires qui le spamment — c'est un champion qu'il semble utiliser comme symbole de simplisme. <strong>Tryndamere</strong> est la cible de rage la plus intense et la plus documentée : en février 2021, il déclenche une véritable série de rants (<em>"MAIS RIOT NERFEZ TRYNDA"</em>, <em>"ce champ est broken"</em>, descriptions de parties hostages par le champion). <strong>Nasus</strong> revient régulièrement comme exemple de mécaniques frustrantes.
+    </p>
+    <p>
+      Du côté des équipiers, depardieu01 a une théorie récurrente et bien articulée : le jungle et le support sont responsables de la plupart des défaites en soloQ. Il défend une vision du <em>"rôle inutile"</em> qu'il attribue tour à tour aux différentes positions selon la méta du moment, mais son vrai point fixe est la conviction que les ADC sont structurellement sous-évalués. Cette obsession atteint son paroxysme dans certains messages où il dénonce avec un luxe de détails l'état du rôle face aux autres : <em>"les islamo gauchistes peuvent peut être me dire pk maokai 1v9 machine du haut de ses deux items break complètement le jeu pendant que les adc faibles 4 items sont useless"</em> (1er août 2024).
+    </p>
+    <p>
+      <strong>Riot Games</strong> est la grande figure divine et arbitraire qui surplombe tout. Avec 38 mentions directes du studio, depardieu01 entretient avec Riot une relation de sujet avec son souverain injuste — il attend des décisions rationnelles, reçoit des patchs qui le scandalisent, et documente méthodiquement les incohérences du balancement avec la précision d'un avocat dressant un dossier. <em>"LE PETIT FRERE DUN RIOTER IL DOIT JOUER QUE DIANA VIEGO CEST PAS POSSIBLE AUTREMENT"</em> (5 août 2021) atteint le niveau du complotisme affectueux.
+    </p>
+
+    <h3>4. Expressions Signature et Construction d'un Idiolecte</h3>
+    <p>
+      depardieu01 a développé au fil des années un idiolecte reconnaissable parmi mille. Le terme le plus distinctif est sans conteste <em>"paz"</em> / <em>"pazification"</em> — un terme du groupe désignant le fait de dominer ou humilier un adversaire ou un membre du serveur, utilisé avec une solennité quasi-juridique (<em>"paz sur toi nonobstant"</em>, <em>"paz en dépit de ent"</em>). L'ajout de formules latines ou juridiques à ce terme LoL-argotique révèle une jouissance particulière à mélanger les registres — le vocabulaire étudiant en droit contaminent son lexique gaming.
+    </p>
+    <p>
+      Le mot <em>"hostage"</em> — utilisé pour décrire une game qu'un équipier rend ingagnable par son comportement — est un autre marqueur fort. <em>"broken"</em> est son adjectif préféré (89 occurrences), employé avec une gradation implicite : il y a le broken problématique, le broken acceptable, et le broken ridicule. <em>"merguez"</em> désigne dans son vocabulaire les joueurs qui font de mauvais choix de build ou de stratégie. <em>"diff"</em> est utilisé dans les deux sens — pour reconnaître une différence de niveau favorable ou défavorable.
+    </p>
+    <p>
+      Sa construction syntaxique est elle-même caractéristique : des phrases longues, subordonnées enchainées, avec des parenthèses et des guillemets citant des positions adverses avant de les démonter. Il adore mettre en scène des contradicteurs fictifs sous forme de citations extrapolées, puis répondre à ces positions avec une précision chirurgicale. C'est le style d'un débatteur, pas d'un simple rageur.
+    </p>
+
+    <h3>5. Humour, Absurde et Socio-Culture du Canal</h3>
+    <p>
+      L'humour de depardieu01 est dense et très référentiel. Il n'est pas du genre joke-de-comptoir mais plutôt ironie-dans-l'hyperbole : l'absurde naît de l'exagération sérieuse d'une situation déjà absurde. Ses meilleurs moments comiques sont souvent involontairement drôles — quand il s'indigne avec la véhémence d'un Cicéron dénonçant Catilina d'un champion de jeu vidéo. <em>"« ransberg qui va outelo MPB »"</em> suivi d'un émoji rire en décembre 2020, les comptes-rendus en style procès-verbal de parties catastrophiques, ou encore la liste solennelle des <em>"pazifications effectuées"</em> en saison 10 rédigée comme un palmarès militaire.
+    </p>
+    <p>
+      Il intègre naturellement des références à sa vie étudiante, notamment à son cursus de droit : la nuit du 6 décembre 2020 est un chef-d'œuvre du genre, où à 1h du matin il jongle entre la rédaction d'un TD de droit, une discussion sur League of Legends et des anecdotes de vie quotidienne, admettant avoir séché ses premiers TD pour garder des jokers. La citation <em>"économise ransberg tu pourras t'acheter technique contractuelle de Mousseron à 120e"</em> est un crossover culturel parfait entre son monde gaming et son monde académique.
+    </p>
+    <p>
+      Son humour connaît aussi des moments de tendresse vis-à-vis de sa communauté. Il peut se montrer réellement affectueux envers les membres du canal tout en les insultant copieusement dans la même phrase — c'est le propre de l'amitié de longue durée sur Discord.
+    </p>
+
+    <h3>6. Évolution sur 6 Ans — D'Étudiant Rageur à Analyste Senior</h3>
+    <p>
+      En relisant le corpus chronologiquement, on observe une maturation progressive. En 2019-2020, les messages sont plus courts, les rages plus primaires, les prises de position moins argumentées. À partir de 2021 — son année la plus prolifique — quelque chose se cristallise : la persona de <em>"analyste de soloQ"</em> se consolide. Les messages s'allongent, les débats deviennent plus systématiques, le vocabulaire se codifie.
+    </p>
+    <p>
+      En 2024-2025, un nouveau chapitre s'ouvre : depardieu01 semble davantage impliqué dans des structures de jeu organisé ou dans des tournois communautaires (mentions de kick de joueurs, gestion d'équipe, rôles de leadership), ce qui entraîne un type nouveau de frustration — non plus la soloQ anonyme mais les dynamiques humaines d'une équipe. Sa façon d'évoquer des décisions de roster en avril 2025 (<em>"kick d'akeno pour menace envers l'orga"</em>) révèle quelqu'un qui a pris des responsabilités et qui les assume avec la même sévérité analytique qu'il appliquait à ses game reviews. La rage n'a pas disparu — elle s'est juste institutionnalisée.
+    </p>
+
+  </div>
+
+  <!-- ══════════════════════════ SECTION PSYCHIATRIQUE ══════════════════════ -->
+  <div class="divider"></div>
+  <div class="section-title">🏥 Évaluation Psychiatrique [PARODIQUE]</div>
+
+  <div class="medical">
+    <div class="medical-header">
+      <h2>Centre Hospitalier Régional de Santé Mentale Gaming</h2>
+      <p>Service de Psychiatrie Numérique — Unité SoloQ Pathologique</p>
+      <p style="font-size:0.75rem; color:#999; margin-top:6px;">Document confidentiel — Usage interne — Ne pas communiquer à l'entourage sous peine de paz</p>
+    </div>
+
+    <div class="medical-field"><span class="medical-field-label">Nom du patient :</span><span class="medical-field-val">depardieu01 (identité réelle non communiquée par pudeur)</span></div>
+    <div class="medical-field"><span class="medical-field-label">Établissement :</span><span class="medical-field-val">Canal #qq-only, serveur Discord non identifié</span></div>
+    <div class="medical-field"><span class="medical-field-label">Période d'observation :</span><span class="medical-field-val">Juin 2019 — Février 2026 (6 ans, 7 mois)</span></div>
+    <div class="medical-field"><span class="medical-field-label">Corpus analysé :</span><span class="medical-field-val">7 819 messages, ~850 000 caractères de données textuelles</span></div>
+    <div class="medical-field"><span class="medical-field-label">Psychiatre référent :</span><span class="medical-field-val">Dr. A. Nonymous, MD, PhD, ARAM-certified</span></div>
+
+    <h3>I. Diagnostic Principal (DSM-V — Édition SoloQ)</h3>
+    <p>
+      Après lecture exhaustive du dossier, le praticien retient le diagnostic de <strong>Trouble Analytique Obsessionnel-Compulsif à Composante Gaming (TAOCC-G)</strong>, associé à un syndrome secondaire de <strong>Syndrome du Commentateur Omniscient Non Écouté (SCONE)</strong>. Le patient présente en outre des traits compatibles avec un <strong>Trouble de la Personnalité Avocat-Plaidant</strong>, indépendamment de toute formation juridique formelle — bien que celle-ci semble avoir amplifié le tableau clinique à partir de 2020.
+    </p>
+
+    <h3>II. Présentation Clinique et Observations</h3>
+    <p>
+      Le patient est orienté dans le temps, l'espace, et la méta League of Legends. Son discours est fluide, cohérent, parfois brillant, mais structurellement incapable de s'arrêter lorsqu'il a identifié une injustice — réelle ou perçue. L'anamnèse révèle un pattern récurrent : une partie de soloQ se déroule de façon non conforme aux attentes du patient, déclenchant une cascade d'analyse post-hoc dans laquelle la responsabilité est systématiquement localisée hors du patient lui-même (<em>"j'ai jamais win une game où je me suis cassé"</em>, 10 décembre 2020 — déclaration symptomatique d'un mécanisme de défense par externalisation totale).
+    </p>
+    <p>
+      On note une fixation récurrente sur un objet transitionnel nommé <strong>MPB</strong> (106 mentions documentées), qui semble fonctionner comme un miroir ambivalent — admiré pour sa précédence dans le groupe, critiqué pour ses limites supposées, cité comme étalon négatif (<em>"MPB est celui qui a le plus de gold de son équipe or il n'est pas capable de les amener à la victoire, savez vous ce que cela signifie ?"</em>, avril 2022). Cette relation suggère un attachement anxieux à la figure du rival interne.
+    </p>
+    <p>
+      La symptomatologie s'aggrave notablement entre 21h et 2h du matin — phase de jeu tardif associée à une désorganisation progressive du discours, une augmentation des majuscules et une utilisation accrue des insultes affectueuses (<em>"fdp"</em> employé indifféremment pour des amis, des ennemis et des champions de jeu). Le pic de rage documenté à 16h00 en semaine correspond probablement à la fenêtre post-déjeuner de soloQ, phase cliniquement connue comme la <em>Grind Hour</em>, période à risque élevé.
+    </p>
+    <p>
+      La répétition compulsive de <em>"TOP ROLE"</em> en boucle sur 300+ caractères (au moins 3 occurrences distinctes entre décembre 2021 et janvier 2022) constitue ce que la littérature clinique désigne sous le terme de <em>mantra frustrationnel</em> — une régression vers la pensée magique où la répétition d'un constat est censée provoquer son inversion ontologique.
+    </p>
+
+    <h3>III. Mécanismes de Défense Identifiés</h3>
+    <p>
+      <strong>Rationalisation post-défaite :</strong> Toute défaite est immédiatement suivie d'une explication causale exhaustive impliquant Riot Games, les équipiers, la méta, les items ou le balancement des champions — jamais le propre jeu du patient sur la durée.<br>
+      <strong>Intellectualisation :</strong> L'excès d'analyse sert de pare-feu émotionnel. En transformant la rage en débat intellectuel, le patient évite le contact direct avec la frustration primaire.<br>
+      <strong>Déplacement :</strong> Les tensions liées aux études de droit (nuits blanches, TD, examens) sont régulièrement redirigées sur le jeu, et inversement.<br>
+      <strong>Humour défensif :</strong> L'ironie et l'absurde comme bouclier — en faisant rire de sa propre rage, le patient la rend supportable.
+    </p>
+
+    <h3>IV. Pronostic</h3>
+    <p>
+      Le pronostic est <strong>réservé mais non désespéré</strong>. On note que le patient est capable, à de rares occasions, d'une lucidité remarquable sur ses propres comportements (<em>"quand tu tilt pas t'es meilleur donc si c'est une question d'être meilleur"</em>, décembre 2020 — moment de clair-voyance cliniquement inattendu). La persistance d'activité sur 6 ans sans rupture majeure témoigne d'une stabilité affective sous-jacente et d'une attache réelle à sa communauté. La transition vers un rôle de gestion d'équipe en 2024-2025 suggère une sublimation partielle des pulsions analytiques dans des structures sociales plus larges — signe positif.
+    </p>
+    <p>
+      La guérison complète est toutefois conditionnée à un événement improbable : que Riot Games balance le jeu de façon satisfaisante pour le patient. Le praticien estime la probabilité de cet événement à 0,03%.
+    </p>
+
+    <div class="ordonnance">
+      <h4>Rp — Ordonnance Thérapeutique</h4>
+      <ul>
+        <li><strong>Respirolol 50mg</strong> — 1 comprimé à avaler avant chaque partie de soloQ, 2 comprimés supplémentaires en cas d'autofill</li>
+        <li><strong>Riot-Detox™ (prise unique)</strong> — Cure de désintoxication des patch notes, à renouveler à chaque saison</li>
+        <li><strong>Pazythromycine</strong> — Antibiotique anti-délusion. 1 ampoule orale après chaque défaite attribuée à la jungle diff</li>
+        <li><strong>Hostage-Calm® (spray sublingual)</strong> — À utiliser dès apparition des premières majuscules dans la fenêtre de chat</li>
+        <li><strong>MPB-Away® (patch transdermique)</strong> — Application dorsale quotidienne pour réduire la fréquence des citations involontaires</li>
+        <li><strong>TOP ROLE Suppressant</strong> — En cas de rechute compulsive, fermer la fenêtre Discord, ouvrir un code civil</li>
+      </ul>
+    </div>
+
+    <p class="signature">
+      Fait à Ransberg, le 20 mars 2026<br>
+      <em>Dr. A. Nonymous — "Primo non nocere, deuxièmement ne pas rage quit"</em><br>
+      Cachet et signature illisibles
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════ VERDICT ══════════════════════════════ -->
+  <div class="divider"></div>
+  <div class="section-title">⚖️ Verdict Final</div>
+
+  <div class="verdict">
+    <div class="verdict-title">⚔️ Sentence du Tribunal de la SoloQ ⚔️</div>
+    <p>
+      depardieu01 est un <strong>rageur de haute culture</strong> : incapable de perdre en silence, mais assez intelligent pour transformer chaque défaite en conférence de presse. <strong>En 7 819 messages, il n'a jamais abandonné ni son serveur, ni ses convictions, ni sa certitude que la jungle est un rôle brisé.</strong><br>
+      Il est l'avocat des ADC, le procureur de Riot Games, et le juge implacable de ses coéquipiers — le tout depuis un bureau jonché de codes juridiques et éclairé par la lueur bleue d'un écran LoL allumé à 2h du matin.<br>
+      <strong>Toxic ? Non. Intense ? Cliniquement oui.</strong> Ses punchlines sont une arme, sa mémoire méta un superpouvoir, et sa capacité à dire <em>"paz sur toi nonobstant"</em> avec le sérieux d'un magistrat, sa marque de fabrique inoubliable.<br>
+      Le verdict est clair : <strong>condamné à analyser League of Legends jusqu'à la fin des temps</strong>, peine non susceptible d'appel sauf nerf massif de la jungle.
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  Rapport généré le 20 mars 2026 &nbsp;·&nbsp; Données : canal #qq-only (2019–2026) &nbsp;·&nbsp; Toute ressemblance avec un vrai joueur est pleinement intentionnelle
+</footer>
+
+<!-- Chart.js (CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  const hourData = {
+    0:324,1:329,2:193,3:14,4:1,5:4,6:14,7:18,8:159,
+    9:317,10:536,11:492,12:531,13:567,14:607,15:491,
+    16:740,17:405,18:625,19:398,20:251,21:232,22:266,23:305
+  };
+
+  const labels = Array.from({length:24}, (_,i) => `${String(i).padStart(2,'0')}h`);
+  const values = labels.map((_,i) => hourData[i] || 0);
+
+  const ctx = document.getElementById('hourChart').getContext('2d');
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+  gradient.addColorStop(0, 'rgba(233,69,96,0.8)');
+  gradient.addColorStop(1, 'rgba(83,52,131,0.3)');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: values.map(v => v === Math.max(...values) ? 'rgba(244,196,48,0.85)' : gradient),
+        borderColor: 'transparent',
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e3a',
+          borderColor: '#533483',
+          borderWidth: 1,
+          titleColor: '#e8e8f0',
+          bodyColor: '#aaaacc',
+          callbacks: {
+            label: ctx => ` ${ctx.raw} messages`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#8888aa', font: { family: 'JetBrains Mono', size: 11 } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#8888aa', font: { family: 'JetBrains Mono', size: 11 } }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossier #qq-only — bluzzie</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --red: #e94560;
+    --pink: #ff6b9d;
+    --gold: #f5a623;
+    --text: #e0e0e0;
+    --muted: #888;
+    --accent: #7c4dff;
+    --green: #4caf50;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a0a2e 40%, #2d0a1e 100%);
+    padding: 60px 40px 40px;
+    text-align: center;
+    border-bottom: 2px solid var(--red);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(83,52,131,0.04) 30px,
+      rgba(83,52,131,0.04) 60px
+    );
+  }
+  .header-avatar {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--purple), var(--red));
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 30px rgba(233,69,96,0.4);
+    position: relative; z-index: 1;
+  }
+  .header h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    position: relative; z-index: 1;
+  }
+  .header h1 span { color: var(--red); }
+  .header-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    position: relative; z-index: 1;
+  }
+  .badges {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center;
+    margin-top: 24px;
+    position: relative; z-index: 1;
+  }
+  .badge {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red); }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple); color: #b39ddb; }
+  .badge-gold { background: rgba(245,166,35,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-green { background: rgba(76,175,80,0.15); border: 1px solid var(--green); color: var(--green); }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(233,69,96,0.3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::before { content: '▸'; }
+
+  /* ─── STATS GRID ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .stat-card .value {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+  .stat-card .label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  /* ─── CHART SECTION ─── */
+  .chart-wrapper {
+    background: var(--bg2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+  .chart-title {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 120px;
+  }
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--red), var(--purple));
+    border-radius: 3px 3px 0 0;
+    transition: opacity 0.2s;
+    min-height: 2px;
+  }
+  .bar:hover { opacity: 0.8; }
+  .bar-label {
+    font-size: 0.62rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ─── CARDS GRID ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--purple);
+    margin-bottom: 16px;
+    color: #b39ddb;
+  }
+
+  /* Progress bars */
+  .progress-item {
+    margin-bottom: 12px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+  }
+  .progress-label { color: var(--text); font-weight: 600; }
+  .progress-val { color: var(--muted); font-size: 0.78rem; }
+  .progress-bar-bg {
+    background: rgba(255,255,255,0.06);
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+  }
+
+  /* Expressions */
+  .expr-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .expr-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(83,52,131,0.1);
+    border-radius: 8px;
+    border-left: 3px solid var(--purple);
+  }
+  .expr-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.88rem;
+    color: #d1c4e9;
+  }
+  .expr-count {
+    font-size: 0.75rem;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* Rage meter */
+  .rage-meter {
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50px;
+    height: 24px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+  .rage-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #ff9800, #f44336, #b71c1c);
+    transition: width 1s ease;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 12px;
+  }
+  .rage-label-text {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .meter-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Quotes / citations */
+  .quote-card {
+    background: var(--bg2);
+    border: 1px solid rgba(233,69,96,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 16px;
+    font-size: 3rem;
+    color: var(--red);
+    opacity: 0.4;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .quote-text {
+    font-style: italic;
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .quote-meta {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* ─── PROSE SECTION ─── */
+  .prose-section {
+    background: var(--bg2);
+    border: 1px solid rgba(83,52,131,0.4);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 40px;
+  }
+  .subsection {
+    margin-bottom: 36px;
+  }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--pink);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .subsection h3 .num {
+    background: var(--red);
+    color: white;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .subsection p {
+    color: #c5c5d5;
+    font-size: 0.93rem;
+    line-height: 1.85;
+    margin-bottom: 12px;
+  }
+  .subsection p em {
+    color: #b39ddb;
+    font-style: italic;
+    background: rgba(83,52,131,0.15);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(83,52,131,0.3);
+    margin: 28px 0;
+  }
+
+  /* ─── PSYCHIATRIE ─── */
+  .psych-section {
+    background: #0a0a1a;
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 40px;
+    font-family: 'Courier New', monospace;
+    position: relative;
+  }
+  .psych-section::before {
+    content: 'CONFIDENTIEL';
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 2px 8px;
+    opacity: 0.7;
+  }
+  .psych-header {
+    border-bottom: 1px solid rgba(233,69,96,0.4);
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+  .psych-header .inst {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .psych-header h2 {
+    font-size: 1.1rem;
+    color: var(--red);
+    margin: 8px 0 4px;
+    font-family: 'Courier New', monospace;
+  }
+  .psych-field {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+  }
+  .psych-field .key { color: var(--muted); }
+  .psych-field .val { color: var(--text); }
+  .psych-field .val strong { color: var(--red); }
+  .psych-body {
+    color: #c0c0d0;
+    font-size: 0.82rem;
+    line-height: 1.8;
+  }
+  .psych-body h4 {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+  .psych-body em {
+    color: #b39ddb;
+    font-style: italic;
+  }
+  .ordonnance {
+    background: rgba(245,166,35,0.08);
+    border: 1px dashed var(--gold);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+  .ordonnance h4 {
+    color: var(--gold) !important;
+    margin-top: 0 !important;
+  }
+  .rx-item {
+    font-size: 0.8rem;
+    color: #ddd;
+    margin-bottom: 6px;
+  }
+  .rx-item .rp { color: var(--gold); font-weight: bold; margin-right: 6px; }
+
+  /* ─── VERDICT ─── */
+  .verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.2), rgba(233,69,96,0.15));
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    padding: 36px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .verdict h2 {
+    font-size: 1.4rem;
+    color: var(--red);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .verdict p {
+    font-size: 1.05rem;
+    color: var(--text);
+    line-height: 1.9;
+    max-width: 800px;
+    margin: 0 auto 12px;
+  }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict strong { color: var(--pink); }
+
+  /* Monthly chart */
+  .monthly-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 80px;
+    margin-top: 12px;
+  }
+  .m-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 3px;
+  }
+  .m-bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--purple), var(--accent));
+    border-radius: 2px 2px 0 0;
+    min-height: 1px;
+  }
+  .m-label {
+    font-size: 0.52rem;
+    color: var(--muted);
+    transform: rotate(-45deg);
+    white-space: nowrap;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(83,52,131,0.2);
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ HEADER -->
+<div class="header">
+  <div class="header-avatar">🎮</div>
+  <h1><span>bluzzie</span></h1>
+  <div class="header-subtitle">#qq-only · Dossier Clinique &amp; Analytique · Canal Défouloir</div>
+  <div class="badges">
+    <span class="badge badge-red">🔥 Rageur Chronique</span>
+    <span class="badge badge-purple">🐆 Main Rengar</span>
+    <span class="badge badge-gold">⚡ Plat → Diamond</span>
+    <span class="badge badge-red">📢 Théoricien du Jeu</span>
+    <span class="badge badge-purple">🎭 Comédien malgré lui</span>
+    <span class="badge badge-green">✅ Pas Toxic (selon lui)</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ════════════════════════════════════════════════ STATS -->
+  <div class="section-title">Statistiques générales</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="value">5 966</div>
+      <div class="label">Messages envoyés</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">~5.5</div>
+      <div class="label">Ans d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">2.98</div>
+      <div class="label">Messages / jour (moy.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">289</div>
+      <div class="label">Record journalier (07/03/21)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">16h</div>
+      <div class="label">Heure de pic d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">Mars 21</div>
+      <div class="label">Mois le plus actif (1 245 msg)</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ CHART HORAIRE -->
+  <div class="chart-wrapper">
+    <div class="chart-title">⏰ Activité par heure de la journée</div>
+    <div class="bar-chart" id="hourly-chart"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ CHART MENSUEL -->
+  <div class="chart-wrapper">
+    <div class="chart-title">📅 Activité mensuelle (2019–2025)</div>
+    <div class="monthly-chart" id="monthly-chart"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ CARDS -->
+  <div class="section-title">Analyse comportementale</div>
+  <div class="cards-grid">
+
+    <!-- Champions les plus mentionnés -->
+    <div class="card">
+      <h3>🏆 Champions &amp; sujets LoL les plus mentionnés</h3>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Rengar 🐆</span><span class="progress-val">133 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Jungle (rôle) 🌿</span><span class="progress-val">57 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Yone ⚔️</span><span class="progress-val">30 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:23%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Karma 🌀</span><span class="progress-val">25 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:19%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Cho'Gath / Malphite 🪨</span><span class="progress-val">20–28 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:16%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Fiora / Quinn / Nunu 🌸</span><span class="progress-val">8–15 mentions</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%"></div></div>
+      </div>
+    </div>
+
+    <!-- Style de rage -->
+    <div class="card">
+      <h3>💢 Vocabulaire du défouloir</h3>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"nul" / "nul à chier"</span><span class="progress-val">65+</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"merde"</span><span class="progress-val">53</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:81%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"int" / "inter" / "inting"</span><span class="progress-val">~72</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"fdp" (fdp.)</span><span class="progress-val">16</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:25%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"putain"</span><span class="progress-val">23</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:35%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"feed" / "feeding"</span><span class="progress-val">38</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:58%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">"soloq"</span><span class="progress-val">44</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:68%"></div></div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Jauge de rage globale</div>
+        <div class="rage-meter">
+          <div class="rage-fill" style="width:82%"><span class="rage-label-text">CRITIQUE</span></div>
+        </div>
+        <div class="meter-labels"><span>Zen</span><span>Légère frustration</span><span>En feu</span><span>Hospitalisé</span></div>
+      </div>
+    </div>
+
+    <!-- Expressions signature -->
+    <div class="card">
+      <h3>💬 Expressions signature</h3>
+      <div class="expr-list">
+        <div class="expr-item">
+          <span class="expr-text">sah</span>
+          <span class="expr-count">32×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">no fake / nofake</span>
+          <span class="expr-count">23×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">soloq</span>
+          <span class="expr-count">44×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">acad (académique)</span>
+          <span class="expr-count">26×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">L1 (ligue 1 locale)</span>
+          <span class="expr-count">22×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">mdrrr... (rallongé)</span>
+          <span class="expr-count">30×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">frere / frero</span>
+          <span class="expr-count">14×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">wsh / wola</span>
+          <span class="expr-count">7×</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">"je soft int" (mais c'est pas toxic)</span>
+          <span class="expr-count">™️</span>
+        </div>
+        <div class="expr-item">
+          <span class="expr-text">ky$ riot (répété en boucle)</span>
+          <span class="expr-count">🔁</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Têtes de turc -->
+    <div class="card">
+      <h3>🎯 Têtes de turc récurrentes</h3>
+      <div style="font-size:0.85rem;line-height:2;color:#c5c5d5;">
+        <p style="margin-bottom:10px;"><strong style="color:var(--red);">Les "inters"</strong> — La bête noire absolue. Toute victoire perdue est due aux feeders, jamais aux siens propres erreurs (ou à peine).</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--red);">Riot Games</strong> — Responsable de tout patch méta brisé. Le mantra <em>"ky$ riot"</em> répété jusqu'à l'insensibilité prouve une relation amour-haine pathologique.</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--red);">Rengar lui-même</strong> — Paradoxe : à la fois son champion fétiche ET une cible de frustration ("rengar ce champion de merde"). Relation symbiotique dysfonctionnelle.</p>
+        <p style="margin-bottom:10px;"><strong style="color:var(--red);">Le joueur de Tahm Kench top</strong> — Sujet d'un diagnostic médical complet en dec. 2020. Personnifie à lui seul tout le mal de l'humanité.</p>
+        <p><strong style="color:var(--red);">Les D4 0LP</strong> — Une catégorie socio-LoL à part entière : "les pires êtres humains de l'histoire de l'humanité".</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════ CITATIONS MEMORABLES -->
+  <div class="section-title">Citations mémorables</div>
+
+  <div class="quote-card">
+    <p class="quote-text">no fake je suis président là je rétablis la peine de mort juste pour ces deux fils de pute ça y est ils ont reussi a feed la seule source de dégat de l'équipe ennemie jvais mourir frere c trop comment un etre humain et même là c'est 2 être humains sur 10 peut etre si con […] allez crever en enfer les fils de viol je passe 3m de ma vie a écrire un pavé pour ces fils de pute aaaaaaaaAAAAAAAAAAAAAAAA</p>
+    <div class="quote-meta">10 janvier 2021 · Après une game particulièrement traumatisante</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">Perso j'ai imprimé une image de chaque perso de lol, et dès qu'un mec me int je frappe de toutes mes forces l'image de son champion</p>
+    <div class="quote-meta">2 décembre 2020 · Révélation d'une thérapie comportementale artisanale</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">FILS DE PUTE DE PERSO DE MERDE IL JOUE EXHAUST AU TOP SA MERE SE PROSTITUE FREREEEEEEEEEEEEEEEEEEEEEEEEEEEEEE EN NORMAL GAME EN PLUS HEIN</p>
+    <div class="quote-meta">28 janvier 2021 · Découverte du summoner exhaust top</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">JE FINIS MES PLACEMENTS EN OR 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+    <div class="quote-meta">10 janvier 2021 · Moment de joie absolue. Les "A" s'étendent sur 200 caractères.</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">Joueur de Tahm Kench top = Abandonné par sa daronne + tabassé par son daron + rejeté par l'assistance scolaire + harcelé en primaire au collège au lycée + trisomie 21 + asperger + cancer des couilles</p>
+    <div class="quote-meta">31 décembre 2020 · Diagnostic clinique non sollicité sur le profil-type du joueur de Tahm top</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">(j'ai soft int mes 6 dernières games mais c'est pas toxic)</p>
+    <div class="quote-meta">30 avril 2021 · Parenthèse légale ajoutée à posteriori, sans ironie apparente</div>
+  </div>
+
+  <div class="quote-card">
+    <p class="quote-text">Pourquoi je dodge pas les compo full ad contre malphite putain je suis con je suis con je suis con je suis con frere c tropppppppppppppppppppppp j'ai juste a dodge j'évite une lose à 100%</p>
+    <div class="quote-meta">11 janvier 2021 · Rare moment de lucidité post-game, très vite refermé</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ DESCRIPTION LONGUE -->
+  <div class="section-title">Profil analytique détaillé</div>
+  <div class="prose-section">
+
+    <div class="subsection">
+      <h3><span class="num">1</span> Personnalité sur le canal — La forge de l'âme soloQ</h3>
+      <p>Le canal <em>#qq-only</em> est pour bluzzie ce que le confessionnal est au catholique : un lieu de décharge émotionnelle calibré, un espace où les règles normales de la conversation humaine sont suspendues au profit d'un flux de conscience post-game brut et non filtré. Dès les premiers messages de 2020, on perçoit un personnage qui ne se contente pas de subir le jeu vidéo — il le vit, littéralement, dans toutes ses dimensions émotionnelles. La rage n'est pas un accident de parcours ; c'est le mode opératoire de base. Bluzzie ne joue pas "à" League of Legends : il est <em>dedans</em>, souffrant et jubilant en temps réel, et le canal est son théâtre de reportage.</p>
+      <p>Sa façon de rager est distincte des simples insultes : elle est structurée, argumentée, presque politique. Quand il écrit en janvier 2022 que les D4 0LP <em>"devraient être marqués au fer et envoyés au goulag en Sibérie"</em>, c'est moins de la haine que de la satire hypertrophiée. Il construit des dossiers à charge, liste des griefs, invoque la peine de mort. Son humour est insondable pour un observateur extérieur mais parfaitement cohérent dans la logique du canal : la démesure est la mesure. La célébration suit le même registre extrême — quand il finit ses placements en Or 1, les "AAAAAAA" s'étalent sur deux-cents caractères, un cri de joie primitif capturé en texte pur.</p>
+      <p>Son rapport aux autres membres du canal est celui d'un débatteur permanent. Il ne pose pas — il défend des thèses, contredit, évalue les performances d'autrui avec la sévérité d'un recruteur de LCS. Les <em>"t'es nul"</em> sont distribués sans parcimonie, mais sont rarement méchants : c'est le langage de la compétition entre amis, une monnaie d'échange tacitement acceptée dans ce microcosme.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="subsection">
+      <h3><span class="num">2</span> Niveau apparent et rapport à la progression — Le Purgatoire Plat-Diamond</h3>
+      <p>Bluzzie navigue sur la période documentée dans un intervalle allant de Platine bas à Diamond, ce qui le place objectivement au-dessus de la vaste majorité des joueurs League of Legends tout en le maintenant loin des sommets qu'il semble viser. En janvier 2021, il se retrouve en Or 1 à l'issue de ses placements (ce qui provoque le fameux cri de joie) puis grimpe vers Platine 3, flirte avec Platine 1, avant de démotes et remonter. Ce cycle est documenté avec la précision d'un relevé bancaire.</p>
+      <p>Son vocabulaire trahit une connaissance technique réelle du jeu : il parle de compositions, de scaling, de wave management implicite, d'avantages en jungle, d'autofill. Il n'est pas le joueur qui ne comprend pas pourquoi il perd — il comprend trop bien, ce qui amplifie la frustration. Voir ses coéquipiers commettre des erreurs qu'il identifie comme évitables génère une souffrance particulièrement intense, résumée par <em>"c'est trop comme efforts que je dois faire pour win 1 (une) game qui me rapporte 15 lp"</em>.</p>
+      <p>Fait intéressant : bluzzie est tout à fait capable de s'auto-critiquer, mais ces moments de lucidité sont fugaces. Le mécanisme de défense dominant consiste à identifier très rapidement un facteur externe expliquant la défaite, permettant de fermer le dossier avant que l'autocritique ne prenne racine. La phrase <em>"(j'ai soft int mes 6 dernières games mais c'est pas toxic)"</em> en avril 2021 est un chef-d'œuvre de ce mécanisme : aveu, justification et auto-absolution compressés en une seule parenthèse.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="subsection">
+      <h3><span class="num">3</span> La relation à Rengar — Un amour maudit</h3>
+      <p>Rengar occupe une place à part dans l'univers bluzzie, suffisamment importante pour mériter sa propre sous-partie. Le champion apparaît 133 fois dans le corpus — plus que tout autre champion, plus que toute autre notion du jeu hormis les rôles génériques. La relation est une histoire d'amour classique avec ses phases : idolâtrie, pratique intensive, remise en question, ruptures annoncées et jamais consommées.</p>
+      <p>Le 30 novembre 2020, bluzzie envoie un message unique consistant uniquement en <em>"RENGAR"</em> répété en boucle sur 570 caractères — une incantation ou une déclaration d'amour selon l'interprétation. En mars 2021, il propose à ses amis de regarder <em>"sa game high quality rengar gameplay"</em>, manifestation classique du besoin de validation autour de son champion signature. Quelques semaines plus tard, le même Rengar est qualifié de <em>"champion de merde tellement nul"</em>.</p>
+      <p>En décembre 2021, bluzzie proclame solennellement : <em>"déjà vu + pq tu me ping + je joue plus rengar + je joue plus à lol"</em> — formule condensant à la fois le ras-le-bol, la rupture officielle et la négation totale du passé. En janvier 2022, nouvelle déclaration : <em>"Stv toute façons je main plus rengar."</em> La trajectoire est claire : il mainera Rengar jusqu'à sa mort ou jusqu'à celle du jeu, peu importe le nombre de ruptures officielles.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="subsection">
+      <h3><span class="num">4</span> Style linguistique et humour — L'art de l'excès calibré</h3>
+      <p>Le style bluzzie est immédiatement reconnaissable. Sa signature linguistique repose sur plusieurs piliers : l'usage de l'argot de banlieue parisien-français (<em>sah</em>, <em>wsh</em>, <em>frero</em>, <em>wola</em>), mélangé à du vocabulaire LoL anglicisé (<em>inter</em>, <em>soloq</em>, <em>acad</em>, <em>L1</em>), et traversé de touches de verlan et d'écriture phonétique qui révèlent des phases selon le niveau d'agitation. Plus il est énervé, plus ses messages explosent : phrases courtes envoyées en rafale, majuscules débridées, voyelles allongées (<em>tropppppppppppp</em>, <em>AAAAAAAAAA</em>).</p>
+      <p>Son humour est de l'ordre du burlesque déclaratif. Il ne fait pas de blagues au sens classique — il fait des <em>proclamations</em>. Décréter qu'un joueur de Tahm Kench top souffre de l'intégralité du DSM-V en une phrase, ou annoncer qu'il imprimerait les portraits de champions pour les frapper physiquement — ce ne sont pas des blagues construites, ce sont des vérités émotionnelles présentées avec un sérieux parodique. L'effet comique naît du contraste entre la forme (déclaration sérieuse, argumentée) et le fond (absurde total).</p>
+      <p>Sa syntaxe est particulière : il a tendance à envoyer ses messages en "rafale de fragments", une pensée unique découpée en cinq ou six messages consécutifs. Cela donne au canal un rythme haché, saccadé, comme si sa pensée arrivait plus vite que ses doigts ne peuvent la former en phrases complètes. Certains jours (<em>7 mars 2021</em>, 289 messages en une journée, dont les premiers à 4h15 du matin semblent relever du doomscrolling clavier-first), le flux devient franchement hypnotique à lire.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="subsection">
+      <h3><span class="num">5</span> Rageur ou fair-play ? L'équilibre précaire</h3>
+      <p>La question mérite une réponse nuancée, car bluzzie défie la catégorisation binaire. Techniquement, ses messages débordent de toxicité potentielle : insultes massives envers les adversaires, les coéquipiers, les développeurs de Riot, le genre humain en général. Les expressions <em>"fils de pute"</em>, <em>"espèce d'attardé mental"</em> et <em>"crève en enfer"</em> apparaissent avec une régularité statistiquement significative.</p>
+      <p>Cependant, une observation cruciale : tout cela se passe <em>dans le canal privé</em>. Le canal est précisément fait pour ça. Bluzzie semble avoir une conscience aiguë de cette frontière — il vanne sauvagement ses amis dans le qq, mais s'auto-défend avec véhémence contre les accusations de toxicité in-game réelle. Sa phrase la plus révélatrice à ce sujet reste <em>"(j'ai soft int mes 6 dernières games mais c'est pas toxic)"</em> — qui, aussi contradictoire qu'elle paraisse, exprime une vérité interne : pour lui, la toxicité est un état d'esprit, pas un acte. Il peut faire des choses "numériquement" toxiques tout en ne se considérant pas comme un joueur toxique.</p>
+      <p>Par ailleurs, il cite régulièrement les gg, reconnaît les bonnes performances adverses (<em>"gg à lui"</em>), et s'enthousiasme pour les bonnes plays de ses amis. Son verdict final sur lui-même : <em>"Je soft int je win"</em> — philosophie nihiliste pragmatique qui se passe de commentaire.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="subsection">
+      <h3><span class="num">6</span> Sujets hors LoL — La vraie vie qui pointe le bout du nez</h3>
+      <p>Le canal est officiellement un défouloir LoL, mais quelques sujets extra-gaming émergent régulièrement, révélant des fragments du bluzzie hors-jeu. Les références scolaires (<em>lycée</em>, <em>cours</em>, <em>devoir</em>) situent une partie de son activité — notamment le pic de mars 2021 — pendant une période de scolarité, probablement lycée/terminale, où LoL servait de soupape de pression scolaire. En novembre 2020, il mentionne un enseignant qui <em>"passe plus de temps à lui dire d'aller en cours qu'à lui-même aller donner des cours"</em> — vignette de vie lycéenne capturée avec une précision comique.</p>
+      <p>La relation au sport est mentionnée avec une certaine ironie — il sait qu'il devrait en faire, ses amis le lui rappellent. Les événements externes (confinements, vie quotidienne) émergent en filigrane plutôt qu'en sujets centraux : le jeu absorbe tout, y compris l'angoisse et l'ennui de la pandémie. Le pic d'activité de décembre 2020–mars 2021 coïncide parfaitement avec les périodes de confinement et distanciel scolaire en France — League of Legends comme passe-temps de crise, une donnée que partageaient beaucoup à cette époque mais que bluzzie vit avec une intensité particulière.</p>
+      <p>Enfin, la dimension sociale du canal est forte : malgré tout le vocabulaire de rage, il y a une affection réelle envers les membres du canal, des références à des événements passés partagés (<em>"ça date de l'expérience où toi ransberg et mpb étiez en quarantaine dans un qq parallèle"</em>), et une logique de groupe bien établie avec ses blagues internes, ses tirs groupés et ses personnages récurrents.</p>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════ SECTION PSYCHIATRIQUE -->
+  <div class="section-title">Évaluation psychiatrique</div>
+  <div class="psych-section">
+
+    <div class="psych-header">
+      <div class="inst">Institut Médico-Psychologique du Joueur Compétitif Européen (IMPJCE)</div>
+      <div class="inst" style="margin-top:2px;">Service des Troubles Liés aux Jeux de Rôle en Ligne à Multiples Joueurs</div>
+      <h2>RAPPORT D'ÉVALUATION CLINIQUE N° 00241-B</h2>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;">Classification : CONFIDENTIEL MÉDICAL — Ne pas remettre au patient sous aucun prétexte</div>
+    </div>
+
+    <div class="psych-field"><span class="key">Nom de code :</span><span class="val"><strong>BLUZZIE</strong></span></div>
+    <div class="psych-field"><span class="key">Période d'observation :</span><span class="val">Novembre 2019 — Mai 2025 (corpus de 5 966 messages)</span></div>
+    <div class="psych-field"><span class="key">Vecteur d'observation :</span><span class="val">Canal Discord #qq-only, contexte défouloir soloQ</span></div>
+    <div class="psych-field"><span class="key">Médecin référent :</span><span class="val">Dr. I. Inting, PhD, spécialiste en Tiltologie Appliquée</span></div>
+    <div class="psych-field"><span class="key">Diagnostic principal :</span><span class="val"><strong>SDPT – Syndrome de Détresse Post-Teammate (F99.LOL selon DSM-LoL-IV)</strong></span></div>
+    <div class="psych-field"><span class="key">Diagnostics associés :</span><span class="val">TRTCD (Trouble Réactionnel au Tahm Kench et Champions Dérivés) · Délire Grandiose Rengarien Intermittent · Fixation Compulsive sur le LP</span></div>
+
+    <div class="psych-body">
+
+      <h4>I. OBSERVATIONS CLINIQUES GÉNÉRALES</h4>
+      <p>Le sujet présente un tableau clinique riche et cohérent, caractérisé par des oscillations rapides entre états d'euphorie extrême et de détresse aiguë, ces deux pôles étant systématiquement corrélés à des événements de jeu vidéo sans aucune relation proportionnelle avec leur gravité objective. L'observation d'une simple utilisation du summoner Exhaust en partie Top Lane peut déclencher une réponse émotionnelle d'une intensité normalement réservée aux catastrophes naturelles de magnitude 7+ : <em>"FILS DE PUTE DE PERSO DE MERDE IL JOUE EXHAUST AU TOP SA MERE SE PROSTITUE FREREEEEEEEEEEEEEEEEEEEE"</em> (28 jan. 2021). Le clinicien note que l'étirement des "E" finaux (38 occurrences) constitue un marqueur comportemental d'hyperactivation limbique.</p>
+
+      <h4>II. MÉCANISMES DE DÉFENSE IDENTIFIÉS</h4>
+      <p><strong>1. La Déflexion Causale Instantanée (DCI) :</strong> quelle que soit l'issue négative, un bouc émissaire externe est identifié dans les 90 secondes suivant la fin de partie. La phrase <em>"(j'ai soft int mes 6 dernières games mais c'est pas toxic)"</em> (30 avril 2021) constitue un exemplaire clinique parfait de la DCI combinée à une absolution auto-administrée — le sujet s'accuse tout en se blanchissant dans la même phrase, un exploit cognitif rare.</p>
+      <p><strong>2. La Rupture Rengarienne :</strong> ruptures officielles répétées avec un champion (Rengar), jamais suivies d'effets. On dénombre au moins 3 déclarations d'abandon du champion entre 2021 et 2022. Ce phénomène, connu sous le nom de "syndrome du main qui part pas", s'apparente au cycle de dépendance affective décrit par Bowlby, appliqué à une unité de jeu vidéo virtuelle. Pronostic de guérison : défavorable.</p>
+      <p><strong>3. L'Hyperbole Pénale :</strong> le sujet recourt à un arsenal juridico-pénal fictif pour exprimer sa frustration. Rétablissement de la peine de mort (jan. 2021), envoi au goulag sibérien (jan. 2022), marquage au fer rouge (jan. 2022). Ces manifestations ne reflètent aucune pensée violente réelle mais constituent un système symbolique élaboré pour quantifier la magnitude de sa frustration — une forme d'art abstrait de la colère.</p>
+
+      <h4>III. DÉCLENCHEURS PRIMAIRES IDENTIFIÉS</h4>
+      <p>Par ordre décroissant de dangerosité clinique observée : (1) les coéquipiers qui "inter" involontairement, (2) Riot Games et ses décisions de patch, (3) le champion Rengar lui-même paradoxalement, (4) la mécanique de LP — chaque point de ligue perdu génère un pic d'hyperactivation documenté, (5) les joueurs de Tahm Kench Top — catégorie pour laquelle le sujet a élaboré en décembre 2020 un diagnostic clinique complet non sollicité d'une précision troublante.</p>
+
+      <h4>IV. ÉLÉMENTS PRONOSTIQUES POSITIFS</h4>
+      <p>Malgré ce tableau, le clinicien identifie plusieurs indicateurs positifs. Le sujet présente une théorie du jeu solide, une capacité d'autocritique fonctionnelle (quoique fugace), et une affection réelle non feinte pour les membres de son groupe social. Son humour, lorsqu'il n'est pas en phase décompensée, est franchement inventif — le dispositif d'impression d'images de champions à frapper physiquement (déc. 2020) constitue une tentative de coping somatique à saluer. Enfin, sa trajectoire de jeu montre une amélioration réelle sur la durée : il est remonté de Platine à Diamond malgré l'adversité coéquipière chronique qu'il décrit.</p>
+
+      <div class="ordonnance">
+        <h4>🩺 ORDONNANCE N° QQ-241 — Dr. I. Inting</h4>
+        <div class="rx-item"><span class="rp">Rp.</span> Acceptation du RNG Coéquipier — 3 doses/jour avant chaque session LoL, à avaler sans eau</div>
+        <div class="rx-item"><span class="rp">Rp.</span> Pause forcée de 10 minutes après chaque message contenant plus de 8 lettres identiques consécutives</div>
+        <div class="rx-item"><span class="rp">Rp.</span> Interdiction de regarder son op.gg entre minuit et 4h du matin — fenêtre horaire à risque documentée (cf. 07/03/2021 04h15 : "JVAIS POEZRT 0°+EZGO0RAED P")</div>
+        <div class="rx-item"><span class="rp">Rp.</span> Thérapie comportementale ciblée : accepter que "le jungler fait une différence" ne signifie pas "ton jungler fait une différence ce soir"</div>
+        <div class="rx-item"><span class="rp">Rp.</span> Rengar : ne plus essayer d'arrêter. Accepter la relation. En parler à un thérapeute certifié en Dépendances MOBA.</div>
+        <div class="rx-item" style="margin-top:10px;color:var(--muted);font-size:0.72rem;">⚠️ Ce traitement est fictif et humoristique. Le praticien décline toute responsabilité quant aux éventuels LP perdus pendant ou après la lecture de cette ordonnance.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════ VERDICT -->
+  <div class="verdict">
+    <h2>⚖️ Verdict Final</h2>
+    <p>Bluzzie est le type de joueur pour lequel League of Legends a été créé : <strong>il y croit vraiment</strong>. Pas naïvement — il comprend le jeu, analyse, progresse — mais avec une conviction que chaque partie est une affaire personnelle, un test de valeur, un miroir existentiel. Sa rage est spectaculaire mais sa joie l'est tout autant : les "AAAAAA" du placement Or 1 valent autant en intensité que ses diatribes contre les intereurs.</p>
+    <p>Ce qui distingue bluzzie d'un simple rageur, c'est <strong>la cohérence de sa vision du monde LoL</strong> : il a des opinions précises, étayées, sur les champions, les métas, les profils de joueurs. Ses rants sont moins des explosions incontrôlées que des <em>thèses défendues avec trop d'énergie</em>. Il est irritant et drôle en même temps — souvent le même soir, parfois dans le même message.</p>
+    <p>Son rapport à Rengar résume tout : <strong>un amour impossible qu'il ne peut ni assumer pleinement ni abandonner</strong>. Cinq ans de données confirment que c'est son champion, sa croix, son identité — quoi qu'il en dise officiellement.</p>
+    <p>Diagnostic final en une ligne : <strong>pas toxique, juste trop vivant pour un jeu vidéo</strong>.</p>
+  </div>
+
+</div>
+
+<footer>
+  Rapport généré automatiquement à partir de 5 966 messages Discord · #qq-only · 2019–2025<br>
+  Toute ressemblance avec un vrai rapport psychiatrique est purement coincidentielle et humoristique
+</footer>
+
+<script>
+  // ── Hourly Chart ──
+  const hourlyData = {0:275,1:202,2:251,3:79,4:65,5:14,6:39,7:51,8:40,9:153,10:340,11:526,12:149,13:301,14:343,15:204,16:782,17:348,18:437,19:283,20:199,21:198,22:425,23:262};
+  const maxH = Math.max(...Object.values(hourlyData));
+  const hourChart = document.getElementById('hourly-chart');
+  for (let h = 0; h < 24; h++) {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const pct = (hourlyData[h] / maxH) * 100;
+    const isPeak = h === 16;
+    col.innerHTML = `
+      <div class="bar" style="height:${pct}%;background:${isPeak ? 'linear-gradient(to top,#e94560,#ff6b9d)' : 'linear-gradient(to top,#533483,#7c4dff)'};${isPeak ? 'box-shadow:0 0 8px rgba(233,69,96,0.5)' : ''}" title="${hourlyData[h]} messages à ${h}h"></div>
+      <div class="bar-label">${h}h</div>
+    `;
+    hourChart.appendChild(col);
+  }
+
+  // ── Monthly Chart ──
+  const monthlyData = [['2019-11',4],['2020-06',12],['2020-07',30],['2020-08',2],['2020-10',2],['2020-11',61],['2020-12',303],['2021-01',282],['2021-02',508],['2021-03',1245],['2021-04',1053],['2021-05',441],['2021-06',255],['2021-07',264],['2021-08',94],['2021-09',654],['2021-10',43],['2021-11',5],['2021-12',6],['2022-01',132],['2022-02',152],['2022-03',143],['2022-04',57],['2022-05',91],['2022-06',2],['2022-07',104],['2023-11',1],['2024-08',1],['2024-11',2],['2024-12',6],['2025-04',8],['2025-05',3]];
+  const maxM = Math.max(...monthlyData.map(d => d[1]));
+  const mChart = document.getElementById('monthly-chart');
+  monthlyData.forEach(([label, val]) => {
+    const col = document.createElement('div');
+    col.className = 'm-col';
+    const pct = (val / maxM) * 100;
+    const isPeak = label === '2021-03';
+    col.innerHTML = `
+      <div class="m-bar" style="height:${pct}%;background:${isPeak ? 'linear-gradient(to top,#e94560,#ff6b9d)' : 'linear-gradient(to top,#533483,#7c4dff)'}" title="${label}: ${val}"></div>
+      <div class="m-label">${label.slice(2)}</div>
+    `;
+    mChart.appendChild(col);
+  });
+</script>
+
+</body>
+</html>
