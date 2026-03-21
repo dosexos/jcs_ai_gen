@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoller — Profil Trombinoscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --bg2: #1a1a2e;
+    --bg3: #16213e;
+    --purple: #533483;
+    --purple-light: #7b52b9;
+    --red: #e94560;
+    --red-light: #ff6b8a;
+    --gold: #f0a500;
+    --text: #e8e8f0;
+    --text-dim: #9999bb;
+    --text-muted: #5555aa;
+    --card-bg: #1e1e38;
+    --card-border: rgba(83, 52, 131, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 500px; height: 500px; background: var(--purple); top: -100px; right: -100px; opacity: 0.12; }
+  .blob-2 { width: 400px; height: 400px; background: var(--red); bottom: -100px; left: -100px; opacity: 0.12; }
+  .blob-3 { width: 300px; height: 300px; background: var(--purple-light); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.07; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+
+  .server-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: rgba(83, 52, 131, 0.2);
+    border: 1px solid rgba(83, 52, 131, 0.5);
+    padding: 5px 14px;
+    border-radius: 4px;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 50%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-default {
+    color: var(--text-dim);
+    border-color: rgba(153, 153, 187, 0.3);
+    background: rgba(153, 153, 187, 0.05);
+  }
+
+  .badge-purple {
+    color: var(--purple-light);
+    border-color: rgba(123, 82, 185, 0.5);
+    background: rgba(123, 82, 185, 0.1);
+  }
+
+  .badge-red {
+    color: var(--red-light);
+    border-color: rgba(233, 69, 96, 0.5);
+    background: rgba(233, 69, 96, 0.1);
+  }
+
+  .badge-gold {
+    color: var(--gold);
+    border-color: rgba(240, 165, 0, 0.5);
+    background: rgba(240, 165, 0, 0.08);
+  }
+
+  .quote-hero {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.5vw, 26px);
+    color: var(--text-dim);
+    line-height: 1.5;
+    border-left: 3px solid var(--purple);
+    padding: 20px 28px;
+    text-align: left;
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(83, 52, 131, 0.05);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .quote-hero cite {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 60px 0;
+  }
+
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(123, 82, 185, 0.6);
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    background: linear-gradient(135deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  /* ── CHART ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .chart-section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+
+  .hour-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 120px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+
+  .hour-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .hour-bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--purple), rgba(83, 52, 131, 0.3));
+    border-radius: 3px 3px 0 0;
+    transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 0;
+    min-height: 2px;
+  }
+
+  .hour-bar.peak {
+    background: linear-gradient(to top, var(--red), var(--red-light));
+  }
+
+  .hour-bar.high {
+    background: linear-gradient(to top, var(--purple-light), var(--purple));
+  }
+
+  .hour-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--text-muted);
+    position: absolute;
+    bottom: 0;
+  }
+
+  /* ── TOPICS ── */
+  .topics-section {
+    margin-bottom: 60px;
+  }
+
+  .topic-item {
+    margin-bottom: 20px;
+  }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    align-items: baseline;
+  }
+
+  .topic-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .topic-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .topic-bar {
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .topic-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--purple), var(--red));
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease;
+  }
+
+  /* ── PROSE SECTIONS ── */
+  .prose-section {
+    margin-bottom: 56px;
+  }
+
+  .prose-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .sub-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+
+  .prose-section p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+
+  .inline-quote {
+    font-style: italic;
+    color: var(--purple-light);
+  }
+
+  .inline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  /* ── PORTRAIT ── */
+  .portrait-section {
+    background: var(--bg2);
+    border-top: 2px solid var(--purple);
+    border-radius: 0 0 12px 12px;
+    padding: 40px;
+    margin-bottom: 40px;
+  }
+
+  .portrait-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 36px;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .portrait-section p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .portrait-highlight {
+    background: rgba(83, 52, 131, 0.15);
+    border-radius: 4px;
+    padding: 0 6px;
+    color: var(--purple-light);
+  }
+
+  /* ── VERDICT ── */
+  .verdict-section {
+    background: var(--bg2);
+    border-top: 2px solid var(--red);
+    border-radius: 0 0 12px 12px;
+    padding: 40px;
+    margin-bottom: 60px;
+  }
+
+  .verdict-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 36px;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .verdict-line {
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 24px;
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .verdict-line strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--card-border), transparent);
+    margin: 48px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 0 60px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="server-tag">⬡ TROMBINOSCOPE · DISCORD</div>
+    <h1>Zoller</h1>
+    <div class="subtitle">zoller.lol · #trombinoscope</div>
+    <div class="badges">
+      <span class="badge badge-default">#trombinoscope</span>
+      <span class="badge badge-purple">11 938 messages</span>
+      <span class="badge badge-default">août 2023 → mars 2026</span>
+      <span class="badge badge-red">Analyste du réel · Expert en grilles</span>
+      <span class="badge badge-gold">Père de Jafar Junior</span>
+    </div>
+    <div class="quote-hero">
+      "En France on parle pas des villes les plus sûres mais des villes les moins insécurisées."
+      <cite>— 29 août 2023, 05h45</cite>
+    </div>
+  </header>
+
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">11 938</div>
+      <div class="stat-label">Messages totaux</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">2,5 ans</div>
+      <div class="stat-label">Présence active</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">12h</div>
+      <div class="stat-label">Pic d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">50</div>
+      <div class="stat-label">Chars / message (moy.)</div>
+    </div>
+  </div>
+
+  <!-- HOURLY CHART -->
+  <div class="chart-section">
+    <div class="section-title">Distribution horaire des messages</div>
+    <div class="hour-chart" id="hourChart">
+      <!-- Bars generated by JS -->
+    </div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="topics-section">
+    <div class="section-title">Thèmes récurrents</div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Tinder & stratégies de séduction</span>
+        <span class="topic-pct">100%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="100"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Société, France, politique implicite</span>
+        <span class="topic-pct">80%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="80"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Humour / ironie / second degré</span>
+        <span class="topic-pct">72%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="72"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Football & sport</span>
+        <span class="topic-pct">52%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="52"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">League of Legends & gaming</span>
+        <span class="topic-pct">38%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="38"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Mode, style, vestimentaire</span>
+        <span class="topic-pct">28%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="28"></div></div>
+    </div>
+
+    <div class="topic-item">
+      <div class="topic-header">
+        <span class="topic-name">Paternité & Jafar Junior</span>
+        <span class="topic-pct">22%</span>
+      </div>
+      <div class="topic-bar"><div class="topic-fill" data-width="22"></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROSE SECTIONS -->
+
+  <div class="prose-section">
+    <h3><span class="sub-num">01/</span> Sa place dans le groupe</h3>
+    <p>
+      Zoller n'est pas quelqu'un qui cherche à exister sur le serveur : il <em>est</em> le serveur dans ses meilleures heures. Avec 11 938 messages répartis sur deux ans et demi, il occupe le canal avec la régularité d'un salarié modèle — son activité culmine précisément à 12h, soit l'heure de la pause déjeuner au bureau, ce qui dit beaucoup sur la nature de ses sessions. Il est actif entre 8h et 18h, avec un pic à 16h en seconde vague, et s'évanouit presque totalement après minuit. Ce n'est pas un noctambule numérique : c'est un homme qui a ses horaires.
+    </p>
+    <p>
+      Dans les échanges, il tient systématiquement le rôle de <em>celui qui a l'expérience</em>. Quand quelqu'un pose une question sur Tinder, c'est lui qui répond en premier. Quand un sujet porte sur Paris, la vie nocturne ou la séduction, son autorité est rarement contestée. Il ne la revendique pas bruyamment — il la pose, laconiquement, comme une évidence. <span class="inline-quote">"Sur Paris ça marche pour moi et tous mes potes (sauf 1 qui a bide sec mais il est gros)"</span><span class="inline-date">29/08/2023</span> : une phrase qui condense tout un état d'esprit.
+    </p>
+    <p>
+      Il pratique un art particulier de l'ironie affectueuse. Il taquine, il juge avec soin, mais il reste. Il ne lâche pas l'affaire en cours de débat, il revient, il précise, il contre-argumente — toujours avec une certaine rigueur que la blagounette vient régulièrement désamorcer.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">02/</span> Ses obsessions de prédilection</h3>
+    <p>
+      Les femmes, la séduction, l'analyse des comportements humains à travers le filtre du dating — c'est l'axe central de son activité sur le canal. Mais ce serait réducteur de n'y voir qu'un simple dragueur se vantant de ses conquêtes. Zoller est avant tout un <em>taxonomiste</em>. Il classe, hiérarchise, catégorise. Son célèbre système de <span class="inline-quote">"deux grilles différentes selon le stade d'alcoolémie"</span><span class="inline-date">28/08/2023</span> est moins une révélation sur ses critères que sur sa façon d'aborder le monde : tout mérite d'être modélisé, tout peut être analysé avec des variables claires.
+    </p>
+    <p>
+      Cette passion pour la mise en système dépasse largement la sphère amoureuse. On la retrouve quand il décortique l'algorithme de Tinder (<span class="inline-quote">"l'algorithme analyse à peu près tout — longueur moyenne de tes messages etc"</span><span class="inline-date">23/07/2024</span>), quand il théorise sur l'alcoolisme en distinguant part comportementale et part neurologique, ou quand il construit des analogies entre le classement LoL et les déciles de beauté. La mécanique est toujours la même : observer un phénomène, extraire les variables, construire une règle générale. C'est un esprit qui pense naturellement en distributions et en percentiles.
+    </p>
+    <p>
+      Il y a aussi une fascination persistante pour Paris — non pas Paris comme lieu de vie sentimental, mais Paris comme système optimal. <span class="inline-quote">"Si je veux sortir un mardi soir à 3h du matin je suis pas sûr que tu puisses me donner plus de 3 adresses dans les villes que t'as citées"</span><span class="inline-date">08/09/2023</span> — et il a grandi jusqu'à 21 ans en Savoie. C'est le regard du provincial converti, plus acéré sur la chose que les natifs eux-mêmes.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">03/</span> Son humour et son registre d'expression</h3>
+    <p>
+      Zoller écrit en rafales courtes. La grande majorité de ses messages fait moins de 50 caractères — une affirmation sèche, une nuance, une précision, puis il coupe. Ce style télégraphique crée un effet de percussion : on ne sait jamais si la prochaine message sera une blagounette ou une thèse. Cette alternance est sa marque stylistique la plus forte.
+    </p>
+    <p>
+      Son humour est celui du constat implacable qu'on ne se donne même pas la peine d'embellir. <span class="inline-quote">"Il a juste omis la troisième option, si la meuf commence sa phrase par 'Nous avons détecté une tumeur dans votre cerveau'"</span><span class="inline-date">29/08/2023</span> : c'est drôle précisément parce que ça ne cherche pas à l'être. Le comique émerge du sérieux de la formulation. Il ne fait pas de setup/chute — il assène. Il pratique aussi l'autodérision de façon très contrôlée : <span class="inline-quote">"Y a rien qui va dans son set up et pourtant dieu sait que j'ai eu toute ma vie des set up pas terribles"</span><span class="inline-date">28/08/2023</span> — l'aveu est là, mais il est encadré, dosé.
+    </p>
+    <p>
+      Il a ses formules récurrentes qui constituent une sorte de lexique personnel. "Haut du panier", "swipe à gauche/droite", "zinzin", "goatesque", "khey" — autant de marqueurs qui oscillent entre l'argot jeune et un certain vocabulaire analytique qui lui appartient en propre. L'émoji <code>:ronaldin:</code> revient 547 fois dans le corpus, signal d'un humour très codé à l'intérieur du groupe.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">04/</span> Sa vie hors Discord</h3>
+    <p>
+      À travers les 2,5 ans de messages, une biographie se dessine par fragments. Zoller a grandi en Savoie, entre Annecy et Aix-les-Bains, jusqu'à ses 21 ans — un passé rural qui ressurgit dans des anecdotes sur le vélo pour aller à l'école, les tortues ramassées sur le bord de la route, les bus scolaires à heure fixe. Il s'est installé à Paris pour le travail, a beaucoup sorti (<span class="inline-quote">"une époque où je sortais entre 4 et 7 fois par semaine"</span><span class="inline-date">12/01/2024</span>), puis a rangé ses soirées tardives. Il a deux chats, un appartement atypique en maison divisée, une belle-sœur à New York.
+    </p>
+    <p>
+      En 2025, deux événements majeurs bouleversent sa trajectoire : un mariage avec une femme musulmane qui l'amène à se convertir à l'islam — il documente la démarche avec sa candeur habituelle (<span class="inline-quote">"je vais citer les piliers de l'islam et dire une phrase en arabe si j'ai bien compris"</span><span class="inline-date">18/05/2025</span>) — et la naissance de son fils, qu'il surnomme affectueusement Jafar Junior sur le serveur. La fin du corpus le montre dans une configuration radicalement différente du début : père, marié, converti, qui planifie ses sorties 12 mois à l'avance et reçoit des amis à la maison pour regarder des matchs.
+    </p>
+    <p>
+      Il a aussi une vie professionnelle dans la finance ou la comptabilité (il mentionne des "clôtures mensuelles", un préavis de 3 mois lors d'une démission en 2024), joue à League of Legends avec sérieux sinon avec talent, et s'intéresse au ping-pong qu'il décrit avec une passion inattendue. Il a cherché à négocier l'achat d'un appartement, s'est interrogé sur ses droits aux congés pendant son préavis — des petits détails d'une vie d'adulte qui se construit méthodiquement.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">05/</span> Ce qui le distingue</h3>
+    <p>
+      Ce qui distingue Zoller de la plupart des membres du serveur, c'est sa capacité à tenir une ligne argumentative sur la durée. Il ne lâche pas en cours de débat. Quand il défend Paris contre le reste de la France, il amène des arguments factuels, anticipe les objections, concède là où il le faut (<span class="inline-quote">"je suis pas du tout parisien hein, j'ai grandi jusqu'à 21 ans en Savoie"</span><span class="inline-date">08/09/2023</span>) — et maintient sa position. Il n'est pas là pour avoir raison de façon rhétorique ; il veut que la réalité soit dite correctement.
+    </p>
+    <p>
+      Il possède aussi une honnêteté intellectuelle rare : il préfixe ses opinions non étayées de formules comme "mon avis qui n'a aucun fondement scientifique". Il distingue scrupuleusement ce qu'il sait de ce qu'il pense. Dans un canal Discord, c'est une démarche qui tranche. Il peut être brutal dans ses jugements sur les personnes, mais il reste précis sur ses sources et réserves épistémiques.
+    </p>
+    <p>
+      Enfin, il est l'un des rares membres dont l'arc narratif sur le serveur est lisible — on le voit évoluer de jeune homme Parisien expert en dating à père de famille converti, sans rupture de ton mais avec une transformation réelle. Le Zoller de mars 2026 écrit les mêmes phrases courtes qu'en août 2023, mais il parle désormais de promenades au parc avec un nourrisson et de noms à donner à ses enfants. C'est un personnage qui a eu une histoire sur ce serveur.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PORTRAIT HUMAIN -->
+  <div class="portrait-section">
+    <h2>Portrait humain</h2>
+    <p>
+      Zoller est un homme qui pense à voix haute, mais qui le fait avec méthode. Sa présence sur le canal ressemble moins à celle d'un bavard compulsif qu'à celle d'un consultant qui passerait sa pause déjeuner à corriger le raisonnement de ses collègues. Il n'intervient pas sur tout, mais quand il intervient, c'est rarement pour rien. Il y a dans son écriture une <span class="portrait-highlight">économie de moyens qui force à l'attention</span> : ses meilleures formules tiennent en une ligne, mais elles rayonnent dans la conversation pendant plusieurs échanges.
+    </p>
+    <p>
+      Ce qui frappe en lisant l'intégralité du corpus, c'est à quel point Zoller est un <span class="portrait-highlight">homme de transition perpétuelle</span>. Provincial devenu parisien. Fêtard devenu rangé. Célibataire devenu marié. Non-croyant devenu musulman. Homme sans enfant devenu père. Chaque phase est documentée dans les messages avec la même tonalité deadpan — il ne dramatise aucun de ces changements, ne les annonce pas comme des ruptures. Ils arrivent dans la conversation comme des faits, presque anodins, avant qu'on réalise leur poids.
+    </p>
+    <p>
+      L'observation contre-intuitive s'impose ici : derrière le commentateur froid des comportements humains, l'analyste implacable des stratégies de séduction et le classificateur de profils féminins en "haut du panier" — se cache un romantique discret. Il s'est converti à l'islam pour se marier. Il prénomme affectueusement son fils dans chaque conversation. Il prépare ses sorties avec un soin vestimentaire qui trahit le goût du beau geste. L'homme qui théorisait sur les "zones de chalandise" féminines est le même qui passe le réveillon du Nouvel An 2026 chez lui à attendre la naissance de son bébé.
+    </p>
+    <p>
+      Son rapport au groupe est fondé sur un paradoxe affectueux : il juge, il classe, il tranche — et pourtant il reste. Il revient, il donne son avis sur le short d'un pote, il vote sur le prénom du fils d'un autre, il conseille sur les photos Tinder. <span class="portrait-highlight">Il est une présence critique qui choisit de rester</span>, et c'est peut-être la forme d'attachement la plus sincère.
+    </p>
+    <p>
+      Ce qui restera, in fine, c'est une voix. Reconnaissable dans sa structure — la phrase courte, l'argument précis, la chute en formule — mais aussi dans ses silences. Zoller ne répond pas à tout. Il sait quand entrer, et il sait quand s'abstenir. Dans un espace où beaucoup parlent pour exister, cette discipline-là est presque élégante.
+    </p>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-section">
+    <h2>Verdict</h2>
+    <div class="verdict-line">
+      <strong>Le théoricien du réel.</strong> Zoller est l'un des rares membres du serveur à ne jamais séparer l'analyse de l'expérience. Chaque thèse qu'il avance est ancrée dans un vécu précis — ses dates, ses erreurs, ses soirées passées. Il ne philosophe pas dans le vide. Son autorité vient de là, et elle est difficile à contester.
+    </div>
+    <div class="verdict-line">
+      <strong>Un arc narratif rare.</strong> En 2,5 ans, il est passé de célibataire parisien expert Tinder à père de famille converti qui planifie ses agendas à l'année. Cette trajectoire est documentée message après message, sans emphase ni reniement du passé. C'est un personnage qui a <em>vécu</em> sur ce canal, pas seulement transité.
+    </div>
+    <div class="verdict-line">
+      <strong>La précision comme marque de fabrique.</strong> Il distingue ce qu'il sait de ce qu'il pense. Il concède quand il a tort. Il nuance quand il exagère. Dans un canal Discord, c'est une discipline intellectuelle qui mérite d'être soulignée — et qui explique en partie pourquoi on lui donne instinctivement raison même quand on est en désaccord.
+    </div>
+    <div class="verdict-line">
+      <strong>Affectueux sous couvert d'impassibilité.</strong> La surface est froide, analytique, parfois tranchante. Mais il revient. Il demande des nouvelles. Il conseille. Il nomme des enfants. Ce n'est pas un spectateur : c'est quelqu'un qui tient à ce groupe, à sa manière — sans jamais le dire explicitement, ce qui est précisément son style.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    Généré depuis 11 938 messages · 28 août 2023 → 20 mars 2026<br>
+    Canal #trombinoscope<br><br>
+    <span class="badge badge-purple" style="font-size:10px;">ZOLLER PROFILE v1.0</span>
+  </footer>
+
+</div>
+
+<script>
+  // ── HOUR CHART ──
+  const hourData = [45, 0, 0, 0, 2, 40, 154, 266, 533, 616, 849, 720, 1087, 800, 969, 883, 1054, 945, 931, 721, 441, 553, 299, 30];
+  const maxVal = Math.max(...hourData);
+  const chart = document.getElementById('hourChart');
+
+  hourData.forEach((val, h) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'hour-bar-wrap';
+
+    const bar = document.createElement('div');
+    const pct = (val / maxVal) * 96;
+    let cls = 'hour-bar';
+    if (h === 12) cls += ' peak';
+    else if (val > maxVal * 0.7) cls += ' high';
+    bar.className = cls;
+    bar.dataset.height = pct;
+
+    if (h % 3 === 0) {
+      const lbl = document.createElement('span');
+      lbl.className = 'hour-label';
+      lbl.textContent = h + 'h';
+      lbl.style.position = 'absolute';
+      lbl.style.bottom = '2px';
+      lbl.style.left = '50%';
+      lbl.style.transform = 'translateX(-50%)';
+      wrap.style.position = 'relative';
+      wrap.appendChild(lbl);
+    }
+
+    wrap.appendChild(bar);
+    chart.appendChild(wrap);
+  });
+
+  // Animate bars on load
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.querySelectorAll('.hour-bar').forEach(b => {
+        b.style.height = b.dataset.height + 'px';
+      });
+    }, 300);
+  });
+
+  // ── TOPIC BARS via IntersectionObserver ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fill = entry.target.querySelector('.topic-fill');
+        if (fill) {
+          fill.style.width = fill.dataset.width + '%';
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.topic-bar').forEach(bar => observer.observe(bar));
+</script>
+</body>
+</html>
