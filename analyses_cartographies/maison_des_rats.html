@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LA MAISON DES RATS — Saison 1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --bg:#0d0b14;
+  --bg2:#12101c;
+  --card:#18152a;
+  --border:#2a2540;
+  --acc:#e94560;
+  --acc2:#533483;
+  --acc3:#f0a500;
+  --acc4:#3dffc0;
+  --text:#e8e6f0;
+  --muted:#7a7590;
+  --mpb:#e94560;
+  --sh:#3a9fff;
+  --sa:#f0a500;
+  --ly:#a78bfa;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+}
+
+/* ======= HERO HEADER ======= */
+.hero{
+  background:linear-gradient(135deg,#0a0814 0%,#1a0a2e 40%,#0f0820 100%);
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:3rem 1rem 2rem;
+  position:relative;
+  overflow:hidden;
+  border-bottom:2px solid var(--acc);
+}
+
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(233,69,96,.25) 0%,transparent 55%),
+    radial-gradient(ellipse at 80% 30%,rgba(83,52,131,.3) 0%,transparent 50%),
+    radial-gradient(ellipse at 60% 80%,rgba(240,165,0,.1) 0%,transparent 40%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.8rem;
+  position:relative;
+}
+
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,10vw,7rem);
+  letter-spacing:.05em;
+  line-height:.9;
+  color:#fff;
+  position:relative;
+  text-shadow:0 0 60px rgba(233,69,96,.4);
+}
+
+.hero h1 span{color:var(--acc)}
+
+.hero-sub{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  color:var(--muted);
+  letter-spacing:.15em;
+  margin-top:.8rem;
+  position:relative;
+}
+
+.hero-cast{
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:1.5rem;
+  position:relative;
+}
+
+.cast-chip{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.4rem 1rem;
+  border-radius:30px;
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  border:1px solid;
+}
+
+.cast-chip.mpb{background:rgba(233,69,96,.15);border-color:var(--mpb);color:var(--mpb)}
+.cast-chip.sh{background:rgba(58,159,255,.12);border-color:var(--sh);color:var(--sh)}
+.cast-chip.sa{background:rgba(240,165,0,.12);border-color:var(--sa);color:var(--sa)}
+.cast-chip.ly{background:rgba(167,139,250,.12);border-color:var(--ly);color:var(--ly)}
+
+/* ======= NAV ======= */
+.nav-wrap{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(13,11,20,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav{
+  display:flex;
+  overflow-x:auto;
+  gap:0;
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 1rem;
+  scrollbar-width:none;
+}
+
+.nav::-webkit-scrollbar{display:none}
+
+.nav-btn{
+  flex-shrink:0;
+  padding:.75rem 1.2rem;
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .2s;
+  white-space:nowrap;
+}
+
+.nav-btn:hover{color:var(--text)}
+.nav-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+
+/* ======= MAIN ======= */
+.main{max-width:1100px;margin:0 auto;padding:2rem 1rem 4rem}
+
+/* ======= FICHES CANDIDATS ======= */
+.fiches-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1.2rem;
+  margin-top:1.5rem;
+}
+
+.fiche{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+  transition:transform .2s;
+}
+
+.fiche:hover{transform:translateY(-3px)}
+
+.fiche::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+}
+
+.fiche.mpb::before{background:var(--mpb)}
+.fiche.sh::before{background:var(--sh)}
+.fiche.sa::before{background:var(--sa)}
+.fiche.ly::before{background:var(--ly)}
+
+.fiche-emoji{font-size:2.5rem;margin-bottom:.8rem;display:block}
+
+.fiche-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.8rem;
+  letter-spacing:.05em;
+  margin-bottom:.2rem;
+}
+
+.fiche.mpb .fiche-name{color:var(--mpb)}
+.fiche.sh .fiche-name{color:var(--sh)}
+.fiche.sa .fiche-name{color:var(--sa)}
+.fiche.ly .fiche-name{color:var(--ly)}
+
+.fiche-slogan{
+  font-style:italic;
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:1rem;
+  border-left:2px solid var(--border);
+  padding-left:.6rem;
+}
+
+.fiche-row{
+  display:flex;
+  gap:.5rem;
+  margin-bottom:.5rem;
+  font-size:.8rem;
+}
+
+.fiche-label{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--muted);
+  margin-bottom:.15rem;
+}
+
+.badge-small{
+  display:inline-block;
+  padding:.2rem .5rem;
+  border-radius:4px;
+  font-size:.65rem;
+  font-weight:700;
+  letter-spacing:.05em;
+}
+
+.badge-str{background:rgba(61,255,192,.15);color:var(--acc4)}
+.badge-wk{background:rgba(233,69,96,.15);color:var(--acc)}
+.badge-strat{background:rgba(83,52,131,.2);color:#c9b4f0}
+
+/* ======= JOURS ======= */
+.section{display:none}
+.section.active{display:block}
+
+.day-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:2rem;
+  margin-bottom:2rem;
+}
+
+.day-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.4rem;
+}
+
+.day-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.4rem;
+  letter-spacing:.04em;
+  color:var(--text);
+  margin-bottom:1rem;
+  line-height:1;
+}
+
+.day-summary{
+  font-size:.95rem;
+  color:#b0aec8;
+  line-height:1.8;
+  margin-bottom:1.5rem;
+}
+
+/* ======= TENSION GAUGE ======= */
+.tension-wrap{margin:1.2rem 0}
+
+.tension-label{
+  font-family:'Space Mono',monospace;
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--muted);
+  margin-bottom:.5rem;
+}
+
+.tension-bar{
+  height:8px;
+  background:var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.tension-fill{
+  height:100%;
+  border-radius:4px;
+  transition:width .8s ease;
+}
+
+.tension-score{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  color:var(--text);
+  margin-top:.3rem;
+}
+
+/* ======= ALLIANCE ======= */
+.alliance-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.35rem .9rem;
+  border-radius:20px;
+  font-size:.75rem;
+  font-weight:700;
+  background:rgba(83,52,131,.2);
+  border:1px solid var(--acc2);
+  color:#c9b4f0;
+  margin-bottom:1.5rem;
+}
+
+/* ======= DIALOGUE DISCORD ======= */
+.dialogue-section{
+  background:#0f0d1e;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem;
+  margin:1.5rem 0;
+}
+
+.dialogue-title{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  color:var(--muted);
+  margin-bottom:1rem;
+  padding-bottom:.5rem;
+  border-bottom:1px solid var(--border);
+}
+
+.msg{
+  display:flex;
+  gap:.8rem;
+  margin-bottom:1rem;
+  align-items:flex-start;
+}
+
+.msg-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.8rem;
+  flex-shrink:0;
+  font-weight:700;
+}
+
+.msg-avatar.mpb{background:rgba(233,69,96,.3);color:var(--mpb)}
+.msg-avatar.sh{background:rgba(58,159,255,.2);color:var(--sh)}
+.msg-avatar.sa{background:rgba(240,165,0,.2);color:var(--sa)}
+.msg-avatar.ly{background:rgba(167,139,250,.2);color:var(--ly)}
+
+.msg-body{}
+
+.msg-name{
+  font-size:.7rem;
+  font-weight:700;
+  margin-bottom:.2rem;
+  font-family:'Space Mono',monospace;
+}
+
+.msg-name.mpb{color:var(--mpb)}
+.msg-name.sh{color:var(--sh)}
+.msg-name.sa{color:var(--sa)}
+.msg-name.ly{color:var(--ly)}
+
+.msg-text{
+  font-size:.9rem;
+  color:#d0cfe8;
+  line-height:1.5;
+}
+
+/* ======= CONFESSIONNAL ======= */
+.confessionnal{
+  background:linear-gradient(135deg,#16112a,#1a0f22);
+  border:1px solid rgba(83,52,131,.4);
+  border-radius:12px;
+  padding:1.5rem;
+  margin:1rem 0;
+}
+
+.conf-header{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin-bottom:1rem;
+}
+
+.conf-cam{
+  font-size:1rem;
+}
+
+.conf-name{
+  font-family:'Space Mono',monospace;
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.conf-name.mpb{color:var(--mpb)}
+.conf-name.sh{color:var(--sh)}
+.conf-name.sa{color:var(--sa)}
+.conf-name.ly{color:var(--ly)}
+
+.conf-text{
+  font-style:italic;
+  font-size:.9rem;
+  color:#c8c6e0;
+  line-height:1.7;
+}
+
+/* ======= STATS ======= */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+  margin-top:1.5rem;
+}
+
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem;
+  text-align:center;
+}
+
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:3rem;
+  color:var(--acc);
+  line-height:1;
+  margin-bottom:.3rem;
+}
+
+.stat-desc{
+  font-size:.8rem;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+/* ======= SONDAGE ======= */
+.sondage-item{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  margin-bottom:.8rem;
+}
+
+.sondage-label{
+  font-size:.85rem;
+  min-width:90px;
+}
+
+.sondage-bar-wrap{
+  flex:1;
+  height:20px;
+  background:var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.sondage-bar{
+  height:100%;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  padding-left:.4rem;
+  font-size:.65rem;
+  font-weight:700;
+  color:#fff;
+  transition:width 1s ease;
+}
+
+.sondage-pct{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  color:var(--text);
+  min-width:35px;
+  text-align:right;
+}
+
+/* ======= SAISON 2 ======= */
+.s2-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.2rem;
+  margin-top:1rem;
+}
+
+.s2-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.s2-card::after{
+  content:'S2';
+  position:absolute;
+  top:-10px;right:-10px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5rem;
+  color:rgba(255,255,255,.03);
+  line-height:1;
+}
+
+.s2-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;
+  color:var(--acc3);
+  margin-bottom:.4rem;
+}
+
+.s2-why{
+  font-size:.85rem;
+  color:#a0a0c0;
+  line-height:1.6;
+}
+
+/* ======= SECTIONS TITLES ======= */
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;
+  letter-spacing:.05em;
+  color:var(--text);
+  margin-bottom:.4rem;
+}
+
+.section-subtitle{
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:1.5rem;
+}
+
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:2rem 0;
+}
+
+/* ======= CONFESSIONNAUX GRID ======= */
+.conf-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+
+@media(max-width:600px){
+  .conf-grid{grid-template-columns:1fr}
+  .s2-grid{grid-template-columns:1fr}
+  .fiches-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ======= SCROLL ANIMATION ======= */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.day-card{animation:fadeUp .4s ease both}
+
+.tension-fill{
+  background:linear-gradient(90deg,#2ecc71,#f0a500,#e94560);
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">ÉMISSION EXCLUSIVE · SAISON 1 · 7 JOURS</div>
+  <h1>LA MAISON<br>DES <span>RATS</span></h1>
+  <div class="hero-sub">Ils ont survécu des années sur Discord — maintenant ils doivent cohabiter IRL</div>
+  <div class="hero-cast">
+    <div class="cast-chip mpb">🧱 MPB</div>
+    <div class="cast-chip sh">📋 SHAars</div>
+    <div class="cast-chip sa">✝️ Sacha</div>
+    <div class="cast-chip ly">🏠 Lyd</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="show('fiches',this)">👥 Candidats</button>
+    <button class="nav-btn" onclick="show('j1',this)">J1 · Installation</button>
+    <button class="nav-btn" onclick="show('j2',this)">J2 · Premier repas</button>
+    <button class="nav-btn" onclick="show('j3',this)">J3 · Débat politique</button>
+    <button class="nav-btn" onclick="show('j4',this)">J4 · Trêve</button>
+    <button class="nav-btn" onclick="show('j5',this)">J5 · Crise</button>
+    <button class="nav-btn" onclick="show('j6',this)">J6 · Lendemain</button>
+    <button class="nav-btn" onclick="show('j7',this)">J7 · Finale</button>
+    <button class="nav-btn" onclick="show('stats',this)">📊 Stats</button>
+    <button class="nav-btn" onclick="show('verdict',this)">🗳️ Verdict</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ========== FICHES ========== -->
+<div id="fiches" class="section active">
+  <div class="section-title">FICHES CANDIDATS</div>
+  <div class="section-subtitle">4 personnalités réelles, une maison. Que le meilleur survive.</div>
+
+  <div class="fiches-grid">
+
+    <div class="fiche mpb">
+      <span class="fiche-emoji">🧱</span>
+      <div class="fiche-name">MPB</div>
+      <div class="fiche-slogan">"Je veux débattre mais c'est moi qui ferme la porte"</div>
+      <div class="fiche-label">Point fort</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-str">Argumentation en 4 points numérotés</span></div>
+      <div class="fiche-label">Point faible</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-wk">Insulte quand il manque d'arguments</span></div>
+      <div class="fiche-label">Stratégie dans la maison</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-strat">Lancer des débats à 23h et se plaindre que les autres fuient</span></div>
+      <div class="fiche-label" style="margin-top:.8rem">Vitals</div>
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7">Prof des écoles · Souverainiste · Anti-libéral · Jancoviciste<br>Pic d'activité : <strong style="color:var(--text)">15h–16h</strong></div>
+    </div>
+
+    <div class="fiche sh">
+      <span class="fiche-emoji">📋</span>
+      <div class="fiche-name">SHAars</div>
+      <div class="fiche-slogan">"Contrairement à certain ici je donne les sources"</div>
+      <div class="fiche-label">Point fort</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-str">Demande de sources comme respiration</span></div>
+      <div class="fiche-label">Point faible</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-wk">Incapable de résister à un mauvais débat</span></div>
+      <div class="fiche-label">Stratégie dans la maison</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-strat">Screenshots préventifs, classification taxinomique de tout le monde</span></div>
+      <div class="fiche-label" style="margin-top:.8rem">Vitals</div>
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7">Officier gendarmerie · Gaulliste · 135k€ en bourse<br>Pic d'activité : <strong style="color:var(--text)">10h00</strong></div>
+    </div>
+
+    <div class="fiche sa">
+      <span class="fiche-emoji">✝️</span>
+      <div class="fiche-name">Sacha</div>
+      <div class="fiche-slogan">"Continue les insultes igo"</div>
+      <div class="fiche-label">Point fort</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-str">Calme olympien sous les insultes</span></div>
+      <div class="fiche-label">Point faible</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-wk">Préfère la formule qui frappe à celle qui convainc</span></div>
+      <div class="fiche-label">Stratégie dans la maison</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-strat">Sortir une stat Suisse/Singapour à point nommé, puis se taire</span></div>
+      <div class="fiche-label" style="margin-top:.8rem">Vitals</div>
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7">Trad. juridique · Catholique · Monarchiste · Régionaliste<br>"Libéral classique d'un pdv réaliste"</div>
+    </div>
+
+    <div class="fiche ly">
+      <span class="fiche-emoji">🏠</span>
+      <div class="fiche-name">Lyd</div>
+      <div class="fiche-slogan">"Le temps de vie disponible c'est la ressource la plus précieuse"</div>
+      <div class="fiche-label">Point fort</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-str">Marx pour analyser, capitalisme pour s'enrichir</span></div>
+      <div class="fiche-label">Point faible</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-wk">Se perçoit anticap, perçu comme bourgeois</span></div>
+      <div class="fiche-label">Stratégie dans la maison</div>
+      <div style="margin-bottom:.6rem"><span class="badge-small badge-strat">Définir les termes de tout débat, puis démolir en 3 questions</span></div>
+      <div class="fiche-label" style="margin-top:.8rem">Vitals</div>
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7">Étudiant droit notarial · Investisseur immo · Futur rentier<br>Pic absolu : <strong style="color:var(--text)">2025</strong></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== JOUR 1 ========== -->
+<div id="j1" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 1</div>
+    <div class="day-title">QUI PREND LE LIT DU HAUT ?</div>
+    <div class="day-summary">
+      La camionnette dépose les quatre à 14h pile devant une villa de périphérie. MPB arrive le premier, fait le tour des chambres en 3 minutes et pose sa valise sur le lit simple avec vue jardin — "c'est la chambre du meilleur ratio superficie/calme, c'est factuel." SHAars arrive deuxième, sort immédiatement son téléphone et commence à photographier les espaces communs "pour avoir une baseline documentée". Sacha entre en dernier, voit que la chambre la plus grande est encore disponible, s'y installe sans commentaire, et met un crucifix sur le mur. Lyd calcule mentalement la valeur locative au m² de chaque pièce avant de choisir.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:20%"></div></div>
+      <div class="tension-score">2 / 10 — Ambiance auberge de jeunesse. Pour l'instant.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : Lyd × Sacha — 15 min de conversation sur l'immobilier parisien</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — L'inspection des lieux</div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Bon. Règle numéro 1 de la maison : on partage les tâches ménagères équitablement. J'ai fait un planning.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">T'as une source pour dire que c'est "équitable" ? Parce que si t'as pas de méthode de calcul c'est juste ton ressenti là.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">On est là depuis 20 minutes SHAars. 20 MINUTES.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Continue les insultes igo. Moi je propose qu'on fasse le ménage quand c'est sale. Concept révolutionnaire.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">Le temps qu'on passe à débattre du planning est déjà du temps de vie perdu walklah. On fait quoi ce soir ?</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"J'avais préparé le planning depuis 3 jours. Trois jours. Et SHAars me demande une source sur l'équité ménagère. C'est le genre de truc qui me fait comprendre pourquoi les gens ne veulent pas débattre avec moi — parce que moi je le fais SÉRIEUSEMENT, en vrai. Sacha a mis un crucifix dans la chambre commune. Je dirai rien. Pour l'instant."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"J'ai déjà 47 photos documentant l'état initial de la maison. En cas de litige futur c'est une baseline essentielle. MPB a sorti un planning en papier A4 avec des couleurs. C'est soit le geste d'un organisateur né soit un premier degré abyssal. Je me réserve le droit de conclure."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Honnêtement ça va ahi. Lyd et moi on a parlé SCI et démembrement pendant un quart d'heure, c'est le mec le plus pragmatique de la maison. MPB va lancer un débat politique dans les 48h chrono. SHAars va demander une source sur le temps de cuisson des pâtes."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"La villa vaut probablement 480k dans ce coin. Rendement locatif autour de 4,2%. Bref. MPB est le genre de mec qui fait un planning en arrivant — donc soit très organisé soit très anxieux. SHAars screenshots tout, c'est soit paranoïa soit rigueur. À définir. Sacha est chelax. Moi je suis là pour voir ce que ça donne."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 2 ========== -->
+<div id="j2" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 2</div>
+    <div class="day-title">LE PREMIER REPAS COMMUN SE FINIT EN PROCÈS</div>
+    <div class="day-summary">
+      SHAars se lève à 7h30, nage 40 longueurs dans sa tête et décide de cuisiner. Il fait des pâtes. MPB arrive en cuisine à midi et annonce qu'il "préfère cuisiner lui-même parce qu'il a une vision précise du repas idéal." Sacha propose de commander une pizza. Lyd calcule le coût par personne des deux options et présente ses conclusions comme si c'était une plaidoirie. Le premier accrochage surgit sur une question de sel : MPB affirme qu'il faut saler l'eau bouillante "à raison de 10g par litre, c'est la donnée physico-chimique objective." SHAars demande la source. MPB répond "c'est Bocuse niveau 0." Ça dégénère.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:40%"></div></div>
+      <div class="tension-score">4 / 10 — Ça commence à sentir le débat de 23h.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : MPB × Sacha — unis contre "l'épistémologie du sel" de SHAars</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — Le débat du sel</div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">10 grammes par litre d'eau, c'est la norme physico-chimique pour les pâtes. Pas négociable.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">T'as une source là ? Parce que "c'est Bocuse" c'est pas une source, c'est un prénom.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Tu me demandes une source sur le salage des pâtes. Sur le SALAGE DES PÂTES. Vous ne voulez pas débattre de cuisine correctement ou quoi.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">En Suisse ils mettent 7g/L et l'économie tourne quand même igo.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">Ok je vais poser la question différemment. Définissez ce que vous entendez par "bonne pâte" avant de continuer parce que là vous débattez sans cadre conceptuel minimum.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">*screenshot* Conservé pour la postérité.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"J'ai pas dit que j'abandonnais le débat, j'ai dit que j'abandonnais CE débat AVEC LUI parce que demander une source sur le sel c'est une escroquerie rhétorique pour éviter de concéder que j'avais raison. Le repas était bon d'ailleurs. Grâce à MON sel."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"Le repas était bien. Mais MPB a salé avec une cuillère à soupe en affirmant que c'était 10g. C'était clairement 15g minimum, j'avais une balance dans mon sac. J'ai rien dit. J'ai le screenshot. Le moment viendra."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Les pâtes étaient trop salées mais j'ai rien dit parce que c'était pas le moment. La dynamique est intéressante : MPB lance, SHAars contre-attaque avec méthode, Lyd recadre philosophiquement. Je suis le seul à pas avoir d'agenda. Continue les insultes igo."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"Ils ont débattu du sel 23 minutes. VINGT-TROIS MINUTES de temps de vie. C'est dingue. Moi j'ai profité pour regarder les taux immobiliers sur mon téléphone. Sacha commence à me sembler être le mec le plus sain dans cette maison, ce qui en dit long."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 3 ========== -->
+<div id="j3" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 3</div>
+    <div class="day-title">LES FRONTIÈRES DE L'EUROPE ET DE LEUR AMITIÉ</div>
+    <div class="day-summary">
+      MPB attendait ce moment. 21h47, tout le monde est dans le salon, et il lance comme ça, l'air de rien : "Vous pensez que la sortie de l'UE c'est toujours la question politique la plus importante ?" Ce qui suit dure 4h12. SHAars sort Wikipedia dans les 8 premières minutes. Sacha cite Lord Acton à 22h15 et la Suisse à 22h43. Lyd définit d'abord "souveraineté" en demandant à chacun sa définition exacte, ce qui retarde le vrai débat de 35 minutes. MPB dit "vous ne voulez pas débattre" à 23h02 alors qu'il est littéralement en train de débattre. À 1h30, Sacha se lève, dit "bonne nuit igo", et part se coucher. MPB continue à débattre avec Lyd jusqu'à 2h.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:65%"></div></div>
+      <div class="tension-score">6.5 / 10 — Le vrai jeu commence.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : SHAars × Lyd — coalition épistémologique anti-MPB</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — 23h02, l'instant classique</div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Non mais là vous faites exactement ce que je disais — vous ne voulez pas débattre sur le fond. C'est classique. Dès que j'amène la question souverainiste sérieusement vous esquivez.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">On est là depuis 1h15 MPB. 1h15. GK des mots et 0 définition de "souveraineté" de ta part depuis le début.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">C'est pour ça que j'avais demandé la définition au départ. Walklah. Quelle souveraineté tu veux exactement : monétaire, législative, migratoire ? C'est pas le même débat.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">LES TROIS. C'est un tout. On ne peut pas découper la souveraineté nationale en sous-menus comme un kebab SHAars.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">La Suisse l'a découpée en sous-menus depuis 1848 et ça marche pas mal. Bonne nuit igo, j'ai vêpres demain matin.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR (très soir)</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"Sacha est parti à 1h30 en mode hauteur mystique alors que j'avais pas encore développé l'argument économique. C'est ça la vraie escroquerie — partir avant la fin du débat. Lyd au moins est resté. Le gouloum a du mérite."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"MPB a dit 'vous ne voulez pas débattre' alors qu'on débattait depuis 75 minutes. J'ai le screenshot horodaté. Je le garde. Pour mémoire. Et pour la gendarmerie si nécessaire."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"J'avais raison sur tout mais le lit était plus urgent. La Suisse a géré la souveraineté par le fédéralisme depuis 1848, j'aurais pu continuer 3h mais à quoi bon. Continue les insultes igo."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"J'ai débattu jusqu'à 2h du mat. C'est la preuve que même moi je peux perdre du temps de vie pour un débat qui tient la route. MPB est plus solide qu'il le laisse paraître quand il se calme. Sacha avait tort de partir — il aurait gagné si il était resté 20 minutes de plus."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 4 ========== -->
+<div id="j4" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 4</div>
+    <div class="day-title">L'ÎLE DE PAIX (OU PRESQUE)</div>
+    <div class="day-summary">
+      Personne ne propose de débat. Comme un accord tacite. SHAars propose une randonnée, MPB accepte "pour l'aspect physique", Sacha dit "aaahi ouais" et Lyd accepte en calculant que c'est le loisir le moins coûteux en temps/énergie. En pleine forêt, quelque chose d'inattendu se produit : Sacha et MPB se trouvent une passion commune pour les oiseaux (MPB est prof des écoles, il a un bagage naturaliste surprenant). SHAars et Lyd marchent 50m derrière en parlant investissement immobilier et retraite anticipée. Le soir, premier repas sans accrochage. Sacha cuisine. Ça se passe bien.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:10%"></div></div>
+      <div class="tension-score">1 / 10 — Miracle météorologique humain.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : MPB × Sacha — ornithologie surprise + SHAars × Lyd — stratégie patrimoniale</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — La forêt révèle tout</div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Attends — t'entends là ? C'est un pouillot véloce. En octobre c'est rare, normalement ils sont partis en migration.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Sérieux ? Je connais pas du tout mais ahi c'est stylé. C'est le petit gris là dans les feuilles ?</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Ouais. Phylloscopus collybita. Je fais ça avec mes élèves, la reconnaissance par le chant. C'est un truc incroyable comme les gamins accrochent là-dessus.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Tu m'apprends ça le reste de la semaine. Franchement. C'est le genre de truc que je veux savoir igo.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">*(50m derrière, parlant avec SHAars)* Le démembrement de propriété c'est littéralement de l'optimisation temporelle, t'es d'accord ? T'achètes l'usufruit maintenant, dans 20 ans tu as la pleine propriété sans effort.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">En théorie oui. Donne-moi une étude OCDE là-dessus et j'adhère pleinement.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"Sacha est pas si con en dehors du politique. Le gars s'intéresse réellement aux oiseaux maintenant. On a passé 2h à identifier des espèces. C'est ça l'idéal du débat — quand tu trouves un terrain neutre où tout le monde est honnête. Dommage que la politique ça existe."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"Lyd m'a expliqué le démembrement de propriété pendant 45 minutes. J'ai pris des notes. J'avais déjà commencé à y réfléchir mais sa formulation du 'temps de vie' est intéressante analytiquement. Je le classerai nulle part pour l'instant."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Bonne journée ahi. MPB est prof des écoles et ça se voit quand il parle de truc qu'il aime vraiment — il est pédagogue sans condescendance pour une fois. C'est bien. La forêt c'est mieux que Discord pour les débattre."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"Journée bien optimisée. SHAars et moi on a avancé sur la réflexion patrimoniale. MPB et Sacha ont eu l'air de devenir potes autour d'oiseaux ce qui est probablement la chose la plus improbable de la semaine. La tension va revenir. Mais là c'était bien."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 5 ========== -->
+<div id="j5" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 5</div>
+    <div class="day-title">LA GRANDE RUPTURE : "250 000. VERDUN TOUS LES ANS."</div>
+    <div class="day-summary">
+      Tout part d'une émission de débat sur la télé allumée en bruit de fond. Quelqu'un mentionne l'avortement. Sacha, qui n'avait pas prévu de lancer ça ce soir, lâche sa phrase fétiche, posément, comme s'il posait une bombe : "250 000 avortements en 2024. Verdun tous les ans." Silence de 4 secondes. MPB explose le premier. SHAars demande la source du chiffre (elle est exacte). Lyd demande à Sacha de définir "vie" avant de continuer. Le débat dure 3h, monte dans les tours, et à un moment MPB dit à Sacha quelque chose qu'il aurait pas dû dire. Sacha répond "Continue les insultes igo" et quitte la pièce. C'est la première fois de la semaine qu'une pièce se vide par départ volontaire.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:95%"></div></div>
+      <div class="tension-score">9.5 / 10 — Thermomètre cliniquement mort.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : Lyd — seul arbitre en terrain miné</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — Le point de rupture</div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">250 000 avortements en 2024. Verdun tous les ans.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">NON. Non. T'es en train de comparer une bataille militaire avec une décision médicale sur le corps d'une femme. C'est une manipulation rhétorique indigne.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">Le chiffre est exact par contre, j'ai la source DREES. C'est 234 000 en 2023. La rhétorique est discutable, le chiffre non.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">Sacha tu peux définir à partir de quel moment tu considères qu'il y a une vie ? Parce que sans ça le débat tourne en rond.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">*[après 2h de débat]* Franchement Sacha des fois je me demande comment des gens avec des convictions pareilles arrivent à fonctionner normalement en société. C'est pas une insulte c'est une question sincère.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Continue les insultes igo.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">*[se lève, sort de la pièce]*</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"J'aurais pas dû dire ça. Je le sais. Mais 'comment arrivent-ils à fonctionner normalement' c'était une vraie question pas une insulte — le problème c'est que quand on est fatigué à 1h du mat les vraies questions ressemblent à des insultes. Je vais lui dire demain. Peut-être."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"J'ai documenté l'intégralité du débat. MPB a franchi la ligne. Le chiffre de Sacha était exact, ses conclusions discutables, mais sa sortie était digne. Moi j'aurais répondu différemment mais 'Continue les insultes igo' en se levant c'est quand même une masterclass de désengagement."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Je savais que ça finirait là. MPB est quelqu'un de bien mais il déraille quand il est épuisé et que l'interlocuteur ne cède pas. J'ai pas claqué la porte, j'ai juste arrêté. La différence est importante. Demain ça ira."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"MPB a dit un truc de trop, Sacha est sorti avec classe, SHAars a documenté. Moi j'essayais de recadrer conceptuellement mais le débat était trop émotionnel pour la méthode. C'est ça le problème avec l'avortement : définir 'vie' ne suffit pas quand l'un croit en une âme et l'autre pas."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 6 ========== -->
+<div id="j6" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 6</div>
+    <div class="day-title">LE LENDEMAIN DES RUINES</div>
+    <div class="day-summary">
+      MPB se lève tôt, fait du café pour tout le monde — y compris Sacha. C'est son mode d'excuse. Sacha comprend, dit "merci" et c'est réglé entre eux. Pas de grands discours. SHAars fait remarquer à MPB qu'il "a franchi une ligne épistémologique et éthique" avec des sources à l'appui sur ce que constitue une attaque ad personam. MPB répond "ta gueule SHAars" affectueusement, ce qui est sa façon de concéder. Lyd passe la matinée à lire, seul, en mode "j'optimise mon temps de vie." L'après-midi, MPB et Sacha reprennent la leçon des oiseaux dans le jardin. SHAars les observe et prend des photos.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:30%"></div></div>
+      <div class="tension-score">3 / 10 — Le calme après la tempête. Sous surveillance.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : MPB × Sacha — réconciliation café + oiseaux, acte 2</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — L'excuse sans le dire</div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">*[pose un café devant Sacha sans rien dire]*</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Merci.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">MPB tu as utilisé hier soir ce que la littérature académique classe comme une attaque ad personam. J'ai la source si tu veux.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">Ta gueule SHAars.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">*screenshot* — Aveu implicite documenté.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">Vous êtes tous des gens bien, les gars. Sincèrement. C'est juste qu'ensemble à 1h du mat sur l'avortement ça devient une autre histoire.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX DU SOIR</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"Le café c'était mon excuse. Il a compris. C'est ça qui est bien avec Sacha — il fonctionne pas en rancune. SHAars par contre m'a sorti de la littérature académique sur l'ad personam à 8h du matin. J'avoue que c'est quand même assez lui."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"MPB a dit 'ta gueule SHAars' ce qui dans notre dialecte est une concession. J'ai 3 photos de la réconciliation MPB/Sacha dans le jardin avec les oiseaux. Pour l'histoire. Je suis peut-être le plus sentimental des quatre en fait."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Le café c'était bien. On a vu une grive musicienne dans le jardin cet après-midi, MPB était style gamin de 8 ans. C'est mon MPB préféré. Hier soir c'était l'autre. Les deux sont réels. Igo."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"Journée tranquille. J'ai lu 80 pages. Vraiment bien. Je pense que ma vraie analyse de la semaine c'est que SHAars est le plus attachant des quatre malgré lui, et MPB le plus touchant quand il se détend."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JOUR 7 ========== -->
+<div id="j7" class="section">
+  <div class="day-card">
+    <div class="day-eyebrow">JOUR 7</div>
+    <div class="day-title">DERNIÈRE SOIRÉE : LE BILAN QUE PERSONNE NE VOULAIT FAIRE</div>
+    <div class="day-summary">
+      Dernier soir. SHAars cuisine pour tout le monde — pour de vrai cette fois, avec effort. MPB ouvre une bouteille sans demander si c'est la bonne quantité de vin par personne. Sacha boit de l'eau et dit que c'est très bien comme ça. Lyd boit le vin et dit "temps de vie bien investi finalement." Ils finissent par parler de la semaine, presque sans se battre. MPB reconnaît qu'il a dit un truc de trop au J5. Sacha dit "déjà oublié." SHAars dit qu'il a 847 photos de la semaine. Lyd dit qu'il rentrerait habiter dans un endroit comme ça pour 3 mois si le loyer était correct. Personne ne claque de porte. Tout le monde se couche à heure raisonnable. C'est probablement leur meilleur soir.
+    </div>
+
+    <div class="tension-wrap">
+      <div class="tension-label">🌡 Niveau de tension</div>
+      <div class="tension-bar"><div class="tension-fill" style="width:15%"></div></div>
+      <div class="tension-score">1.5 / 10 — L'humanité, parfois, ça finit bien.</div>
+    </div>
+
+    <div class="alliance-badge">⚡ Alliance du jour : Tous les quatre — rare et précieux</div>
+
+    <div class="dialogue-section">
+      <div class="dialogue-title">🎬 SCÈNE DU JOUR — Le bilan honnête</div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">Bilan objectif : 7 jours, 23 débats, 847 photos, 1 rupture, 1 réconciliation, et une grive musicienne le jour 6.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar mpb">M</div>
+        <div class="msg-body">
+          <div class="msg-name mpb">monpotestbon</div>
+          <div class="msg-text">847 photos c'est de la maladie SHAars. Franchement. *pause* Le jour 5 j'aurais pas dû. Sacha. Voilà.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sa">S</div>
+        <div class="msg-body">
+          <div class="msg-name sa">Sacha</div>
+          <div class="msg-text">Déjà oublié igo. Tu m'as appris le pouillot véloce. C'est Phylloscopus collybita pour ceux qui prennent des notes.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar sh">S</div>
+        <div class="msg-body">
+          <div class="msg-name sh">SHAars</div>
+          <div class="msg-text">*screenshot* — Pour la postérité.</div>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-avatar ly">L</div>
+        <div class="msg-body">
+          <div class="msg-name ly">Lyd</div>
+          <div class="msg-text">Honnêtement ? Temps de vie bien utilisé. Ce qui est rare dans ma bouche, les gars. Prenez-le.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem">🎭 CONFESSIONNAUX FINAUX</div>
+
+    <div class="conf-grid">
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name mpb">MPB</span></div>
+        <div class="conf-text">"Ce que je retiens ? Que SHAars est réellement agaçant à 8h du matin mais qu'il avait raison sur le sel. Que Sacha est le seul à jamais perdre sa dignité dans un débat, et ça m'apprend quelque chose. Que Lyd pense en termes de temps de vie et ça m'a changé une petite chose. Et que j'ai dit 'vous ne voulez pas débattre' à des gens qui débattaient avec moi depuis 1h15. C'est peut-être le gouloum en moi. On verra bien."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sh">SHAars</span></div>
+        <div class="conf-text">"Je suis toujours l'exemple le plus réel du gaullisme en France mais tu n'es pas prêt pour ce débat. Ce que je retiens : MPB est plus honnête avec lui-même qu'il ne le laisse voir. Sacha est le mec le plus difficile à déstabiliser que j'ai jamais rencontré IRL. Lyd pense comme un rentier à 22 ans et finira soit très riche soit très lucide. Moi j'ai 847 photos et des analyses qui tiennent la route. C'est un bon bilan."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name sa">Sacha</span></div>
+        <div class="conf-text">"Ce que je retiens ? Que MPB prof des écoles qui explique les oiseaux à un gamin c'est le meilleur MPB. Que SHAars sans ses sources serait perdu mais que ses sources sont toujours exactes. Que Lyd est le philosophe le plus pragmatique que je connaisse. Et que la Suisse a quand même raison sur à peu près tout. Bonne semaine ahi. Continue les insultes igo."</div>
+      </div>
+      <div class="confessionnal">
+        <div class="conf-header"><span class="conf-cam">📹</span><span class="conf-name ly">Lyd</span></div>
+        <div class="conf-text">"Dans ma tête le prime humain c'est une société pleine de gens comme eux — agaçants, cohérents, vrais. La vie est courte et je le verrai peut-être jamais, donc je préfère en profiter maintenant. Ce que je retiens : MPB est le plus touchant. SHAars le plus fiable. Sacha le plus digne. Et moi ? Je suis le seul à avoir calculé le rendement locatif de la villa le jour 1. Walklah."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== STATS ========== -->
+<div id="stats" class="section">
+  <div class="section-title">STATISTIQUES DE LA SEMAINE</div>
+  <div class="section-subtitle">Les chiffres ne mentent pas. Contrairement à certains dans cette maison.</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--mpb)">23</div>
+      <div class="stat-desc">Débats lancés au total<br><small style="color:var(--muted)">dont 14 par MPB</small></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--mpb)">7</div>
+      <div class="stat-desc">Fois où MPB a dit<br><em style="color:#c8c6e0">"vous ne voulez pas débattre"</em></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--sh)">847</div>
+      <div class="stat-desc">Screenshots pris par SHAars<br><small style="color:var(--muted)">certifiés horodatés</small></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--sa)">4</div>
+      <div class="stat-desc">Fois où Sacha a dit<br><em style="color:#c8c6e0">"Continue les insultes igo"</em></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--sa)">3</div>
+      <div class="stat-desc">Références à la Suisse/Singapour<br>par Sacha</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--ly)">∞</div>
+      <div class="stat-desc">Fois où Lyd a parlé<br>du temps de vie disponible</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--ly)">2</div>
+      <div class="stat-desc">Fois où Lyd a mentionné<br>son patrimoine immobilier</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--sh)">1</div>
+      <div class="stat-desc">Balance pour peser le sel<br>(dans le sac de SHAars)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--acc4)">1</div>
+      <div class="stat-desc">Pouillot véloce identifié<br>Phylloscopus collybita</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--acc3)">4h12</div>
+      <div class="stat-desc">Durée du débat le plus long<br>(J3, souveraineté UE)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VERDICT ========== -->
+<div id="verdict" class="section">
+  <div class="section-title">🗳️ VERDICT DU PUBLIC</div>
+  <div class="section-subtitle">Sondage fictif auprès de 2 847 téléspectateurs imaginaires</div>
+
+  <div class="day-card">
+    <div class="day-eyebrow">QUI ÉTAIT LE PLUS ATTACHANT ?</div>
+    <div style="margin:1rem 0">
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sh)">SHAars</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:38%;background:var(--sh)">38%</div></div>
+        <div class="sondage-pct">38%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--mpb)">MPB</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:27%;background:var(--mpb)">27%</div></div>
+        <div class="sondage-pct">27%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sa)">Sacha</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:24%;background:var(--sa)">24%</div></div>
+        <div class="sondage-pct">24%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--ly)">Lyd</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:11%;background:var(--ly)">11%</div></div>
+        <div class="sondage-pct">11%</div>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.5rem">SHAars gagne sur l'attachant malgré lui — le public adore quelqu'un qui demande des sources avec une balance dans le sac.</div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-eyebrow">QUI ÉTAIT LE PLUS AGAÇANT ?</div>
+    <div style="margin:1rem 0">
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--mpb)">MPB</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:51%;background:var(--mpb)">51%</div></div>
+        <div class="sondage-pct">51%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sh)">SHAars</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:29%;background:var(--sh)">29%</div></div>
+        <div class="sondage-pct">29%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--ly)">Lyd</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:13%;background:var(--ly)">13%</div></div>
+        <div class="sondage-pct">13%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sa)">Sacha</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:7%;background:var(--sa)">7%</div></div>
+        <div class="sondage-pct">7%</div>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.5rem">MPB à 51% — "vous ne voulez pas débattre" dit 7 fois en 7 jours, c'est mathématique.</div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-eyebrow">QUI ÉTAIT LE PLUS SURPRENANT ?</div>
+    <div style="margin:1rem 0">
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--mpb)">MPB</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:44%;background:var(--mpb)">44%</div></div>
+        <div class="sondage-pct">44%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sa)">Sacha</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:30%;background:var(--sa)">30%</div></div>
+        <div class="sondage-pct">30%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--ly)">Lyd</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:16%;background:var(--ly)">16%</div></div>
+        <div class="sondage-pct">16%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sh)">SHAars</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:10%;background:var(--sh)">10%</div></div>
+        <div class="sondage-pct">10%</div>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.5rem">MPB surprend sur les oiseaux. Personne n'avait vu ça venir. Pas même lui.</div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-eyebrow">QUI VOUDRAIT-ON REVOIR EN SAISON 2 ?</div>
+    <div style="margin:1rem 0">
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sh)">SHAars</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:40%;background:var(--sh)">40%</div></div>
+        <div class="sondage-pct">40%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--sa)">Sacha</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:33%;background:var(--sa)">33%</div></div>
+        <div class="sondage-pct">33%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--mpb)">MPB</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:20%;background:var(--mpb)">20%</div></div>
+        <div class="sondage-pct">20%</div>
+      </div>
+      <div class="sondage-item">
+        <div class="sondage-label" style="color:var(--ly)">Lyd</div>
+        <div class="sondage-bar-wrap"><div class="sondage-bar" style="width:7%;background:var(--ly)">7%</div></div>
+        <div class="sondage-pct">7%</div>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:.5rem">Lyd à 7% — il avait dit lui-même qu'il ne reviendrait que si le loyer est correct.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="margin-bottom:1rem">📺 SAISON 2 — LE TEASER</div>
+  <div class="section-subtitle">Si une saison 2 était tournée, qui intègrerait la maison ?</div>
+
+  <div class="s2-grid">
+    <div class="s2-card">
+      <div class="s2-name">🎮 UDYRDEFEU</div>
+      <div class="s2-why">
+        3ème du classement CSV avec 612 messages en octobre — et visiblement pas du genre à mâcher ses mots. Son énergie contraste avec la rigueur formelle de SHAars et le souverainisme structuré de MPB. Le chaos vs la méthode. La production attend ça depuis la saison 1. Il apporterait une énergie gaming brute dans une maison qui débat déjà trop sérieusement, et créerait une alliance improbable avec Sacha ou une friction immédiate avec MPB. Probablement les deux.
+      </div>
+    </div>
+    <div class="s2-card">
+      <div class="s2-name">🦅 RISTORANTE</div>
+      <div class="s2-why">
+        594 messages en octobre, 4ème du classement. Présence constante mais discrète dans le CSV — le profil parfait du joker de téléréalité. On ne sait pas encore tout à fait qui il est dans le débat. Est-ce qu'il sourcifie comme SHAars ? Est-ce qu'il a une philosophie de vie comme Lyd ? Est-ce qu'il claque des formules comme Sacha ? L'inconnue dans la maison, c'est toujours la variable la plus intéressante narrativement. La production mise dessus.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:12px;text-align:center">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--acc);margin-bottom:.5rem">LA MAISON DES RATS</div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.2em">SAISON 2 · BIENTÔT · SUR AUCUNE CHAÎNE QUI EXISTE</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

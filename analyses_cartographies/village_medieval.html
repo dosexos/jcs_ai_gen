@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Village des Rageux — Chronique Médiévale</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=IM+Fell+English:ital@0;1&display=swap');
+
+:root {
+  --parch: #1a1208;
+  --parch2: #221810;
+  --parch3: #2e2014;
+  --gold: #c8922a;
+  --gold2: #e8b84b;
+  --gold3: #f5d080;
+  --bordeaux: #6b1a28;
+  --bordeaux2: #8b2a3a;
+  --ink: #e8d5a0;
+  --ink2: #c8b580;
+  --ink3: #a09060;
+  --red: #cc3030;
+  --teal: #2a7a6a;
+  --blue: #2a4a8a;
+  --green: #3a6a2a;
+  --shadow: rgba(0,0,0,0.7);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--parch);
+  color: var(--ink);
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* PARCHMENT TEXTURE */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 20% 10%, rgba(200,146,42,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 120% at 80% 90%, rgba(107,26,40,0.08) 0%, transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      transparent, transparent 2px,
+      rgba(200,146,42,0.015) 2px, rgba(200,146,42,0.015) 4px
+    );
+  pointer-events: none; z-index: -1;
+}
+
+/* GRAIN */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: -1; opacity: 0.6;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.village-header {
+  text-align: center;
+  padding: 60px 24px 40px;
+  border-bottom: 2px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+}
+.village-header::before {
+  content: '⚜';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 500px;
+  color: rgba(200,146,42,0.03);
+  pointer-events: none;
+}
+.village-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(28px, 5vw, 60px);
+  font-weight: 900;
+  color: var(--gold2);
+  text-shadow: 0 0 40px rgba(200,146,42,0.3), 2px 2px 0px rgba(0,0,0,0.8);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.village-subtitle {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink2);
+  margin-bottom: 20px;
+}
+.village-date {
+  font-family: 'Crimson Text', serif;
+  font-size: 13px;
+  color: var(--ink3);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.ornament { color: var(--gold); margin: 0 12px; }
+
+/* ═══════════════════════════════════════
+   MAP SECTION
+═══════════════════════════════════════ */
+.map-section {
+  padding: 40px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.map-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 22px;
+  color: var(--gold2);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.map-hint {
+  text-align: center;
+  color: var(--ink3);
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.map-container {
+  position: relative;
+  background: var(--parch2);
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(200,146,42,0.15), inset 0 0 80px rgba(0,0,0,0.4);
+}
+.map-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+.click-zone {
+  position: absolute;
+  cursor: pointer;
+  background: transparent;
+  z-index: 10;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.click-zone:hover {
+  background: rgba(200,146,42,0.08);
+  outline: 1px solid rgba(200,146,42,0.3);
+}
+
+/* building hover */
+.building-group {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.building-group:hover .building-body { filter: brightness(1.4); }
+.building-group:hover .building-label { fill: #f5d080; }
+.building-tooltip {
+  position: absolute;
+  background: var(--parch3);
+  border: 1px solid var(--gold);
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  color: var(--ink);
+  pointer-events: none;
+  display: none;
+  z-index: 100;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+.modal-card {
+  background: var(--parch2);
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  max-width: 680px; width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 80px rgba(200,146,42,0.2), inset 0 0 40px rgba(0,0,0,0.3);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+
+/* Corner ornaments */
+.modal-card::before, .modal-card::after {
+  content: '✦';
+  position: absolute;
+  color: var(--gold);
+  font-size: 20px;
+  line-height: 1;
+}
+.modal-card::before { top: 8px; left: 12px; }
+.modal-card::after { bottom: 8px; right: 12px; }
+
+.modal-header {
+  background: linear-gradient(135deg, var(--parch3), var(--bordeaux) 200%);
+  border-bottom: 1px solid var(--gold);
+  padding: 28px 28px 20px;
+  position: relative;
+}
+.modal-emoji { font-size: 48px; line-height: 1; display: block; margin-bottom: 10px; }
+.modal-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(20px, 4vw, 32px);
+  color: var(--gold2);
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+  margin-bottom: 4px;
+}
+.modal-role {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  color: var(--ink2);
+  font-size: 16px;
+}
+.modal-building-name {
+  display: inline-block;
+  margin-top: 8px;
+  background: rgba(200,146,42,0.1);
+  border: 1px solid var(--gold);
+  padding: 3px 12px;
+  border-radius: 2px;
+  font-size: 13px;
+  color: var(--gold3);
+  letter-spacing: 0.05em;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: 1px solid var(--gold);
+  color: var(--gold); font-size: 18px;
+  width: 32px; height: 32px;
+  border-radius: 2px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: var(--gold); color: var(--parch); }
+
+.modal-body { padding: 24px 28px 32px; }
+
+.modal-section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  margin-top: 20px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(200,146,42,0.3);
+}
+.modal-section-title:first-child { margin-top: 0; }
+
+.modal-text {
+  color: var(--ink2);
+  font-size: 16px;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.modal-quote {
+  background: rgba(200,146,42,0.06);
+  border-left: 3px solid var(--gold);
+  padding: 10px 16px;
+  margin: 12px 0;
+  font-style: italic;
+  color: var(--gold3);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.modal-relations {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 8px;
+}
+.rel-tag {
+  padding: 4px 12px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-family: 'Crimson Text', serif;
+  border: 1px solid;
+}
+.rel-ally { background: rgba(58,106,42,0.2); border-color: var(--green); color: #7fc070; }
+.rel-rival { background: rgba(204,48,48,0.15); border-color: var(--red); color: #e07070; }
+.rel-neutral { background: rgba(42,74,138,0.15); border-color: var(--blue); color: #7090d0; }
+
+/* ═══════════════════════════════════════
+   SECTIONS NARRATIVE
+═══════════════════════════════════════ */
+.sections-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 24px 60px;
+}
+
+.chronicle-section {
+  margin-bottom: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(200,146,42,0.2);
+}
+.chronicle-section:last-child { border-bottom: none; }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.section-ornament {
+  color: var(--gold);
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(16px, 3vw, 26px);
+  color: var(--gold2);
+  text-shadow: 0 0 30px rgba(200,146,42,0.2);
+}
+.section-subtitle {
+  font-style: italic;
+  color: var(--ink3);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* PLACE DU VILLAGE */
+.village-square {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.influencer-card {
+  background: var(--parch3);
+  border: 1px solid rgba(200,146,42,0.4);
+  padding: 18px 20px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.influencer-card::before {
+  content: attr(data-rank);
+  position: absolute; top: 10px; right: 14px;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 40px;
+  color: rgba(200,146,42,0.08);
+  line-height: 1;
+}
+.inf-emoji { font-size: 32px; margin-bottom: 8px; }
+.inf-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 16px;
+  color: var(--gold2);
+  margin-bottom: 4px;
+}
+.inf-role { font-style: italic; color: var(--ink3); font-size: 14px; margin-bottom: 8px; }
+.inf-desc { color: var(--ink2); font-size: 15px; line-height: 1.5; }
+
+/* QUERELLES */
+.conflict-list { display: flex; flex-direction: column; gap: 20px; }
+.conflict-item {
+  background: var(--parch3);
+  border: 1px solid rgba(204,48,48,0.3);
+  border-left: 4px solid var(--red);
+  padding: 16px 20px;
+}
+.conflict-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  color: #e07070;
+  margin-bottom: 6px;
+}
+.conflict-desc { color: var(--ink2); font-size: 15px; line-height: 1.6; }
+
+/* ALLIANCES */
+.alliance-list { display: flex; flex-direction: column; gap: 20px; }
+.alliance-item {
+  background: var(--parch3);
+  border: 1px solid rgba(58,106,42,0.3);
+  border-left: 4px solid var(--green);
+  padding: 16px 20px;
+}
+.alliance-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  color: #7fc070;
+  margin-bottom: 6px;
+}
+.alliance-desc { color: var(--ink2); font-size: 15px; line-height: 1.6; }
+
+/* LEGENDE */
+.legend-text {
+  font-family: 'IM Fell English', serif;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink2);
+  text-align: justify;
+  column-count: 2;
+  column-gap: 32px;
+}
+.legend-text::first-letter {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 72px;
+  float: left;
+  line-height: 0.7;
+  margin-right: 8px;
+  margin-top: 10px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+}
+@media (max-width: 600px) {
+  .legend-text { column-count: 1; }
+}
+
+/* EVENEMENT */
+.chronicle-box {
+  background: var(--parch3);
+  border: 1px solid var(--gold);
+  padding: 28px 32px;
+  position: relative;
+}
+.chronicle-box::before {
+  content: '†';
+  display: block;
+  text-align: center;
+  color: var(--gold);
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.chronicle-event-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 18px;
+  color: var(--gold2);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.chronicle-event-date {
+  text-align: center;
+  color: var(--ink3);
+  font-style: italic;
+  font-size: 13px;
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
+}
+.chronicle-event-text {
+  font-family: 'IM Fell English', serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink2);
+}
+.chronicle-event-text p { margin-bottom: 12px; }
+.chronicle-event-text p:last-child { margin-bottom: 0; }
+
+/* FOOTER */
+.village-footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid rgba(200,146,42,0.2);
+  color: var(--ink3);
+  font-style: italic;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="village-header">
+  <div class="village-title">Le Village des Rageux</div>
+  <div class="village-subtitle">
+    <span class="ornament">⚜</span>
+    Cartographie d'un Serveur Discord en Royaume Médiéval
+    <span class="ornament">⚜</span>
+  </div>
+  <div class="village-date">Anno Domini 2019 — 2026 · Serveur privé francophone</div>
+</header>
+
+<!-- ═══════════ MAP ═══════════ -->
+<section class="map-section">
+  <div class="map-title">Carte du Village</div>
+  <div class="map-hint">✦ Cliquer sur un bâtiment pour rencontrer son habitant ✦</div>
+  <div class="map-container" id="mapContainer">
+
+    <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" id="villageSvg" style="pointer-events:all">
+      <!-- GROUND / SKY -->
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0e0c18"/>
+          <stop offset="100%" stop-color="#1a1208"/>
+        </linearGradient>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a1208"/>
+          <stop offset="100%" stop-color="#120e06"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softglow">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Sky -->
+      <rect width="900" height="620" fill="url(#skyGrad)"/>
+
+      <!-- Stars -->
+      <g fill="#e8d5a0" opacity="0.4">
+        <circle cx="50" cy="30" r="1"/><circle cx="120" cy="18" r="1.5"/>
+        <circle cx="200" cy="35" r="1"/><circle cx="350" cy="12" r="1"/>
+        <circle cx="500" cy="25" r="1.5"/><circle cx="650" cy="15" r="1"/>
+        <circle cx="750" cy="40" r="1"/><circle cx="820" cy="22" r="1.5"/>
+        <circle cx="870" cy="50" r="1"/><circle cx="30" cy="65" r="1"/>
+        <circle cx="900" cy="80" r="0.8"/>
+      </g>
+
+      <!-- Moon -->
+      <circle cx="820" cy="60" r="28" fill="#e8c870" opacity="0.15" filter="url(#softglow)"/>
+      <circle cx="820" cy="60" r="22" fill="#f5d88a" opacity="0.25"/>
+
+      <!-- Ground base -->
+      <rect x="0" y="430" width="900" height="190" fill="#120e06"/>
+      <!-- Ground texture lines -->
+      <path d="M0,430 Q225,420 450,432 Q675,440 900,430" stroke="#1e180a" stroke-width="2" fill="none"/>
+      <path d="M0,445 Q300,435 600,450 Q750,455 900,445" stroke="#1a1408" stroke-width="1" fill="none"/>
+
+      <!-- Dirt paths -->
+      <!-- Central path -->
+      <path d="M450,430 Q450,510 450,620" stroke="#2a1e10" stroke-width="22" fill="none" opacity="0.8"/>
+      <path d="M450,430 Q450,510 450,620" stroke="#342410" stroke-width="16" fill="none" opacity="0.5"/>
+      <!-- Horizontal path -->
+      <path d="M0,520 Q200,515 450,520 Q650,525 900,520" stroke="#2a1e10" stroke-width="18" fill="none" opacity="0.8"/>
+      <!-- Diagonal paths -->
+      <path d="M160,430 Q300,475 450,430" stroke="#2a1e10" stroke-width="12" fill="none" opacity="0.6"/>
+      <path d="M740,430 Q600,475 450,430" stroke="#2a1e10" stroke-width="12" fill="none" opacity="0.6"/>
+      <path d="M200,430 Q340,380 450,350 Q560,320 700,430" stroke="#2a1e10" stroke-width="10" fill="none" opacity="0.4"/>
+
+      <!-- River -->
+      <path d="M0,395 Q150,385 280,392 Q380,398 420,390" stroke="#1a3a5a" stroke-width="12" fill="none" opacity="0.8"/>
+      <path d="M0,397 Q150,387 280,394 Q380,400 420,392" stroke="#2a5a8a" stroke-width="6" fill="none" opacity="0.5"/>
+
+      <!-- Forest left -->
+      <g opacity="0.7">
+        <polygon points="40,380 55,340 70,380" fill="#1a2e14"/>
+        <polygon points="60,385 78,338 96,385" fill="#162a10"/>
+        <polygon points="25,390 40,355 55,390" fill="#1e3418"/>
+      </g>
+      <!-- Forest right -->
+      <g opacity="0.7">
+        <polygon points="830,385 845,345 860,385" fill="#1a2e14"/>
+        <polygon points="855,380 870,340 885,380" fill="#162a10"/>
+        <polygon points="815,390 830,360 845,390" fill="#1e3418"/>
+      </g>
+
+      <!-- ============================
+           BUILDING HELPER MACROS
+           Each building: group with rect/polygon shapes
+      ============================ -->
+
+      <!-- ═══ 1. SHAARS — La Forteresse de la Gendarmerie (top center, dominant) ═══ -->
+      <g class="building-group" id="b-shaars" data-member="shaars" transform="translate(405,240)">
+        <!-- Keep -->
+        <rect x="-20" y="-50" width="90" height="80" fill="#3a2a18" class="building-body"/>
+        <rect x="-18" y="-48" width="86" height="76" fill="#2e2012" class="building-body"/>
+        <!-- Battlements -->
+        <rect x="-20" y="-60" width="14" height="14" fill="#3a2a18"/>
+        <rect x="4" y="-60" width="14" height="14" fill="#3a2a18"/>
+        <rect x="28" y="-60" width="14" height="14" fill="#3a2a18"/>
+        <rect x="52" y="-60" width="14" height="14" fill="#3a2a18"/>
+        <!-- Tower left -->
+        <rect x="-38" y="-30" width="24" height="60" fill="#3e2e1a"/>
+        <polygon points="-38,-30 -26,-58 -14,-30" fill="#5a3a1a"/>
+        <!-- Tower right -->
+        <rect x="64" y="-30" width="24" height="60" fill="#3e2e1a"/>
+        <polygon points="64,-30 76,-58 88,-30" fill="#5a3a1a"/>
+        <!-- Door -->
+        <path d="M10,30 L10,0 Q25,-12 40,0 L40,30 Z" fill="#1a1208"/>
+        <!-- Window -->
+        <rect x="0" y="-20" width="12" height="14" fill="#c8922a" opacity="0.4"/>
+        <rect x="38" y="-20" width="12" height="14" fill="#c8922a" opacity="0.4"/>
+        <!-- Flag -->
+        <line x1="25" y1="-60" x2="25" y2="-90" stroke="#8b2a3a" stroke-width="2"/>
+        <polygon points="25,-90 50,-80 25,-70" fill="#8b2a3a"/>
+        <!-- Label -->
+        <text x="25" y="46" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="11" class="building-label">La Forteresse</text>
+        <text x="25" y="58" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">SHAars</text>
+        <!-- Glow -->
+        <circle cx="25" cy="0" r="40" fill="rgba(200,146,42,0.04)" filter="url(#softglow)"/>
+        <!-- Hit area -->
+        <rect x="-40" y="-95" width="130" height="175" fill="transparent" stroke="none"/>
+      </g>
+
+      <!-- ═══ 2. ELILOS — L'Enfer du Joueur (left mid area) ═══ -->
+      <g class="building-group" id="b-elilos" data-member="elilos" transform="translate(100,290)">
+        <!-- Main building -->
+        <rect x="0" y="-20" width="80" height="70" fill="#3a1820" class="building-body"/>
+        <rect x="2" y="-18" width="76" height="66" fill="#2e1018" class="building-body"/>
+        <!-- Roof -->
+        <polygon points="0,-20 40,-55 80,-20" fill="#5a2030"/>
+        <polygon points="2,-18 40,-52 78,-18" fill="#4a1828"/>
+        <!-- Chimney -->
+        <rect x="30" y="-70" width="12" height="20" fill="#3a1820"/>
+        <!-- Smoke / fire effect -->
+        <circle cx="36" cy="-78" r="6" fill="#cc3030" opacity="0.3" filter="url(#softglow)"/>
+        <!-- Windows (rage red) -->
+        <rect x="12" y="-8" width="20" height="14" fill="#cc3030" opacity="0.6"/>
+        <rect x="48" y="-8" width="20" height="14" fill="#cc3030" opacity="0.6"/>
+        <!-- Door -->
+        <rect x="30" y="15" width="20" height="35" fill="#1a0808"/>
+        <!-- Sign -->
+        <rect x="5" y="52" width="70" height="20" fill="#2e1810" stroke="#6b1a28" stroke-width="1"/>
+        <text x="40" y="65" text-anchor="middle" fill="#e07070" font-family="'Crimson Text',serif" font-size="10">La Salle des Cris</text>
+        <text x="40" y="80" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">elilos</text>
+      </g>
+
+      <!-- ═══ 3. MANIGOLDO — Le Tribunal de l'ADC (left, near elilos) ═══ -->
+      <g class="building-group" id="b-manigoldo" data-member="manigoldo" transform="translate(195,310)">
+        <rect x="0" y="0" width="70" height="55" fill="#2a1a30" class="building-body"/>
+        <rect x="2" y="2" width="66" height="51" fill="#221430" class="building-body"/>
+        <polygon points="0,0 35,-35 70,0" fill="#3a2040"/>
+        <polygon points="2,2 35,-32 68,2" fill="#301838"/>
+        <!-- Columns -->
+        <rect x="10" y="0" width="6" height="55" fill="#3a2a40" opacity="0.7"/>
+        <rect x="54" y="0" width="6" height="55" fill="#3a2a40" opacity="0.7"/>
+        <!-- Door -->
+        <path d="M27,55 L27,30 Q35,20 43,30 L43,55 Z" fill="#12080e"/>
+        <!-- Gavel symbol on roof -->
+        <text x="35" y="-12" text-anchor="middle" fill="#c8922a" font-size="14">⚖</text>
+        <text x="35" y="72" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">Le Tribunal</text>
+        <text x="35" y="84" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Manigoldo</text>
+      </g>
+
+      <!-- ═══ 4. MERKO — L'Observatoire des Stats (far left upper) ═══ -->
+      <g class="building-group" id="b-merko" data-member="merko" transform="translate(45,310)">
+        <!-- Round tower -->
+        <ellipse cx="30" cy="50" rx="28" ry="12" fill="#2a2a1e"/>
+        <rect x="3" y="-10" width="54" height="60" fill="#2a2e1a" rx="5" class="building-body"/>
+        <ellipse cx="30" cy="-10" rx="27" ry="10" fill="#3a3a22"/>
+        <!-- Dome -->
+        <ellipse cx="30" cy="-10" rx="27" ry="22" fill="#262e18" class="building-body"/>
+        <!-- Telescope peeking out -->
+        <rect x="26" y="-36" width="8" height="18" fill="#3a3a22"/>
+        <!-- Windows -->
+        <circle cx="30" cy="10" r="10" fill="#2a5a3a" opacity="0.7"/>
+        <circle cx="30" cy="10" r="7" fill="#1a3a28" opacity="0.8"/>
+        <!-- Star on dome -->
+        <text x="30" y="-18" text-anchor="middle" fill="#c8922a" font-size="11">★</text>
+        <text x="30" y="68" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Observatoire</text>
+        <text x="30" y="80" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">merko</text>
+      </g>
+
+      <!-- ═══ 5. DORIAN — La Tour de Commandement (upper left) ═══ -->
+      <g class="building-group" id="b-dorian" data-member="dorian" transform="translate(245,250)">
+        <rect x="5" y="-10" width="50" height="70" fill="#2e2a1a" class="building-body"/>
+        <rect x="0" y="-30" width="60" height="24" fill="#3a3218"/>
+        <!-- Battlements top -->
+        <rect x="0" y="-42" width="12" height="14" fill="#3a3218"/>
+        <rect x="18" y="-42" width="12" height="14" fill="#3a3218"/>
+        <rect x="36" y="-42" width="12" height="14" fill="#3a3218"/>
+        <rect x="54" y="-42" width="12" height="14" fill="#3a3218"/>
+        <!-- Arrow slit windows -->
+        <rect x="22" y="-5" width="6" height="14" fill="#c8922a" opacity="0.3"/>
+        <rect x="36" y="-5" width="6" height="14" fill="#c8922a" opacity="0.3"/>
+        <!-- Door -->
+        <path d="M20,60 L20,40 Q30,30 40,40 L40,60 Z" fill="#1a1208"/>
+        <!-- Flag blue -->
+        <line x1="30" y1="-42" x2="30" y2="-68" stroke="#2a4a8a" stroke-width="2"/>
+        <polygon points="30,-68 54,-58 30,-48" fill="#2a4a8a"/>
+        <text x="30" y="78" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">La Tour du Maître</text>
+        <text x="30" y="90" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Dorian</text>
+      </g>
+
+      <!-- ═══ 6. FORANDOS — La Bibliothèque de Rome (upper center-left) ═══ -->
+      <g class="building-group" id="b-forandos" data-member="forandos" transform="translate(315,270)">
+        <!-- Columns facade -->
+        <rect x="0" y="0" width="80" height="60" fill="#2e2a24" class="building-body"/>
+        <rect x="2" y="2" width="76" height="56" fill="#262018"/>
+        <!-- Triangle pediment -->
+        <polygon points="0,0 40,-30 80,0" fill="#3a3228"/>
+        <polygon points="2,0 40,-27 78,0" fill="#2e2820"/>
+        <!-- Columns -->
+        <rect x="10" y="0" width="8" height="60" fill="#3e382e"/>
+        <rect x="36" y="0" width="8" height="60" fill="#3e382e"/>
+        <rect x="62" y="0" width="8" height="60" fill="#3e382e"/>
+        <!-- Books window -->
+        <rect x="30" y="15" width="20" height="25" fill="#1a1812" stroke="#c8922a" stroke-width="0.5"/>
+        <!-- Coin/denarius on pediment -->
+        <text x="40" y="-10" text-anchor="middle" fill="#c8922a" font-size="12">🏛</text>
+        <text x="40" y="78" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">La Bibliothèque</text>
+        <text x="40" y="90" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">forandos</text>
+      </g>
+
+      <!-- ═══ 7. LYDD — Le Comptoir du Rentier (center, near square) ═══ -->
+      <g class="building-group" id="b-lydd" data-member="lydd" transform="translate(480,310)">
+        <!-- Bank building -->
+        <rect x="0" y="0" width="75" height="65" fill="#282a1a" class="building-body"/>
+        <rect x="2" y="2" width="71" height="61" fill="#202218"/>
+        <!-- Pediment -->
+        <polygon points="0,0 37,-25 75,0" fill="#38381e"/>
+        <!-- Gold vault door -->
+        <circle cx="37" cy="35" r="14" fill="#3a3010" stroke="#c8922a" stroke-width="1.5"/>
+        <circle cx="37" cy="35" r="10" fill="#2e2808" stroke="#c8922a" stroke-width="1"/>
+        <!-- Gold glow -->
+        <circle cx="37" cy="35" r="8" fill="#c8922a" opacity="0.15" filter="url(#softglow)"/>
+        <!-- Coin stacks -->
+        <text x="37" y="40" text-anchor="middle" fill="#c8922a" font-size="10">$</text>
+        <text x="37" y="82" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">Le Comptoir du Rentier</text>
+        <text x="37" y="94" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">lydd</text>
+      </g>
+
+      <!-- ═══ 8. PAULOO — L'Arène du Procureur (center-right) ═══ -->
+      <g class="building-group" id="b-pauloo" data-member="pauloo" transform="translate(600,290)">
+        <!-- Coliseum-like oval -->
+        <ellipse cx="38" cy="40" rx="38" ry="28" fill="#3a1a18"/>
+        <ellipse cx="38" cy="38" rx="36" ry="26" fill="#2e1410"/>
+        <!-- Inner ring -->
+        <ellipse cx="38" cy="40" rx="26" ry="18" fill="#1a0e0c"/>
+        <!-- Sand floor -->
+        <ellipse cx="38" cy="44" rx="22" ry="12" fill="#3a2a12"/>
+        <!-- Arches -->
+        <path d="M5,40 Q5,20 38,15 Q71,20 71,40" fill="none" stroke="#5a2a20" stroke-width="4"/>
+        <!-- Flag -->
+        <line x1="38" y1="15" x2="38" y2="-10" stroke="#8b2a3a" stroke-width="2"/>
+        <polygon points="38,-10 58,0 38,10" fill="#8b2a3a"/>
+        <text x="38" y="85" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Arène du Verdict</text>
+        <text x="38" y="97" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Pauloo</text>
+      </g>
+
+      <!-- ═══ 9. SHINYA — Le Donjon de l'Éternel Perdant (right area) ═══ -->
+      <g class="building-group" id="b-shinya" data-member="shinya" transform="translate(695,270)">
+        <!-- Crumbling tower -->
+        <rect x="5" y="-30" width="60" height="90" fill="#2a1a2a" class="building-body"/>
+        <rect x="7" y="-28" width="56" height="86" fill="#221422" class="building-body"/>
+        <!-- Broken battlements -->
+        <rect x="5" y="-44" width="12" height="16" fill="#2a1a2a"/>
+        <rect x="24" y="-38" width="12" height="10" fill="#2a1a2a"/><!-- shorter = broken -->
+        <rect x="43" y="-44" width="12" height="16" fill="#2a1a2a"/>
+        <!-- Cracked window -->
+        <rect x="20" y="-15" width="16" height="20" fill="#cc3030" opacity="0.25"/>
+        <line x1="20" y1="-15" x2="36" y2="5" stroke="#6b1a28" stroke-width="1"/>
+        <rect x="38" y="-15" width="16" height="20" fill="#8a2a3a" opacity="0.25"/>
+        <!-- Door half-open/broken -->
+        <rect x="25" y="30" width="20" height="30" fill="#1a0a1a"/>
+        <!-- Cat (Rengar OTP) -->
+        <text x="35" y="28" text-anchor="middle" fill="#c8922a" font-size="12">🐱</text>
+        <text x="35" y="80" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">Le Donjon Maudit</text>
+        <text x="35" y="92" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Shinya</text>
+      </g>
+
+      <!-- ═══ 10. MPB — La Taverne du Philosophe (center, prime spot) ═══ -->
+      <g class="building-group" id="b-mpb" data-member="mpb" transform="translate(390,370)">
+        <!-- Tavern building -->
+        <rect x="0" y="-10" width="90" height="70" fill="#3a2810" class="building-body"/>
+        <rect x="2" y="-8" width="86" height="66" fill="#2e2008" class="building-body"/>
+        <!-- Pitched roof -->
+        <polygon points="0,-10 45,-48 90,-10" fill="#4a3018"/>
+        <polygon points="2,-8 45,-45 88,-8" fill="#3e2814"/>
+        <!-- Chimney with warm light -->
+        <rect x="25" y="-55" width="14" height="22" fill="#3a2810"/>
+        <circle cx="32" cy="-62" r="8" fill="#e8a030" opacity="0.3" filter="url(#softglow)"/>
+        <!-- Sign above door -->
+        <rect x="20" y="-20" width="50" height="20" fill="#2a1808" stroke="#c8922a" stroke-width="0.8"/>
+        <text x="45" y="-7" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="9">🍺 TAVERNE</text>
+        <!-- Door -->
+        <rect x="35" y="30" width="20" height="32" fill="#1a1008" rx="2"/>
+        <!-- Windows warm glow -->
+        <rect x="8" y="5" width="22" height="18" fill="#e8a030" opacity="0.45"/>
+        <rect x="60" y="5" width="22" height="18" fill="#e8a030" opacity="0.45"/>
+        <!-- Tables visible in window -->
+        <line x1="8" y1="14" x2="30" y2="14" stroke="#3a2810" stroke-width="1" opacity="0.8"/>
+        <!-- Warm ground light -->
+        <ellipse cx="45" cy="70" rx="40" ry="8" fill="#e8a030" opacity="0.08" filter="url(#softglow)"/>
+        <text x="45" y="84" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="11" class="building-label">La Taverne du Sage</text>
+        <text x="45" y="96" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">MPB</text>
+      </g>
+
+      <!-- ═══ 11. SACHA — L'Écurie du Motard (right-center area) ═══ -->
+      <g class="building-group" id="b-sacha" data-member="sacha" transform="translate(680,380)">
+        <rect x="0" y="0" width="85" height="60" fill="#28221a" class="building-body"/>
+        <rect x="2" y="2" width="81" height="56" fill="#201a12"/>
+        <!-- Sloped roof -->
+        <polygon points="0,0 85,0 85,-20 0,-15" fill="#342a1c"/>
+        <!-- Large door (for horses/bikes) -->
+        <rect x="15" y="15" width="55" height="45" fill="#1a1208" rx="2"/>
+        <line x1="42" y1="15" x2="42" y2="60" stroke="#342a1c" stroke-width="1.5"/>
+        <!-- Wind vane / compass on roof -->
+        <line x1="42" y1="-20" x2="42" y2="-38" stroke="#8a7050" stroke-width="2"/>
+        <text x="42" y="-26" text-anchor="middle" fill="#c8922a" font-size="14">🏍</text>
+        <!-- Provence flag: yellow-red stripes -->
+        <rect x="2" y="2" width="81" height="6" fill="#e8b84b" opacity="0.3"/>
+        <text x="42" y="78" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Écurie du Motard</text>
+        <text x="42" y="90" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Sacha</text>
+      </g>
+
+      <!-- ═══ 12. FLEY — L'Hôpital des Âmes (upper-center-right) ═══ -->
+      <g class="building-group" id="b-fley" data-member="fley" transform="translate(550,245)">
+        <!-- Hospital building -->
+        <rect x="0" y="0" width="70" height="65" fill="#1a2828" class="building-body"/>
+        <rect x="2" y="2" width="66" height="61" fill="#142020"/>
+        <!-- Roof with cross -->
+        <rect x="0" y="-15" width="70" height="18" fill="#1e3030"/>
+        <!-- Red cross -->
+        <rect x="28" y="-30" width="14" height="40" fill="#8b2a3a" opacity="0.8"/>
+        <rect x="18" y="-18" width="34" height="14" fill="#8b2a3a" opacity="0.8"/>
+        <!-- Windows -->
+        <rect x="10" y="15" width="18" height="20" fill="#2a7a6a" opacity="0.5"/>
+        <rect x="42" y="15" width="18" height="20" fill="#2a7a6a" opacity="0.5"/>
+        <!-- Door -->
+        <rect x="28" y="38" width="14" height="27" fill="#1a1208"/>
+        <text x="35" y="83" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Hospice des Âmes</text>
+        <text x="35" y="95" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Fley</text>
+      </g>
+
+      <!-- ═══ 13. FOUDULABO — L'Alchimiste (far right upper) ═══ -->
+      <g class="building-group" id="b-foudulabo" data-member="foudulabo" transform="translate(790,290)">
+        <!-- Alchemist tower -->
+        <rect x="5" y="10" width="50" height="60" fill="#1a2a22" class="building-body"/>
+        <rect x="7" y="12" width="46" height="56" fill="#142018"/>
+        <!-- Conical roof -->
+        <polygon points="0,10 30,-38 60,10" fill="#1e3828"/>
+        <polygon points="3,10 30,-34 57,10" fill="#182e20"/>
+        <!-- Flask / bubble window -->
+        <circle cx="30" cy="40" r="12" fill="#1a4a3a" stroke="#2a7a6a" stroke-width="1"/>
+        <circle cx="30" cy="38" r="7" fill="#3dffc0" opacity="0.15" filter="url(#softglow)"/>
+        <!-- Smoke from tip -->
+        <circle cx="30" cy="-44" r="5" fill="#3dffc0" opacity="0.2" filter="url(#softglow)"/>
+        <!-- Door -->
+        <rect x="20" y="50" width="20" height="20" fill="#1a1208"/>
+        <text x="30" y="82" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Atelier des Arcanes</text>
+        <text x="30" y="94" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">fou du labo</text>
+      </g>
+
+      <!-- ═══ 14. KASPEI — L'École du Libéralisme (upper area center) ═══ -->
+      <g class="building-group" id="b-kaspei" data-member="kaspei" transform="translate(497,225)">
+        <!-- School building -->
+        <rect x="0" y="0" width="68" height="55" fill="#22201e" class="building-body"/>
+        <rect x="2" y="2" width="64" height="51" fill="#1a1814"/>
+        <!-- Bell tower -->
+        <rect x="22" y="-35" width="24" height="38" fill="#2a2820"/>
+        <polygon points="22,-35 34,-55 46,-35" fill="#383020"/>
+        <!-- Bell -->
+        <path d="M28,-28 Q34,-18 40,-28" fill="none" stroke="#c8922a" stroke-width="1.5"/>
+        <!-- Windows -->
+        <rect x="10" y="12" width="16" height="18" fill="#c8922a" opacity="0.2"/>
+        <rect x="42" y="12" width="16" height="18" fill="#c8922a" opacity="0.2"/>
+        <!-- Door arched -->
+        <path d="M27,55 L27,35 Q34,26 41,35 L41,55 Z" fill="#1a1208"/>
+        <text x="34" y="72" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'École du Pédagogue</text>
+        <text x="34" y="84" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Kaspei</text>
+      </g>
+
+      <!-- ═══ 15. YABAPHI — La Taverne du Sud (far left bottom) ═══ -->
+      <g class="building-group" id="b-yabaphi" data-member="yabaphi" transform="translate(55,395)">
+        <!-- Southern inn -->
+        <rect x="0" y="0" width="75" height="55" fill="#2a1e10" class="building-body"/>
+        <rect x="2" y="2" width="71" height="51" fill="#221808"/>
+        <!-- Terracotta-style roof -->
+        <rect x="-5" y="-14" width="85" height="18" fill="#4a2810"/>
+        <!-- Arches (southern style) -->
+        <path d="M10,55 L10,30 Q20,18 30,30 L30,55" fill="#1a1208"/>
+        <path d="M45,55 L45,30 Q55,18 65,30 L65,55" fill="#1a1208"/>
+        <!-- Béarn flag: red/gold -->
+        <line x1="37" y1="-14" x2="37" y2="-36" stroke="#8a6020" stroke-width="2"/>
+        <rect x="37" y="-36" width="22" height="14" fill="#c8922a" opacity="0.7"/>
+        <!-- Cow (Béarn symbol) -->
+        <text x="37" y="-27" text-anchor="middle" fill="#1a1208" font-size="10">🐄</text>
+        <text x="37" y="72" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">L'Auberge du Béarn</text>
+        <text x="37" y="84" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">yabaphi</text>
+      </g>
+
+      <!-- ═══ 16. YOOB — La Boucherie (center-left bottom) ═══ -->
+      <g class="building-group" id="b-yoob" data-member="yoob" transform="translate(185,380)">
+        <!-- Butcher shop -->
+        <rect x="0" y="0" width="72" height="60" fill="#2e1810" class="building-body"/>
+        <rect x="2" y="2" width="68" height="56" fill="#261408"/>
+        <!-- Awning -->
+        <path d="M-5,0 Q36,-20 77,0" fill="#8b2a3a"/>
+        <path d="M-3,2 Q36,-16 75,2" fill="#6b1a28"/>
+        <!-- Hanging meats -->
+        <line x1="20" y1="0" x2="20" y2="20" stroke="#4a2010" stroke-width="2"/>
+        <circle cx="20" cy="22" r="5" fill="#8b2a3a"/>
+        <line x1="36" y1="0" x2="36" y2="16" stroke="#4a2010" stroke-width="2"/>
+        <circle cx="36" cy="18" r="4" fill="#7a1a28"/>
+        <line x1="52" y1="0" x2="52" y2="22" stroke="#4a2010" stroke-width="2"/>
+        <circle cx="52" cy="24" r="6" fill="#8b2a3a"/>
+        <!-- Window/counter -->
+        <rect x="5" y="22" width="62" height="22" fill="#1a0e08"/>
+        <!-- Knife sign -->
+        <text x="36" y="72" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">La Boucherie Pragmatique</text>
+        <text x="36" y="84" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">yoob</text>
+      </g>
+
+      <!-- ═══ 17. ZOLLER — La Salle de Ping Pong (right bottom) ═══ -->
+      <g class="building-group" id="b-zoller" data-member="zoller" transform="translate(790,380)">
+        <!-- Sports hall -->
+        <rect x="0" y="5" width="80" height="55" fill="#1e1e28" class="building-body"/>
+        <rect x="2" y="7" width="76" height="51" fill="#181820"/>
+        <!-- Barrel vault roof -->
+        <ellipse cx="40" cy="5" rx="40" ry="14" fill="#28283a"/>
+        <!-- Ping pong table through window -->
+        <rect x="12" y="25" width="56" height="26" fill="#1a1a20"/>
+        <line x1="12" y1="38" x2="68" y2="38" stroke="#3a3a50" stroke-width="1"/><!-- net -->
+        <rect x="14" y="27" width="52" height="23" fill="#2a2a3e" opacity="0.8"/>
+        <!-- Ball -->
+        <circle cx="30" cy="35" r="3" fill="#e8d5a0" opacity="0.6"/>
+        <!-- Flag Maroc on side -->
+        <text x="40" y="3" text-anchor="middle" fill="#c8922a" font-size="10">🏓</text>
+        <text x="40" y="75" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">Le Palais du Pongiste</text>
+        <text x="40" y="87" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">zoller</text>
+      </g>
+
+      <!-- ═══ 18. RISTORANTE — La Forge du Breton (bottom center) ═══ -->
+      <g class="building-group" id="b-ristorante" data-member="ristorante" transform="translate(335,385)">
+        <!-- Forge / smithy -->
+        <rect x="0" y="0" width="80" height="60" fill="#2a1a0e" class="building-body"/>
+        <rect x="2" y="2" width="76" height="56" fill="#221408"/>
+        <!-- Sloped roof with overhang -->
+        <polygon points="-8,0 40,-30 88,0" fill="#3a2010"/>
+        <polygon points="-6,2 40,-27 86,2" fill="#301808"/>
+        <!-- Chimney with forge glow -->
+        <rect x="28" y="-40" width="18" height="24" fill="#3a2010"/>
+        <circle cx="37" cy="-48" r="10" fill="#e84830" opacity="0.25" filter="url(#softglow)"/>
+        <!-- Forge bellows window (orange glow) -->
+        <rect x="8" y="15" width="25" height="25" fill="#e84830" opacity="0.35"/>
+        <rect x="47" y="15" width="25" height="25" fill="#1a1208"/>
+        <!-- Anvil door sign -->
+        <text x="34" y="42" text-anchor="middle" fill="#c8922a" font-size="11">⚒</text>
+        <rect x="30" y="42" width="20" height="18" fill="#1a1208"/>
+        <text x="40" y="78" text-anchor="middle" fill="#c8922a" font-family="'Crimson Text',serif" font-size="10" class="building-label">La Forge du Breton</text>
+        <text x="40" y="90" text-anchor="middle" fill="#a09060" font-family="'Crimson Text',serif" font-size="10">Ristorante</text>
+      </g>
+
+      <!-- ═══ RELATIONS / ROADS between buildings ═══ -->
+      <!-- Strong alliances as roads -->
+      <!-- MPB ↔ Sacha (taverne to écurie) -->
+      <path d="M475,430 Q580,440 722,450" stroke="#c8922a" stroke-width="2" fill="none" opacity="0.25" stroke-dasharray="6,4"/>
+      <!-- SHAars ↔ Forandos (forteresse to bibliothèque) -->
+      <path d="M460,310 Q420,300 365,340" stroke="#c8922a" stroke-width="1.5" fill="none" opacity="0.2" stroke-dasharray="6,4"/>
+      <!-- Merko ↔ Manigoldo -->
+      <path d="M105,360 Q155,360 195,365" stroke="#e07070" stroke-width="1.5" fill="none" opacity="0.2" stroke-dasharray="4,4"/>
+      <!-- Lydd ↔ Forandos -->
+      <path d="M520,360 Q440,345 395,340" stroke="#7fc070" stroke-width="1.5" fill="none" opacity="0.2" stroke-dasharray="6,4"/>
+      <!-- Kaspei ↔ Forandos (ideological proximity) -->
+      <path d="M530,285 Q480,280 435,340" stroke="#c8922a" stroke-width="1.5" fill="none" opacity="0.2" stroke-dasharray="4,4"/>
+
+      <!-- WELL at center -->
+      <g transform="translate(445,440)">
+        <ellipse cx="0" cy="15" rx="18" ry="7" fill="#2a2010"/>
+        <rect x="-15" y="0" width="30" height="15" fill="#2a2010" rx="2"/>
+        <ellipse cx="0" cy="0" rx="15" ry="6" fill="#342a18"/>
+        <ellipse cx="0" cy="0" rx="11" ry="4" fill="#1a1208"/>
+        <!-- Well beam -->
+        <line x1="-12" y1="-18" x2="12" y2="-18" stroke="#3a2a14" stroke-width="4"/>
+        <line x1="-12" y1="-22" x2="-12" y2="0" stroke="#3a2a14" stroke-width="3"/>
+        <line x1="12" y1="-22" x2="12" y2="0" stroke="#3a2a14" stroke-width="3"/>
+        <!-- Bucket -->
+        <rect x="-3" y="-18" width="6" height="8" fill="#2a1808"/>
+        <text x="0" y="35" text-anchor="middle" fill="#a09060" font-size="9" font-family="'Crimson Text',serif">Puits du Village</text>
+      </g>
+
+      <!-- Ambient glow from tavern MPB -->
+      <circle cx="435" cy="405" r="70" fill="rgba(232,160,48,0.04)" filter="url(#softglow)"/>
+
+      <!-- Night fireflies -->
+      <g fill="#e8d5a0" opacity="0.5">
+        <circle cx="300" cy="350" r="1.5" filter="url(#glow)"/>
+        <circle cx="500" cy="400" r="1" filter="url(#glow)"/>
+        <circle cx="700" cy="340" r="1.5" filter="url(#glow)"/>
+        <circle cx="150" cy="420" r="1" filter="url(#glow)"/>
+      </g>
+
+    </svg>
+    <!-- Tooltip -->
+    <div class="building-tooltip" id="buildingTooltip"></div>
+    <!-- Invisible HTML click zones overlaid on SVG buildings -->
+    <!-- Positions are percentage-based: left/top relative to SVG viewBox 900x620 -->
+    <div class="click-zone" data-member="shaars"     style="left:44%;  top:28%; width:12%; height:18%;"></div>
+    <div class="click-zone" data-member="elilos"     style="left:9%;   top:40%; width:11%; height:18%;"></div>
+    <div class="click-zone" data-member="manigoldo"  style="left:20%;  top:43%; width:10%; height:18%;"></div>
+    <div class="click-zone" data-member="merko"      style="left:3%;   top:42%; width:9%;  height:18%;"></div>
+    <div class="click-zone" data-member="dorian"     style="left:26%;  top:33%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="forandos"   style="left:33%;  top:37%; width:11%; height:20%;"></div>
+    <div class="click-zone" data-member="lydd"       style="left:52%;  top:43%; width:11%; height:20%;"></div>
+    <div class="click-zone" data-member="pauloo"     style="left:64%;  top:40%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="shinya"     style="left:76%;  top:37%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="mpb"        style="left:41%;  top:52%; width:13%; height:20%;"></div>
+    <div class="click-zone" data-member="sacha"      style="left:74%;  top:53%; width:12%; height:20%;"></div>
+    <div class="click-zone" data-member="fley"       style="left:59%;  top:33%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="foudulabo"  style="left:86%;  top:40%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="kaspei"     style="left:54%;  top:28%; width:10%; height:20%;"></div>
+    <div class="click-zone" data-member="yabaphi"    style="left:4%;   top:55%; width:11%; height:20%;"></div>
+    <div class="click-zone" data-member="yoob"       style="left:19%;  top:53%; width:11%; height:20%;"></div>
+    <div class="click-zone" data-member="zoller"     style="left:86%;  top:53%; width:11%; height:20%;"></div>
+    <div class="click-zone" data-member="ristorante" style="left:36%;  top:53%; width:11%; height:20%;"></div>
+  </div>
+</section>
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-header" id="modalHeader">
+      <span class="modal-emoji" id="modalEmoji">🏰</span>
+      <div class="modal-name" id="modalName">Nom</div>
+      <div class="modal-role" id="modalRole">Rôle</div>
+      <div class="modal-building-name" id="modalBuilding">🏠 Bâtiment</div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">⚜ Réputation dans le village</div>
+      <div class="modal-text" id="modalReputation"></div>
+      <div class="modal-section-title">✦ Citation signature</div>
+      <div class="modal-quote" id="modalQuote"></div>
+      <div class="modal-section-title">⚔ Relations</div>
+      <div class="modal-relations" id="modalRelations"></div>
+      <div class="modal-section-title">📜 Arc narratif</div>
+      <div class="modal-text" id="modalArc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SECTIONS NARRATIVES ═══════════ -->
+<div class="sections-wrapper">
+
+  <!-- LA PLACE DU VILLAGE -->
+  <section class="chronicle-section">
+    <div class="section-header">
+      <span class="section-ornament">⚜</span>
+      <div class="section-title">La Place du Village</div>
+      <div class="section-subtitle">Les âmes qui animent la vie collective</div>
+    </div>
+    <div class="village-square">
+      <div class="influencer-card" data-rank="I">
+        <div class="inf-emoji">🍺</div>
+        <div class="inf-name">MPB</div>
+        <div class="inf-role">Le Philosophe de Taverne</div>
+        <div class="inf-desc">La taverne de MPB est le cœur battant du village. Tout le monde finit par s'y retrouver — pour débattre, raconter une anecdote gastronomique absurde, ou écouter sa dernière théorie sur l'onctuosité d'une béchamel. Son feu ne s'éteint jamais avant 3h du matin.</div>
+      </div>
+      <div class="influencer-card" data-rank="II">
+        <div class="inf-emoji">⚔</div>
+        <div class="inf-name">SHAars</div>
+        <div class="inf-role">Le Gendarme Épistémique</div>
+        <div class="inf-desc">Depuis sa forteresse, SHAars surveille les échanges du village et frappe d'une citation sourcée quiconque ose avancer un argument sans preuve. Il est à la fois le juge et le gardien de l'ordre intellectuel — respecté même par ses adversaires.</div>
+      </div>
+      <div class="influencer-card" data-rank="III">
+        <div class="inf-emoji">🔥</div>
+        <div class="inf-name">elilos</div>
+        <div class="inf-role">Le Héraut de la Rage</div>
+        <div class="inf-desc">On entend elilos avant de le voir. Ses 27 575 cris traversent les murs de sa salle de cris et maintiennent tout le village en éveil. Sa rage est une institution — une sorte de carillon humain qui rythme le passage des saisons LoL.</div>
+      </div>
+      <div class="influencer-card" data-rank="IV">
+        <div class="inf-emoji">📚</div>
+        <div class="inf-name">forandos</div>
+        <div class="inf-role">Le Décliniste de la Bibliothèque</div>
+        <div class="inf-desc">Depuis la bibliothèque, forandos observe la chute de l'Empire en compilant ses propres statistiques. Il ne commente que quand il a une source primaire — mais quand il parle, les autres se taisent pour prendre note.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LES QUERELLES -->
+  <section class="chronicle-section">
+    <div class="section-header">
+      <span class="section-ornament">⚔</span>
+      <div class="section-title">Les Querelles du Village</div>
+      <div class="section-subtitle">Les trois conflits qui enflamment le conseil</div>
+    </div>
+    <div class="conflict-list">
+      <div class="conflict-item">
+        <div class="conflict-title">I — La Guerre Éternelle des Sources</div>
+        <div class="conflict-desc">SHAars vs. yabaphi : d'un côté, l'officier de gendarmerie qui exige des citations académiques pour chaque affirmation ; de l'autre, le franc-tireur béarnais qui "pense à voix haute par instinct". Leurs échanges se terminent invariablement par un "GK 839383 de mots toujours 0 source" murmured d'un côté, et un "ahi mais c'est flagrant franchement" de l'autre. Ni l'un ni l'autre ne cède.</div>
+      </div>
+      <div class="conflict-item">
+        <div class="conflict-title">II — Le Grand Schisme Jungle / ADC</div>
+        <div class="conflict-desc">Merko, Manigoldo, Pauloo et Shinya s'affrontent éternellement sur la question philosophique fondamentale : qui est le vrai responsable des défaites en soloQ ? Manigoldo proclame que l'ADC devrait régner en maître. Merko rétorque avec des winrates de pickrates. Shinya conclut que "l'algo anti-main Rengar" est la seule véritable explication. Pauloo rédige un réquisitoire sur 14 messages et condamne tout le monde.</div>
+      </div>
+      <div class="conflict-item">
+        <div class="conflict-title">III — Le Paradoxe du Rentier Marxiste</div>
+        <div class="conflict-desc">Lydd vs. le reste du monde progressiste du village. Il convoque Bourdieu pour dénoncer le capitalisme, puis sort un plan SCI/démembrement de la même conversation. SHAars et le fou du labo l'observent avec une fascination mêlée d'agacement. Lydd défend sa contradiction avec une sérénité nietzschéenne : "le pognon c'est littéralement ta liberté de vivre".</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LES ALLIANCES -->
+  <section class="chronicle-section">
+    <div class="section-header">
+      <span class="section-ornament">🤝</span>
+      <div class="section-title">Les Alliances Secrètes</div>
+      <div class="section-subtitle">Les complicités les plus solides du village</div>
+    </div>
+    <div class="alliance-list">
+      <div class="alliance-item">
+        <div class="alliance-title">I — La Fraternité du Trombinoscope</div>
+        <div class="alliance-desc">MPB, Sacha et Ristorante forment un triumvirat de la vie quotidienne. Ils se taquinent sur le physique, débattent de la séduction avec une franchise désarmante, et s'envoient des invitations à Brest à 6€ en car. Leur complicité n'est jamais théorisée — elle existe dans la texture même de leurs échanges. Sacha est "le beauf provençal préféré" de Fley ; Ristorante propose des week-ends chez lui ; MPB est le point d'ancrage.</div>
+      </div>
+      <div class="alliance-item">
+        <div class="alliance-title">II — L'Axe Libéral Sourcé</div>
+        <div class="alliance-desc">Kaspei et forandos partagent une même passion pour les données, les tableaux comparatifs, et la critique de l'État-providence. Ils ne sont jamais entièrement d'accord — Kaspei est plus institutionnel, forandos plus décliniste — mais face à un argument non sourcé, ils se retrouvent automatiquement dans le même camp. Deux pédagogues qui débattent de la façon de pédagoguer.</div>
+      </div>
+      <div class="alliance-item">
+        <div class="alliance-title">III — La Guilde des Rageurs Analytiques</div>
+        <div class="alliance-desc">Dorian, Merko et Shinya forment une guilde de jungleurs et joueurs hauts rangs liés par leur capacité à analyser leur propre douleur en soloQ avec la précision d'un chirurgien. Ils ne se plaignent pas — ils débriefent. Leurs interactions sont faites de débunks mutuels affectueux, de "souviens-toi en 2022 quand tu disais X" et d'une étrange solidarité des gens qui comprennent trop bien pourquoi ce jeu est injouable.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LA LÉGENDE -->
+  <section class="chronicle-section">
+    <div class="section-header">
+      <span class="section-ornament">📜</span>
+      <div class="section-title">La Légende du Village</div>
+      <div class="section-subtitle">Un conte médiéval, tel que chanté par le barde du serveur</div>
+    </div>
+    <div class="legend-text">
+      En l'an de grâce 2019, dans les brumes du royaume numérique, fut fondé le Village des Rageux par une poignée d'âmes turbulentes cherchant un endroit pour crier en paix. MPB, philosophe tavernier aux mains enfarinées, posa la première pierre d'un établissement qui deviendrait le cœur du monde connu. À ses côtés, elilos érectait sa Salle des Cris dont les MAJUSCULES traversaient les montagnes.
+
+      SHAars, officier en uniforme et sourceur impitoyable, bâtit sa forteresse sur la colline et y installa sa balance à arguments. Forandos le Décliniste, convaincu que l'Empire tombait comme Rome, ouvrit sa bibliothèque aux textes de droite et aux courbes du PIB. Kaspei le Pédagogue sonna la cloche de son école pour toute âme égarée qui confondait taxe et cotisation.
+
+      Manigoldo le Procureur et Merko le Statisticien se disputaient chaque matin au tribunal de la botlane. Pauloo rédigeait des réquisitoires. Shinya contemplait sa fatalité depuis son donjon maudit. Dorian, maître technicien, observait les singes de SoloQ avec une rage froide et calculée.
+
+      Lydd arriva un jour avec Marx sous un bras et un contrat SCI sous l'autre — et ne fut jamais vraiment compris. Le Fou du Labo vint de Jussieu avec des études et des lettres aléatoires. Sacha descendit de Provence à moto, la tchatche en bandoulière. Ristorante frappait son enclume en Bretagne. Yoob pesait ses carcasses à Belleville. Zoller pratiquait son art sacré du ping-pong, attendant le Grand Nettoyage. Fley analysait ses propres angoisses avec la précision d'un EAPA. Yabaphi veillait depuis le Béarn, cherchant des pédo-réseaux dans chaque coin d'ombre.
+
+      Et le village vécut, cria, débattit, perdit des games et gagna des arguments. Jusqu'en mars 2026, et au-delà.
+    </div>
+  </section>
+
+  <!-- L'ÉVÉNEMENT MARQUANT -->
+  <section class="chronicle-section">
+    <div class="section-header">
+      <span class="section-ornament">🔔</span>
+      <div class="section-title">L'Événement Marquant</div>
+      <div class="section-subtitle">Chronique de la Grande Crise de SoloQ — Hiver 2021</div>
+    </div>
+    <div class="chronicle-box">
+      <div class="chronicle-event-title">La Nuit des Mille Majuscules</div>
+      <div class="chronicle-event-date">7 mars 2021 · 232 messages en un seul jour · Le Jour le Plus Actif</div>
+      <div class="chronicle-event-text">
+        <p>En ce jour maudit de mars de l'an 2021, le Village des Rageux faillit périr dans les flammes de sa propre frustration. Elilos, en proie à une série noire de défaites en ranked, ouvrit les hostilités à l'aurore avec un cri primal de 400 caractères que l'on transcrit ici pudiquement : <em>"JE VEUX MOURIRJE VEUX MOURIR"</em> répété jusqu'à l'épuisement du clavier.</p>
+
+        <p>Manigoldo, piqué au vif par une jungle qui avait osé prendre deux buffs sans son autorisation, convoqua son Tribunal de l'ADC en session extraordinaire, listant les chefs d'accusation avec la précision d'un inquisiteur : soft int, mauvais placement, absence de ward, trahison envers la botlane sacrée. <em>"Il me soft int ce fdp"</em>, proclama-t-il en ouverture de séance — et ce fut le signal.</p>
+
+        <p>Pauloo, depuis l'Arène du Verdict, rédigea son plus long réquisitoire, condamnant les junglers, les supports, les ADC adverses, et finalement le principe même de la matchmaking. Merko débunkait chaque argument avec des données de winrate. Shinya regardait le chaos depuis son donjon maudit, concédant simplement <em>"deux saisons d'affilées que je dépasse pas gold 4"</em> avec la sérénité d'un moine tibétain.</p>
+
+        <p>MPB, à la taverne, tenta de ramener la paix en proposant une soupe à l'oignon et une réflexion sur <em>"ce que penserait mon ancêtre"</em> de tout cela. Personne n'écouta. Dorian analysait la game en silence. SHAars demandait des sources. Le Fou du Labo écrivit <em>"kdlskjflsdkjf"</em> et alla se coucher.</p>
+
+        <p>À l'aube du lendemain, le village était toujours debout. Les 232 messages restèrent gravés dans les Annales comme le témoignage d'une civilisation capable, en une seule nuit, de passer du désespoir existentiel à la théorie des classes sociales à l'analyse macro de la jungle — sans jamais vraiment se reposer.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="village-footer">
+  <span class="ornament">⚜</span>
+  Chronique établie d'après les archives du Serveur Privé Francophone · Anno 2019–2026
+  <span class="ornament">⚜</span>
+  <br>
+  <span style="font-size:11px; margin-top:8px; display:block">✦ Cliquer sur les bâtiments pour rencontrer les habitants ✦</span>
+</footer>
+
+</div><!-- /page -->
+
+<script>
+// ═══════════════════════════════════════
+// MEMBER DATA
+// ═══════════════════════════════════════
+const members = {
+  shaars: {
+    name: "SHAars",
+    emoji: "⚔",
+    role: "Officier de Gendarmerie & Gardien de l'Ordre",
+    building: "🏰 La Forteresse de la Gendarmerie",
+    reputation: "On dit dans le village que SHAars ne dort jamais sans avoir vérifié ses sources. Ses voisins le respectent autant qu'ils le redoutent : approchez-le sans argument solide et vous repartirez avec une note de bas de page.",
+    quote: '"GK 839383 de mots toujours 0 source pour appuyer son propos."',
+    relations: [
+      { name: "forandos", type: "ally", label: "Alliance intellectuelle" },
+      { name: "Kaspei", type: "ally", label: "Partenaire libéral" },
+      { name: "yabaphi", type: "rival", label: "Conflit sources" },
+      { name: "MPB", type: "neutral", label: "Respect mutuel" },
+      { name: "lydd", type: "neutral", label: "Débat structurel" },
+    ],
+    arc: "SHAars est l'architecte de l'ordre du village. Son arc narratif : maintenir les standards épistémiques face à l'invasion permanente des arguments sans source. Officier de gendarmerie dans la vraie vie, il porte l'uniforme jusqu'au Discord. Sa grande crise : accepter que certains habitants préfèrent ne jamais avoir raison plutôt que de chercher une source."
+  },
+  elilos: {
+    name: "elilos",
+    emoji: "🔥",
+    role: "Héraut de la Rage & Champion Kai'Sa",
+    building: "🏚 La Salle des Cris Éternels",
+    reputation: "27 575 messages de pure lave vocale. Les anciens disent qu'elilos est \"marabouté par la soloQ\" — un sort jeté en 2019 qui n'a jamais été levé. Sa salle est reconnaissable à la lueur rouge permanente de ses fenêtres et aux cris qui en sortent à 6h du matin.",
+    quote: '"Perso marabouté c'est genre je suis marabouté par la soloQ en mode ça m'a retourné le cerveau."',
+    relations: [
+      { name: "Manigoldo", type: "ally", label: "Frères de rage" },
+      { name: "Pauloo", type: "ally", label: "Référence élo mutuelle" },
+      { name: "merko", type: "ally", label: "Taquinerie affectueuse" },
+    ],
+    arc: "elilos est un système de rage avec sa propre grammaire, son propre cycle, ses propres invariants. Son arc : atteindre l'illumination — ou l'épuisement — après 5 ans de cris. Il a déjà diagnostiqué sa condition avec précision. Le problème : la conscience du problème n'a jamais suffi à l'arrêter."
+  },
+  manigoldo: {
+    name: "Manigoldo",
+    emoji: "👑",
+    role: "Grand Procureur de la Botlane & Théologien Draven",
+    building: "⚖ Le Tribunal de l'ADC",
+    reputation: "Manigoldo ne rage pas — il instruit des dossiers. \"Quand t'as la win dans l'ADN, on en oublie presque ce que peuvent ressentir les gueux.\" Son tribunal est ouvert 24h/24, et les accusés (jungler, support, méta, Riot Games) sont toujours condamnés.",
+    quote: '"Quand t\'as la win dans l\'ADN on en oublie presque ce que peuvent ressentir les gueux."',
+    relations: [
+      { name: "merko", type: "rival", label: "Débunks mutuels" },
+      { name: "elilos", type: "ally", label: "Fraternité de rage" },
+      { name: "Pauloo", type: "ally", label: "Partage de procurature" },
+      { name: "MPB", type: "ally", label: "359 mentions affectueuses" },
+    ],
+    arc: "Manigoldo est passé de Platine à Master 312LP en 7 ans — une odyssée qu'il commente avec la précision d'un procureur. Son arc : prouver que l'ADC doit régner sur League of Legends, ou mourir en plaidant sa cause."
+  },
+  merko: {
+    name: "merko",
+    emoji: "🌟",
+    role: "Avocat de la Méta & Statisticien Compulsif",
+    building: "🔭 L'Observatoire des Statistiques",
+    reputation: "merko ne se plaint pas — il argumente. Son observatoire est rempli de données de winrate, de pickrates et de comparaisons d'échantillonnage. \"Rappel que orianna a moins de ratio AP sur tous ses sorts qu'un auto double Q de Rengar\" — voilà le genre de vérité qu'il distille chaque nuit.",
+    quote: '"Moi je pense premier degré que les junglers ne devraient pas avoir le droit de gank ducoup."',
+    relations: [
+      { name: "Manigoldo", type: "rival", label: "Cible des débunks" },
+      { name: "Shinya", type: "ally", label: "Respect des junglers" },
+      { name: "Sacha", type: "ally", label: "Référence intellectuelle" },
+      { name: "GK", type: "rival", label: "Hitler prime (paix en 2025)" },
+    ],
+    arc: "merko est le justicier de la méta. Sa rage doit se légitimer — elle convoque des sources. Son arc : prouver une fois pour toutes que Rengar est non seulement viable mais objectivement supérieur à tout ce que Manigoldo a jamais joué."
+  },
+  dorian: {
+    name: "Dorian",
+    emoji: "🎯",
+    role: "Maître Technicien & Rageur Lucide",
+    building: "🏯 La Tour de Commandement",
+    reputation: "Dorian incarne l'archétype rare du rageur lucide. Il sait exactement ce qui ne va pas — et c'est précisément cette lucidité qui rend sa rage si intense. Master 500 LP atteint. Sa tour est dotée d'un drapeau bleu qui ne claque jamais dans le vent : Dorian ne célèbre pas, il constate.",
+    quote: '"Monter master 500 lp me rendre compte que ça change rien que +80% des games sont full pain."',
+    relations: [
+      { name: "merko", type: "ally", label: "Guilde des rageurs analytiques" },
+      { name: "Shinya", type: "ally", label: "Fraternité du high elo douloureux" },
+      { name: "MPB", type: "neutral", label: "Coexistence sereine" },
+    ],
+    arc: "Dorian est le technicien de la souffrance. Son record de 400+ caractères de pur cri primal reste une œuvre d'art. Son arc : accepter que même Master 500LP, le jeu reste injuste — ou continuer à l'analyser jusqu'à ce qu'il le devienne."
+  },
+  forandos: {
+    name: "forandos",
+    emoji: "🏛",
+    role: "Bibliothécaire Décliniste & Prophète de la Chute de Rome",
+    building: "📚 La Bibliothèque de la Décadence",
+    reputation: "forandos a prédit la chute de l'Empire avec la même précision que les anciens Romains auraient dû le faire. Libéral souverainiste décliniste, il partage des sources de x.com et Wikipedia avec la régularité d'un moine copiste. \"La France a juste reformé son système d'ancien régime.\"",
+    quote: '"LA MONNAIE FIAT EST UN MENSONGE CRÉÉ PAR LA BOURGEOISIE POUR SE RÉPARTIR LA PRODUCTION DES TRAVAILLEURS."',
+    relations: [
+      { name: "SHAars", type: "ally", label: "Alliance de rigueur" },
+      { name: "Kaspei", type: "ally", label: "Axe libéral sourcé" },
+      { name: "lydd", type: "neutral", label: "Convergence économique" },
+      { name: "foudulabo", type: "rival", label: "Gauche vs droite libérale" },
+    ],
+    arc: "forandos est le Cassandre du village. Il prédit la décadence avec cohérence totale depuis 4 ans — sans jamais fléchir. Son arc : vivre assez longtemps pour dire 'je vous avais prévenus' sur au moins un sujet."
+  },
+  lydd: {
+    name: "lydd",
+    emoji: "💰",
+    role: "Juriste Marxiste & Futur Rentier Assumé",
+    building: "🏦 Le Comptoir du Rentier Cynique",
+    reputation: "lydd cite Bourdieu et les loyers dans la même phrase. Anti-capitaliste le matin, plan SCI le soir. \"Le pognon c'est littéralement ta liberté de vivre sans avoir à dépenser du temps de vie.\" Il est l'homme le plus cohérent dans sa contradiction.",
+    quote: '"Le pognon c\'est littéralement ta liberté de vivre sans avoir à dépenser du temps de vie à travailler pour quelqu\'un d\'autre."',
+    relations: [
+      { name: "SHAars", type: "neutral", label: "Débats structurels" },
+      { name: "forandos", type: "ally", label: "Convergence économique" },
+      { name: "foudulabo", type: "rival", label: "Paradoxe marxiste/rentier" },
+      { name: "Kaspei", type: "neutral", label: "Discordance fiscale" },
+    ],
+    arc: "lydd veut prouver que l'on peut analyser l'exploitation capitaliste tout en l'utilisant pour s'enrichir. Son arc : réussir ses montages patrimoniaux assez tôt pour avoir le temps libre de débattre de la mort du capitalisme depuis sa villa louée."
+  },
+  pauloo: {
+    name: "Pauloo",
+    emoji: "⚡",
+    role: "Procureur de l'Arène & Analyste de la Souffrance",
+    building: "🏟 L'Arène du Verdict",
+    reputation: "Pauloo n'est pas un rageur de salon. Il rédige des réquisitoires. Ses 14 messages consécutifs en majuscules sur \"COMMENT CEST POSSIBLE DE SE SUICIDER EN BOUCLE\" restent une œuvre de la littérature discord. Expert en hiérarchie élo et juge des performances de ses pairs.",
+    quote: '"après je préfère faire 13 années d\'école de co que 13 années de lol et penser que degenazirdu28 est le meilleur joueur d\'azir euw."',
+    relations: [
+      { name: "MPB", type: "ally", label: "Figure de référence élo" },
+      { name: "elilos", type: "ally", label: "Duo légendaire" },
+      { name: "Manigoldo", type: "ally", label: "Partage du prétoire" },
+      { name: "GK", type: "rival", label: "Souffre-douleur officiel" },
+      { name: "Ransberg", type: "rival", label: "Stuck Gold à vie" },
+    ],
+    arc: "Pauloo est le tribunal ambulant du village. Son arc : trouver une défaite qui mérite vraiment d'être analysée — et non pas juste subir. Il va à l'école de commerce pour ne pas finir comme ses adversaires LoL. C'est son arc de rédemption."
+  },
+  shinya: {
+    name: "Shinya",
+    emoji: "🐱",
+    role: "Moine du Donjon Maudit & Jungler Philosophe",
+    building: "🏚 Le Donjon de l'Éternel Gold 4",
+    reputation: "Shinya est coincé en Gold 4 depuis deux saisons — et il l'a accepté avec la sérénité d'un moine bouddhiste. Son donjon est maudit par l'algorithme anti-main Rengar de Riot. \"Deux saisons d'affilées que je dépasse pas Gold 4\" : dit avec la sagesse de quelqu'un qui a enfin trouvé la paix.",
+    quote: '"jte stacks des smics en me branlant en TT et je passe rentrer la moitié de mes week end avec ma famille et mes amis pdt que tu spam des soloQ de 8h du mat a 2h pour faire emeraude 3 => emeraude 3."',
+    relations: [
+      { name: "merko", type: "ally", label: "Guilde des junglers" },
+      { name: "Dorian", type: "ally", label: "Rageurs analytiques" },
+      { name: "Pauloo", type: "neutral", label: "Coexistence philosophique" },
+    ],
+    arc: "Shinya a atteint l'illumination de l'inséparable Gold 4. Son arc : s'en sortir une fois pour pouvoir dire qu'il l'a fait — puis peut-être retomber. Mais en attendant, il analyse chaque défaite avec la précision d'un expert, et sa vie IRL dépasse objectivement celle de ses adversaires diamond."
+  },
+  mpb: {
+    name: "MPB",
+    emoji: "🍺",
+    role: "Philosophe de Brasserie, Ancien Scout & Cuisinier Pionnier",
+    building: "🍺 La Taverne du Sage Nocturne",
+    reputation: "MPB est la taverne du village. Tout le monde y passe — pour une soupe, un débat, ou une anecdote scout racontée avec la fierté d'un chevalier qui défend son honneur. \"Je suis un pionnier gastronome.\" Il le dit sans ironie mesurable, et tout le monde le croit.",
+    quote: '"Je vais pas expliquer à un chirurgien comment opérer des gens alors me donne pas des leçons sur comment bien chier proprement dans les bois alors que je le fais depuis 14 ans."',
+    relations: [
+      { name: "Sacha", type: "ally", label: "Trombi soul mates" },
+      { name: "Ristorante", type: "ally", label: "Joutes affectueuses" },
+      { name: "Fley", type: "ally", label: "Débats nocturnes" },
+      { name: "Drako", type: "ally", label: "Soirées nostalgiques" },
+    ],
+    arc: "MPB est le cœur du village. Son arc : concilier le romantique blessé qui se pose des questions à 3h du matin avec le pionnier gastronome qui a toujours réponse à tout. Sa taverne a vu passer 7810 messages et autant d'anecdotes. Aucun n'est banal."
+  },
+  sacha: {
+    name: "Sacha",
+    emoji: "🏍",
+    role: "Motard Provençal & Théoricien de la Séduction",
+    building: "🏍 L'Écurie du Chevrier du Midi",
+    reputation: "Sacha est arrivé en 2018 sur sa moto provençale avec une tchatche légendaire et des propositions de mannequinat. Il constate sans jamais chercher à convaincre. Son :chancla: vaut mille mots. Sa phrase courte comme chute : \"voilà\" — et tout s'effondre.",
+    quote: '"Si vous voulez juste baiser je vous jure que parler à des meufs et aller à des endroits où elles sont désinhibées suffit."',
+    relations: [
+      { name: "MPB", type: "ally", label: "Fraternité trombi" },
+      { name: "Ristorante", type: "ally", label: "Moquerie fraternelle" },
+      { name: "Fley", type: "ally", label: "Beauf préféré" },
+      { name: "merko", type: "ally", label: "Référence intellectuelle" },
+    ],
+    arc: "Sacha a traversé une L3 ratée, une saga universitaire digne d'une épopée, et un emménagement en couple à Toulon. Son arc : trouver le juste équilibre entre \"j'aime l'endroit où j'ai grandi\" et \"j'ai aucune attache à la France en tant que telle\"."
+  },
+  fley: {
+    name: "Fley",
+    emoji: "💊",
+    role: "EAPA Méditatif & Analyste Compulsif",
+    building: "🏥 L'Hospice des Âmes Anxieuses",
+    reputation: "Fley est un analyste qui applique à sa propre vie la rigueur clinique d'un rapport médical. Angoisse de mort → insomnie → motivation effondrée : il le schématise lui-même avec une précision déconcertante. \"Ma vie est si douce depuis que je vais au travail à pied.\"",
+    quote: '"tu donnes tellement de sens à des choses qui n\'en ont pas en t\'enlevant des angoisses parce que tu crois dans un livre écrit par le premier tocard qui a voulu avoir un peu de pouvoir."',
+    relations: [
+      { name: "Sacha", type: "ally", label: "Beauf préféré" },
+      { name: "Kaspei", type: "neutral", label: "Moments nostalgiques" },
+      { name: "MPB", type: "ally", label: "Partenaire de débat" },
+      { name: "forandos", type: "neutral", label: "Discussions méritocratie" },
+    ],
+    arc: "Fley est le médecin qui soigne les autres et diagnose ses propres névroses en temps réel. Son arc : transformer son anxiété de mort chronique en combustible pour une vie douce — et y parvenir, progressivement, à pied jusqu'au travail."
+  },
+  foudulabo: {
+    name: "le fou du labo",
+    emoji: "🧪",
+    role: "Alchimiste Précaire & Absurdiste de Doctrine",
+    building: "⚗ L'Atelier des Arcanes Gauchistes",
+    reputation: "Le fou du labo vit sous le seuil de pauvreté à Jussieu et le dit sans pathos. Chercheur précaire le jour, absurdiste la nuit. Après chaque analyse politique impeccable, il tape une suite de lettres aléatoires. C'est un tic ritualisé. Ce n'est pas un bug.",
+    quote: '"Extrême giga gauche, j\'ai partagé un sandwich l\'autre jour."',
+    relations: [
+      { name: "SHAars", type: "ally", label: "Gauche économique commune" },
+      { name: "forandos", type: "rival", label: "Classes vs liberalisme" },
+      { name: "lydd", type: "rival", label: "Marxisme paradoxal" },
+      { name: "yoob", type: "neutral", label: "Terrain commun anti-RN" },
+    ],
+    arc: "Le fou du labo est arrivé déjà formé politiquement. Son arc : financer sa thèse tout en défendant l'idée que le système qui la finance devrait être détruit. La tension est pure et assumée. Le 🥸 après chaque conviction réelle dit tout."
+  },
+  kaspei: {
+    name: "Kaspei",
+    emoji: "📐",
+    role: "Pédagogue Libéral & Fonctionnaire de l'Intérieur",
+    building: "🏫 L'École du Libéralisme Sourcé",
+    reputation: "Kaspei entre dans un débat avec un plan, des sources et un argumentaire structuré — et ne repart que quand il a fermé tous les angles. Fonctionnaire à la DGFIP qui critique le système de l'intérieur. Il sonne sa cloche chaque fois que quelqu'un confond taxe et cotisation.",
+    quote: '"ça m\'extermine" (à chaque amalgame fiscal non sourcé).',
+    relations: [
+      { name: "forandos", type: "ally", label: "Axe libéral sourcé" },
+      { name: "SHAars", type: "ally", label: "Standards épistémiques" },
+      { name: "yabaphi", type: "rival", label: "Méthode vs instinct" },
+      { name: "lydd", type: "neutral", label: "Débat fiscal" },
+    ],
+    arc: "Kaspei est l'insider du système libéral : il le défend depuis l'intérieur d'un ministère qu'il critique. Son arc : attendre Lisnard 2027 avec la patience d'un saint — et continuer à corriger les amalgames en attendant."
+  },
+  yabaphi: {
+    name: "yabaphi",
+    emoji: "🐄",
+    role: "Franc-Tireur Béarnais & Gardien du Complot",
+    building: "🏠 L'Auberge du Béarn Libre",
+    reputation: "yabaphi pense à voix haute, par salves de messages courts. Son intelligence est contextuelle, narrative, instinctive. \"BEARN INDEPENDANT\" — dit sans ironie, avec la fierté d'un seigneur local. Défenseur de la justice procédurale même pour les accusés odieux, mais de plus en plus convaincu que le vrai pouvoir se cache dans les parenthèses triples.",
+    quote: '"la justice doit être la même pour tous, la morale n\'a pas sa place dans un tribunal."',
+    relations: [
+      { name: "SHAars", type: "rival", label: "Instinct vs sources" },
+      { name: "Kaspei", type: "rival", label: "Méthode vs réactivité" },
+      { name: "Ristorante", type: "ally", label: "\"ahi\" commun" },
+    ],
+    arc: "yabaphi est parti d'un sudiste taquin en 2021 pour arriver à un complotiste sincère et revendiqué en 2025. Son arc : tracer la frontière — si elle existe — entre l'instinct sociologique juste et la dérive vers des lectures de plus en plus sombres."
+  },
+  yoob: {
+    name: "yoob",
+    emoji: "🥩",
+    role: "Boucher-Philosophe & Père de Famille Pragmatique",
+    building: "🥩 La Boucherie Pragmatique de Belleville",
+    reputation: "yoob a fait un Master en biochimie et l'a mis dans un tiroir pour vendre de la viande à Belleville. Il régularise ses employés illégaux à l'OFRA et se méfie de LFI. \"J'ai une bonne moitié de mes employés qui sont immigrants. Ils travaillent bien.\" Il vit dans les tensions de sa propre réalité — sans les résoudre.",
+    quote: '"Jme suis fait 30K€ le jour de l\'Aïd, les boucheries halal m\'ont sous-traité pour couper en morceau des carcasses."',
+    relations: [
+      { name: "MPB", type: "neutral", label: "Gastronomie commune" },
+      { name: "forandos", type: "neutral", label: "Souverainisme différent" },
+      { name: "foudulabo", type: "neutral", label: "Anti-RN commun" },
+    ],
+    arc: "yoob est le personnage le plus ancré dans la réalité du village. Son arc : voter souverainiste alors que ses employés sont les immigrés qu'il régularise lui-même. La contradiction est productive — il ne la résout pas, il vit dedans."
+  },
+  zoller: {
+    name: "zoller",
+    emoji: "🏓",
+    role: "Pongiste Philosophe & Futur Favorisé",
+    building: "🏓 Le Palais Sacré du Ping-Pong",
+    reputation: "zoller défend des positions extrêmes 40 messages puis concède le point suivant — ce qui, paradoxalement, le rend attachant. \"Mon dream appeler mon fils Adolf pour imaginer les profs faire l'appel.\" Sa passion sincère pour le ping-pong est la chose la plus désarmante d'un personnage par ailleurs très armé rhétoriquement.",
+    quote: '"Je considère le ping pong comme un art en plus d\'être un sport. Voir des chinois s\'entraîner c\'est de l\'asmr, de l\'art visuel et de l\'admiration de sportifs."',
+    relations: [
+      { name: "Fley", type: "neutral", label: "Contre-exemple théories séduction" },
+      { name: "Sacha", type: "neutral", label: "Taquinerie générale" },
+      { name: "forandos", type: "ally", label: "Droite libérale commune" },
+    ],
+    arc: "zoller est en route vers sa villa secondaire au Maroc pendant que les autres sauvent la France. Son arc : acheter sa maison, élever son fils pongiste, et ne jamais vraiment choisir entre l'autodérision totale et la conviction sincère — parce que les deux lui conviennent parfaitement."
+  },
+  ristorante: {
+    name: "Ristorante",
+    emoji: "⚒",
+    role: "Forgeron Breton & Introspectif Sans Rôle Imposé",
+    building: "⚒ La Forge du Breton Corporel",
+    reputation: "Ristorante forge son corps au gym et ses opinions dans le débat. Sa faute de frappe légendaire \"c ets\" est présente dans 138 messages sur 8 ans — jamais corrigée. Il envoie vite, pense fort, relit jamais. Et quand il s'arrête pour réfléchir, ce qui sort est souvent la vérité.",
+    quote: '"Marre de ne pas exister aux yeux des filles. Dans la rue je n\'existe pas."',
+    relations: [
+      { name: "Sacha", type: "ally", label: "Rival frère aîné" },
+      { name: "MPB", type: "ally", label: "Joutes affectueuses" },
+      { name: "Fley", type: "ally", label: "Souffre-douleur affectueux" },
+    ],
+    arc: "Ristorante est libéré sur le trombi de la persona du rageur LoL. Son arc : devenir \"moins con\" qu'il pense l'être — un processus qu'il a commencé à articuler avec une honnêteté désarmante. \"je suis en train de rattraper là.\" Peut-être que oui."
+  }
+};
+
+// ═══════════════════════════════════════
+// TOOLTIP & MODAL LOGIC
+// ═══════════════════════════════════════
+const tooltip = document.getElementById('buildingTooltip');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalClose = document.getElementById('modalClose');
+
+const tooltipTexts = {
+  shaars: "⚔ La Forteresse de la Gendarmerie",
+  elilos: "🔥 La Salle des Cris Éternels",
+  manigoldo: "⚖ Le Tribunal de l'ADC",
+  merko: "🔭 L'Observatoire des Statistiques",
+  dorian: "🏯 La Tour de Commandement",
+  forandos: "📚 La Bibliothèque de la Décadence",
+  lydd: "💰 Le Comptoir du Rentier",
+  pauloo: "⚡ L'Arène du Verdict",
+  shinya: "🐱 Le Donjon Maudit",
+  mpb: "🍺 La Taverne du Sage",
+  sacha: "🏍 L'Écurie du Motard",
+  fley: "💊 L'Hospice des Âmes",
+  foudulabo: "🧪 L'Atelier des Arcanes",
+  kaspei: "📐 L'École du Pédagogue",
+  yabaphi: "🐄 L'Auberge du Béarn",
+  yoob: "🥩 La Boucherie Pragmatique",
+  zoller: "🏓 Le Palais du Pongiste",
+  ristorante: "⚒ La Forge du Breton"
+};
+
+// Wire up HTML click zones (overlay on SVG)
+const mapContainer = document.getElementById('mapContainer');
+
+document.querySelectorAll('.click-zone').forEach(zone => {
+  const memberId = zone.dataset.member;
+  if (!memberId) return;
+
+  zone.addEventListener('mouseenter', () => {
+    const zRect = zone.getBoundingClientRect();
+    const cRect = mapContainer.getBoundingClientRect();
+    tooltip.style.display = 'block';
+    tooltip.style.left = (zRect.left - cRect.left + zRect.width / 2 - 60) + 'px';
+    tooltip.style.top = Math.max(4, zRect.top - cRect.top - 36) + 'px';
+    tooltip.textContent = tooltipTexts[memberId] || memberId;
+  });
+
+  zone.addEventListener('mousemove', (e) => {
+    const cRect = mapContainer.getBoundingClientRect();
+    tooltip.style.left = (e.clientX - cRect.left + 14) + 'px';
+    tooltip.style.top = (e.clientY - cRect.top - 30) + 'px';
+  });
+
+  zone.addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+  });
+
+  zone.addEventListener('click', () => {
+    tooltip.style.display = 'none';
+    openModal(memberId);
+  });
+});
+
+function openModal(memberId) {
+  const m = members[memberId];
+  if (!m) return;
+
+  document.getElementById('modalEmoji').textContent = m.emoji;
+  document.getElementById('modalName').textContent = m.name;
+  document.getElementById('modalRole').textContent = m.role;
+  document.getElementById('modalBuilding').textContent = m.building;
+  document.getElementById('modalReputation').textContent = m.reputation;
+  document.getElementById('modalQuote').textContent = m.quote;
+  document.getElementById('modalArc').textContent = m.arc;
+
+  const relContainer = document.getElementById('modalRelations');
+  relContainer.innerHTML = '';
+  (m.relations || []).forEach(rel => {
+    const tag = document.createElement('span');
+    tag.className = 'rel-tag rel-' + rel.type;
+    tag.textContent = rel.name + ' · ' + rel.label;
+    relContainer.appendChild(tag);
+  });
+
+  modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
