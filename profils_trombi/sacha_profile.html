@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — Sacha (sinnoh)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0e0c1a;
+    --bg2: #13102a;
+    --bg3: #1a1635;
+    --card: #1f1a3d;
+    --card-hover: #261e4a;
+    --purple: #533483;
+    --purple-light: #7048b5;
+    --purple-pale: #9b72cf;
+    --red: #e94560;
+    --red-light: #ff6b84;
+    --gold: #f0a500;
+    --teal: #00c9a7;
+    --text: #e8e4f8;
+    --text-dim: #9b93c4;
+    --text-muted: #5c5480;
+    --border: rgba(83,52,131,0.35);
+    --glow-purple: 0 0 30px rgba(83,52,131,0.4);
+    --glow-red: 0 0 30px rgba(233,69,96,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── HEADER ── */
+  .header {
+    position: relative;
+    padding: 80px 0 60px;
+    overflow: hidden;
+  }
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(83,52,131,0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 50% at 80% 30%, rgba(233,69,96,0.12) 0%, transparent 60%);
+  }
+  .header-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(83,52,131,0.08) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(83,52,131,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .header-content {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--red) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    color: white;
+    box-shadow: var(--glow-purple), inset 0 0 0 3px rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 1;
+  }
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(var(--red), var(--purple), var(--red));
+    z-index: -1;
+    opacity: 0.7;
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .avatar-inner {
+    width: 94px;
+    height: 94px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1f1a3d 0%, #0e0c1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    font-size: 42px;
+  }
+
+  .header-text { flex: 1; }
+
+  .username-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .username {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, var(--purple-pale) 60%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .handle {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .canal-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(83,52,131,0.2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--purple-pale);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 20px;
+  }
+  .canal-tag::before { content: '#'; color: var(--red); font-weight: 700; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple); color: var(--purple-pale); }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: var(--red-light); }
+  .badge-gold { background: rgba(240,165,0,0.15); border: 1px solid var(--gold); color: var(--gold); }
+  .badge-teal { background: rgba(0,201,167,0.15); border: 1px solid var(--teal); color: var(--teal); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+    margin: 0 0 40px;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--red-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    margin-top: 2px;
+  }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .left-col { display: flex; flex-direction: column; gap: 24px; }
+  .right-col { display: flex; flex-direction: column; gap: 24px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .card:hover { border-color: var(--purple); background: var(--card-hover); }
+
+  .card-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ── HEURE CHART ── */
+  #hourChart { width: 100%; height: 120px; }
+
+  /* ── TOPICS BARS ── */
+  .topic-row { margin-bottom: 14px; }
+  .topic-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .topic-name { font-size: 13px; color: var(--text); font-weight: 600; }
+  .topic-count { font-size: 12px; color: var(--text-muted); font-family: 'Space Mono', monospace; }
+  .topic-bar-bg { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .topic-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    transition: width 1s ease;
+  }
+
+  /* ── EXPRESSIONS ── */
+  .expr-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .expr-tag {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: rgba(83,52,131,0.2);
+    border: 1px solid rgba(83,52,131,0.4);
+    color: var(--purple-pale);
+    transition: all 0.2s;
+  }
+  .expr-tag:hover { background: rgba(233,69,96,0.15); border-color: var(--red); color: var(--red-light); }
+  .expr-tag.big { font-size: 14px; padding: 6px 14px; background: rgba(83,52,131,0.3); border-color: var(--purple); }
+
+  /* ── RELATIONS ── */
+  .relation-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(83,52,131,0.15); }
+  .relation-item:last-child { border-bottom: none; }
+  .rel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+  .rel-name { font-weight: 700; font-size: 14px; color: var(--text); min-width: 90px; }
+  .rel-desc { font-size: 12px; color: var(--text-dim); }
+
+  /* ── CITATIONS ── */
+  .citation {
+    position: relative;
+    padding: 16px 20px 16px 28px;
+    background: rgba(83,52,131,0.1);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+  }
+  .citation::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 40px;
+    font-family: 'DM Serif Display', serif;
+    color: var(--purple);
+    line-height: 1;
+    opacity: 0.5;
+  }
+  .citation p { font-size: 13px; color: var(--text); line-height: 1.6; font-style: italic; }
+  .citation .cite-date { font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-top: 6px; }
+
+  .citation-red {
+    border-left-color: var(--red);
+    background: rgba(233,69,96,0.08);
+  }
+  .citation-red::before { color: var(--red); }
+
+  /* ── SECTION ANALYSE ── */
+  .analyse-section { margin-bottom: 40px; }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 32px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .analyse-part { margin-bottom: 36px; }
+  .part-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .part-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .part-content {
+    font-size: 14.5px;
+    color: var(--text-dim);
+    line-height: 1.85;
+  }
+  .part-content em {
+    color: var(--purple-pale);
+    font-style: italic;
+  }
+  .part-content strong { color: var(--text); }
+
+  /* ── PORTRAIT ── */
+  .portrait-section {
+    position: relative;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .portrait-section::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(233,69,96,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .portrait-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(83,52,131,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .portrait-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .portrait-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--text);
+    margin-bottom: 28px;
+    line-height: 1.2;
+  }
+  .portrait-title span {
+    background: linear-gradient(135deg, var(--gold), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .portrait-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--text-dim);
+    position: relative;
+    z-index: 1;
+  }
+  .portrait-text em { font-style: italic; color: var(--text); }
+  .portrait-text strong { color: var(--red-light); font-style: normal; }
+
+  /* ── VERDICT ── */
+  .verdict {
+    background: linear-gradient(135deg, rgba(83,52,131,0.3) 0%, rgba(233,69,96,0.15) 100%);
+    border: 1px solid var(--red);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 60px;
+    box-shadow: var(--glow-red);
+  }
+  .verdict-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .verdict-lines { display: flex; flex-direction: column; gap: 12px; }
+  .verdict-line {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.4;
+    padding-left: 20px;
+    border-left: 2px solid var(--red);
+  }
+
+  /* ── MOMENTS ── */
+  .moment-item {
+    padding: 16px;
+    background: rgba(83,52,131,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(83,52,131,0.2);
+    margin-bottom: 12px;
+  }
+  .moment-date { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--purple-pale); margin-bottom: 6px; }
+  .moment-text { font-size: 13px; color: var(--text-dim); font-style: italic; line-height: 1.5; }
+  .moment-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(233,69,96,0.15);
+    color: var(--red-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+
+  /* ── TIMELINE ANNEE ── */
+  .year-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .year-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); width: 40px; flex-shrink: 0; }
+  .year-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+  .year-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--purple), var(--red-light)); transition: width 1.2s ease; }
+  .year-count { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); width: 45px; text-align: right; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .username { font-size: 36px; }
+    .portrait-section { padding: 28px; }
+    .portrait-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-bg"></div>
+  <div class="header-grid"></div>
+  <div class="container">
+    <div class="header-content">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <div class="avatar-inner">S</div>
+        </div>
+      </div>
+      <div class="header-text">
+        <div class="username-row">
+          <div class="username">Sacha</div>
+          <div class="handle">@.sinnoh · trombinoscope</div>
+        </div>
+        <div class="canal-tag">trombinoscope — canal général</div>
+        <div class="badges">
+          <span class="badge badge-purple">Analyste compulsif</span>
+          <span class="badge badge-red">Motard provençal</span>
+          <span class="badge badge-gold">Théoricien de la séduction</span>
+          <span class="badge badge-teal">Linguiste malgré lui</span>
+          <span class="badge badge-purple">Présent depuis 2018</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num">14 987</div>
+        <div class="stat-label">Messages totaux</div>
+        <div class="stat-sub">canal trombinoscope</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8 ans</div>
+        <div class="stat-label">Période d'activité</div>
+        <div class="stat-sub">mai 2018 → mars 2026</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1 069</div>
+        <div class="stat-label">Jours actifs</div>
+        <div class="stat-sub">sur ~2 900 jours</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">14,0</div>
+        <div class="stat-label">Msgs / jour actif</div>
+        <div class="stat-sub">pic à 251 msgs (25/07/24)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">12h</div>
+        <div class="stat-label">Pic horaire</div>
+        <div class="stat-sub">1 307 msgs à midi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <div class="main-grid">
+
+    <!-- LEFT COL -->
+    <div class="left-col">
+
+      <!-- Activité horaire -->
+      <div class="card">
+        <div class="card-title">Rythme d'activité — distribution horaire</div>
+        <canvas id="hourChart" height="120"></canvas>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-muted);">
+          Profil journalier classique — actif dès <strong style="color:var(--text)">9h</strong>, pic à <strong style="color:var(--red-light)">midi</strong>, soutenu jusqu'à <strong style="color:var(--text)">19h</strong>. Rarissimes messages entre 2h et 5h du matin.
+        </div>
+      </div>
+
+      <!-- Activité par année -->
+      <div class="card">
+        <div class="card-title">Évolution annuelle</div>
+        <div id="yearBars"></div>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-muted);">
+          Montée en puissance régulière depuis 2022. <strong style="color:var(--red-light)">2024 et 2025 sont ses années les plus actives</strong> — coïncident avec sa fin de licence LEA, l'emménagement en couple et la période toulonnaise.
+        </div>
+      </div>
+
+      <!-- Sujets spontanés -->
+      <div class="card">
+        <div class="card-title">Sujets spontanés les plus fréquents</div>
+        <div id="topicBars"></div>
+      </div>
+
+      <!-- Moments mémorables -->
+      <div class="card">
+        <div class="card-title">Moments mémorables — citations et dates</div>
+
+        <div class="moment-item">
+          <div class="moment-date">14/08/2018</div>
+          <div class="moment-text">« La jsuis ienb jme fais sucer par ma meuf »</div>
+          <div class="moment-tag">Entrée en matière</div>
+        </div>
+        <div class="moment-item">
+          <div class="moment-date">19/05/2023</div>
+          <div class="moment-text">« d'ailleurs à ce virage l'an dernier j'ai eu un accident, hopital points de suture 45 jours d'immobilisation »</div>
+          <div class="moment-tag">Révélation personnelle</div>
+        </div>
+        <div class="moment-item">
+          <div class="moment-date">14/08/2023</div>
+          <div class="moment-text">« Pour le mannequinat on m'a déjà fait des propositions… Y a un été où dans la rue à 2 reprises des meufs random m'avaient tapé la discute puis donné leur carte de leur agence »</div>
+          <div class="moment-tag">Autodérision assumée</div>
+        </div>
+        <div class="moment-item">
+          <div class="moment-date">26/02/2026</div>
+          <div class="moment-text">Réponse à un "2 vérités 1 mensonge" : « j'ai rigolé quand elle a annoncé à table que son chien était mort parce qu'il a sauté par la fenêtre du 3e étage en essayant d'attraper une mouche »</div>
+          <div class="moment-tag">Humour noir de haute volée</div>
+        </div>
+        <div class="moment-item">
+          <div class="moment-date">05/11/2025</div>
+          <div class="moment-text">« les kheys ça fait 4 mois qu'on est ensemble avec ma meuf et elle m'a avoué qu'il y a 2 mois au camping elle a embrassé 2 mecs + fait une pipe à 1 autre, je fais quoi ? »</div>
+          <div class="moment-tag">Confession publique</div>
+        </div>
+        <div class="moment-item">
+          <div class="moment-date">06/02/2025</div>
+          <div class="moment-text">Récit de son cursus académique épique : L1 LEA-droit, L2, L3 ratée, une année fantôme, redoublement, puis diplôme… et email de félicitations de l'ancienne fac.</div>
+          <div class="moment-tag">Saga universitaire</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="right-col">
+
+      <!-- Style de communication -->
+      <div class="card">
+        <div class="card-title">Style de communication informel</div>
+        <div style="font-size:13.5px; color:var(--text-dim); line-height:1.8;">
+          Registre <strong style="color:var(--text)">naturellement décontracté</strong> mais rarement vulgaire gratuitement. Passe sans effort de la vanneterie absurde à l'analyse socio de plusieurs paragraphes. Maîtrise parfaite du <em style="color:var(--purple-pale)">ton assertif sans agressivité</em> — il ne cherche pas à convaincre, il constate. Grand amateur de la phrase courte comme chute : lance une thèse en 4 lignes, conclut par <em style="color:var(--purple-pale)">« voilà »</em> ou <em style="color:var(--purple-pale)">« c'est tout »</em>.
+          <br><br>
+          Utilisation très personnelle des emojis custom du serveur, notamment <strong style="color:var(--text)">:chancla:</strong> (432×) comme marqueur d'incrédulité ou d'admiration ironique, <strong style="color:var(--text)">:issou:</strong> pour le scepticisme souriant.
+        </div>
+      </div>
+
+      <!-- Expressions signature -->
+      <div class="card">
+        <div class="card-title">Expressions signature</div>
+        <div class="expr-cloud">
+          <span class="expr-tag big">aaahi</span>
+          <span class="expr-tag big">igo</span>
+          <span class="expr-tag big">bah</span>
+          <span class="expr-tag big">genre</span>
+          <span class="expr-tag">mdr</span>
+          <span class="expr-tag">en vrai</span>
+          <span class="expr-tag">ofc</span>
+          <span class="expr-tag">imo</span>
+          <span class="expr-tag">goat</span>
+          <span class="expr-tag">dinguerie</span>
+          <span class="expr-tag">cimer</span>
+          <span class="expr-tag">feur</span>
+          <span class="expr-tag">clairement</span>
+          <span class="expr-tag">franchement</span>
+          <span class="expr-tag">huge</span>
+          <span class="expr-tag">de ouf</span>
+          <span class="expr-tag">khey</span>
+          <span class="expr-tag">pélo</span>
+          <span class="expr-tag">ayo</span>
+          <span class="expr-tag">fin</span>
+        </div>
+        <div style="margin-top:16px; font-size:12px; color:var(--text-muted); line-height:1.7;">
+          <strong style="color:var(--purple-pale)">« aaahi »</strong> (169×) — interjection fourre-tout pouvant exprimer la surprise, la satisfaction, l'admiration ou une légère honte, selon l'intonation contextuelle.<br>
+          <strong style="color:var(--purple-pale)">« igo »</strong> (239×) — héritage direct du canal politique, infiltré dans le quotidien.
+        </div>
+      </div>
+
+      <!-- Relations avec membres -->
+      <div class="card">
+        <div class="card-title">Relations avec les membres</div>
+        <div class="relation-item">
+          <div class="rel-dot"></div>
+          <div class="rel-name">Top mention #1</div>
+          <div class="rel-desc">Interpellé 45× — probablement interlocuteur privilégié, questions récurrentes de type "anecdote de baise ?" indiquent une amitié solide</div>
+        </div>
+        <div class="relation-item">
+          <div class="rel-dot" style="background:var(--purple-pale);"></div>
+          <div class="rel-name">Top mention #2</div>
+          <div class="rel-desc">38× — souvent mentionné dans des débats ou pour confirmation de faits partagés ("un beau jour avec lui on avait passé 2h à chercher…")</div>
+        </div>
+        <div class="relation-item">
+          <div class="rel-dot" style="background:var(--teal);"></div>
+          <div class="rel-name">Merko</div>
+          <div class="rel-desc">Cité nommément dans plusieurs échanges, figure de référence intellectuelle sur le serveur ("comme a dit merko")</div>
+        </div>
+        <div class="relation-item">
+          <div class="rel-dot" style="background:var(--gold);"></div>
+          <div class="rel-name">Ambiance générale</div>
+          <div class="rel-desc">Ton bienveillant en quotidien, confirme les autres ("c'est recevable", "caps résume bien"), taquine sans méchanceté</div>
+        </div>
+      </div>
+
+      <!-- Citations courtes -->
+      <div class="card">
+        <div class="card-title">Citations révélatrices</div>
+
+        <div class="citation">
+          <p>Bah c'est sûr que vaporiser totalement le catholicisme d'un pays d'Amérique latine ça aurait été compliqué mais bon</p>
+          <div class="cite-date">24/10/2023 — tournant de conversation en 9 mots</div>
+        </div>
+
+        <div class="citation citation-red">
+          <p>Si vous voulez juste baiser je vous jure que parler à des meufs et aller à des endroits où elles sont désinhibées suffit</p>
+          <div class="cite-date">26/04/2025 — conseil de vie non sollicité mais probablement juste</div>
+        </div>
+
+        <div class="citation">
+          <p>J'aime l'endroit où je suis né, où j'ai grandi, où y a ma famille etc mais j'ai aucune attache particulière à la France en tant que telle</p>
+          <div class="cite-date">01/07/2025 — identité provençale > identité nationale</div>
+        </div>
+
+        <div class="citation citation-red">
+          <p>Je ne suis qu'amour igo</p>
+          <div class="cite-date">16/10/2025 — réponse à une accusation, ironie parfaitement dosée</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── ANALYSE DÉTAILLÉE ── -->
+  <div class="divider"></div>
+
+  <section class="analyse-section">
+    <div class="section-title">Analyse détaillée</div>
+    <div class="section-subtitle">Portrait en six mouvements, construit uniquement à partir du canal trombinoscope</div>
+
+    <div class="analyse-part">
+      <div class="part-num">01 — PERSONNALITÉ INFORMELLE</div>
+      <div class="part-title">Le décontracté calculé — comment il se tient quand personne ne le regarde vraiment</div>
+      <div class="part-content">
+        Dans un contexte sans débat imposé, Sacha révèle une personnalité fondamentalement <strong>à l'aise avec elle-même</strong>. Il ne cherche ni à performer ni à convaincre — il constate, glisse une remarque, disparaît, revient. Sa présence est rythmée par des rafales : il peut poster 250 messages en une journée de juillet, puis s'absenter plusieurs semaines. Ce n'est pas de l'impulsivité, c'est de la <strong>concentration émotionnelle</strong> — il est là quand il a quelque chose à dire ou quand la conversation lui donne envie.
+
+        Ce qui frappe immédiatement, c'est la cohérence entre son ton en débat et son ton informel : il est toujours <strong>assertif sans agressivité</strong>, toujours prêt à avoir raison mais rarement moqueur. Sur trombinoscope, il s'autorise l'humour absurde, la boutade, le non-sens — mais jamais longtemps. En quelques échanges, il glisse vers l'analyse, vers la théorisation de ce qui se passe autour de lui. C'est presque involontaire. Il voit un fait divers, une remarque d'un autre membre, et la mécanique s'emballe : <em>« bah alors la seule explication que je vois… »</em> (05/10/2025). Il ne peut pas s'en empêcher.
+
+        Il confirme, valide, taquine sans méchanceté. Ses réponses courtes — <em>« c'est recevable »</em>, <em>« caps résume bien »</em>, <em>« ofc »</em> — montrent qu'il écoute vraiment les autres, qu'il n'est pas en attente de son prochain tour de parole. Dans ce groupe où les personnalités sont marquées et les débats parfois houleux, Sacha est paradoxalement <strong>celui qui maintient la température</strong> sur le canal général : assez présent pour que la conversation vive, assez discret pour ne pas tout phagocyter.
+      </div>
+    </div>
+
+    <div class="analyse-part">
+      <div class="part-num">02 — SUJETS SPONTANÉS</div>
+      <div class="part-title">L'obsession douce des relations humaines — et tout ce qu'il y a autour</div>
+      <div class="part-content">
+        Laissé à lui-même, sans débat à nourrir, Sacha parle <strong>massivement des relations entre hommes et femmes</strong>. Ce n't est pas une obsession malsaine — c'est un sujet de curiosité intellectuelle sincère mâtiné d'expérience personnelle. Il théorise la séduction avec le même sérieux qu'il met à analyser la politique, construisant des arguments à partir d'hypothèses évolutionnistes, d'observations sociales et de ce qu'il vit concrètement. <em>« La plupart des meufs sont attirées, même inconsciemment, par un mec qui a déjà eu plusieurs conquêtes »</em> (05/10/2025) — c'est du niveau vulgarisation sociobiologique, dit avec la désinvolture d'un mec qui pense avoir résolu l'équation.
+
+        La <strong>moto</strong> est son autre grand sujet informel, avec une profondeur technique impressionnante : coûts d'entretien, accidentologie, assurance, permis bridé, comparatifs de cylindrées. Il ne pose pas de questions — il répond, il conseille, il avertit. Sa moto n'est pas un hobby, c'est une extension de lui. L'accident de 2022 (points de suture, 45 jours d'immobilisation) n'est mentionné qu'en passant, comme si la gravité de l'événement était disproportionnée avec son importance narrative.
+
+        La <strong>géographie et l'urbanisme</strong> constituent son troisième pôle spontané. Il a des opinions très arrêtées sur chaque ville française — <em>« Rennes = plus gros repère à punks à chien de France »</em> (05/10/2022), <em>« Annecy = températures chiantes 8 mois sur 12 »</em> — et défend avec acharnement la Méditerranée, La Ciotat, le mode de vie provençal comme modèle de civilisation. Ce n'est pas du chauvinisme régional : c'est une réflexion sur ce qui rend la vie <strong>matériellement bonne</strong>, ancrée dans le concret (tout à pied, la mer accessible, les commerces, les bars ouverts).
+      </div>
+    </div>
+
+    <div class="analyse-part">
+      <div class="part-num">03 — VIE QUOTIDIENNE</div>
+      <div class="part-title">Un parcours en zigzag qui se stabilise — La Ciotat, Toulon, et le reste</div>
+      <div class="part-content">
+        La vie de Sacha telle qu'elle transparaît sur huit ans de messages est celle d'un homme qui <strong>a pris le temps de trouver sa trajectoire</strong>. Il commence sur Discord en mai 2018, probablement lycéen ou tout juste entré en fac. Sa L1 LEA-droit démarre en 2019. La L2 passe. La L3 foire — il n'y va pas, DEF à tous les examens. Une année fantôme en 2022-2023. Puis il repart, valide sa L3 LEA, reçoit en décembre 2024 un email de félicitations de son ancienne fac qui l'invite à une cérémonie de remise de diplômes — avec deux ans de retard, mais le diplôme arrive. Ce parcours n'est jamais raconté avec honte ni avec fierté excessive : il le documente factuellement, comme si ces allers-retours étaient normaux. Et pour lui, ils l'étaient.
+
+        Géographiquement, il est ancré dans le <strong>Sud-Est</strong>. Il grandit à La Ciotat (piscine, mer à pied, famille), part étudier à Aix puis Toulon. En octobre 2024, il mentionne qu'ils vont déménager avec sa compagne, probablement dans le quartier Saint-Jean/Mourillon. <em>« Je vis avec ma meuf »</em> (10/02/2025) — une phrase anodine qui confirme une installation dans la vie adulte. Son père est charcutier, sa mère s'est remariée (rencontre sur Adopte). Un frère, une sœur. Une famille présente mais pas envahissante dans ses messages.
+
+        Côté loisirs, la moto domine, mais il mentionne aussi la <strong>muscu</strong> régulièrement, des réflexions sur l'alimentation et la santé physique. Il a un tatouage fait en août 2024 — premier tatouage, sur l'avant-bras, décrit comme <em>« giga gros pour un premier »</em>. Il a une boucle d'oreille gauche depuis 2024. Des propositions de mannequinat qu'il n'a jamais honorées, évoquées avec une autodérision parfaitement dosée.
+      </div>
+    </div>
+
+    <div class="analyse-part">
+      <div class="part-num">04 — HUMOUR</div>
+      <div class="part-title">L'humour noir comme langue maternelle — absurde, timing, et l'art de la chute</div>
+      <div class="part-content">
+        L'humour de Sacha sur trombinoscope est <strong>fondamentalement différent de son humour en débat</strong>. En politique, il est ironique, distancié, utilise le sarcasme comme arme. Sur le canal général, il se permet quelque chose de plus risqué et de plus sincère : l'<strong>humour noir absolu</strong>.
+
+        L'anecdote du chien mort est emblématique : répondre à un "deux vérités une fausse" en racontant qu'il a ri à table quand la compagne de son père a annoncé la mort de son animal, sauté du 3ème étage après une mouche — et présenter ça comme le mensonge potentiel, laissant l'auditoire dans le doute <em>(26/02/2026)</em>. C'est du timing parfait, de la construction narrative précise, et une connaissance fine de ce que son audience peut absorber.
+
+        Il utilise aussi l'humour pour <strong>désamorcer les situations gênantes</strong> sur lui-même : l'accident de moto évoqué en passant, les notes catastrophiques au premier semestre expliquées par l'accident comme si c'était évident, les propositions de mannequinat acceptées comme une blague avant d'être confirmées sérieusement. Il joue constamment avec la frontière entre autodérision et vérité, laissant les autres décider où mettre le curseur.
+
+        Il maîtrise enfin le <strong>non-sens pur</strong> : <em>« Je préfère boire les pertes blanches de la daronne prime que de me faire FP par Maw en flex queue »</em> (12/03/2026) — une phrase construite pour être grotesque, dont la valeur est entièrement dans l'excès. C'est un humour de serveur Discord vieillissant bien : il sait exactement quand sortir l'artillerie lourde.
+      </div>
+    </div>
+
+    <div class="analyse-part">
+      <div class="part-num">05 — OBSESSIONS HORS POLITIQUE</div>
+      <div class="part-title">Le marché, l'image de soi, la mécanique — trois fils rouges invisibles</div>
+      <div class="part-content">
+        Au-delà des sujets explicites, trois <strong>obsessions transversales</strong> traversent l'intégralité du corpus de Sacha sur ce canal.
+
+        La première est ce qu'on pourrait appeler <strong>la mécanique des systèmes</strong> : il ne peut pas voir un phénomène sans chercher à en identifier les rouages. Qu'il parle de séduction, de sécurité routière, d'économie ou d'urbanisme, il pense en termes d'incitations, de cause à effet, de rationalité des acteurs. <em>« Ceux qui conduisent le mieux dans le sens où les jeunes de 20-30 ans ont des réflexes, de la vivacité… LE problème c'est que plus t'as des capacités plus tu veux les utiliser »</em> (12/01/2024) — il analyse l'accidentologie comme on modélise un marché.
+
+        La deuxième est <strong>l'image sociale et la présentation de soi</strong> — non par vanité, mais par curiosité sociologique. Il observe comment les gens se présentent, pourquoi certains signaux fonctionnent et d'autres pas, ce que révèlent les choix vestimentaires, les tatouages, les comportements en soirée. Il applique cette grille à lui-même sans complaisance : il documente ses propres échecs relationnels avec la même neutralité qu'il analyse ceux des autres.
+
+        La troisième est <strong>la géographie comme qualité de vie</strong>. Derrière chaque commentaire sur une ville, une région, un quartier, il y a la même question fondamentale : est-ce qu'on peut y vivre bien, concrètement, quotidiennement ? Pas abstraitement bien — matériellement bien. Avec la mer, les commerces à pied, le climat, les bars ouverts et des gens avec qui boire un verre. C'est une obsession méditerranéenne profonde.
+      </div>
+    </div>
+
+    <div class="analyse-part">
+      <div class="part-num">06 — L'ÉCART ENTRE LES CANAUX</div>
+      <div class="part-title">Ce que trombinoscope révèle que politique ne montre pas</div>
+      <div class="part-content">
+        Le Sacha de politique est un combattant : il entre dans l'arène avec des positions construites, encaisse les insultes avec son <em>« continue les insultes igo »</em> rituel, et ne lâche rien. Ce personnage-là — le catholique sedevacantiste qui défend le RN contre l'étiquette d'extrême droite — est réel, mais incomplet.
+
+        Sur trombinoscope, on découvre un homme <strong>considérablement plus nuancé dans ses émotions</strong>. Il dit <em>« J'ai 2 potes dont je suis bien proche »</em> (30/11/2025) avec une simplicité qui touche. Il avoue avoir vécu <em>« une année fantôme »</em> sans la charger de sens dramatique. Il se confie sur la trahison de sa compagne avec une franchise désarmante, demandant conseil à ses amis du serveur comme s'ils étaient les mieux placés pour répondre.
+
+        Ce canal révèle aussi sa <strong>tendresse réelle pour les gens</strong> — il valide, il répond, il confirme, il prend des nouvelles. La formule <em>« je ne suis qu'amour igo »</em> (16/10/2025), ostensiblement ironique, contient probablement plus de vérité qu'il ne voudrait l'admettre. L'homme qui refuse de céder un millimètre en débat politique est le même qui, sur un canal de discussions libres, passe son temps à confirmer les autres, à trouver leurs positions <em>« recevables »</em>, à dire <em>« cimer »</em> quand quelqu'un l'aide.
+
+        L'écart entre les deux Sacha n'est pas une contradiction — c'est une <strong>spécialisation émotionnelle</strong>. Il a appris à mettre son armure quand le contexte l'exige. Quand il ne l'exige pas, l'armure reste au vestiaire.
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── PORTRAIT HUMAIN ── -->
+  <div class="divider"></div>
+
+  <section class="portrait-section">
+    <div class="portrait-label">Portrait littéraire — section VIII</div>
+    <div class="portrait-title">Qui est cet homme dans la <span>vraie vie</span> ?</div>
+    <div class="portrait-text">
+      <p>Il y a des gens qui occupent l'espace sans le chercher. Sacha est de ceux-là. Vous ne le verriez pas arriver dans une pièce — il serait déjà là depuis dix minutes, assis dans un angle, à regarder comment les conversations se nouent avant de choisir le bon moment pour intervenir. Et quand il le fait, c'est avec cette assurance tranquille des gens qui n't ont pas besoin d'approbation pour parler — ils parlent parce qu'ils ont quelque chose à dire.</p>
+
+      <p style="margin-top:20px;">Ce qui le définit d'abord, c'est <em>la mécanique de sa pensée</em>. Sacha est fondamentalement un <strong>architecte de systèmes</strong> — pas le genre ingénieur froid qui fait des tableaux, mais le genre de gars qui, en regardant deux motos se doubler sur l'autoroute, vous explique en trois phrases pourquoi les meilleurs conducteurs sont statistiquement les plus accidentés. Il ne peut pas s'empêcher de voir les rouages derrière les surfaces. Cette qualité, qui fait de lui un adversaire redoutable en débat, le rend aussi profondément intéressant dans une conversation de comptoir à deux heures du matin, quand les gens commencent à dire des choses vraies.</p>
+
+      <p style="margin-top:20px;">Il est <em>provençal dans les os</em>. Pas de manière folklorique — il ne porte pas de cigale en sautoir — mais dans cette conviction tranquille que la vie bonne se mesure en termes concrets : la mer à pied, un café en terrasse en janvier, des bars ouverts le soir. Il défend La Ciotat avec la ferveur qu'on réserve d'habitude aux grandes causes. C'est touchant et légèrement ridicule, ce qui le rend attachant.</p>
+
+      <p style="margin-top:20px;">Ses <strong>faiblesses</strong> sont visibles dans ses messages : une tendance à théoriser là où l'empathie brute suffirait, une certaine difficulté à accepter que les choses soient compliquées sans avoir de logique interne. Quand sa compagne le trahit, il demande immédiatement <em>« je fais quoi ? »</em> à ses potes Discord — pas parce qu'il est perdu, mais parce que le problème, soudainement, ne rentre plus dans son modèle. C'est le seul moment où on le sent désorienté, et c'est précieux.</p>
+
+      <p style="margin-top:20px;">Ce qui le rend <em>mémorable</em>, c'est cette combinaison rare entre la solidité et la légèreté. Il a des convictions très fortes — religieuses, politiques, sur la vie bonne, sur les meufs, sur Annecy — et pourtant il les porte sans lourdeur, sans avoir besoin que vous soyez d'accord. Il dit <em>« c'est recevable »</em> sans condescendance. Il dit <em>« je ne suis qu'amour igo »</em> avec un demi-sourire qu'on entend à travers l'écran. Il a fait une année blanche, raté sa L3 une première fois, eu un accident de moto qui l'a cloué 45 jours — et tout ça est rangé dans ses messages comme des faits, ni douloureux ni glorieux, juste <em>arrivés</em>.</p>
+
+      <p style="margin-top:20px;"><strong>On se souvient de lui</strong> parce qu't il est l'un des rares sur le serveur à être entier — le même en débat et dans le vide d'une conversation sans sujet, la même logique, la même chaleur sous-jacente. Il analysera votre comportement avec une précision qui peut faire peur, puis dira <em>« aaahi »</em> et passera à autre chose. C'est une forme d'intelligence émotionnelle déguisée en détachement. Il faut du temps pour voir la différence. Ceux qui restent assez longtemps finissent par comprendre qu'il ne fait que semblant de ne pas s'en faire.</p>
+    </div>
+  </section>
+
+  <!-- ── VERDICT ── -->
+  <div class="verdict">
+    <div class="verdict-label">⬡ Verdict final — synthèse en quatre lignes</div>
+    <div class="verdict-lines">
+      <div class="verdict-line">Sacha est un analyste compulsif habillé en mec décontracté du Sud — la théorie dans la tête, la Méditerranée dans le sang, et la moto dans le garage.</div>
+      <div class="verdict-line">Son vrai talent, invisible sur le canal politique, c'est de rendre les gens à l'aise sans effort apparent : il écoute, il valide, il balance une vanne au bon moment.</div>
+      <div class="verdict-line">Son parcours en zigzag universitaire et ses silences de plusieurs semaines ne sont pas des faiblesses — ce sont les respirations d'un homme qui prend le temps de faire les choses quand il est prêt à les faire.</div>
+      <div class="verdict-line">Difficile à oublier une fois qu'on l'a lu : trop cohérent, trop franc, et légèrement plus aimant qu'il ne voudrait qu'on le sache.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── HOUR CHART ──
+(function() {
+  const canvas = document.getElementById('hourChart');
+  const ctx = canvas.getContext('2d');
+  const data = {"0":264,"1":50,"2":31,"3":37,"4":14,"5":24,"6":57,"7":171,"8":252,"9":587,"10":883,"11":1174,"12":1307,"13":940,"14":1044,"15":1027,"16":1107,"17":1053,"18":1099,"19":1146,"20":888,"21":810,"22":688,"23":334};
+  const vals = Object.values(data);
+  const maxVal = Math.max(...vals);
+  const W = canvas.clientWidth, H = 120;
+  canvas.width = W * devicePixelRatio;
+  canvas.height = H * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const barW = W / 24 - 2;
+  const padTop = 10, padBot = 22;
+  vals.forEach((v, i) => {
+    const x = i * (W/24) + 1;
+    const barH = ((v / maxVal) * (H - padTop - padBot));
+    const y = H - padBot - barH;
+    const isNight = i < 6 || i >= 22;
+    const isPeak = i === 12;
+    const grad = ctx.createLinearGradient(0, y, 0, H - padBot);
+    grad.addColorStop(0, isPeak ? '#e94560' : isNight ? '#2a2050' : '#533483');
+    grad.addColorStop(1, isPeak ? '#ff6b84' : isNight ? '#1a1635' : '#7048b5');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, barH, 2);
+    ctx.fill();
+    if (i % 6 === 0 || i === 12) {
+      ctx.fillStyle = isPeak ? '#e94560' : '#5c5480';
+      ctx.font = `${10 * devicePixelRatio / devicePixelRatio}px Space Mono, monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(i+'h', x + barW/2, H - 4);
+    }
+  });
+})();
+
+// ── YEAR BARS ──
+(function() {
+  const yearData = {2018:184,2019:494,2020:547,2021:645,2022:755,2023:1967,2024:4862,2025:5202,2026:331};
+  const maxY = Math.max(...Object.values(yearData));
+  const container = document.getElementById('yearBars');
+  Object.entries(yearData).forEach(([y, v]) => {
+    const pct = Math.round((v / maxY) * 100);
+    container.innerHTML += `
+      <div class="year-bar">
+        <div class="year-label">${y}</div>
+        <div class="year-bar-bg"><div class="year-bar-fill" style="width:${pct}%"></div></div>
+        <div class="year-count">${v.toLocaleString('fr')}</div>
+      </div>`;
+  });
+})();
+
+// ── TOPIC BARS ──
+(function() {
+  const topics = [
+    {name: 'Relations / Séduction', count: 1101, max: 1101},
+    {name: 'Philosophie / Société', count: 850, max: 1101},
+    {name: 'Études / Fac / Parcours', count: 358, max: 1101},
+    {name: 'Moto / Voitures / Transport', count: 280, max: 1101},
+    {name: 'Musique', count: 199, max: 1101},
+    {name: 'Films / Séries', count: 117, max: 1101},
+    {name: 'Jeux vidéo', count: 138, max: 1101},
+    {name: 'Nourriture / Bouffe', count: 83, max: 1101},
+    {name: 'Argent / Travail', count: 104, max: 1101},
+    {name: 'Sport / Muscu', count: 73, max: 1101},
+  ];
+  const container = document.getElementById('topicBars');
+  topics.forEach(t => {
+    const pct = Math.round((t.count / t.max) * 100);
+    container.innerHTML += `
+      <div class="topic-row">
+        <div class="topic-header">
+          <div class="topic-name">${t.name}</div>
+          <div class="topic-count">${t.count} occurrences</div>
+        </div>
+        <div class="topic-bar-bg"><div class="topic-bar" style="width:${pct}%"></div></div>
+      </div>`;
+  });
+})();
+</script>
+
+</body>
+</html>
