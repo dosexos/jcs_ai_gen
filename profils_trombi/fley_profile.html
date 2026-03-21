@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fley — Profil Discord · #trombinoscope</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+  :root {
+    --bg: #0f0f1a;
+    --bg2: #141428;
+    --bg3: #1a1a35;
+    --card: #1e1e3a;
+    --card2: #232344;
+    --violet: #533483;
+    --violet-light: #7b4ec2;
+    --violet-glow: #9b6ef3;
+    --red: #e94560;
+    --red-soft: #ff6b87;
+    --gold: #f0b429;
+    --text: #e8e6f0;
+    --text-muted: #8c89a8;
+    --text-faint: #4e4b6a;
+    --border: rgba(83, 52, 131, 0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── HEADER ─────────────────────────────────── */
+  .header {
+    position: relative;
+    padding: 60px 48px 48px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(83,52,131,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .server-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .server-tag::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--violet);
+  }
+
+  .pseudo-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet) 0%, var(--red) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(155,110,243,0.3);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 30%, var(--violet-glow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .channel-badge {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    padding-left: 2px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1px solid;
+  }
+
+  .badge-violet { background: rgba(83,52,131,0.2); border-color: rgba(155,110,243,0.4); color: #c4a8ff; }
+  .badge-red    { background: rgba(233,69,96,0.15); border-color: rgba(233,69,96,0.4); color: #ff9baf; }
+  .badge-gold   { background: rgba(240,180,41,0.1); border-color: rgba(240,180,41,0.35); color: #f5cc6a; }
+  .badge-teal   { background: rgba(32,201,167,0.1); border-color: rgba(32,201,167,0.3); color: #7eecd5; }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+  }
+
+  /* ─── LAYOUT ─────────────────────────────────── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--violet-glow);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ─── STATS ROW ─────────────────────────────── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(155,110,243,0.5);
+    transform: translateY(-2px);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--red));
+    opacity: 0.6;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-value span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    vertical-align: middle;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ─── CHART ──────────────────────────────────── */
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 48px;
+  }
+
+  .chart-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 100px;
+  }
+
+  .chart-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .chart-bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    min-height: 2px;
+    transition: opacity 0.2s;
+    cursor: default;
+    position: relative;
+  }
+
+  .chart-bar:hover { opacity: 0.8; }
+
+  .chart-bar-label {
+    font-size: 9px;
+    color: var(--text-faint);
+    font-family: 'DM Sans', monospace;
+  }
+
+  .chart-bar[data-peak] {
+    box-shadow: 0 0 12px rgba(233,69,96,0.5);
+  }
+
+  /* ─── TWO COL GRID ──────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 720px) {
+    .two-col { grid-template-columns: 1fr; }
+    .main { padding: 32px 20px 60px; }
+    .header { padding: 40px 20px 36px; }
+    h1 { font-size: 48px; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── PROGRESS BARS ─────────────────────────── */
+  .topic-row {
+    margin-bottom: 14px;
+  }
+
+  .topic-row:last-child { margin-bottom: 0; }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .topic-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .topic-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+
+  .topic-bar {
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .topic-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--violet), var(--violet-glow));
+  }
+
+  .topic-fill.red { background: linear-gradient(90deg, #b83350, var(--red)); }
+  .topic-fill.gold { background: linear-gradient(90deg, #c49020, var(--gold)); }
+
+  /* ─── EXPRESSIONS ──────────────────────────── */
+  .expression-tag {
+    display: inline-block;
+    background: rgba(83,52,131,0.25);
+    border: 1px solid rgba(155,110,243,0.25);
+    color: #c4a8ff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 4px;
+    font-style: italic;
+  }
+
+  /* ─── QUOTES ─────────────────────────────────── */
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .quote-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--violet);
+    border-radius: 0 16px 16px 0;
+    padding: 20px 24px;
+    position: relative;
+    transition: border-left-color 0.2s;
+  }
+
+  .quote-card:nth-child(even) { border-left-color: var(--red); }
+  .quote-card:nth-child(3n) { border-left-color: var(--gold); }
+
+  .quote-text {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  .quote-meta {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── PROSE SECTIONS ─────────────────────────── */
+  .prose-section {
+    margin-bottom: 48px;
+  }
+
+  .prose-part {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prose-part::after {
+    content: attr(data-num);
+    position: absolute;
+    top: -20px; right: 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 120px;
+    font-weight: 800;
+    color: rgba(83,52,131,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .prose-part-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .prose-part-title .num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--violet-glow);
+    border: 1px solid rgba(155,110,243,0.4);
+    border-radius: 6px;
+    padding: 2px 8px;
+  }
+
+  .prose-part p {
+    color: #c5c2d8;
+    font-size: 14.5px;
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  .prose-part p:last-child { margin-bottom: 0; }
+
+  .inline-quote {
+    font-style: italic;
+    color: #d4b8ff;
+    background: rgba(83,52,131,0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .inline-date {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-faint);
+    font-style: normal;
+  }
+
+  /* ─── PORTRAIT SECTION ───────────────────────── */
+  .portrait-section {
+    background: linear-gradient(135deg, rgba(83,52,131,0.15) 0%, rgba(233,69,96,0.08) 100%);
+    border: 1px solid rgba(155,110,243,0.3);
+    border-radius: 24px;
+    padding: 48px 48px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portrait-section::before {
+    content: '"';
+    position: absolute;
+    top: -30px; left: 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 300px;
+    font-weight: 800;
+    color: rgba(83,52,131,0.07);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .portrait-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .portrait-title span {
+    background: linear-gradient(90deg, var(--violet-glow), var(--red-soft));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .portrait-body {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: #ccc9e0;
+    font-weight: 300;
+    position: relative;
+  }
+
+  .portrait-body p { margin-bottom: 20px; }
+  .portrait-body p:last-child { margin-bottom: 0; }
+
+  .portrait-body em {
+    color: #dbb8ff;
+    font-style: italic;
+  }
+
+  .portrait-body strong {
+    color: white;
+    font-weight: 500;
+  }
+
+  /* ─── VERDICT ─────────────────────────────────── */
+  .verdict {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--red);
+    border-radius: 0 0 20px 20px;
+    padding: 36px 40px;
+    margin-bottom: 48px;
+  }
+
+  .verdict-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    margin-bottom: 20px;
+  }
+
+  .verdict-line {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 600;
+    color: white;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    padding-left: 16px;
+    border-left: 2px solid var(--text-faint);
+  }
+
+  .verdict-line:nth-child(2) { border-left-color: var(--violet); }
+  .verdict-line:nth-child(3) { border-left-color: var(--red); }
+  .verdict-line:nth-child(4) { border-left-color: var(--gold); }
+
+  /* ─── RELATIONS ─────────────────────────────── */
+  .relation-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(83,52,131,0.15);
+  }
+
+  .relation-row:last-child { border-bottom: none; }
+
+  .relation-pseudo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--violet-glow);
+    min-width: 80px;
+    padding-top: 1px;
+  }
+
+  .relation-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* ─── ROLE CARD ──────────────────────────────── */
+  .role-pill {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(83,52,131,0.4), rgba(233,69,96,0.2));
+    border: 1px solid rgba(155,110,243,0.35);
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 100px;
+    margin: 4px;
+  }
+
+  /* ─── FOOTER ─────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-faint);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── ANIMATIONS ─────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header-inner { animation: fadeUp 0.6s ease both; }
+  .stats-row    { animation: fadeUp 0.6s 0.1s ease both; }
+  .chart-card   { animation: fadeUp 0.6s 0.15s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="server-tag">Discord · #trombinoscope · Analyse de profil</div>
+    <div class="pseudo-row">
+      <div class="avatar">F</div>
+      <div>
+        <div class="channel-badge">fleyou · membre actif depuis oct. 2020</div>
+        <h1>Fley</h1>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-violet"><span class="badge-dot"></span>Analyste compulsif</span>
+      <span class="badge badge-red"><span class="badge-dot"></span>Provoc affectueuse</span>
+      <span class="badge badge-gold"><span class="badge-dot"></span>EAPA · secteur médical</span>
+      <span class="badge badge-teal"><span class="badge-dot"></span>Parisdien</span>
+      <span class="badge badge-violet"><span class="badge-dot"></span>Anxiété de mort assumée</span>
+      <span class="badge badge-red"><span class="badge-dot"></span>Pic 12h–14h</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════ MAIN -->
+<main class="main">
+
+  <!-- STATS -->
+  <div class="section-label">Statistiques générales</div>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value">9 262</div>
+      <div class="stat-label">Messages totaux</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">5 <span>ans</span></div>
+      <div class="stat-label">Période d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">4,7</div>
+      <div class="stat-label">Msgs / jour (moyenne)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">12h<span>–14h</span></div>
+      <div class="stat-label">Pic d'activité</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">259</div>
+      <div class="stat-label">Record jour (25 juil. 2024)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">4 525</div>
+      <div class="stat-label">Messages en 2025</div>
+    </div>
+  </div>
+
+  <!-- CHART HORAIRE -->
+  <div class="chart-card">
+    <div class="chart-title">Activité par heure de la journée</div>
+    <div class="chart-bars" id="hourChart"></div>
+  </div>
+
+  <!-- TWO COL: SUJETS + STYLE -->
+  <div class="section-label">Contenus & communication</div>
+  <div class="two-col">
+
+    <div class="card">
+      <div class="card-title">Sujets spontanés les + fréquents</div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">🎮 Gaming & culture geek</span>
+          <span class="topic-count">655 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill" style="width:100%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">⚖️ Société, méritocratie, politique</span>
+          <span class="topic-count">~400 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill red" style="width:61%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">🏋️ Sport, corps, performance</span>
+          <span class="topic-count">~350 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill" style="width:53%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">❤️ Relations, séduction, genre</span>
+          <span class="topic-count">~300 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill red" style="width:46%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">🧠 Psychologie, émotions, soi</span>
+          <span class="topic-count">~200 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill gold" style="width:31%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">🏥 Boulot (hôpital, EAPA)</span>
+          <span class="topic-count">165 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill gold" style="width:25%"></div></div>
+      </div>
+
+      <div class="topic-row">
+        <div class="topic-header">
+          <span class="topic-name">😴 Santé mentale, anxiété, sommeil</span>
+          <span class="topic-count">155 réf.</span>
+        </div>
+        <div class="topic-bar"><div class="topic-fill" style="width:24%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Style de communication</div>
+      <p style="color:var(--text-muted); font-size:13px; margin-bottom:16px; line-height:1.65;">
+        Fley écrit comme il parle : fluide, parfois sans ponctuation, avec des chaînes de messages courts qui forment un raisonnement au fil de l'eau. Il n'hésite pas à rédiger des pavés analytiques de 300 mots quand un sujet l'accroche.
+      </p>
+
+      <div class="card-title" style="margin-top:20px;">Expressions signature</div>
+      <div>
+        <span class="expression-tag">perso</span>
+        <span class="expression-tag">ça dépend</span>
+        <span class="expression-tag">en vrai</span>
+        <span class="expression-tag">forcément</span>
+        <span class="expression-tag">khey</span>
+        <span class="expression-tag">akhy</span>
+        <span class="expression-tag">franchement</span>
+        <span class="expression-tag">c'est pas</span>
+        <span class="expression-tag">je jure</span>
+        <span class="expression-tag">de toute façon</span>
+        <span class="expression-tag">fondamentalement</span>
+        <span class="expression-tag">par définition</span>
+        <span class="expression-tag">c'est pas chelou</span>
+        <span class="expression-tag">ouais non</span>
+      </div>
+
+      <div class="card-title" style="margin-top:20px;">Rôle dans le groupe</div>
+      <div>
+        <span class="role-pill">⚡ Débatteur</span>
+        <span class="role-pill">🧭 Conseiller</span>
+        <span class="role-pill">😏 Taquin</span>
+        <span class="role-pill">📣 Amplificateur</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATIONS -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Relations avec les membres</div>
+      <div class="relation-row">
+        <div class="relation-pseudo">Sinnoh</div>
+        <div class="relation-desc">Relation la plus citée (135 messages). Mélange de moquerie affectueuse et vraie proximité — son « beauf ultime préféré », marseillais fan de bagnoles et de foot, avec qui il rit autant qu'il débat.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo">Zoller</div>
+        <div class="relation-desc">72 mentions, souvent dans les sujets séduction et physique. Fley se sert de Zoller comme repoussoir comique ou contre-exemple pour ses théories, avec une tendresse évidente.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo">Drako/Kaspei</div>
+        <div class="relation-desc">Présents dans les moments nostalgiques, les vocaux de jeux, les soirées. Fley leur réserve une bienveillance nette : <em>« j'ai vu le K IRL, only bienveillance ».</em></div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo">Arok</div>
+        <div class="relation-desc">Interlocuteur privilégié sur les sujets graves (méritocratie, société). Fley le cite régulièrement comme partenaire intellectuel.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo">Groupe entier</div>
+        <div class="relation-desc">Paris (58 mentions) comme terrain commun — sorties, plans, retrouvailles. Fley est ancré dans la vie réelle du groupe, pas seulement en ligne.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Moments mémorables</div>
+      <div class="relation-row">
+        <div class="relation-pseudo" style="color:var(--gold)">25 juil. 2024</div>
+        <div class="relation-desc">Record absolu : 259 messages en une journée. Enchaînement de benchmarks et de vifs débats sur le physique, la séduction et les relations — en pleine forme rhétorique.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo" style="color:var(--gold)">19 mai 2023</div>
+        <div class="relation-desc">Découverte des stats Tinder (103 156 swipes à gauche). Journée dense sur l'attirance, la libido post-séance, la race et le corps — conversations sans filtre.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo" style="color:var(--gold)">29 nov. 2023</div>
+        <div class="relation-desc">Partage rare et vulnérable : son cercle vicieux anxiété→insomnie→motivation effondrée, décrit avec précision clinique. Angoisse de mort comme moteur sous-jacent.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo" style="color:var(--gold)">3 jan. 2025</div>
+        <div class="relation-desc">Long débat nocturne sur la nature humaine, l'altruisme, les réseaux sociaux. Fley défend une vision lucide (pas cynique) de la société pendant des heures.</div>
+      </div>
+      <div class="relation-row">
+        <div class="relation-pseudo" style="color:var(--gold)">17 avr. 2025</div>
+        <div class="relation-desc">Chienne de son frère en urgence neurologique. Fley, EAPA en milieu médical, gère l'information avec calme professionnel et émotion contenue — son dualisme en action.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTES -->
+  <div class="section-label">Citations & fragments mémorables</div>
+  <div class="quotes-grid">
+    <div class="quote-card">
+      <div class="quote-text">« événement qui me rend triste ou anxieux → angoisse de mort → je dors pas → je suis fatigué → je suis triste/anxieux et fatigué → je peux sauter des repas plus facilement, baisse de motivation, humeur qui se détériore → je galère à maintenir mes routines sportives ou alors je me mets dedans x10 »</div>
+      <div class="quote-meta">29 novembre 2023 · Auto-analyse clinique</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« tu donnes tellement de sens à des choses qui n'en ont pas en t'enlevant des angoisses parce que tu crois dans un livre écrit par le premier tocard qui a voulu avoir un peu de pouvoir »</div>
+      <div class="quote-meta">19 mars 2024 · À propos de la religion</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« ma vie est si douce depuis que je vais au travail à pied »</div>
+      <div class="quote-meta">10 août 2025 · Satisfaction du quotidien</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« Confiant mais pas arrogant / Spontané mais pas irréfléchi / Responsable mais pas ennuyant / Avoir le sens de la mode mais pas efféminé / Musclé mais pas vaniteux / Sociable mais pas trop sortir / Riche mais pas trop pris par le travail / Drôle mais pas immature / Mature mais pas insipide »</div>
+      <div class="quote-meta">3 août 2025 · L'homme idéal selon Fley (ou selon les femmes, selon le point de vue)</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« si j'étais là j'aurais pu te faire le bilan moi même... »</div>
+      <div class="quote-meta">24 juin 2025 · Sa casquette EAPA toujours disponible pour les proches</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« ce monde prospère avant tout parce que la majorité retrouve son confort personnel à l'intérieur même si celui-ci est profondément injuste »</div>
+      <div class="quote-meta">3 janvier 2025 · Vision du monde</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« personnellement puisque vous financez mes siestes je considère que c'est très bien utilisé »</div>
+      <div class="quote-meta">4 février 2025 · Humour pince-sans-rire sur le temps libre</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">« fume avant que la vie te fume »</div>
+      <div class="quote-meta">7 janvier 2025 · Philosophie du quotidien version condensée</div>
+    </div>
+  </div>
+
+  <!-- ANALYSE DETAILLEE -->
+  <div class="section-label">Analyse détaillée</div>
+  <div class="prose-section">
+
+    <div class="prose-part" data-num="1">
+      <div class="prose-part-title"><span class="num">01</span> Personnalité sur ce canal</div>
+      <p>Sur #trombinoscope, Fley ne se déguise pas. Il parle sans filet, avec la même énergie qu'on imagine lui trouver dans une cuisine entre amis à 23h. Son registre de base est celui du mec qui a des opinions — sur tout, sur rien, sur ce qu'on vient juste de dire — mais qui les pose avec une assurance tranquille plutôt qu'avec de l'agressivité. Il ne cherche pas à avoir le dernier mot en se taisant : il continue, il précise, il corrige, il nuance. Les mots qui reviennent le plus naturellement dans sa plume sont <span class="inline-quote">perso</span>, <span class="inline-quote">ça dépend</span> et <span class="inline-quote">forcément</span> — trois mots qui disent tout de sa manière d'être : un homme de position, mais capable de situer ses opinions dans leur contexte.</p>
+      <p>Il est à l'aise dans le conflit verbal, mais ce n'est pas un bagarreur. Quand il descend quelqu'un, c'est souvent en souriant — un peu comme si la pique était un geste d'affection. Il peut enchaîner des taquineries féroces sur Sinnoh et lui exprimer de la chaleur dans la même heure. Cette ambivalence n'est pas de la fausseté : c'est son langage. Dans ce groupe, l'ironie est une monnaie d'échange, et Fley en est un commerçant expérimenté.</p>
+      <p>Sa présence augmente au fil des années : quasi inexistant en 2020–2022, il devient progressivement l'un des membres les plus prolixes, avec 4 525 messages en 2025. Le canal lui a clairement rendu service autant qu'il le lui a rendu : c'est un espace de décompression, de pensée à voix haute, et parfois de thérapie légère.</p>
+    </div>
+
+    <div class="prose-part" data-num="2">
+      <div class="prose-part-title"><span class="num">02</span> Ce dont il parle spontanément</div>
+      <p>Les grandes catégories de Fley sont stables et révélatrices. Le gaming est son terreau culturel — il en parle avec la connivence de quelqu'un qui a grandi dans cette culture, même si ce n'est plus son unique occupation. La séduction, le corps, les relations homme-femme constituent son deuxième terrain de prédilection : des sujets où il déploie des théories, cite des exemples, construit des modèles — parfois avec une franchise qui pourrait déranger, toujours avec une cohérence interne évidente.</p>
+      <p>Vient ensuite la société au sens large : méritocratie, inégalités, réseaux sociaux, comportements humains. Fley n'est pas politisé au sens partisan du terme, mais il a une vision du monde — lucide, parfois sombre, toujours articulée. Il croit que les gens sont rarement aussi altruistes qu'ils le prétendent, que les mécaniques sociales sont souvent injustes, et que se raconter des histoires dessus ne sert à rien. <span class="inline-quote">Ce monde prospère avant tout parce que la majorité retrouve son confort personnel à l'intérieur même si celui-ci est profondément injuste</span> <span class="inline-date">(jan. 2025)</span> — voilà Fley en quatre lignes.</p>
+      <p>Ce qui frappe, c'est qu'il parle aussi de lui avec une régularité qu'on ne trouve pas chez tous. Ses angoisses, ses routines sportives, ses humeurs de novembre, son boulot, son chemin à pied vers l'hôpital — il offre des fragments de vie quotidienne sans en faire ni un journal intime ni un spectacle.</p>
+    </div>
+
+    <div class="prose-part" data-num="3">
+      <div class="prose-part-title"><span class="num">03</span> Vie quotidienne transparente</div>
+      <p>Le profil socio-professionnel de Fley se dessine très nettement. Il est <strong>EAPA (Enseignant en Activité Physique Adaptée)</strong>, travaille en rééducation dans un hôpital, en gériatrie, à Paris. C'est un métier qu'il aime — <span class="inline-quote">en rééducation à l'hôpital ma vie est chill</span> <span class="inline-date">(mars 2024)</span> — et qui colore sa façon d'interagir : il propose des bilans, diagnostique, conseille. Quand la chienne de son frère est hospitalisée en urgence neurologique, sa réaction est de noter les indicateurs médicaux avec une précision clinique, avant de laisser percer l'émotion.</p>
+      <p>Il a fait un Master après son parcours en STAPS, et vit clairement à Paris ou sa proche banlieue. Il se déplace à pied jusqu'à son lieu de travail, ce qu'il évoque avec un contentement sincère qui dit quelque chose sur son rapport au corps et au rythme de vie. Son activité sportive est sérieuse — plusieurs séances par semaine, références à la musculation, à la salle — et fait partie de son équilibre psychologique autant que physique.</p>
+      <p>Sa vie sociale est dense : sorties, Rosa Park, soirées, retrouvailles avec les membres du serveur en IRL. Paris joue un rôle de hub — il convoque les autres, organise, questionne les absences. <span class="inline-quote">Reviens à Paris Spyrof putain</span>, <span class="inline-quote">d'ailleurs on se revoit quand mon ami</span> <span class="inline-date">(juil. 2025)</span> — Fley est quelqu'un qui tient à ce que le groupe reste un groupe, au sens physique du terme.</p>
+    </div>
+
+    <div class="prose-part" data-num="4">
+      <div class="prose-part-title"><span class="num">04</span> Humour et style</div>
+      <p>L'humour de Fley est essentiellement <strong>ironique et pince-sans-rire</strong>. Il ne fait pas de blagues construites avec une chute — il glisse des phrases qui sonnent comme des constats mais qui font rire par leur lucidité désabusée ou leur absurdité assumée. <span class="inline-quote">Personnellement puisque vous financez mes siestes je considère que c'est très bien utilisé</span> <span class="inline-date">(fév. 2025)</span> — il ne se présente pas comme quelqu'un qui en ferait trop. C'est le registre du mec qui sait être drôle sans s'agiter.</p>
+      <p>Il manie avec aisance la référence culturelle geek (Discord emojis personnalisés, mèmes), les diminutifs affectueux (<span class="inline-quote">khey</span>, <span class="inline-quote">akhy</span>, <span class="inline-quote">mon ami</span>) et les tournures de discussion informelle qui rendent ses pavés de philosophie sociale nettement plus digestes. C'est un communicant naturel qui sait ajuster son niveau de langue à son interlocuteur sans effort apparent.</p>
+      <p>Son style écrit alterne sans transition entre des messages de deux mots (<span class="inline-quote">ouais</span>, <span class="inline-quote">lourde la crémaillère</span>) et des monologues de 10 lignes où il construit un argument structuré, avec des tirets et des numérations. Cette amplitude est sa signature : on ne sait jamais si la prochaine réponse sera une vanne ou une thèse.</p>
+    </div>
+
+    <div class="prose-part" data-num="5">
+      <div class="prose-part-title"><span class="num">05</span> Obsessions récurrentes</div>
+      <p>Deux thèmes reviennent avec une constance qui dépasse le simple intérêt : <strong>la méritocratie et le corps</strong>. Sur la méritocratie, Fley est catégorique : elle est un mythe, ou du moins une construction commode pour ceux qui en bénéficient. Il a débattu le sujet plusieurs fois avec des arguments stables et développés sur plusieurs années, ce qui indique une conviction profonde plutôt qu'une posture du moment. <span class="inline-quote">Ma théorie c'est que si les gens qui en profitent refusent de l'accepter, c'est parce qu'ils se sentiront illégitimes s'ils ont l'impression d'avoir eu plus de chances que les autres</span> <span class="inline-date">(août 2023)</span>.</p>
+      <p>Sur le corps, il a une vision très construite : l'apparence physique est un capital sérieux, le sport est un outil de performance autant que d'équilibre, et l'entretien de soi est une forme de respect de base. Il peut être sévère dans ses évaluations — pas sans une bonne dose d'humour noir — mais il applique la même logique à lui-même : il fait lui aussi ses séances, suit sa progression, assume l'investissement.</p>
+      <p>Sa troisième obsession, plus intime, est l'<strong>angoisse de mort</strong>. Il en parle avec une transparence rare, la décrivant comme le moteur de ses cercles vicieux anxieux. <span class="inline-quote">Les angoisses de mort étant de très loin ce qui me terrifie le plus</span> <span class="inline-date">(nov. 2023)</span>. C'est sa blessure visible, celle qu'il porte sans la dissimuler, et qui rend ses moments de plein bonheur d'autant plus intenses.</p>
+    </div>
+
+    <div class="prose-part" data-num="6">
+      <div class="prose-part-title"><span class="num">06</span> Rôle dans le groupe</div>
+      <p>Fley joue plusieurs rôles à la fois. En premier lieu, il est un <strong>débatteur et structureur</strong> — celui qui prend une discussion lancée par quelqu'un d'autre et la creuse, la recadre, la théorise. Ce n'est pas le lanceur de sujets par excellence, mais il est presque toujours là pour amplifier. On sent les autres membres s'y appuyer pour avancer sur des questions complexes.</p>
+      <p>Il est aussi un <strong>conseiller tacite</strong>. Sa formation médicale et sa sensibilité psychologique le rendent disponible pour les moments où quelqu'un traverse quelque chose de difficile. Il ne le fait pas avec une solennité appuyée — il reste dans son ton habituel — mais la substance de ses réponses change, devient plus précise, plus attentive.</p>
+      <p>En troisième lieu, c'est un <strong>animateur social</strong> au sens physique : celui qui propose les sorties, qui rappelle que le groupe existe aussi hors écran, qui note les absences. <span class="inline-quote">Sinon on réserve semaine pro à Rosa Park</span> <span class="inline-date">(jan. 2025)</span>. Cette constance à vouloir entretenir le lien IRL dit quelque chose de fondamental sur ce que le groupe représente pour lui.</p>
+    </div>
+
+  </div>
+
+  <!-- PORTRAIT HUMAIN -->
+  <div class="section-label">Portrait humain</div>
+  <div class="portrait-section">
+    <div class="portrait-title">Qui est Fley, <span>vraiment</span> ?</div>
+    <div class="portrait-body">
+      <p>Il y a des gens qu'on remarque parce qu'ils parlent fort, d'autres parce qu'ils parlent bien. Fley fait partie de la deuxième catégorie — et c'est plus rare qu'il n'y paraît dans un Discord de vingt personnes. Il arrive dans une conversation comme il doit arriver dans une pièce : avec une légèreté apparente qui cache une présence réelle. Il ne prend pas de place, il l'occupe. Ce n'est pas la même chose.</p>
+      <p>Ce qui frappe en premier, à parcourir ses messages sur cinq ans, c'est sa <strong>cohérence</strong>. Les positions de Fley en 2023 ne contredisent pas celles de 2025. Il a une vision du monde qu'il a construite, pas qu'on lui a donnée, et il la défend avec une sérénité qui n'a rien de l'arrogance — c'est plutôt la sérénité de quelqu'un qui a déjà beaucoup retourné la question dans sa tête avant d'en parler. <em>« ça dépend »</em> est sa phrase fétiche non par paresse, mais parce qu'il sait sincèrement que les choses dépendent.</p>
+      <p>Sous la surface du débatteur, il y a un homme qui porte quelque chose de pesant : une angoisse de mort qu'il décrit lui-même comme son plus grand moteur de dérèglement. Ce n'est pas anodin. Cette angoisse-là ne se soigne pas avec de la volonté — elle se gère, elle s'apprivoise. Et Fley, à sa façon, l'a apprivoisée : il la nomme, la cartographie, la raconte à ses amis avec une précision qui tient presque de l'auto-thérapie. C'est une forme de courage tranquille qu'on ne voit pas souvent.</p>
+      <p>Son paradoxe le plus attachant, c'est d'être à la fois <strong>très lucide sur les autres et sincèrement affectueux</strong>. Il peut disséquer les comportements humains avec un regard froid digne d'un sociologue, et dans la même heure écrire à Sinnoh <em>« j'ai beaucoup de respect pour toi mon ami »</em> ou s'inquiéter pour un collègue de travail dans un message quasi-professionnel. Il ne voit pas la dureté de son regard comme une contradiction avec sa chaleur — et il a probablement raison.</p>
+      <p>Il est aussi, avec le temps, devenu quelqu'un qui <em>tient le groupe ensemble</em>. Pas comme un leader charismatique qui fascine — plutôt comme un fil de rappel, quelqu'un qui n'oublie pas que les visages derrière les pseudos existent aussi dans la vraie vie et méritent d'être revus. <em>« D'ailleurs on se revoit quand mon ami »</em> — cinq mots qui résument peut-être mieux que tout ce qu'il est : quelqu'un qui croit que ce qui se passe hors écran compte plus que ce qui se passe dessus, même s'il passe beaucoup de temps dessus.</p>
+      <p>Ce qu'on retiendra de Fley, une fois la page fermée ? Un homme de 25–30 ans, parisien, sportif, ancré dans un métier qu'il aime, qui a choisi de réparer les corps des autres tout en apprenant à gérer ses propres failles. Quelqu'un de dense, de drôle à doses maîtrisées, de plus vulnérable qu'il n'y paraît, et de plus fidèle qu'il ne le montrera jamais directement. Le genre de mec dont on dit, quand il est parti d'une soirée : <em>« il manque quelque chose »</em>.</p>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="section-label">Verdict</div>
+  <div class="verdict">
+    <div class="verdict-title">Synthèse · 4 lignes</div>
+    <div class="verdict-line">Fley est un analyste compulsif qui cache sa chaleur derrière une ironie bien calibrée — mais il ne la cache pas très bien.</div>
+    <div class="verdict-line">Il a une vision du monde cohérente, une angoisse de mort chronique, et un diplôme de kiné qu'il sort quand quelqu'un en a besoin : c'est son mode d'amour.</div>
+    <div class="verdict-line">Plus il écrit, plus on voit quelqu'un qui réfléchit vraiment — pas quelqu'un qui performe la réflexion.</div>
+    <div class="verdict-line">Au fond : un homme sérieux qui ne supporte pas de se prendre au sérieux.</div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Profil généré à partir de 9 262 messages · #trombinoscope · oct. 2020 – mars 2026
+</footer>
+
+<script>
+  // ─── HOURLY CHART ────────────────────────────
+  const hourData = [76,1,0,0,0,22,45,152,262,392,504,753,843,691,841,724,677,677,719,533,475,434,346,95];
+  const maxVal = Math.max(...hourData);
+  const chart = document.getElementById('hourChart');
+
+  hourData.forEach((val, h) => {
+    const pct = val / maxVal * 100;
+    const isPeak = val === maxVal;
+
+    const div = document.createElement('div');
+    div.className = 'chart-bar-wrap';
+
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = Math.max(pct, 2) + '%';
+    bar.title = `${h}h : ${val} messages`;
+
+    if (isPeak) {
+      bar.style.background = 'linear-gradient(180deg, #e94560, #b83350)';
+      bar.setAttribute('data-peak', '1');
+    } else if (val > maxVal * 0.5) {
+      bar.style.background = 'linear-gradient(180deg, #7b4ec2, #533483)';
+    } else if (val > maxVal * 0.2) {
+      bar.style.background = 'linear-gradient(180deg, #533483, #3a2060)';
+    } else {
+      bar.style.background = 'rgba(83,52,131,0.3)';
+    }
+
+    const label = document.createElement('div');
+    label.className = 'chart-bar-label';
+    label.textContent = h % 3 === 0 ? `${h}h` : '';
+
+    div.appendChild(bar);
+    div.appendChild(label);
+    chart.appendChild(div);
+  });
+</script>
+</body>
+</html>
