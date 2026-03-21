@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Gymnase — Fley × Risto × Zoller</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --bg: #0f0e17;
+    --violet: #533483;
+    --violet-light: #7b52b9;
+    --rouge: #e94560;
+    --or: #f0a500;
+    --blanc: #e8e8f0;
+    --gris: #9999bb;
+    --carte: #1e1e38;
+    --scene-bg: #141428;
+    --risto-bg: #1a1030;
+    --fley-bg: #1a0a14;
+    --pivot-bg: #1a0a1a;
+    --carton-bg: #1a1a2e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--blanc);
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--violet); top: -200px; left: -200px; }
+  .blob-2 { width: 400px; height: 400px; background: var(--rouge); bottom: 200px; right: -100px; }
+  .blob-3 { width: 300px; height: 300px; background: var(--or); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.06; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  /* ─── HEADER ─── */
+  header {
+    padding: 120px 32px 80px;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid rgba(83,52,131,0.3);
+  }
+
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--violet-light);
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(72px, 12vw, 140px);
+    font-weight: 400;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #e8e8f0 0%, #7b52b9 50%, #e94560 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .header-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gris);
+    letter-spacing: 0.1em;
+    margin-bottom: 48px;
+  }
+
+  .opening-quote {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--or);
+    line-height: 1.5;
+    padding: 24px;
+    border-left: 3px solid var(--or);
+    text-align: left;
+    background: rgba(240,165,0,0.04);
+  }
+
+  .opening-quote cite {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--gris);
+    letter-spacing: 0.15em;
+    margin-top: 12px;
+  }
+
+  /* ─── SECTION TITLES ─── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 400;
+    color: var(--blanc);
+    margin-bottom: 12px;
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--violet-light);
+    margin-bottom: 48px;
+    display: block;
+  }
+
+  /* ─── PERSONNAGES ─── */
+  .persos {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(83,52,131,0.2);
+  }
+
+  .perso-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .perso-card {
+    background: var(--carte);
+    border: 1px solid rgba(83,52,131,0.3);
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .perso-card:hover { border-color: rgba(123,82,185,0.6); }
+
+  .perso-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-risto::before { background: linear-gradient(90deg, var(--violet), var(--violet-light)); }
+  .card-fley::before { background: linear-gradient(90deg, var(--rouge), #ff6b6b); }
+  .card-zoller::before { background: linear-gradient(90deg, var(--or), #ffcc44); }
+
+  .perso-pseudo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gris);
+    margin-bottom: 8px;
+  }
+
+  .perso-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--blanc);
+    margin-bottom: 4px;
+  }
+
+  .perso-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gris);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .perso-quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--or);
+    line-height: 1.5;
+    margin-bottom: 24px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(240,165,0,0.2);
+    border-bottom: 1px solid rgba(240,165,0,0.2);
+  }
+
+  .confidence-bar {
+    margin-top: 16px;
+  }
+
+  .confidence-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gris);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .bar-risto { background: linear-gradient(90deg, var(--violet), var(--violet-light)); width: 95%; }
+  .bar-fley { background: linear-gradient(90deg, var(--rouge), #ff9999); width: 0%; }
+
+  .zoller-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--or);
+    letter-spacing: 0.1em;
+    margin-top: 16px;
+    padding: 8px 12px;
+    background: rgba(240,165,0,0.06);
+    border: 1px solid rgba(240,165,0,0.15);
+  }
+
+  .perso-silhouette {
+    float: right;
+    margin-left: 16px;
+    margin-bottom: 8px;
+    opacity: 0.15;
+  }
+
+  /* ─── TIMELINE D3 ─── */
+  .timeline-section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(83,52,131,0.2);
+  }
+
+  #timeline-svg { width: 100%; }
+
+  /* ─── SCÈNES ─── */
+  .scene-section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(83,52,131,0.2);
+  }
+
+  .scene {
+    margin-bottom: 72px;
+  }
+
+  .scene-carton {
+    background: var(--carton-bg);
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #5555aa;
+    text-transform: uppercase;
+  }
+
+  .scene-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--blanc);
+    margin-bottom: 28px;
+    line-height: 1.2;
+  }
+
+  .prose {
+    color: rgba(232,232,240,0.88);
+    line-height: 1.85;
+    font-size: 16.5px;
+    max-width: 760px;
+  }
+
+  .prose p { margin-bottom: 20px; }
+
+  /* ─── ENCARTS DISCORD ─── */
+  .discord-risto {
+    background: var(--carte);
+    border-left: 3px solid var(--violet);
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #7b52b9;
+    line-height: 1.5;
+    max-width: 680px;
+  }
+
+  .discord-fley {
+    background: var(--carte);
+    border-left: 3px solid var(--rouge);
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #e94560;
+    line-height: 1.5;
+    max-width: 680px;
+  }
+
+  .discord-ts {
+    font-size: 10px;
+    color: var(--gris);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .discord-author {
+    font-weight: 700;
+    margin-right: 8px;
+  }
+
+  /* ─── MONOLOGUE INTÉRIEUR ─── */
+  .monologue {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--or);
+    padding-left: 28px;
+    margin: 24px 0;
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 680px;
+    opacity: 0.9;
+  }
+
+  /* ─── CITATION PIVOT ─── */
+  .citation-pivot {
+    background: var(--pivot-bg);
+    border-left: 4px solid var(--or);
+    padding: 32px 36px;
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .citation-pivot .text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--or);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  .citation-pivot .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gris);
+    letter-spacing: 0.15em;
+  }
+
+  /* ─── SCÈNE CENTRALE ─── */
+  .central-section {
+    background: var(--scene-bg);
+    padding: 80px 0;
+    border-top: 1px solid rgba(83,52,131,0.3);
+    border-bottom: 1px solid rgba(83,52,131,0.3);
+    position: relative;
+  }
+
+  .central-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(83,52,131,0.05) 0%, transparent 30%, transparent 70%, rgba(233,69,96,0.03) 100%);
+    pointer-events: none;
+  }
+
+  .temps-separator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0;
+    max-width: 760px;
+  }
+
+  .temps-separator::before,
+  .temps-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(83,52,131,0.4), transparent);
+  }
+
+  .temps-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gris);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ─── ÉPILOGUE ─── */
+  .mecanisme {
+    margin: 16px 0;
+    padding: 16px 20px;
+    background: rgba(83,52,131,0.08);
+    border: 1px solid rgba(83,52,131,0.2);
+    max-width: 760px;
+  }
+
+  .mecanisme-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--violet-light);
+    margin-bottom: 6px;
+  }
+
+  .mecanisme-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--blanc);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .mecanisme-prose {
+    font-size: 14.5px;
+    color: rgba(232,232,240,0.8);
+    line-height: 1.7;
+  }
+
+  /* ─── RÉCITS CONCURRENTS ─── */
+  .recits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin: 32px 0;
+    max-width: 980px;
+  }
+
+  .recit-risto {
+    background: var(--risto-bg);
+    padding: 32px 28px;
+    border-top: 3px solid var(--violet);
+  }
+
+  .recit-fley {
+    background: var(--fley-bg);
+    padding: 32px 28px;
+    border-top: 3px solid var(--rouge);
+  }
+
+  .recit-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .recit-risto .recit-header { color: var(--violet-light); }
+  .recit-fley .recit-header { color: var(--rouge); }
+
+  .recit-prose {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: rgba(232,232,240,0.82);
+  }
+
+  /* ─── GRAPHIQUE D3 ─── */
+  .graph-section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(83,52,131,0.2);
+  }
+
+  #confidence-chart { width: 100%; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 60px 32px;
+    border-top: 1px solid rgba(83,52,131,0.2);
+    text-align: center;
+  }
+
+  .footer-main {
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    color: var(--gris);
+    margin-bottom: 16px;
+  }
+
+  .footer-stats {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(153,153,187,0.5);
+    line-height: 2;
+  }
+
+  .footer-caveat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(153,153,187,0.35);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+  }
+
+  /* ─── UTILITIES ─── */
+  .section-header {
+    margin-bottom: 0;
+    padding-top: 80px;
+    padding-bottom: 0;
+  }
+
+  hr.scene-div {
+    border: none;
+    border-top: 1px solid rgba(83,52,131,0.15);
+    margin: 56px 0;
+    max-width: 760px;
+  }
+
+  .highlight-risto { color: var(--violet-light); }
+  .highlight-fley { color: var(--rouge); }
+  .highlight-zoller { color: var(--or); }
+  .highlight-fact { color: rgba(232,232,240,0.6); font-size: 0.9em; }
+
+  @media (max-width: 700px) {
+    .perso-grid { grid-template-columns: 1fr; }
+    .recits-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <span class="header-tag">⬡ FICTION DOCUMENTAIRE · DISCORD · #TROMBINOSCOPE</span>
+  <h1>LE GYMNASE</h1>
+  <p class="header-sub">Fley × Risto × Zoller &nbsp;—&nbsp; 20 juillet 2025 &nbsp;/&nbsp; données réelles</p>
+  <blockquote class="opening-quote">
+    "j y vais si fley vient pour pouvoir le djoufara"
+    <cite>— ristorante, 30 mai 2025, 19:21</cite>
+  </blockquote>
+</header>
+
+<!-- ═══ FICHES PERSONNAGES ═══ -->
+<section class="persos">
+  <div class="container">
+    <h2 class="section-title">Personnages</h2>
+    <span class="section-tag">─── DRAMATIS PERSONAE ───</span>
+    <div class="perso-grid">
+
+      <div class="perso-card card-risto">
+        <svg class="perso-silhouette" width="40" height="60" viewBox="0 0 40 60">
+          <ellipse cx="20" cy="14" rx="10" ry="13" fill="#7b52b9"/>
+          <rect x="6" y="26" width="28" height="26" rx="3" fill="#7b52b9"/>
+          <rect x="2" y="27" width="7" height="20" rx="3" fill="#7b52b9"/>
+          <rect x="31" y="27" width="7" height="20" rx="3" fill="#7b52b9"/>
+        </svg>
+        <div class="perso-pseudo">@ristorante</div>
+        <div class="perso-name">Risto</div>
+        <div class="perso-role">Challenger · Architecte du récit</div>
+        <div class="perso-quote">"Mais irl je vais lui rappeler que discord c'est pas la vraie vie. A coup de patates dans la tête."</div>
+        <div class="confidence-bar">
+          <div class="confidence-label"><span>CONFIANCE PRÉ-MATCH</span><span>95 %</span></div>
+          <div class="bar-track"><div class="bar-fill bar-risto"></div></div>
+        </div>
+      </div>
+
+      <div class="perso-card card-fley">
+        <svg class="perso-silhouette" width="30" height="55" viewBox="0 0 30 55">
+          <ellipse cx="15" cy="10" rx="8" ry="9" fill="#e94560"/>
+          <rect x="5" y="18" width="20" height="24" rx="3" fill="#e94560"/>
+          <rect x="1" y="19" width="5" height="16" rx="2" fill="#e94560"/>
+          <rect x="24" y="19" width="5" height="16" rx="2" fill="#e94560"/>
+        </svg>
+        <div class="perso-pseudo">@fleyou</div>
+        <div class="perso-name">Fley</div>
+        <div class="perso-role">Invitant · Économie de mots</div>
+        <div class="perso-quote">"je me suis dit que Risto devait forcément être obèse après l'avoir entendu"</div>
+        <div class="confidence-bar">
+          <div class="confidence-label"><span>CONFIANCE PRÉ-MATCH</span><span>non pertinent</span></div>
+          <div class="bar-track"><div class="bar-fill bar-fley"></div></div>
+        </div>
+      </div>
+
+      <div class="perso-card card-zoller">
+        <svg class="perso-silhouette" width="35" height="58" viewBox="0 0 35 58">
+          <ellipse cx="17" cy="11" rx="9" ry="10" fill="#f0a500"/>
+          <rect x="5" y="20" width="25" height="26" rx="3" fill="#f0a500"/>
+          <rect x="1" y="21" width="6" height="18" rx="2" fill="#f0a500"/>
+          <rect x="28" y="21" width="6" height="18" rx="2" fill="#f0a500"/>
+        </svg>
+        <div class="perso-pseudo">@zoller</div>
+        <div class="perso-name">Zoller</div>
+        <div class="perso-role">Témoin · Étalon de mesure</div>
+        <div class="perso-quote">"Je serai arbitre et zoller filmera" — ristorante, les yeux dans le passé</div>
+        <div class="zoller-status">TÉMOIN · NIVEAU SUPÉRIEUR AUX DEUX · SILENCE ACTIF</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TIMELINE D3 ═══ -->
+<section class="timeline-section">
+  <div class="container">
+    <h2 class="section-title">Chronologie</h2>
+    <span class="section-tag">─── 20 JUILLET 2025 · 08:00–22:00 ───</span>
+    <svg id="timeline-svg" height="220"></svg>
+  </div>
+</section>
+
+<!-- ═══ PROLOGUE ═══ -->
+<section class="scene-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">La fiction</h2>
+      <span class="section-tag">─── PROLOGUE · MAI–JUILLET 2025 ───</span>
+    </div>
+
+    <!-- SCÈNE 1 -->
+    <div class="scene" style="padding-top:48px;">
+      <div class="scene-carton">Scène 1 · 30 mai 2025 · Soirée · Canal #trombinoscope</div>
+      <h3 class="scene-title">"La promesse"</h3>
+      <div class="prose">
+        <p>Il y a des soirs où le canal devient un ring. Pas à cause de ce qu'on dit — à cause de ce qu'on promet. Ce soir du 30 mai, Risto n'est pas là pour converser. Il est là pour poser une intention dans le béton du texte.</p>
+        <p>La discussion part de quelque chose d'anecdotique. Il y est question d'une IRL — un rassemblement physique, des gens qui se voient enfin hors-écran. Fley dit quelque chose. Exactement quoi, peu importe : Risto l'entend comme une provocation, et la machine s'emballe. Les provocations de Fley sur Discord, Risto les reçoit toujours comme des chèques sans provision. Ce qu'il pense, au fond de lui, postant ce soir depuis son appartement : <em>t'es brave derrière ton clavier.</em></p>
+      </div>
+
+      <div class="discord-risto">
+        <span class="discord-ts">30 mai 2025 · 18:27</span>
+        <span class="discord-author">ristorante</span>Mais irl je vais lui rappeler que discord c'est pas la vraie vie. A coup de patates dans la tête.
+      </div>
+
+      <div class="prose">
+        <p>La formule est délibérément hyperbolique, et il le sait. "Patates dans la tête." Risto est dans ce registre performatif où l'excès est lui-même le message — <em>je surjoue, et mon surjeu est la preuve que je n'ai pas peur de toi.</em> C'est une économie rhétorique précise : plus la menace est grotesque, plus elle affirme la supériorité tranquille de celui qui la profère. On ne menace pas quelqu'un qu'on craint de ce façon-là.</p>
+        <p>Il pose ensuite sa question au groupe, avec le calme de quelqu'un qui n'attend pas vraiment de réponse :</p>
+      </div>
+
+      <div class="discord-risto">
+        <span class="discord-ts">30 mai 2025 · 18:34</span>
+        <span class="discord-author">ristorante</span>Vous voulez que je tabasse fley et lyd de quelle manière à l'irl ?
+      </div>
+
+      <div class="prose">
+        <p>Ce n'est pas une vraie question. C'est une déclaration de programme. Et dans le même fil, quelques minutes plus tard, il répond à une invitation pour la prochaine IRL :</p>
+      </div>
+
+      <div class="discord-risto">
+        <span class="discord-ts">30 mai 2025 · 19:21</span>
+        <span class="discord-author">ristorante</span>j y vais si fley vient pour pouvoir le djoufara
+      </div>
+
+      <div class="prose">
+        <p>La présence de Fley est explicitement la condition de participation de Risto. Il n'y va pas pour voir des amis, pas pour partager un moment. Il y va pour corriger quelque chose que l'écran lui a refusé de corriger. L'IRL n'est pas un espace de rencontre — c'est un tribunal physique où les hiérarchies textuelles seront remises dans le bon ordre.</p>
+        <p>Ce que Risto construit en ce soir de mai, c'est une fiction sur la nature de Fley. Un Fley courageux en ligne, couard en face. Un Fley dont les "bras de zemel" ne peuvent rien faire. Un Fley qui "se dégonfle". Il est en sèche depuis cinq mois. Il a perdu quinze kilogrammes. Il fait du cardio. Il soulève 120 kilos au deadlift. Dans son référentiel — qui est un référentiel de force, de masse, de puissance — cette préparation est une garantie. Il est prêt. Fley ne l'est pas.</p>
+      </div>
+
+      <div class="monologue">
+        Il postait et il sentait la légèreté de qui n'a rien à prouver — du moins c'est ce qu'il se disait. Quelque part dans le train du retour, dans l'écran blanc d'une soirée à rien, il imaginait Fley lire ça et hésiter. Il imaginait le silence de l'autre côté comme une forme de capitulation préventive.
+      </div>
+      <div class="prose">
+        <p>Ce qu'il n'imaginait pas, ce soir-là : un gymnase. Un volant de plumes. Un filet à trois mètres de hauteur qu'il faudrait traverser de bout en bout en sprint. Ce n'est pas son terrain. Il n'y a pas pensé.</p>
+      </div>
+    </div>
+
+    <hr class="scene-div">
+
+    <!-- SCÈNE 2 -->
+    <div class="scene">
+      <div class="scene-carton">Scène 2 · Juin 2025 · Autoportrait · Canal #trombinoscope</div>
+      <h3 class="scene-title">"L'ennemi imaginaire"</h3>
+      <div class="prose">
+        <p>Risto parle beaucoup de lui-même en juin. C'est le propre de quelqu'un qui se prépare : les chiffres deviennent des mots, les mots deviennent des arguments. 84 kilos. Moins quinze depuis cinq mois. Douze heures de sport par semaine. Un programme de force sérieux — poitrine-biceps, dos-triceps, jambes, recommencé. Deadlift à 120. Ces données ne sont pas seulement des informations ; elles sont des preuves. Preuves de sérieux. Preuves de supériorité physique sur quelqu'un qui, dans sa tête, fait du sport "sauf si insulter les gros compte comme tel".</p>
+      </div>
+
+      <div class="discord-risto">
+        <span class="discord-ts">30 mai 2025 · 19:31</span>
+        <span class="discord-author">ristorante</span>je fais genre 10x plus de sport que toi / sauf si tu comptes insulter les gros comme un sport / en tant que phasme ta réserve d air ds les poumons doit etre légère / donc c ptet un sport / zemel de merde
+      </div>
+
+      <div class="prose">
+        <p>Le Fley qu'il s'est construit dans la tête est un <em>phasme</em> — le mot revient. Un insecte bâtonnet. Quelque chose de maigre à l'extrême, d'invisible presque, de fragile par construction. "Zemel" — argot pour quelqu'un de faible, sans masse. "Bras de zemel." Cette taxonomie physique est la fondation de toute sa confiance. Si Fley est un phasme, alors Risto — qui a perdu quinze kilos de gras tout en conservant sa force au sol — le domine par simple présence.</p>
+        <p>En parallèle, côté Fley, un diagnostic posé en mai revient hanter le scénario :</p>
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">18 mai 2025 · 14:15</span>
+        <span class="discord-author">fleyou</span>je me suis dit que Risto devait forcément être obèse après l'avoir entendu
+      </div>
+
+      <div class="prose">
+        <p>Fley n'a pas encore vu Risto. Il l'a <em>entendu</em>. Et depuis ce son de voix, il a conclu quelque chose sur le corps. Ce n'est pas de la cruauté — c'est une lecture. Et quelques lignes plus loin dans juin, sans se placer sur le même terrain sportif, Fley produit son propre doute sur le programme physique de Risto :</p>
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">30 mai 2025 · 19:31</span>
+        <span class="discord-author">fleyou</span>pourquoi ristorante fait genre qu'il a un programme de sport
+      </div>
+
+      <div class="prose">
+        <p>Ce "fait genre" est redoutable. Pas une accusation directe — une question qui suppose la réponse. Un programme de sport n'est pas seulement du chiffre. Il faut aussi savoir <em>quel sport</em>. Et c'est là que la dissonance de Risto est totale : sa préparation est réelle mais mal orientée. La force au sol, le deadlift, la masse — tout cela compte peu sur un terrain de badminton. Le badminton demande de la mobilité latérale, des changements de direction explosifs, la capacité de se baisser pour ramasser un volant, de sprinter puis stopper. C'est un sport de réactivité et d'agilité. À 84 kilos, même après une sèche, avec des genoux qui portent un corps d'homme fort et des épaules habituées à soulever, pas à pivoter — le terrain sera ingrat.</p>
+        <p>Risto n'a pas fait de badminton depuis quinze ans. Il ne le sait pas encore — ou plutôt : il sait qu'il n'en a pas fait, mais il ne pense pas que ça compte. Dans son monde, la force compense tout. Ce monde va rencontrer un filet.</p>
+      </div>
+
+      <div class="monologue">
+        Il se répétait : sport c'est sport. Force, cardio, masse — tout se transfère. Il avait vérifié son programme, il avait ses chiffres, il avait ses preuves. Ce qu'on appelle badminton ne pouvait pas vraiment être un avantage décisif pour un phasme.
+      </div>
+    </div>
+
+    <hr class="scene-div">
+
+    <!-- SCÈNE 3 -->
+    <div class="scene">
+      <div class="scene-carton">Scène 3 · 19 juillet 2025 · Nuit · Rex Club, Paris</div>
+      <h3 class="scene-title">"La veille"</h3>
+      <div class="prose">
+        <p>Ce n'est pas Fley qui prépare un piège. C'est le hasard qui arrange les choses. Le soir du 19 juillet, Fley sort du Lollapalooza. Il rentre sur Paris. Il croise Risto quelque part — dans le fil du canal, dans un bar, les données ne précisent pas le lieu exact — et l'invitation tombe de la façon la plus décontractée possible :</p>
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">19 juillet 2025 · 22:17</span>
+        <span class="discord-author">fleyou</span>tu veux venir demain ?
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">19 juillet 2025 · 22:19</span>
+        <span class="discord-author">fleyou</span>badminton puis restaurant (probablement)
+      </div>
+
+      <div class="prose">
+        <p>Cinq mots pour l'invitation. Cinq mots et une parenthèse de doute sur le restaurant. Pas de mise en scène. Pas de challenge formel. Pas de "viens qu'on règle ça". Fley a réservé ce terrain régulièrement depuis le printemps — c'est lui qui invitait Zoller depuis mai, qui relançait en juin. Le badminton est son activité. Risto va y être reçu comme invité chez quelqu'un d'autre.</p>
+        <p>Dans la nuit du 19 au 20 juillet, quelque chose de symétrique se construit sur les deux rives. Du côté de Fley : rien de particulier. Il rentre d'un festival. Il a fait une soirée. Il a proposé au gars avec qui il chambre depuis des mois de venir faire du sport le lendemain. C'est presque banal.</p>
+        <p>Du côté de Risto, on peut imaginer ce que l'invitation produit. Deux mois qu'il attend ça. Deux mois de "j'y vais si fley vient pour le djoufara". Et voilà que Fley lui-même propose. Pas sur un terrain de Risto — sur le terrain de badminton de Fley, avec Zoller comme tiers. Zoller, dont Risto ne sait pas encore exactement à quel niveau il joue. La variable est inconnue.</p>
+      </div>
+
+      <div class="monologue">
+        Risto a dit oui facilement. Trop facilement peut-être, si quelqu'un avait regardé. Dans le flux des messages de la nuit, entre deux sujets sans rapport, il a confirmé l'heure, puis annoncé des retards probables à cause du RER A. Il dormait en pensant à demain — pas à un match de badminton, mais à un moment de correction. Demain était le jour où le Fley en ligne allait rencontrer la réalité.
+      </div>
+
+      <div class="prose">
+        <p>Ce qu'il ne savait pas encore : Fley ne devient pas quelqu'un d'autre en IRL. La boca ne disparaît pas. Elle s'adapte au medium. Et sur un terrain de badminton, le medium, c'est le volant.</p>
+        <p>Zoller, lui, est le lien invisible entre les deux. C'est lui qui a formellement invité Risto — Fley le confirmera le lendemain : "il a été invité par zoller". Zoller est l'organisateur de fait, le nœud entre deux personnes qui depuis deux mois construisent des récits divergents sur ce que sera leur rencontre. Il observe. Il ne dit rien. Ce silence-là, on apprendra à le connaître.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCÈNE CENTRALE ═══ -->
+<section class="central-section">
+  <div class="container">
+    <h2 class="section-title" style="padding-top:0;">Le gymnase</h2>
+    <span class="section-tag">─── SCÈNE CENTRALE · 20 JUILLET 2025 ───</span>
+
+    <!-- TEMPS 1 -->
+    <div class="temps-separator"><span class="temps-label">TEMPS I · ARRIVÉE · 07:57–09:15</span></div>
+
+    <div class="scene-carton">20 juillet 2025 · Matin · Gymnase, Paris / RER A</div>
+    <h3 class="scene-title">"L'arrivée"</h3>
+
+    <div class="discord-fley">
+      <span class="discord-ts">20 juillet 2025 · 07:57</span>
+      <span class="discord-author">fleyou</span>vous êtes où les tocards
+    </div>
+
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 08:02</span>
+      <span class="discord-author">ristorante</span>J'arrive vers 15 je pense. A cause du problème sur le A.
+    </div>
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 08:14</span>
+      <span class="discord-author">ristorante</span>20 plutôt
+    </div>
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 08:17</span>
+      <span class="discord-author">ristorante</span>Je suis trop gros pour un traon ?? / Train
+    </div>
+
+    <div class="prose">
+      <p>Risto est dans le RER A. Problème sur la ligne — il décale de 15h à 20h en douze minutes. Sa blague sur le train ("je suis trop gros pour un traon") tient de l'autodérision de façade : il s'approprie les vannes avant qu'on puisse les lui faire. C'est un mécanisme de contrôle. Dans les transports, il se construit mentalement la scène à venir. La correction. La remise en ordre. Fley qui se tait en face.</p>
+      <p>Mais le RER arrive. Et quelque chose se passe lors du premier contact physique, avant même de pénétrer dans le gymnase.</p>
+    </div>
+
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 08:56</span>
+      <span class="discord-author">ristorante</span>Bon du coup je viens de croiser fley, il ne pourra plus venir à aucune irl
+    </div>
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 08:56</span>
+      <span class="discord-author">ristorante</span>Je l'ai laissé inerte
+    </div>
+
+    <div class="prose">
+      <p>Ce premier message depuis le gymnase, posté à 08h56, est une déclaration de victoire avant le match. Risto a <em>croisé</em> Fley. Pas joué. Pas affronté. Croisé. Et déjà il "l'a laissé inerte". Déjà il "ne pourra plus venir à aucune irl". Le présent physique est immédiatement converti en narration textuelle dominante. Il ne résiste pas à l'envie de poster. Il a attendu ça depuis deux mois.</p>
+      <p>Ce que cette rapidité révèle : ce n'est pas une victoire, c'est un soulagement. Fley était là, physiquement. Et Risto avait besoin que le canal le sache avant même que quoi que ce soit ne se joue.</p>
+      <p>Fley lit ça. Et répond cinq minutes plus tard depuis le même gymnase, avec exactement le même registre qu'en ligne :</p>
+    </div>
+
+    <div class="discord-fley">
+      <span class="discord-ts">20 juillet 2025 · 09:01</span>
+      <span class="discord-author">fleyou</span>continue de courir gros porc / tu toucheras peut être un volant
+    </div>
+
+    <div class="prose">
+      <p>Cinq minutes. Pas une heure, pas un silence intimidé. Cinq minutes et la même voix, exactement. Risto avait prévu un Fley qui se dégonfle en face. Ce qu'il trouve, c'est un Fley qui était déjà lui-même. La boca n'était pas une armure textuelle. Elle était simplement Fley. La "correction" qu'il avait imaginée pendant deux mois butait sur un fait simple : l'autre n'avait pas peur.</p>
+      <p>À 09h08, Risto tente un recadrage :</p>
+    </div>
+
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 09:08</span>
+      <span class="discord-author">ristorante</span>Jure le fantôme de fley / Le vrai n'aurait jamais parlé comme ça vu comment je l'ai fait bégayer irl
+    </div>
+
+    <div class="prose">
+      <p>"Le fantôme de fley." La stratégie du dédoublement : ce Fley qui répond avec aplomb ne peut pas être le vrai, parce que le vrai a "bégayé" en face. C'est la première reconstruction — et elle arrive avant le match. Risto a besoin de séparer le Fley textuel du Fley physique pour maintenir sa narration. Ce n'est pas un bon signe. On ne nie l'identité de quelqu'un que quand cette identité résiste.</p>
+    </div>
+
+    <!-- TEMPS 2 -->
+    <div class="temps-separator"><span class="temps-label">TEMPS II · LE MATCH · ~09:15–12:00</span></div>
+
+    <h3 class="scene-title">"Le match"</h3>
+
+    <div class="prose">
+      <p>Les messages s'arrêtent entre 09h15 et 12h02. Deux heures quarante-cinq de silence sur le canal. C'est le match. Pas de live-posting, pas de commentaires en cours — ce qui, en soi, dit quelque chose. Fley avait l'habitude de jouer avec Zoller. Zoller connaît le terrain. Risto arrive, à 84 kilos, sans avoir joué depuis quinze ans selon ses propres dires ultérieurs.</p>
+      <p>Ce qui s'est passé dans ce gymnase, on peut le reconstituer depuis les messages de l'après-midi avec une précision chirurgicale. Premièrement : Risto ne peut pas se baisser pour ramasser les volants.</p>
+    </div>
+
+    <div class="discord-fley">
+      <span class="discord-ts">20 juillet 2025 · 12:18</span>
+      <span class="discord-author">fleyou</span>tu pouvais pas te baisser pour ramasser les volants / tes genoux tenaient pas le coup
+    </div>
+
+    <div class="prose">
+      <p>Ce n'est pas une insulte. C'est un constat anatomique. Le badminton se joue bas — en permanence. Chaque volant qui tombe demande un squat rapide, un pivot, une récupération explosive. Les genoux d'un homme de 84 kilos qui n'a pas pratiqué depuis quinze ans portent un poids que la salle de musculation n'avait pas entraîné à gérer dans ce registre de mouvement. Fley l'a regardé faire. Il a vu les genoux. Il a vu la pause qui suit chaque échange.</p>
+      <p>Deuxièmement : Risto transpire. Massivement. Fley le notera à 18h42, d'un seul mot :</p>
+    </div>
+
+    <div class="discord-fley">
+      <span class="discord-ts">20 juillet 2025 · 18:42</span>
+      <span class="discord-author">fleyou</span>tu as SUE aujourd'hui
+    </div>
+
+    <div class="prose">
+      <p>Troisièmement — et c'est le moment pivot de toute la journée — il y a un instant précis pendant le match où Risto regarde Fley jouer contre Zoller. Ce n'est pas son tour. Il observe depuis le bord. Et il voit quelque chose qu'il n'avait pas anticipé : Fley joue à un autre niveau contre Zoller. Les échanges sont différents. Plus rapides. Plus construits. Et dans cet instant de voyeurisme sportif, quelque chose se fissure dans la narration de Risto. Il s'approche de Fley et pose la question :</p>
+    </div>
+
+    <div class="citation-pivot">
+      <div class="text">"risto après s'être fait massacré au badminton et en me regardant jouer contre Zoller : 't-t-t-tu retenais tes coups avant ..?'"</div>
+      <div class="meta">— fleyou · 20 juillet 2025 · 12:30:55 · CITATION PIVOT</div>
+    </div>
+
+    <div class="prose">
+      <p>Fley reproduit cette question avec un bégaiement intentionnel — "t-t-t-tu". Ce n'est pas du mimétisme malveillant. C'est la capture d'un état. Risto a vu Fley jouer à pleine puissance contre Zoller, a compris la différence de niveau que ça impliquait, et a eu besoin d'une explication qui lui permettrait de réinterpréter sa défaite. "Il se retenait." Si c'est vrai, alors sa défaite n'est pas une défaite — c'est un sacrifice consenti par l'adversaire. Si Fley se retenait contre lui, alors la vraie compétition n'a pas eu lieu.</p>
+      <p>Mais Fley n'a pas sauvegardé cette question pour lui. Il l'a postée. Il l'a transformée en texte, avec le bégaiement, pour le canal. Ce faisant, il documente le moment exact où la fiction de Risto s'est rencontrée avec son propre terrain.</p>
+      <p>Zoller, lui, observe tout ça. Il ne commente pas. Dans les deux heures quarante-cinq de silence sur le canal, il joue. Il gagne contre Fley aussi — c'est lui le plus fort des trois, et les deux protagonistes l'admettront à leur façon. Zoller est la mesure étalon de la journée. Et cette mesure, en restant silencieuse, empêche toute manipulation des données.</p>
+    </div>
+
+    <!-- TEMPS 3 -->
+    <div class="temps-separator"><span class="temps-label">TEMPS III · PING-PONG & DÉJEUNER · 12:00–15:00</span></div>
+
+    <h3 class="scene-title">"L'opportunité du ping-pong"</h3>
+
+    <div class="prose">
+      <p>Après le badminton, il y a du ping-pong. Et là, quelque chose d'inattendu se produit : Zoller bat Fley 11/0 11/0. Le score complet. Fley ne marque rien. Et Risto, qui n'attendait que ça — un contre-point, un rééquilibrage — s'en saisit immédiatement.</p>
+    </div>
+
+    <div class="discord-risto">
+      <span class="discord-ts">20 juillet 2025 · 12:18</span>
+      <span class="discord-author">ristorante</span>11/0 11/0 vs zoller au ping / Naaaannnnnnnnn / &lt;@Zoller&gt; tu n'avais pas à faire ça
+    </div>
+
+    <div class="prose">
+      <p>Le "tu n'avais pas à faire ça" adressé à Zoller est ambigu : c'est à la fois une plainte feinte (Zoller l'a aussi battu, lui) et un remerciement implicite pour avoir fourni un contre-récit utilisable. Risto a besoin de ce 11/0 11/0 comme levier. Il va s'en servir tout l'après-midi pour tenter de rééquilibrer la journée.</p>
+      <p>Mais Fley désamorce immédiatement l'argument :</p>
+    </div>
+
+    <div class="discord-fley">
+      <span class="discord-ts">20 juillet 2025 · 12:21</span>
+      <span class="discord-author">fleyou</span>pourquoi ton corps était devenu une piscine après le badminton / alors qu'au ping pong, qualifié de sport par certains, pas une seule personne n'a eu 1 seule goutte de sueur ?
+    </div>
+
+    <div class="prose">
+      <p>La réplique est redoutable de précision. Elle ne nie pas le 11/0. Elle conteste la valeur du contre-argument en attaquant la nature du sport lui-même : si le ping-pong ne fait pas transpirer, il ne mesure pas la même chose que le badminton. Et si le badminton a transformé Risto en "piscine", c'est que le badminton a mesuré quelque chose que le ping-pong ne mesure pas. La victoire de Zoller au ping-pong est réelle mais comparativement insignifiante.</p>
+      <p>Le déjeuner qui suit — au restaurant — est l'objet d'un désaccord narratif. Selon Fley, Risto est venu au restaurant avec eux. Selon Risto, Fley a "squatté" un déjeuner entre Risto et Zoller. Cette divergence n'est pas anecdotique : elle définit qui était l'invité et qui était l'hôte. Et dans cette question d'hospitalité se loge la question centrale de toute la journée — qui possède ce terrain ?</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ÉPILOGUE ═══ -->
+<section class="scene-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">La reconstruction</h2>
+      <span class="section-tag">─── ÉPILOGUE · 20/21 JUILLET 2025 ───</span>
+    </div>
+
+    <!-- SCÈNE 5 -->
+    <div class="scene" style="padding-top:48px;">
+      <div class="scene-carton">Scène 5 · 20 juillet · 12:00–15:00 · Canal #trombinoscope</div>
+      <h3 class="scene-title">"Le premier récit — les huit mécanismes"</h3>
+
+      <div class="prose">
+        <p>Dans les heures qui suivent le match, Risto construit. Ce n'est pas de la mauvaise foi simple — c'est une architecture. Il a huit outils, et il les utilisera tous, dans l'ordre, avec une régularité qui permet de les nommer.</p>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 1 · 08:56–09:08</div>
+        <div class="mecanisme-title">DÉNI INITIAL</div>
+        <div class="mecanisme-prose">
+          Avant même la fin du match, dès le premier contact physique, Risto pose le cadre : "je l'ai laissé inerte", "il ne pourra plus venir à aucune irl". Il construit la victoire avant qu'elle soit jouée. Ce mécanisme est prophylactique — il prévient le récit de défaite en le précédant d'une affirmation de victoire.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 2 · 12:22</div>
+        <div class="mecanisme-title">DÉNI DE TRANSPIRATION</div>
+        <div class="mecanisme-prose">
+          <p style="margin-bottom:8px">Fley dit "tu as SUE". Risto répond :</p>
+          <div class="discord-risto" style="margin:8px 0 0 0">
+            <span class="discord-ts">20 juillet 2025 · 12:22</span>
+            <span class="discord-author">ristorante</span>J'ai pas transpiré du tout tu mens
+          </div>
+          Risto nie un fait physiologique observable. Le déni porte sur du concret. C'est le mécanisme le plus fragile — et le plus révélateur de la pression que la journée a exercée.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 3 · 12:23</div>
+        <div class="mecanisme-title">CONCESSION PARTIELLE + ATTÉNUATION IMMÉDIATE</div>
+        <div class="mecanisme-prose">
+          <div class="discord-risto" style="margin:8px 0">
+            <span class="discord-ts">20 juillet 2025 · 12:23</span>
+            <span class="discord-author">ristorante</span>Il m'a massacré aussi &lt;emoji&gt; / Mais bon j'arrivais à mettre 4-5 points / (et contre fley il s'est retenu btw)
+          </div>
+          La structure est précise : <em>concession</em> ("il m'a massacré") + <em>minimisation</em> ("j'arrivais à mettre 4-5 points") + <em>délégitimation</em> ("il s'est retenu"). La parenthèse est particulièrement révélatrice : les parenthèses chez Risto signalent la conscience de la fragilité de l'argument. Si il était sûr de lui, ce serait en majuscules.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 4 · 12:28</div>
+        <div class="mecanisme-title">INVERSION DE RÔLE — MAGNANIMITÉ</div>
+        <div class="mecanisme-prose">
+          <div class="discord-risto" style="margin:8px 0">
+            <span class="discord-ts">20 juillet 2025 · 12:28</span>
+            <span class="discord-author">ristorante</span>Je voulais te laisser te reposer parce que ça se voyait que tu en avais besoin
+          </div>
+          Risto se représente comme celui qui contrôlait le rythme du match par bienveillance. Si Fley s'est "reposé", c'est que Risto a accordé ces pauses. Ce mécanisme transforme la pause de l'adversaire en cadeau de l'oppresseur. Il est beau dans sa sophistication.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 5 · 19:19</div>
+        <div class="mecanisme-title">DÉLÉGITIMATION PAR L'INEXPÉRIENCE</div>
+        <div class="mecanisme-prose">
+          <div class="discord-risto" style="margin:8px 0">
+            <span class="discord-ts">20 juillet 2025 · 19:19</span>
+            <span class="discord-author">ristorante</span>Bravo tu as battu au badminton qqn qui n'avait pas fait de badminton depuis 15 ans
+          </div>
+          La victoire est annulée par le différentiel d'expérience déclaré. C'est une concession paradoxale : en admettant n'avoir pas joué depuis 15 ans, Risto sauve sa face — mais confirme aussi la défaite qu'il niait au mécanisme 1.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 6 · 19:19</div>
+        <div class="mecanisme-title">DÉPLACEMENT DE TERRAIN</div>
+        <div class="mecanisme-prose">
+          <div class="discord-risto" style="margin:8px 0">
+            <span class="discord-ts">20 juillet 2025 · 19:19</span>
+            <span class="discord-author">ristorante</span>Je te mog dans absolument tout le reste y compris l'escalade
+          </div>
+          "Absolument tout le reste." Le badminton est explicitement soustrait de la liste. La défaite est acceptée en creux, mais le terrain est élargi à l'infini pour en diluer l'importance.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 7 · 20:02</div>
+        <div class="mecanisme-title">PROMESSE DE REVANCHE AVEC PROJECTION TEMPORELLE</div>
+        <div class="mecanisme-prose">
+          <div class="discord-risto" style="margin:8px 0">
+            <span class="discord-ts">20 juillet 2025 · 20:02</span>
+            <span class="discord-author">ristorante</span>Encore 3-4 séances de bad et je pulvérise fley / Après c'est un peu de la triche, il arrive même pas au filet
+          </div>
+          La revanche est conditionnée à un entraînement futur indéfini. Ce faisant, la défaite devient logique (manque d'entraînement) et la victoire future certaine. Le mécanisme est d'une élégance comptable.
+        </div>
+      </div>
+
+      <div class="mecanisme">
+        <div class="mecanisme-num">MÉCANISME 8 · 21:08</div>
+        <div class="mecanisme-title">RÉÉCRITURE NARRATIVE COMPLÈTE</div>
+        <div class="mecanisme-prose">
+          La journée est réécrite à la source. Voir scène 6.
+        </div>
+      </div>
+    </div>
+
+    <hr class="scene-div">
+
+    <!-- SCÈNE 6 -->
+    <div class="scene">
+      <div class="scene-carton">Scène 6 · 20 juillet · 18:42–22:10 · Canal #trombinoscope</div>
+      <h3 class="scene-title">"La soirée — les deux récits"</h3>
+
+      <div class="prose">
+        <p>Fley a disparu du canal entre 15h57 et 18h42. Deux heures quarante-cinq de silence pendant lesquelles Risto a continué de construire. Puis Fley revient avec une seule ligne :</p>
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">20 juillet 2025 · 18:42</span>
+        <span class="discord-author">fleyou</span>tu as SUE aujourd'hui
+      </div>
+
+      <div class="prose">
+        <p>Pas de majuscules. Pas de point d'exclamation. Pas de liste des coups gagnants, pas de score récapitulatif. Juste le fait physiologique. Tu as transpiré. C'est attesté. C'est là. La compression de Fley est totale : là où Risto a besoin de huit mécanismes pour habiter sa défaite, Fley n'a besoin que d'un mot pour la confirmer.</p>
+        <p>Ce qui suit, dans les deux heures de la soirée, est la mise en parallèle de deux récits qui prétendent chacun décrire la même journée et n'ont aucun point commun.</p>
+      </div>
+
+      <div class="recits-grid">
+        <div class="recit-risto">
+          <div class="recit-header">VERSION RISTO · 21:08</div>
+          <div class="recit-prose">
+            <div class="discord-risto" style="margin:0 0 16px 0; background:transparent; border-left-color:#533483">
+              <span class="discord-author">ristorante</span>"L'histoire c'est que j'ai vu mon ami zoller mais un gnome métrobisexuel s'est incrusté."
+            </div>
+            <div class="discord-risto" style="margin:0 0 16px 0; background:transparent; border-left-color:#533483">
+              <span class="discord-author">ristorante</span>"Zoller lui a collé un 11/0 11/0 au ping pour essayer de le faire fuir mais il est venu squatter au restau avec nous malheureusement."
+            </div>
+            <div class="discord-risto" style="margin:0; background:transparent; border-left-color:#533483">
+              <span class="discord-author">ristorante</span>"Vu que je l'ai fracassé il a carrément oublié qu'il s'est fait malaxer au ping. J'aurais dû cogner moins fort my bad."
+            </div>
+            <p style="margin-top:16px; font-size:13px; color:rgba(153,153,187,0.7); font-style:italic;">
+              Fley est l'intrus. Zoller est l'hôte. La journée est une rencontre Zoller/Risto parasitée par un "gnome métrobisexuel". La défaite au badminton est effacée sous une victoire par K.O. ("fracassé"), et la défaite au ping-pong de Fley devient la preuve d'une humiliation que la "fracasse" aurait brouillée dans sa mémoire.
+            </p>
+          </div>
+        </div>
+
+        <div class="recit-fley">
+          <div class="recit-header">VERSION FLEY · 21:03</div>
+          <div class="recit-prose">
+            <div class="discord-fley" style="margin:0 0 16px 0; background:transparent; border-left-color:#e94560">
+              <span class="discord-author">fleyou</span>"j'ai à nouveau vu mon ami Zoller pour partager un doux repas ainsi qu'un match endiablé de badminton."
+            </div>
+            <div class="discord-fley" style="margin:0 0 16px 0; background:transparent; border-left-color:#e94560">
+              <span class="discord-author">fleyou</span>"et on a croisé un sdf roux obèse sur le chemin"
+            </div>
+            <div class="discord-fley" style="margin:0; background:transparent; border-left-color:#e94560">
+              <span class="discord-author">fleyou</span>"au moins j'ai pu faire courir ce gros porc sur l'ensemble du terrain de badminton. ça m'a un peu consolé"
+            </div>
+            <p style="margin-top:16px; font-size:13px; color:rgba(153,153,187,0.7); font-style:italic;">
+              Risto est l'intrus. Zoller est l'hôte. La journée est une rencontre Zoller/Fley parasitée par un "sdf roux obèse". La "consolation" est délicieuse dans son ambiguïté : consolé de quoi ? Du 11/0 11/0 au ping ? Ce "un peu consolé" est la seule trace d'une concession dans le récit de Fley.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top:32px;">
+        <p>Les deux récits sont structurellement identiques et substantiellement inversés. Dans les deux versions : Zoller est l'ami légitime, l'autre est l'intrus. Dans les deux versions : la journée se conclut par une forme de victoire personnelle. Dans les deux versions : Zoller ne parle pas, ne valide pas, ne choisit pas de camp. Son silence permet à chacun d'écrire la journée à sa façon.</p>
+        <p>C'est la mécanique de la fiction documentaire : deux personnes ont vécu la même journée. Aucune des deux ne ment vraiment. Elles sélectionnent. Et ce qu'on sélectionne dit plus sur soi que sur les faits.</p>
+      </div>
+    </div>
+
+    <hr class="scene-div">
+
+    <!-- SCÈNE 7 -->
+    <div class="scene">
+      <div class="scene-carton">Scène 7 · 21 juillet 2025 · 08:23–16:51 · Canal #trombinoscope</div>
+      <h3 class="scene-title">"Le lendemain matin — la défaite absorbée"</h3>
+
+      <div class="discord-risto">
+        <span class="discord-ts">21 juillet 2025 · 08:23</span>
+        <span class="discord-author">ristorante</span>J'observe l'ennemi de près pour mieux l'abattre. T'es dispo irl soon ?
+      </div>
+
+      <div class="prose">
+        <p>La nuit a passé. Et avec elle, quelque chose s'est réorganisé. "J'observe l'ennemi de près pour mieux l'abattre." Cette phrase est la dernière étape — le mécanisme d'absorption. La journée du 20 juillet n'est plus une défaite : elle est devenue du renseignement. Risto s'est approché, il a vu comment Fley jouait, et maintenant il sait. La défaite est réintégrée comme phase utile d'une stratégie à plus long terme.</p>
+        <p>Ce qui frappe dans cette reformulation, c'est sa sincérité partielle. "J'observe l'ennemi de près" — c'est une façon de dire <em>j'ai vu quelque chose hier que je n'avais pas prévu.</em> C'est une admission déguisée. La journée a produit de l'information. Risto en a besoin pour la prochaine fois. Et la prochaine fois, il la redemande immédiatement : "T'es dispo irl soon ?"</p>
+        <p>Plus tard dans la matinée, il concède quelque chose sur la taille :</p>
+      </div>
+
+      <div class="discord-risto">
+        <span class="discord-ts">21 juillet 2025 · 10:29</span>
+        <span class="discord-author">ristorante</span>C'est vrai que la taille au bad ça a l'air op (comme dans 90% des sports) / Pourtant je te paz quand même / cho
+      </div>
+
+      <div class="prose">
+        <p>La concession sur la taille est enveloppée de généralisation ("90% des sports") et immédiatement neutralisée par "Pourtant je te paz quand même". Et le "cho" final — abréviation d'un mot familier d'insistance — est le sceau d'une conviction maintenue malgré l'argument qu'il vient lui-même d'admettre. Cette structure est le résumé de la rhétorique de Risto post-20 juillet : <em>j'admets le fait, mais pas la conclusion.</em></p>
+        <p>Fley, de son côté, répond depuis sa propre conversation :</p>
+      </div>
+
+      <div class="discord-fley">
+        <span class="discord-ts">21 juillet 2025 · 10:33</span>
+        <span class="discord-author">fleyou</span>il peut arrêter de mentionner mon pseudo le débile ou quoi
+      </div>
+
+      <div class="prose">
+        <p>Ce n'est pas adressé à Risto. C'est dit à quelqu'un d'autre, probablement Zoller ou un autre membre du groupe. "Le débile." La distance est totale. Fley ne reconstruit rien — il continue. La journée du 20 juillet a eu lieu, elle a confirmé ce qu'il pensait depuis le 18 mai, et maintenant il passe à autre chose. La symétrie avec Risto est frappante : là où Risto a besoin d'absorber, de transformer, de projeter — Fley a juste besoin que ça s'arrête.</p>
+        <p>La dernière ligne de Risto sur ces deux journées tombe le 21 juillet à 16h51, en réponse à une photo de quelqu'un d'autre :</p>
+      </div>
+
+      <blockquote style="background:var(--pivot-bg); border-left:3px solid var(--gris); padding:24px 28px; margin:24px 0; max-width:500px; font-family:'DM Serif Display',serif; font-style:italic; font-size:20px; color:var(--gris);">
+        "Un peu obèse mais bon"
+      </blockquote>
+
+      <div class="prose">
+        <p>Il parle de quelqu'un d'autre. La phrase flotte, sans ancrage explicite dans la journée du 20. Mais dans ce canal, dans ce fil, après ces trente-six heures — "un peu obèse mais bon" dit tout sur l'état dans lequel Risto termine cette séquence. Pas de rage. Pas de douleur. Une resignature de catégorie. Il évalue les corps des autres depuis la même grille qu'avant. La grille n'a pas changé. Ce qui a peut-être changé, c'est qu'il sait maintenant que la grille ne s'applique pas à tous les terrains.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GRAPHIQUE D3 — CONFIANCE DE RISTO ═══ -->
+<section class="graph-section">
+  <div class="container">
+    <h2 class="section-title">Indice de confiance — Risto</h2>
+    <span class="section-tag">─── COURBE RECONSTRUCTIVE · 08:00–22:00 ───</span>
+    <svg id="confidence-chart" height="280"></svg>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <p class="footer-main">Basé sur 2 411 messages Discord réels — mai–juillet 2025 · canal #trombinoscope</p>
+    <div class="footer-stats">
+      ristorante &nbsp;·&nbsp; 784 messages &nbsp;·&nbsp; mai–juillet 2025<br>
+      fleyou &nbsp;·&nbsp; 1 627 messages &nbsp;·&nbsp; mai–juillet 2025<br>
+      zoller &nbsp;·&nbsp; 0 messages dans ce fil · présent dans tous les récits
+    </div>
+    <p class="footer-caveat">Fiction documentaire — les citations sont intégrales depuis les échanges réels · narration et reconstitution sont fictionnelles</p>
+  </div>
+</footer>
+
+<script>
+// ─── TIMELINE D3 ───
+(function() {
+  const svg = d3.select('#timeline-svg');
+  const container = svg.node().parentElement;
+  const W = container.clientWidth || 1000;
+  const H = 220;
+  svg.attr('viewBox', `0 0 ${W} ${H}`);
+
+  const margin = { left: 40, right: 40, top: 60, bottom: 40 };
+  const innerW = W - margin.left - margin.right;
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const timeScale = d3.scaleLinear().domain([8, 22]).range([0, innerW]);
+
+  // axis
+  g.append('line')
+    .attr('x1', 0).attr('y1', 50).attr('x2', innerW).attr('y2', 50)
+    .attr('stroke', 'rgba(83,52,131,0.4)').attr('stroke-width', 1.5);
+
+  // hour ticks
+  for (let h = 8; h <= 22; h += 2) {
+    const x = timeScale(h);
+    g.append('line').attr('x1', x).attr('y1', 45).attr('x2', x).attr('y2', 55)
+      .attr('stroke', 'rgba(83,52,131,0.4)').attr('stroke-width', 1);
+    g.append('text').attr('x', x).attr('y', 70)
+      .attr('text-anchor', 'middle').attr('fill', '#5555aa')
+      .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 10)
+      .text(h + 'h');
+  }
+
+  // silence zone
+  const silStart = timeScale(15 + 57/60);
+  const silEnd = timeScale(18 + 42/60);
+  g.append('rect')
+    .attr('x', silStart).attr('y', 10).attr('width', silEnd - silStart).attr('height', 60)
+    .attr('fill', 'rgba(153,153,187,0.06)').attr('stroke', 'rgba(153,153,187,0.15)')
+    .attr('stroke-width', 1).attr('stroke-dasharray', '4,3');
+  g.append('text').attr('x', (silStart + silEnd)/2).attr('y', 7)
+    .attr('text-anchor', 'middle').attr('fill', '#5555aa')
+    .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+    .attr('letter-spacing', '0.1em').text('↑ SILENCE DE FLEY ↑');
+
+  const events = [
+    { t: 8 + 56/60, label: '"inerte"', author: 'risto', y: 30 },
+    { t: 9 + 1/60, label: '"gros porc"', author: 'fley', y: 70 },
+    { t: 12 + 18/60, label: '"genoux"', author: 'fley', y: 70 },
+    { t: 12 + 30/60, label: '"t-t-t-tu"', author: 'pivot', y: 30 },
+    { t: 18 + 42/60, label: '"SUE"', author: 'fley', y: 70 },
+    { t: 21 + 8/60, label: '"gnome"', author: 'risto', y: 30 },
+    { t: 21 + 3/60, label: '"sdf roux"', author: 'fley', y: 70 },
+  ];
+
+  const colorMap = { risto: '#7b52b9', fley: '#e94560', pivot: '#f0a500' };
+
+  events.forEach(e => {
+    const x = timeScale(e.t);
+    const col = colorMap[e.author];
+    const isBottom = e.y > 50;
+    const dotY = 50;
+    const labelY = isBottom ? dotY + 24 : dotY - 24;
+
+    g.append('line').attr('x1', x).attr('y1', dotY + (isBottom ? 4 : -4))
+      .attr('x2', x).attr('y2', labelY + (isBottom ? -12 : 12))
+      .attr('stroke', col).attr('stroke-width', 1).attr('stroke-dasharray', '3,2').attr('opacity', 0.6);
+
+    g.append('circle').attr('cx', x).attr('cy', dotY).attr('r', 5)
+      .attr('fill', col).attr('opacity', 0.9);
+
+    g.append('text').attr('x', x).attr('y', labelY)
+      .attr('text-anchor', 'middle').attr('fill', col)
+      .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+      .attr('font-weight', e.author === 'pivot' ? 700 : 400)
+      .text(e.label);
+  });
+
+  // legend
+  const leg = svg.append('g').attr('transform', `translate(${margin.left}, 10)`);
+  [['Risto','#7b52b9'], ['Fley','#e94560'], ['Pivot','#f0a500']].forEach(([name, col], i) => {
+    const lx = i * 100;
+    leg.append('circle').attr('cx', lx + 6).attr('cy', 7).attr('r', 4).attr('fill', col);
+    leg.append('text').attr('x', lx + 16).attr('y', 11)
+      .attr('fill', col).attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 10)
+      .text(name);
+  });
+})();
+
+// ─── CONFIDENCE CHART D3 ───
+(function() {
+  const svg = d3.select('#confidence-chart');
+  const container = svg.node().parentElement;
+  const W = container.clientWidth || 1000;
+  const H = 280;
+  svg.attr('viewBox', `0 0 ${W} ${H}`);
+
+  const margin = { left: 55, right: 40, top: 30, bottom: 50 };
+  const innerW = W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Data points [hour, confidence]
+  const data = [
+    [8.0, 90],
+    [8.93, 100],  // "je l'ai laissé inerte" 08:56
+    [9.02, 96],   // fley répond normalement
+    [12.3, 72],   // les messages post-match commencent
+    [12.5, 60],   // citation pivot t-t-t-tu
+    [12.56, 55],  // concession "il m'a massacré"
+    [15.0, 62],   // rémission narrative
+    [19.0, 70],   // soirée, discours épiques
+    [19.33, 65],  // "bravo tu as battu qqn qui n'a pas joué depuis 15 ans"
+    [20.04, 68],  // "encore 3-4 séances"
+    [21.15, 75],  // réécriture complète
+    [22.0, 72],
+  ];
+
+  const xScale = d3.scaleLinear().domain([8, 22]).range([0, innerW]);
+  const yScale = d3.scaleLinear().domain([40, 105]).range([innerH, 0]);
+
+  // Grid lines
+  [50, 60, 70, 80, 90, 100].forEach(v => {
+    g.append('line').attr('x1', 0).attr('y1', yScale(v)).attr('x2', innerW).attr('y2', yScale(v))
+      .attr('stroke', 'rgba(83,52,131,0.12)').attr('stroke-width', 1);
+    g.append('text').attr('x', -8).attr('y', yScale(v) + 4)
+      .attr('text-anchor', 'end').attr('fill', '#5555aa')
+      .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+      .text(v);
+  });
+
+  // Axes
+  g.append('line').attr('x1', 0).attr('y1', innerH).attr('x2', innerW).attr('y2', innerH)
+    .attr('stroke', 'rgba(83,52,131,0.3)').attr('stroke-width', 1);
+  g.append('line').attr('x1', 0).attr('y1', 0).attr('x2', 0).attr('y2', innerH)
+    .attr('stroke', 'rgba(83,52,131,0.3)').attr('stroke-width', 1);
+
+  for (let h = 8; h <= 22; h += 2) {
+    const x = xScale(h);
+    g.append('text').attr('x', x).attr('y', innerH + 18)
+      .attr('text-anchor', 'middle').attr('fill', '#5555aa')
+      .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+      .text(h + 'h');
+  }
+
+  // Gradient def
+  const defs = svg.append('defs');
+  const grad = defs.append('linearGradient').attr('id', 'conf-grad')
+    .attr('gradientUnits', 'userSpaceOnUse')
+    .attr('x1', 0).attr('y1', yScale(100)).attr('x2', 0).attr('y2', yScale(40));
+  grad.append('stop').attr('offset', '0%').attr('stop-color', '#7b52b9');
+  grad.append('stop').attr('offset', '100%').attr('stop-color', '#e94560');
+
+  // Area fill
+  const area = d3.area()
+    .x(d => xScale(d[0]))
+    .y0(innerH)
+    .y1(d => yScale(d[1]))
+    .curve(d3.curveCatmullRom);
+
+  g.append('path').datum(data).attr('d', area)
+    .attr('fill', 'url(#conf-grad)').attr('opacity', 0.15);
+
+  // Line
+  const line = d3.line()
+    .x(d => xScale(d[0]))
+    .y(d => yScale(d[1]))
+    .curve(d3.curveCatmullRom);
+
+  g.append('path').datum(data).attr('d', line)
+    .attr('fill', 'none').attr('stroke', 'url(#conf-grad)').attr('stroke-width', 2.5);
+
+  // Annotation points
+  const annotations = [
+    { t: 8.93, v: 100, label: '"inerte"', side: 'top' },
+    { t: 12.5, v: 60, label: '"t-t-t-tu"', side: 'bottom', gold: true },
+    { t: 19.33, v: 65, label: '"15 ans"', side: 'bottom' },
+    { t: 21.15, v: 75, label: 'réécriture', side: 'top' },
+  ];
+
+  annotations.forEach(a => {
+    const x = xScale(a.t);
+    const y = yScale(a.v);
+    const col = a.gold ? '#f0a500' : '#7b52b9';
+
+    g.append('circle').attr('cx', x).attr('cy', y).attr('r', 4)
+      .attr('fill', col).attr('stroke', 'var(--bg)').attr('stroke-width', 2);
+
+    const labelY = a.side === 'top' ? y - 16 : y + 22;
+    g.append('text').attr('x', x).attr('y', labelY)
+      .attr('text-anchor', 'middle').attr('fill', col)
+      .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+      .text(a.label);
+  });
+
+  // Y label
+  svg.append('text')
+    .attr('transform', `translate(12, ${margin.top + innerH / 2}) rotate(-90)`)
+    .attr('text-anchor', 'middle').attr('fill', '#5555aa')
+    .attr('font-family', 'JetBrains Mono, monospace').attr('font-size', 9)
+    .attr('letter-spacing', '0.1em')
+    .text('CONFIANCE (estimée)');
+})();
+</script>
+
+</body>
+</html>
