@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Discord — Ristorante | #trombinoscope</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --bg3: #0f3460;
+    --purple: #533483;
+    --purple-light: #7b52b8;
+    --red: #e94560;
+    --red-light: #ff6b81;
+    --text: #e0e0e0;
+    --text-muted: #9a9ab0;
+    --card-bg: #1e1e3a;
+    --card-border: #2e2e5a;
+    --accent: #f5a623;
+    --green: #4caf82;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 50%, #1a0a2e 100%);
+    border-bottom: 2px solid var(--purple);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(83,52,131,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: 5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(233,69,96,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .server-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .server-tag span { color: var(--red); }
+  .pseudo {
+    font-size: 52px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff 0%, var(--purple-light) 50%, var(--red-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+  .sub-pseudo {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .sub-pseudo strong { color: var(--accent); }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .badge-purple { background: rgba(83,52,131,0.3); border: 1px solid var(--purple); color: #c5a8ff; }
+  .badge-red { background: rgba(233,69,96,0.2); border: 1px solid var(--red); color: #ff8fa3; }
+  .badge-green { background: rgba(76,175,130,0.2); border: 1px solid var(--green); color: #7fe8b6; }
+  .badge-amber { background: rgba(245,166,35,0.2); border: 1px solid var(--accent); color: #ffd080; }
+
+  /* ===== LAYOUT ===== */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--purple-light);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== GRID ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+  .grid-full { margin-bottom: 32px; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px 28px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    background: var(--red);
+    border-radius: 2px;
+  }
+
+  /* ===== CHART BARS ===== */
+  .hour-chart { display: flex; align-items: flex-end; height: 80px; gap: 3px; }
+  .hour-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+  .hour-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: opacity 0.2s;
+    cursor: default;
+    min-height: 2px;
+  }
+  .hour-bar:hover { opacity: 0.8; }
+  .hour-label { font-size: 8px; color: var(--text-muted); margin-top: 4px; }
+  .chart-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 8px; text-align: center; }
+
+  /* ===== TOPICS BARS ===== */
+  .topic-row { margin-bottom: 12px; }
+  .topic-label { font-size: 13px; color: var(--text); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .topic-label span { color: var(--text-muted); font-size: 11px; }
+  .progress-track { background: rgba(255,255,255,0.06); border-radius: 6px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 6px; }
+
+  /* ===== SIGNATURES ===== */
+  .sig-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sig-chip {
+    background: rgba(83,52,131,0.2);
+    border: 1px solid rgba(83,52,131,0.5);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 13px;
+    color: #d0b8ff;
+    font-family: monospace;
+  }
+  .sig-count { color: var(--text-muted); font-size: 11px; margin-left: 4px; }
+
+  /* ===== QUOTES ===== */
+  .quote-card {
+    background: linear-gradient(135deg, rgba(83,52,131,0.12), rgba(233,69,96,0.08));
+    border-left: 3px solid var(--purple);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .quote-text {
+    font-size: 14px;
+    color: #e8e0ff;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .quote-meta { font-size: 11px; color: var(--text-muted); }
+  .quote-meta strong { color: var(--red-light); }
+
+  /* ===== PROSE SECTION ===== */
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 28px;
+  }
+  .section-title span { color: var(--red); }
+
+  .prose-section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 32px;
+  }
+  .prose-part {
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .prose-part:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .prose-part-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--purple-light);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prose-num {
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .prose-text {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.85;
+    text-align: justify;
+  }
+  .prose-text em {
+    color: #d0e8ff;
+    font-style: italic;
+  }
+  .prose-text .inline-date {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: normal;
+  }
+
+  /* ===== PORTRAIT SECTION ===== */
+  .portrait-section {
+    background: linear-gradient(135deg, #1e1a2e 0%, #1a1e3a 50%, #1a1530 100%);
+    border: 1px solid var(--purple);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .portrait-section::before {
+    content: '❝';
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    font-size: 120px;
+    color: rgba(83,52,131,0.12);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .portrait-text {
+    font-size: 15.5px;
+    line-height: 2;
+    color: #e8e4ff;
+    position: relative;
+    z-index: 1;
+    font-family: Georgia, 'Times New Roman', serif;
+    text-align: justify;
+  }
+  .portrait-text em { color: #ffd0d0; font-style: italic; }
+
+  /* ===== VERDICT ===== */
+  .verdict-section {
+    background: linear-gradient(135deg, rgba(233,69,96,0.12) 0%, rgba(83,52,131,0.12) 100%);
+    border: 1px solid var(--red);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+  }
+  .verdict-lines { }
+  .verdict-line {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+  .verdict-line:last-child { border-bottom: none; }
+  .verdict-icon { color: var(--red); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ===== RELATIONS ===== */
+  .relation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .relation-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .relation-name { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .relation-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ===== YEAR EVOLUTION ===== */
+  .year-bars { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+  .year-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+  .year-bar { width: 100%; border-radius: 4px 4px 0 0; }
+  .year-label { font-size: 9px; color: var(--text-muted); margin-top: 4px; }
+
+  @media (max-width: 900px) {
+    .main { padding: 24px 20px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .prose-section { padding: 20px; }
+    .portrait-section { padding: 24px; }
+    .header { padding: 32px 20px 28px; }
+    .pseudo { font-size: 36px; }
+    .relation-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-inner">
+    <div class="server-tag">Profil Discord · Canal <span>#trombinoscope</span> · Serveur privé</div>
+    <div class="pseudo">Ristorante</div>
+    <div class="sub-pseudo">Connu aussi comme <strong>rageur LoL sur #qq-only</strong> — mais ici, c'est une autre histoire</div>
+    <div class="badges">
+      <span class="badge badge-purple">🧠 Opinioné compulsif</span>
+      <span class="badge badge-red">💪 Bodybuilder en progression</span>
+      <span class="badge badge-green">📍 Breton convaincu</span>
+      <span class="badge badge-amber">🪞 Introspectif à ses heures</span>
+      <span class="badge badge-purple">🗣️ Débatteur de comptoir</span>
+      <span class="badge badge-red">😅 Humour pince-sans-rire</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <span class="stat-number">6 116</span>
+      <span class="stat-label">Messages totaux</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">524</span>
+      <span class="stat-label">Jours actifs</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">11,7</span>
+      <span class="stat-label">Msgs / jour (actif)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">2018–2026</span>
+      <span class="stat-label">Période d'activité</span>
+    </div>
+  </div>
+
+  <!-- ROW 1 : Heure + Thèmes -->
+  <div class="grid-2">
+
+    <!-- Activité horaire -->
+    <div class="card">
+      <div class="card-title">⏰ Pic d'activité horaire</div>
+      <div class="hour-chart" id="hourChart"></div>
+      <div class="chart-subtitle">Double pic : <strong style="color:#c5a8ff">10h</strong> (matinée bureau) et <strong style="color:#ff8fa3">19h</strong> (soirée canapé)</div>
+    </div>
+
+    <!-- Évolution par année -->
+    <div class="card">
+      <div class="card-title">📈 Évolution de l'activité</div>
+      <div class="year-bars" id="yearChart"></div>
+      <div class="chart-subtitle">Montée continue — 2025 représente <strong style="color:#c5a8ff">35%</strong> de tous ses messages</div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2 : Sujets + Expressions -->
+  <div class="grid-2">
+
+    <!-- Sujets spontanés -->
+    <div class="card">
+      <div class="card-title">🎯 Sujets spontanés les plus fréquents</div>
+      <div id="topicsChart"></div>
+    </div>
+
+    <!-- Expressions signature -->
+    <div class="card">
+      <div class="card-title">🗣️ Expressions signature</div>
+      <div class="sig-list">
+        <div class="sig-chip">c ets<span class="sig-count">×138</span></div>
+        <div class="sig-chip">ahi<span class="sig-count">×57</span></div>
+        <div class="sig-chip">en vrai<span class="sig-count">×51</span></div>
+        <div class="sig-chip">tkt<span class="sig-count">×40</span></div>
+        <div class="sig-chip">persoent<span class="sig-count">×23</span></div>
+        <div class="sig-chip">giga<span class="sig-count">×27</span></div>
+        <div class="sig-chip">chui<span class="sig-count">×28</span></div>
+        <div class="sig-chip">de fou<span class="sig-count">×30</span></div>
+        <div class="sig-chip">par contre<span class="sig-count">×28</span></div>
+        <div class="sig-chip">je pense<span class="sig-count">×40</span></div>
+        <div class="sig-chip">je trouve<span class="sig-count">×35</span></div>
+        <div class="sig-chip">jsp<span class="sig-count">×48</span></div>
+      </div>
+      <div style="margin-top:16px; font-size:13px; color:var(--text-muted); line-height:1.6">
+        Style télégraphique entrecoupé de vraies prises de position. La faute de frappe légendaire <em>"c ets"</em> (= "c'est") est présente dans 138 messages — elle n'a jamais été corrigée en 8 ans. Signe d'un homme qui envoie vite, pense fort, relit jamais.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3 : Relations + Style de comm -->
+  <div class="grid-2">
+
+    <!-- Relations -->
+    <div class="card">
+      <div class="card-title">👥 Relations avec les membres</div>
+      <div class="relation-grid">
+        <div class="relation-item">
+          <div class="relation-name">Sinnoh</div>
+          <div class="relation-desc">49 mentions. L'ami de référence, souvent cité en exemple physique ("poupi et sinnoh peuvent conclure archi facilement"). Relation de taquinerie mutuelle intense, ton de frère aîné + rival.</div>
+        </div>
+        <div class="relation-item">
+          <div class="relation-name">Poupi</div>
+          <div class="relation-desc">Invite à venir à Brest pour un week-end, lui propose des cars à 6€. L'une des relations IRL les plus tangibles du serveur — un pote du quotidien.</div>
+        </div>
+        <div class="relation-item">
+          <div class="relation-name">Fley</div>
+          <div class="relation-desc">39 mentions. Affection taquine, humour d'interrogatoire ("t'es bi ou pd ?"), drague le conduit quand il part à l'IRL. Un de ses souffre-douleur affectueux favoris.</div>
+        </div>
+        <div class="relation-item">
+          <div class="relation-name">Le serveur général</div>
+          <div class="relation-desc">S'engage dans les débats collectifs sur la taille, les relations, le féminisme. Souvent celui qui cadre le débat ou ramène une perspective contra-intuitive.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style de communication -->
+    <div class="card">
+      <div class="card-title">💬 Style de communication informel</div>
+      <div style="font-size:13.5px; line-height:1.9; color:var(--text)">
+        <p style="margin-bottom:10px">Ristorante écrit en <strong style="color:#c5a8ff">rafales courtes</strong> — il décompose sa pensée en 3 ou 4 messages successifs plutôt qu'un seul bloc. La ponctuation est approximative, les accents souvent absents, les fautes de frappe récurrentes (<em>"c ets"</em>, <em>"persoent"</em>). Mais quand le sujet l'anime, il peut produire de vraies tirades argumentées de 200+ mots.</p>
+        <p style="margin-bottom:10px">Tonalité dominante : <strong style="color:#ff8fa3">assertif mais conscient de sa subjectivité</strong>. Il dit "je pense", "je trouve", "perso" — mais ce n'est pas de la timidité, c'est une marque de bonne foi discursive.</p>
+        <p>Il n'hésite pas à se contredire en live, à admettre qu'il a "rep sans réfléchir", à corriger sa propre position. Ce n'est pas de l'inconstance — c'est de l'honnêteté intellectuelle déguisée en désinvolture.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MOMENTS MÉMORABLES -->
+  <div class="grid-full">
+    <div class="card">
+      <div class="card-title">✨ Moments mémorables — citations sélectionnées</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+
+        <div class="quote-card">
+          <div class="quote-text">174.5 et j'ai déjà eu une vraie 8 dans mon lit (seule fois de ma vie) alors que je suis lambda mais bon irl je suis intéressant et j'ai de la tchatche. [spoiler] J'ai rien fait alors qu'elle attendait que ça — elle est repartie et m'a ghost pck j'ai perdu mes couilles ce jour-là, redpilled.</div>
+          <div class="quote-meta"><strong>26 déc 2022</strong> — L'aveu le plus lucide et le plus drôle à la fois</div>
+        </div>
+
+        <div class="quote-card" style="border-left-color:var(--red)">
+          <div class="quote-text">Perso j'ai l'impression d'être devenu plus con ces dernières années, mon cerveau est moins vif genre. Mais je pense que c'est plutôt parce que je l'ai pas assez stimulé pendant 2-3 ans, je suis en train de rattraper là.</div>
+          <div class="quote-meta"><strong>1 jan 2024</strong> — L'introspection de début d'année</div>
+        </div>
+
+        <div class="quote-card" style="border-left-color:var(--accent)">
+          <div class="quote-text">Marre de ne pas exister aux yeux des filles. Dans la rue je n'existe pas.</div>
+          <div class="quote-meta"><strong>2 mai 2023</strong> — Rare moment de vraie douleur, sans filtre</div>
+        </div>
+
+        <div class="quote-card" style="border-left-color:var(--green)">
+          <div class="quote-text">J'ai même testé un casque à 4000€ avec un ampli à 7000€, c'est une dinguerie, t'as l'impression d'être à un concert. Je jure que si je suis riche je m'achète des dingueries.</div>
+          <div class="quote-meta"><strong>21 nov 2023</strong> — Le rêveur de luxe accessible</div>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-text">La banane, c'est je trouve le seul fruit qui allie prix bas, goût de fou et pratique à manger.</div>
+          <div class="quote-meta"><strong>23 sep 2024</strong> — La philosophie de la vie quotidienne</div>
+        </div>
+
+        <div class="quote-card" style="border-left-color:var(--red)">
+          <div class="quote-text">J'aurais dû plus en profiter avant, quand j'étais chevelu et mince.</div>
+          <div class="quote-meta"><strong>18 mai 2025</strong> — La mélancolie qui ne se prend pas au sérieux</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== ANALYSE DÉTAILLÉE ============================== -->
+  <div class="section-title">Analyse détaillée <span>en 6 parties</span></div>
+
+  <div class="prose-section">
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">1</span> Personnalité sur #trombinoscope — l'homme sans rôle imposé</div>
+      <div class="prose-text">
+        Sur #trombinoscope, Ristorante est libéré de la persona du rageux LoL qu'il incarne sur #qq-only. Ici, pas de méta à défendre, pas d'elo à protéger. Ce qui ressort à la place, c'est un homme fondamentalement <em>social</em> — quelqu'un qui aime la conversation pour elle-même, qui lance des sujets pas parce qu'il a raison mais parce qu'il veut voir ce que les autres pensent. Son mode par défaut est l'assertion tempérée : il ne se positionne pas en expert, il se positionne en participant. Le <em>"perso"</em> et le <em>"je pense"</em> qui parsèment ses messages ne sont pas de la timidité — c'est presque une politesse conversationnelle, une manière de dire "je suis dans le débat, pas au-dessus de lui".
+
+        Ce qui frappe sur l'ensemble du corpus, c'est son <em>absence d'arrogance</em> malgré une forte confiance en ses avis. Il dit ce qu'il pense, parfois avec beaucoup de fermeté, mais il admet sans problème quand il a trop vite répondu ou que son raisonnement avait une faille. En décembre 2022, au beau milieu d'une longue discussion, il lâche simplement : <em>"Et en écrivant je me suis rendu compte que non, mais trop tard j'avais déjà rep."</em> Ce genre d'auto-correction en direct est rare — la plupart des gens défendent leur position même quand elle s'effondre. Lui, non. Il a plus d'ego que de vanité. Nuance importante.
+
+        Son énergie sur ce canal est <em>diurne et productive</em> — ses pics d'activité à 10h et 19h en font quelqu'un qui débute la journée connecté (probablement en déplacement ou en pause), reprend en soirée de manière détendue. La régularité de sa présence sur 8 ans dit aussi quelque chose : ce serveur, c'est sa vie sociale numérique principale, pas un passe-temps annexe.
+      </div>
+    </div>
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">2</span> De quoi parle-t-il spontanément — les obsessions récurrentes</div>
+      <div class="prose-text">
+        Quand personne ne lance de débat, Ristorante revient toujours aux mêmes territoires. Le premier, de très loin, c'est <em>lui-même</em> — son physique, son évolution, ses projets, ses regrets. Non pas de manière narcissique, mais avec une honnêteté parfois brutale sur sa propre situation. Il commente son poids (<em>"87 avant d'arriver en IDF, là je me sens plus léger"</em> — juillet 2025), sa calvitie, sa taille (1m73-174.5 selon les jours), son <em>"visage gras"</em> qui lui nuit. C'est un homme qui se regarde beaucoup dans le miroir — pas pour s'admirer, mais pour prendre la mesure de l'écart entre où il est et où il veut être.
+
+        Le deuxième territoire spontané, c'est la <em>salle de sport</em>. Ses programmes de musculation apparaissent régulièrement sous forme de listes détaillées (hack squat, deadlift, curl marteau, pull over…). Ce n'est pas de la vantardise — il ne parle pas de ses performances, il demande des conseils, partage des doutes sur la structure de ses séances. La salle est pour lui un projet en cours, un chantier de soi.
+
+        Troisième terrain : la <em>Bretagne</em>, et Brest en particulier. Il est le défenseur systématique de sa région contre tous ceux qui la critiquent (<em>"je confirme que Brest c'est moche mais bon la Bretagne c'est la région préférée des Français"</em>). C'est un attachement ambigu — il reconnaît les défauts, il ne vend pas du rêve, mais il est là, il tient le cap. Brest, c'est son ancrage. Enfin, les <em>meufs et les relations</em> reviennent régulièrement — non pas comme un sujet d'expert, mais comme un sujet de questionnement sincère sur soi-même, sur les attentes, sur sa propre valeur perçue sur le marché de la séduction.
+      </div>
+    </div>
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">3</span> Sa vie quotidienne telle qu'elle transparaît</div>
+      <div class="prose-text">
+        Le parcours de vie de Ristorante, reconstitué à travers ses messages, est celui d'un homme qui a fait le long chemin de la prépa aux multiples rebonds. Il mentionne avoir réussi sa prépa et son master avec fierté (<em>"par contre je suis fier d'avoir réussi la prépa et mon master"</em> — décembre 2020). Il a tenté par deux fois (au moins) le CRPE — le concours de professeur des écoles — ratant d'abord à deux places, puis la grippe l'empêchant de le passer une troisième fois. Ce parcours empêché vers l'enseignement est un fil rouge : il voulait être instit, pas par défaut, mais parce que ça lui correspondait (et parce que la Bretagne, contrairement à l'IDF, lui permettait une mutation rapide).
+
+        Fin 2024-2025, il opte pour un BTS SIO (Systèmes d'information des organisations) via le GRETA — en formation accélérée sur un an, financé par la région. C'est un pivot pragmatique : la tech permet de vivre à Brest sans dépendre d'un concours, et il touche 1700€ nets mensuels pendant la formation. Ce ne sont pas les ambitions d'un homme qui a abandonné — c'est quelqu'un qui a appris à négocier avec la réalité sans perdre ses critères essentiels : rester en Bretagne, avoir du temps libre, être intellectuellement engagé.
+
+        Sa vie sociale apparaît riche — il parle de potes IRL, de sorties à la salle, de week-ends. Il n'est pas reclus. En juillet 2025, il est à Paris (IDF) pour une raison non précisée — probablement stage ou obligation professionnelle. Il surveille son poids avant de partir, note qu'il perd quelques kilos sur place. Le détail révèle quelqu'un qui fait attention à lui, qui s'observe, qui gère.
+      </div>
+    </div>
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">4</span> Son humour et sa posture dans ce contexte décontracté</div>
+      <div class="prose-text">
+        L'humour de Ristorante sur #trombinoscope est <em>absurde, autodérisoire et parfois franchement trash</em> — mais avec une ligne de crête qu'il ne dépasse généralement pas. Il se moque de lui-même volontiers : <em>"si jamais tu acceptes les condoléances d'un roux chauve nain obèse vieux"</em> (avril 2025) — phrase qui en dit beaucoup sur sa capacité à se caricaturer avec bonne humeur. Il manie le second degré avec aisance, et plusieurs de ses sorties sont clairement des coups de sonde — il dit quelque chose de volontairement excessif pour voir les réactions, et si ça ne prend pas, il ajoute <em>"(jvoulais juste me faire insulter mais ça a raté dmg)"</em>.
+
+        Son humour tiers est souvent dirigé vers les autres membres du serveur de manière affectueuse. Avec Sinnoh, c'est le registre "rival de longue date" ; avec Fley, le registre "interrogatoire taquin" ; avec Poupi, les blagues sur les cars Brest-Paris à 6€ avec tendresse sous-jacente. Il n'humilie pas, il taquine — nuance que son entourage semble avoir bien intégrée puisque ces dynamiques perdurent depuis des années.
+
+        Ce qui distingue son humour du simple trolling, c'est qu'il sait <em>quand arrêter</em>. En avril 2025, dans une discussion sur la mort d'un proche dans l'entourage d'un membre, il écrit sans ironie : <em>"toutes mes condoléances igo"</em>. Pas de tentative de pirater l'émotion avec un truc drôle. Le commutateur marche.
+      </div>
+    </div>
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">5</span> Ce que ce canal révèle que #qq-only ne montre pas</div>
+      <div class="prose-text">
+        Sur #qq-only, Ristorante est le rageux LoL — celui qui s'énerve, qui blâme ses équipiers, qui vit mal les défaites. C'est une facette réelle, mais partielle. #trombinoscope révèle le reste du personnage, et ce reste est souvent surprenant de douceur et de profondeur.
+
+        La facette la plus inattendue : il a un <em>syndrome du sauveur</em> qu'il reconnaît lui-même. En octobre 2024, dans une discussion sur une personne dépressive en couple : <em>"oer j'ai trop le syndrome du sauveur mais j'ai juste de l'empathie et de la pitié pour les personnes comme ça."</em> L'homme qui rage sur LoL est aussi celui qui s'inquiète sincèrement des gens qui lui parlent de leur malheur. Ces deux choses coexistent sans contradiction — la rage gaming, c'est le contrôle perdu ; l'empathie IRL, c'est le contrôle récupéré.
+
+        Il y a aussi un côté <em>esthète discret</em> que LoL ne montre pas du tout. Il parle de fringues avec expertise depuis 2018 (marques directes, rapport qualité/prix, coupes), de casques audio haut de gamme testés avec passion, de style vestimentaire comme d'un projet (<em>"j'ai giga tryhard les fringues, j'estime avoir une garde-robe assez stylée"</em>). C'est quelqu'un qui a des goûts, qui les travaille, qui veut bien paraître — pas pour épater, mais parce que l'apparence fait partie de son projet de soi.
+
+        Enfin, sur #trombinoscope transparaît sa <em>vraie relation au concours</em> et à l'échec professionnel. Il n'en parle pas avec amertume ni résignation — mais avec un humour légèrement forcé qui dit beaucoup. <em>"La deuxième fois je l'ai raté à deux places. La troisième j'avais la grippe."</em> Suivi d'un emoji sourire. Ce sourire, c'est le genre de sourire qu'on fait quand on s'est réconcilié avec quelque chose, mais qu'on aimerait quand même qu'il en ait été autrement.
+      </div>
+    </div>
+
+    <div class="prose-part">
+      <div class="prose-part-title"><span class="prose-num">6</span> Contradictions et complexité — l'homme derrière le pseudo</div>
+      <div class="prose-text">
+        Ristorante est un homme de contradictions productives. Il se décrit comme <em>"lambda"</em> tout en ayant une vie intérieure très développée. Il dit qu'il a eu une vraie 8/10 dans son lit et n'a rien fait — anecdote qu'il qualifie de <em>"sale merde"</em> mais qu'il raconte quand même, conscient de l'absurdité comique de la situation. Il pense que mesurer 1m73 c'est "ne pas exister" sur le marché de la séduction moderne, mais se souvient aussi qu'il se faisait aborder régulièrement à 20 ans. Il croit simultanément aux deux, et aucun des deux ne le rassure vraiment.
+
+        Il est très attaché à Brest — mais il a passé son master, ses concours, potentiellement des stages à Paris, qu'il déteste. Il refuse de s'y installer même pour une opportunité professionnelle (<em>"j'aurais pu avoir le concours en IDF mais flemme"</em>), préférant un BTS à Brest à une carrière en région parisienne. C'est une cohérence de valeurs, mais elle coûte — et il le sait.
+
+        Il parle des meufs avec beaucoup de lucidité sur ses propres failles — pas le classique discours de la victime de la société, plutôt une auto-analyse assez juste de ses blocages (<em>"j'ai perdu mes couilles ce jour-là"</em>). Et simultanément, il a des opinions bien arrêtées sur les rapports asymétriques homme/femme qu'il défend avec des arguments nourris, parfois en désaccord avec l'opinion dominante du serveur, sans jamais tomber dans le ressentiment. C'est l'une de ses qualités les plus nettes : il peut avoir une opinion et ne pas en avoir besoin pour exister.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================== PORTRAIT ============================== -->
+  <div class="section-title">Portrait <span>humain</span></div>
+
+  <div class="portrait-section">
+    <div class="portrait-text">
+      Il y a des gens qu'on ne remarque pas tout de suite dans un groupe — et puis, au bout d'un moment, on réalise qu'ils étaient là depuis le début, qu'ils ont tout suivi, et que quand ils parlent, ils disent quelque chose qui tient. Ristorante est de ceux-là.
+
+      Imaginez un homme dans la trentaine, Brestois de conviction plutôt que de naissance, avec cette façon particulière qu'ont les provinciaux attachés à leur ville d'en défendre les défauts comme des qualités. Il sait que Brest n'est pas belle. Il le dit lui-même. Mais il y revient toujours, comme si la mer grise du Finistère avait quelque chose que Paris avec ses 2 millions de personnes en trop ne pourra jamais lui offrir : de l'espace, du calme, et la certitude tranquille de savoir qui on est quand on est chez soi.
+
+      C'est un garçon qui a fait la prépa, qui en est fier — <em>légitimement</em> fier, pas avec ostentation mais avec la satisfaction de quelqu'un qui sait ce que ça coûte. Il a tenté les concours de l'enseignement à plusieurs reprises, les a ratés pour de mauvaises raisons (deux places, une grippe, la flemme de passer en Île-de-France), et a fini par tourner la page — non pas en capitulant, mais en trouvant une autre route. Le BTS via le GRETA, c'est son pragmatisme discret : il ne lâche pas ses critères essentiels pour être en CDI. Il préfère un statut précaire à Brest à une belle carrière là où il ne veut pas vivre.
+
+      Son rapport à son corps est l'un des fils les plus touchants de son histoire. Il va à la salle avec sérieux — les programmes qu'il partage ne sont pas ceux d'un débutant qui s'essaie, ce sont ceux d'un homme qui a réfléchi à sa structure musculaire. Mais parallèlement, il sait qu'il a un bide, qu'il a perdu ses cheveux, que <em>"calvasse + bide ça aide po"</em>. Il porte ces deux versions de lui-même — le projet et l'état actuel — avec une lucidité qui l'empêche de se raconter des histoires, et une bonne humeur qui l'empêche de s'effondrer dessus.
+
+      Ce qui le rend attachant, c'est cette combinaison rare : il a des convictions fortes <em>et</em> la capacité de douter d'elles. Il débat avec engagement, mais s'il s'est trompé, il le dit. Il prend position sur les rapports humains, sur la séduction, sur la politique, sur l'éducation — et quand quelqu'un le prend en défaut, il ne fait pas semblant de n'avoir jamais dit ce qu'il a dit. Cette honnêteté-là, dans un serveur Discord, c'est presque exotique.
+
+      Ce qui peut agacer ? Son auto-analyse parfois trop méticuleuse de son physique, qui revient comme un disque rayé. Son côté <em>"je suis lambda"</em> qu'il sort stratégiquement avant d'ajouter une exception flatteuse (<em>"lambda, mais bon irl je suis intéressant et j'ai de la tchatche"</em>). On sent l'homme qui a besoin qu'on lui confirme qu'il existe, tout en refusant de le demander explicitement.
+
+      Mais ce petit quelque chose qui fait qu'on se souvient de lui ? C'est le <em>sourire derrière l'aveu</em>. Quand il dit <em>"La deuxième fois j'ai raté à deux places"</em>, suivi d'un emoji sourire — ce n'est pas de la résignation. C'est quelqu'un qui a appris à tenir debout sans raideur, à encaisser sans se plaindre, et à continuer à parler à ses potes comme si ça n'était pas si grave, même quand c'est grave. Ce sourire-là, discret et un peu forcé, c'est peut-être le résumé le plus juste de Ristorante : quelqu'un qui prend sa vie au sérieux sans se prendre au sérieux.
+    </div>
+  </div>
+
+  <!-- ============================== VERDICT ============================== -->
+  <div class="section-title">Verdict <span>final</span></div>
+
+  <div class="verdict-section">
+    <div class="verdict-lines">
+      <div class="verdict-line">
+        <span class="verdict-icon">⚡</span>
+        <span>#qq-only montre sa frustration, #trombinoscope montre son intelligence — et les deux sont authentiques. Le rageux LoL et le type qui s'auto-analyse à 23h sont le même homme, pas deux personnes.</span>
+      </div>
+      <div class="verdict-line">
+        <span class="verdict-icon">📍</span>
+        <span>Sa vraie obsession n'est pas la séduction ni la salle ni même le boulot — c'est <em>rester lui-même géographiquement et psychologiquement</em>. Vivre à Brest, ne pas aller en IDF, ne pas se trahir pour une opportunité. C'est rare, et ça se respecte.</span>
+      </div>
+      <div class="verdict-line">
+        <span class="verdict-icon">🪞</span>
+        <span>Sur 8 ans et 6116 messages, il ne s'est jamais mis en scène — il a juste été là. Ce degré de naturel sur un canal public est sa marque de fabrique et, probablement, sa meilleure qualité humaine.</span>
+      </div>
+      <div class="verdict-line">
+        <span class="verdict-icon">❤️</span>
+        <span>En résumé : un homme sensible déguisé en pragmatique, avec un humour en acier trempé et un sourire emoji en dernier recours quand la vie dépasse les mots.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; color:var(--text-muted); font-size:12px; padding-top:20px">
+    Profil généré à partir de 6 116 messages · Période 14/05/2018 — 16/03/2026 · Canal #trombinoscope
+  </div>
+
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Hour chart
+const hourData = {0:19,1:17,3:14,5:1,6:5,7:46,8:223,9:289,10:633,11:398,12:517,13:424,14:472,15:361,16:425,17:271,18:590,19:627,20:233,21:260,22:204,23:87};
+const maxHour = Math.max(...Object.values(hourData));
+const hourChart = document.getElementById('hourChart');
+
+for (let h = 0; h < 24; h++) {
+  const count = hourData[h] || 0;
+  const pct = (count / maxHour) * 100;
+  const isHigh = count > 500;
+  const isMed = count > 300;
+  const color = isHigh ? '#e94560' : (isMed ? '#533483' : '#2e2e5a');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'hour-bar-wrap';
+
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar';
+  bar.style.height = Math.max(pct, 2) + '%';
+  bar.style.background = color;
+  bar.title = `${h}h: ${count} msgs`;
+
+  const label = document.createElement('div');
+  label.className = 'hour-label';
+  label.textContent = h % 4 === 0 ? h + 'h' : '';
+
+  wrap.appendChild(bar);
+  wrap.appendChild(label);
+  hourChart.appendChild(wrap);
+}
+
+// Year chart
+const yearData = {2018:190,2019:88,2020:435,2021:444,2022:837,2023:783,2024:1026,2025:2165,2026:148};
+const maxYear = Math.max(...Object.values(yearData));
+const yearChart = document.getElementById('yearChart');
+
+Object.entries(yearData).forEach(([year, count]) => {
+  const pct = (count / maxYear) * 100;
+  const wrap = document.createElement('div');
+  wrap.className = 'year-bar-wrap';
+
+  const bar = document.createElement('div');
+  bar.className = 'year-bar';
+  bar.style.height = Math.max(pct, 3) + '%';
+  bar.style.background = year == 2025 ? '#e94560' : 'linear-gradient(to top, #533483, #7b52b8)';
+  bar.title = `${year}: ${count} msgs`;
+
+  const label = document.createElement('div');
+  label.className = 'year-label';
+  label.textContent = year.toString().slice(2);
+
+  wrap.appendChild(bar);
+  wrap.appendChild(label);
+  yearChart.appendChild(wrap);
+});
+
+// Topics chart
+const topics = [
+  { label: 'Apparence / physique', count: 254, max: 254, color: '#e94560' },
+  { label: 'LoL / gaming rage', count: 167, max: 254, color: '#533483' },
+  { label: 'Meufs / relations', count: 127, max: 254, color: '#7b52b8' },
+  { label: 'Boulot / études', count: 110, max: 254, color: '#ff8fa3' },
+  { label: 'Bretagne / identité', count: 87, max: 254, color: '#4caf82' },
+  { label: 'Sorties IRL', count: 64, max: 254, color: '#f5a623' },
+  { label: 'Humour / trolling', count: 54, max: 254, color: '#c5a8ff' },
+  { label: 'Pokémon / jeux vidéo', count: 51, max: 254, color: '#60a0ff' },
+];
+
+const container = document.getElementById('topicsChart');
+topics.forEach(t => {
+  const pct = (t.count / t.max * 100).toFixed(0);
+  container.innerHTML += `
+    <div class="topic-row">
+      <div class="topic-label">${t.label}<span>${t.count} msgs</span></div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${pct}%; background:${t.color}"></div>
+      </div>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>
