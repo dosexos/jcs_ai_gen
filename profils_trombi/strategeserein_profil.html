@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratège Serein — Profil Trombinoscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --bg2: #1a1a2e;
+    --bg3: #16213e;
+    --purple: #533483;
+    --purple-light: #7b52b9;
+    --red: #e94560;
+    --red-light: #ff6b8a;
+    --gold: #f0a500;
+    --text: #e8e8f0;
+    --text-dim: #9999bb;
+    --text-muted: #5555aa;
+    --card-bg: #1e1e38;
+    --card-border: rgba(83, 52, 131, 0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 500px; height: 500px; background: var(--purple); top: -100px; right: -100px; opacity: 0.12; }
+  .blob-2 { width: 400px; height: 400px; background: var(--red); bottom: -80px; left: -80px; opacity: 0.12; }
+  .blob-3 { width: 300px; height: 300px; background: var(--purple-light); top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.08; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* SERVER TAG */
+  .server-tag {
+    display: inline-block;
+    background: rgba(83, 52, 131, 0.2);
+    border: 1px solid rgba(83, 52, 131, 0.5);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* HEADER */
+  header {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid rgba(83, 52, 131, 0.2);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(52px, 8vw, 88px);
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 50%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .pseudo-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .badge-purple {
+    background: rgba(83, 52, 131, 0.2);
+    border-color: rgba(123, 82, 185, 0.5);
+    color: var(--purple-light);
+  }
+
+  .badge-red {
+    background: rgba(233, 69, 96, 0.15);
+    border-color: rgba(233, 69, 96, 0.4);
+    color: var(--red-light);
+  }
+
+  .badge-gold {
+    background: rgba(240, 165, 0, 0.15);
+    border-color: rgba(240, 165, 0, 0.4);
+    color: var(--gold);
+  }
+
+  .quote-hero {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--text-dim);
+    border-left: 3px solid var(--purple);
+    padding-left: 24px;
+    line-height: 1.5;
+    max-width: 680px;
+  }
+
+  .quote-hero .quote-attr {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+  }
+
+  /* STATS GRID */
+  .stats-section { padding: 60px 0; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 24px 20px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* HOUR CHART */
+  .chart-section { padding: 0 0 60px; }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+
+  .hour-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 120px;
+    gap: 3px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 16px 16px 28px;
+    position: relative;
+  }
+
+  .hour-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    justify-content: flex-end;
+  }
+
+  .hour-bar {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    background: rgba(83, 52, 131, 0.4);
+    transition: height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    height: 0;
+  }
+
+  .hour-bar.peak {
+    background: linear-gradient(180deg, var(--red-light), var(--red));
+  }
+
+  .hour-label {
+    position: absolute;
+    bottom: -20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* TOPICS */
+  .topics-section { padding: 0 0 60px; }
+
+  .topic-item {
+    margin-bottom: 16px;
+  }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .topic-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .topic-bar {
+    background: var(--bg2);
+    border-radius: 3px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .topic-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease;
+  }
+
+  /* PROSE SECTIONS */
+  .prose-section {
+    padding: 48px 0;
+    border-top: 1px solid rgba(83, 52, 131, 0.15);
+  }
+
+  .prose-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .sub-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 400;
+  }
+
+  .prose-section p {
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+
+  .inline-quote {
+    font-style: italic;
+    color: var(--purple-light);
+  }
+
+  .inline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  /* RELATIONS */
+  .relations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .relation-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 3px solid var(--purple);
+  }
+
+  .relation-card.friction { border-left-color: var(--red); }
+  .relation-card.neutre { border-left-color: var(--text-muted); }
+
+  .relation-pseudo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .relation-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .relation-badge.complicite { background: rgba(83,52,131,0.3); color: var(--purple-light); }
+  .relation-badge.friction { background: rgba(233,69,96,0.2); color: var(--red-light); }
+  .relation-badge.neutre { background: rgba(85,85,170,0.2); color: var(--text-muted); }
+
+  .relation-quote {
+    font-style: italic;
+    color: var(--purple-light);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .relation-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* PORTRAIT */
+  .portrait-section {
+    background: var(--bg2);
+    border-top: 2px solid var(--purple);
+    padding: 60px 0;
+    margin: 0 -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .portrait-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .portrait-section p {
+    color: var(--text-dim);
+    margin-bottom: 18px;
+    font-size: 15.5px;
+    line-height: 1.8;
+    max-width: 760px;
+  }
+
+  .portrait-highlight {
+    background: rgba(83, 52, 131, 0.15);
+    border-radius: 4px;
+    padding: 0 6px;
+    color: var(--purple-light);
+  }
+
+  /* VERDICT */
+  .verdict-section {
+    border-top: 2px solid var(--red);
+    padding: 60px 0;
+  }
+
+  .verdict-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .verdict-line {
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 24px;
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .verdict-line strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(83, 52, 131, 0.2);
+    padding: 40px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 16px;
+  }
+
+  .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .footer-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--purple-light);
+    background: rgba(83, 52, 131, 0.2);
+    border: 1px solid rgba(83, 52, 131, 0.4);
+    padding: 6px 14px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="server-tag">⬡ TROMBINOSCOPE · DISCORD</div>
+    <h1>Stratège Serein</h1>
+    <div class="pseudo-line">strategeserein · #trombinoscope</div>
+    <div class="badges">
+      <span class="badge badge-purple"># trombinoscope</span>
+      <span class="badge badge-purple">5 346 messages</span>
+      <span class="badge badge-purple">2018 → 2026</span>
+      <span class="badge badge-red">Théoricien du réel</span>
+      <span class="badge badge-gold">Analyste en chef</span>
+    </div>
+    <blockquote class="quote-hero">
+      "Je fais des études randomisées en double aveugle sur les meufs que je choppe, par rapport à ce qu'elles aiment chez un gars / ont aimé chez moi."
+      <span class="quote-attr">— strategeserein, 21 mai 2023</span>
+    </blockquote>
+  </header>
+
+  <!-- STATS GRID -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total messages</div>
+        <div class="stat-number">5 346</div>
+        <div class="stat-sub">sur #trombinoscope</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Période d'activité</div>
+        <div class="stat-number" style="font-size: 22px; padding-top: 4px;">8 ans</div>
+        <div class="stat-sub">14/05/2018 → 20/03/2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pic d'activité</div>
+        <div class="stat-number">11h</div>
+        <div class="stat-sub">504 msgs · matin actif</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Indice "théorie"</div>
+        <div class="stat-number">463</div>
+        <div class="stat-sub">occurrences analytiques</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOUR CHART -->
+  <section class="chart-section">
+    <div class="section-title">Distribution horaire des messages</div>
+    <div class="hour-chart" id="hourChart">
+      <!-- bars injected by JS -->
+    </div>
+  </section>
+
+  <!-- THEMES -->
+  <section class="topics-section">
+    <div class="section-title">Thèmes récurrents</div>
+    <div class="topic-item" data-pct="100">
+      <div class="topic-header"><span>Séduction, dynamiques hommes/femmes</span><span class="topic-pct">100%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="100"></div></div>
+    </div>
+    <div class="topic-item" data-pct="78">
+      <div class="topic-header"><span>Analyses sociales & observations comportementales</span><span class="topic-pct">78%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="78"></div></div>
+    </div>
+    <div class="topic-item" data-pct="55">
+      <div class="topic-header"><span>Style vestimentaire & physique</span><span class="topic-pct">55%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="55"></div></div>
+    </div>
+    <div class="topic-item" data-pct="42">
+      <div class="topic-header"><span>Voyages & expatriation (Asie, Europe)</span><span class="topic-pct">42%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="42"></div></div>
+    </div>
+    <div class="topic-item" data-pct="38">
+      <div class="topic-header"><span>Société, travail, système</span><span class="topic-pct">38%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="38"></div></div>
+    </div>
+    <div class="topic-item" data-pct="30">
+      <div class="topic-header"><span>Jeux vidéo (LoL, ranked)</span><span class="topic-pct">30%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="30"></div></div>
+    </div>
+    <div class="topic-item" data-pct="18">
+      <div class="topic-header"><span>Gastronomie & vie pratique</span><span class="topic-pct">18%</span></div>
+      <div class="topic-bar"><div class="topic-bar-inner" data-w="18"></div></div>
+    </div>
+  </section>
+
+  <!-- PROSE SECTIONS -->
+  <section class="prose-section">
+    <h3><span class="sub-num">01/</span> Sa posture dans le groupe</h3>
+    <p>
+      Strategeserein occupe le canal comme un cabinet de consulting occupe une salle de réunion : avec une assurance tranquille, une légère condescendance bienveillante, et une tendance irrépressible à transformer toute conversation en cas d'école. Il ne s'impose pas, il s'installe. Sur 5 346 messages étalés sur huit ans, on ne trouve pratiquement aucun message creux, aucun bruit de fond — chaque intervention semble avoir été pesée au moins deux secondes avant d'être envoyée.
+    </p>
+    <p>
+      Sa posture type est celle du commentateur de haut vol : il arrive souvent sur un fil déjà engagé, distille une observation tranchante en deux phrases, puis repart. Il initie rarement le spectacle, mais il en est souvent la charnière. <span class="inline-quote">"Bref dans 15h j'ai mon avion direction la maison"</span><span class="inline-date">2022</span> — même ses départs sont laconiques et définitifs. Il parle comme quelqu'un qui a autre chose à faire, et ça semble fonctionner.
+    </p>
+    <p>
+      Ce qui frappe sur la longue durée, c'est la cohérence. Le strategeserein de 2018 balance déjà des jugements secs avec l'emoji <em>drako</em> en guise de ponctuation irréfutable. Celui de 2026 a ajouté de la nuance, un peu plus de recul, mais le fond — cette posture d'observateur légèrement au-dessus de la mêlée — n'a pas bougé d'un millimètre.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h3><span class="sub-num">02/</span> Ses obsessions & sujets de prédilection</h3>
+    <p>
+      L'obsession centrale est claire et assumée : comprendre les dynamiques de séduction avec la rigueur d'un chercheur en sciences comportementales. Strategeserein ne se contente pas de vivre ses expériences — il les encode, les compare, en tire des lois générales. <span class="inline-quote">"Je fais des études randomisées en double aveugle sur les meufs que je choppe"</span><span class="inline-date">21/05/2023</span> — la formulation est semi-humoristique, mais la démarche, elle, est tout à fait sincère.
+    </p>
+    <p>
+      Vient ensuite le style vestimentaire, traité avec le même sérieux analytique. Il ne se contente pas d'avoir un avis, il diagnostique : <span class="inline-quote">"Chemise mal taillée, mal rentrée dans le pantalon... pantalon slim trop bas, qui fait des plis qui rapetissent ton allure"</span><span class="inline-date">18/06/2025</span>. Il connaît la règle des tiers, lit le Guardian Fashion, et prodigue des conseils circonstanciés avec la précision d'un tailleur de province. C'est l'une des rares figures du canal à traiter l'habillement comme une discipline.
+    </p>
+    <p>
+      Le voyage constitue un troisième axe de gravité. L'Asie du Sud-Est revient en leitmotiv — Thaïlande, Japon, avec une affection particulière pour la culture de la politesse et les températures humides. <span class="inline-quote">"Quand j'étais en Thaïlande on a fait une rando avec un pote on avait plus d'eau au bout de 2h et on a continué sous le caniar pendant 3h encore"</span><span class="inline-date">14/05/2024</span>. Les anecdotes de voyage sont rares mais toujours incarnées, jamais touristiques.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h3><span class="sub-num">03/</span> Son registre d'expression & son humour</h3>
+    <p>
+      Le registre de strategeserein est fondamentalement didactique, mais enveloppé dans une ironie permanente qui lui évite de tomber dans le donneur de leçons. Il affectionne la démonstration par l'absurde : <span class="inline-quote">"Une CHINOISE de 1.60 que j'ai choppé sur bumble me dit que ma taille est presque son MINIMUM SYNDICAL (je fais 1.80) / Pour RAPPEL, la taille moyenne d'un homme CHINOIS est de 169,7cm / Par conséquent la nouvelle taille minimale en France pour pouvoir chopper est de > 186.8cm"</span><span class="inline-date">31/10/2023</span>. Le raisonnement est délirant, mais la forme — rigueur pseudo-statistique, majuscules stratégiques, conclusion implacable — est parfaitement tenue.
+    </p>
+    <p>
+      Son humour fonctionne souvent sur l'écart entre le registre soutenu et l'objet trivial. Il n'hésite pas à écrire une ode épique au Poulet au Coca en style médiéval : <span class="inline-quote">"On raconte qu'en un temps où les festins étaient encore des offrandes aux dieux..."</span><span class="inline-date">25/07/2025</span> — trois paragraphes lyriques pour une recette de volaille mijotée au soda. L'absurde cultivé, jamais le gros joke facile.
+    </p>
+    <p>
+      Le troll est présent mais toujours sophistiqué. Il pose des assertions provocatrices avec une totale sérénité, sans agressivité, ce qui est souvent plus déstabilisant que l'attaque frontale. L'emoji <em>philippot</em> fait office de point d'ironie officiel, façon guillemets visuels quand le propos est trop chargé pour être dit sérieusement.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h3><span class="sub-num">04/</span> Ce qui transparaît de sa vie hors Discord</h3>
+    <p>
+      On perçoit un profil urbain, mobile, aux ancrages multiples. Il parle de Toulouse comme d'une base, mais les allers-retours vers Paris, les séjours en Asie, les voyages européens dessinent une vie en déplacement permanent. <span class="inline-quote">"Après 1 mois et demi en Asie (contrée de la politesse), j'ai pris le métro à Toulouse après 12h en France"</span><span class="inline-date">07/02/2025</span> — il y a dans cette formulation le choc culturel d'un habitué des deux rives.
+    </p>
+    <p>
+      Sa vie professionnelle affleure par fragments : une période d'intérim où il venait <span class="inline-quote">"en chemise en lin / pantalon"</span> et se faisait demander s'il était gay, une réflexion sur les majoration d'heures supplémentaires qui révèle une connaissance pratique du droit du travail. Il se pense au-dessus du système sans en être exempt, ce qui génère une tension productive dans ses analyses.
+    </p>
+    <p>
+      Il a vécu en colocation ou en appartement seul par phases, a traversé des périodes de jeu intensif (League of Legends jusqu'au rang Master), et entretient un réseau de potes stables — Soso, Yabaphi, Boudet, Mowde — avec lesquels il fait des IRL réguliers. La calvitie l'a préoccupé un temps : <span class="inline-quote">"Ma coiffeuse me dit que je devrais bientôt raser mes cheveux a cause de la calvitie, mais moi je trouve pas ma calvitie si avancée que ça"</span><span class="inline-date">06/03/2021</span>. La question ne revient plus après. Soit il a rasé, soit il a assumé.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h3><span class="sub-num">05/</span> Ce qui le rend unique parmi les membres</h3>
+    <p>
+      Ce qui distingue strategeserein des autres membres, c'est sa capacité à maintenir une cohérence intellectuelle sur huit ans de messages. Là où beaucoup évoluent par paliers visibles ou se contradisent dans le temps, lui affine — ses positions de 2022 sont les mêmes qu'en 2025, mais articulées avec plus de subtilité. Il a un système de pensée, pas juste des opinions.
+    </p>
+    <p>
+      Il est aussi, paradoxalement, l'un des membres les plus autodidactes du canal en matière de style et d'apparence, un domaine que la plupart n'investissent pas sérieusement. Il lit des articles de fond, suit des règles stylistiques, les teste sur lui-même puis les transmet à ceux qui le demandent. C'est une expertise rare ici, exercée sans vanité affichée.
+    </p>
+    <p>
+      Enfin, il est l'un des rares à avoir des amis proches <em>dans</em> le serveur et pas seulement <em>sur</em> le serveur — les IRL réguliers, les voyages à plusieurs, la texture du quotidien partagé. Discord n'est pas pour lui un substitut de vie sociale mais une extension de relations réelles. Ça change fondamentalement la tonalité de ses interventions.
+    </p>
+  </section>
+
+  <!-- RELATIONS -->
+  <section class="prose-section">
+    <h3><span class="sub-num">05 bis/</span> Relations & dynamiques</h3>
+    <div class="relations-grid">
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Yabaphi</div>
+        <span class="relation-badge complicite">Complicité forte</span>
+        <span class="relation-quote">"12 kheys autour d'une table, Yabaphi et moi sommes les seuls à boire (et mpb en deuspi)"</span>
+        <div class="relation-text">Le duo le plus récurrent du canal. Ils font des sessions LoL ensemble, se retrouvent en IRL, se déplacent en binôme lors des events. Une complicité qui ressemble à de l'amitié réelle, construite dans la durée depuis au moins 2021.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Boudet</div>
+        <span class="relation-badge complicite">Ami de terrain</span>
+        <span class="relation-quote">"On part à 4 pendant un mois environ avec Soso/Mowde et Boudet"</span>
+        <div class="relation-text">Présence dans les voyages, les soirées, les grandes escapades. Boudet est dans le cercle restreint des gens avec qui strategeserein fait des choses concrètes dans la vie. La mention est toujours factuelle, jamais chargée.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Soso</div>
+        <span class="relation-badge complicite">Complicité ancienne</span>
+        <span class="relation-quote">"Demain soir on va boire un coup / fumer quelques joints avec soso"</span>
+        <div class="relation-text">Ami de longue date, avec un homestudio, une présence régulière dans la vie offline. Les mentions de Soso n'ont pas de friction — c'est de la relation fluide, sans bruit, celle des gens qui se voient sans avoir besoin de l'annoncer.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Raydo</div>
+        <span class="relation-badge complicite">Camaraderie canal</span>
+        <span class="relation-quote">"La boucle Tinder est morte ou quoi, il faut réveiller RayDo"</span>
+        <div class="relation-text">Raydo est mentionné comme partenaire de jeu, coéquipier thématique dans les discussions séduction. Le ton est amical, légèrement complice, sans profondeur affective affichée. Une relation de canal plus que de vie.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Poupi</div>
+        <span class="relation-badge complicite">Affection taquine</span>
+        <span class="relation-quote">"Merci poupi moi aussi je te trouve très beau"</span>
+        <div class="relation-text">Échanges courts, souvent moqueurs, mais sans friction réelle. Strategeserein distribue des compliments ironiques à Poupi avec une régularité qui révèle une vraie sympathie sous le troll de surface.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Taaq</div>
+        <span class="relation-badge neutre">Observationnel</span>
+        <span class="relation-quote">"Le BPM de Taaq pendant la soloq"</span>
+        <div class="relation-text">Mentionné ponctuellement, souvent dans des contextes gaming. Relation de cohabitation sur le canal plutôt que lien direct. Strategeserein l'observe avec bienveillance, sans s'y attarder.</div>
+      </div>
+
+      <div class="relation-card">
+        <div class="relation-pseudo">Gank</div>
+        <span class="relation-badge complicite">Allié de soirée</span>
+        <span class="relation-quote">"Finito Rita je vais la gank"</span>
+        <div class="relation-text">Gank apparaît dans les contextes de sortie nocturne, parfois comme stratège adjoint dans les manœuvres collectives. Le registre est celui de l'équipier de confiance pour les situations sociales.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PORTRAIT -->
+  <section class="portrait-section">
+    <div class="container">
+      <h2>Portrait humain</h2>
+      <p>
+        Ce qui frappe avant tout chez strategeserein, c'est <span class="portrait-highlight">le décalage entre la posture et le fond</span>. En surface : un analytique, un peu froid, qui traite la vie sociale comme un problème d'optimisation. En profondeur : quelqu'un qui aime vraiment ses potes, qui revient toujours aux IRL, qui construit des amitiés durables et qui, malgré tout le bruit théorique, vit sa vie de façon assez normale et bien ancrée.
+      </p>
+      <p>
+        Il a une intelligence du détail qui dépasse la simple observation — il sait lire une situation, en extraire la logique sous-jacente, puis la formuler avec une précision qui force l'admiration même chez ceux qui ne sont pas d'accord. <span class="portrait-highlight">Son grand défaut est aussi sa grande force</span> : il généralise à partir d'un échantillon, mais son échantillon est toujours plus riche que celui de la plupart. Il a voyagé, il a testé, il a observé. Ce n'est pas de l'arrogance sans fondement.
+      </p>
+      <p>
+        L'observation contre-intuitive, celle qu'on ne voit pas venir : strategeserein est profondément romantique dans sa définition du couple. <span class="inline-quote">"Un couple t'es à la fois pote et amant donc la compatibilité des idées et de la façon de réfléchir est plus importante que pour une meuf que tu veux juste soulever"</span><span class="inline-date">09/06/2023</span>. Sous les analyses cyniques et les statistiques de taille minimale se cache quelqu'un qui a des exigences très élevées parce qu'il cherche vraiment quelque chose de construit. Le cynisme de surface protège un idéalisme qu'il aurait du mal à assumer frontalement.
+      </p>
+      <p>
+        Il y a aussi une lucidité sur lui-même qui surprend : <span class="inline-quote">"en fait je dirais même qu'une fois que je sais que je plais à une meuf physiquement, elle me désinteresse presque aussitôt"</span><span class="inline-date">15/08/2023</span>. Ce n'est pas une fanfaronnade — c'est une vraie observation de soi, formulée avec la même honnêteté qu'il appliquerait à n'importe quel autre phénomène. <span class="portrait-highlight">Il se met lui-même dans son propre scope analytique</span>, ce qui est rare et, dans le fond, assez courageux.
+      </p>
+      <p>
+        Huit ans de présence sur ce canal, sans jamais vraiment changer de registre ni de position fondamentale, c'est une forme de cohérence rare. Strategeserein est quelqu'un qui a su rester lui-même dans un espace qui fait souvent ressortir le pire ou le plus performatif des gens. Ce n'est pas rien.
+      </p>
+    </div>
+  </section>
+
+  <!-- VERDICT -->
+  <section class="verdict-section">
+    <h2>Verdict</h2>
+
+    <div class="verdict-line">
+      <strong>Il arrive avec une théorie, repart avec une anecdote, et le canal retient les deux.</strong> Strategeserein est l'un des rares membres dont les interventions créent de la valeur informative réelle — même quand elles sont discutables, elles obligent à penser.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Derrière l'analyste se cache un fidèle.</strong> Les amitiés qu'il entretient sur ce serveur durent dans le temps, se matérialisent en déplacements, en voyages, en soirées réelles. Il n'est pas là pour performer — il est là parce que les gens lui importent.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Son intelligence est au service de sa vie, pas l'inverse.</strong> Il théorise pour comprendre, pas pour impressionner. Cette distinction est plus rare qu'il n'y paraît dans un espace comme celui-ci.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Strategeserein laisse une empreinte de sérieux tranquille</strong> — celle d'un membre qui a passé huit ans à regarder le canal vivre, à y participer sans s'y dissoudre, et à maintenir une ligne cohérente du premier message au dernier. Dans dix ans, si quelqu'un relit ce canal, il sera facilement identifiable. Ça compte.
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-meta">
+      Généré depuis 5 346 messages · 14/05/2018 → 20/03/2026<br>
+      Canal #trombinoscope · Auteur unique : strategeserein
+    </div>
+    <div class="footer-badge">STRATEGESEREIN PROFILE v1.0</div>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+// HOUR CHART
+const hourData = [62,24,17,23,18,35,73,78,207,402,486,504,429,419,395,325,307,286,239,194,191,258,230,144];
+const maxVal = Math.max(...hourData);
+const chartEl = document.getElementById('hourChart');
+
+hourData.forEach((val, h) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'hour-bar-wrap';
+
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar' + (h === 11 ? ' peak' : '');
+  bar.style.height = '0px';
+  bar.dataset.target = Math.round((val / maxVal) * 88);
+
+  wrap.appendChild(bar);
+
+  if (h % 3 === 0) {
+    const label = document.createElement('div');
+    label.className = 'hour-label';
+    label.textContent = h + 'h';
+    wrap.appendChild(label);
+  }
+
+  chartEl.appendChild(wrap);
+});
+
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.hour-bar').forEach(bar => {
+    bar.style.height = bar.dataset.target + 'px';
+  });
+}, 200);
+
+// TOPIC BARS via IntersectionObserver
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const inner = entry.target.querySelector('.topic-bar-inner');
+      if (inner) {
+        inner.style.width = inner.dataset.w + '%';
+      }
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.topic-bar').forEach(bar => observer.observe(bar));
+</script>
+</body>
+</html>
