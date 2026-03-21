@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Colocation — MPB × elilos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --card: #1e1e38;
+    --card-dark: #1a1a2e;
+    --incident-bg: #1a0a1a;
+    --violet: #533483;
+    --violet-light: #7b5ea7;
+    --violet-pale: #9d7ec9;
+    --red: #e94560;
+    --gold: #f0a500;
+    --gold-dim: #b07800;
+    --white: #e8e8f0;
+    --grey: #9999bb;
+    --grey-dim: #555577;
+    --mpb-color: #9d7ec9;
+    --elilos-color: #e94560;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ═══════════════════════════════════
+     HEADER
+  ═══════════════════════════════════ */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 40%, rgba(83,52,131,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 60%, rgba(233,69,96,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% 90%, rgba(240,165,0,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--violet-pale);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.9;
+    background: linear-gradient(135deg, var(--white) 0%, var(--violet-pale) 40%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+  }
+
+  .header-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--grey);
+    letter-spacing: 0.12em;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .header-sub span {
+    color: var(--gold);
+  }
+
+  .header-exergue {
+    max-width: 480px;
+    padding: 20px 28px;
+    border-left: 3px solid var(--gold);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .header-exergue blockquote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .header-exergue cite {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.1em;
+    font-style: normal;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--grey-dim);
+    letter-spacing: 0.2em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards, pulse 2s ease 2s infinite;
+  }
+
+  /* ═══════════════════════════════════
+     FICHES COLOCATAIRES
+  ═══════════════════════════════════ */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--grey-dim);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    margin-bottom: 48px;
+    color: var(--white);
+  }
+
+  .fiches-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .fiche {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fiche-mpb { border-top: 3px solid var(--violet); }
+  .fiche-elilos { border-top: 3px solid var(--red); }
+
+  .fiche::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+  }
+
+  .fiche-mpb::before { background: var(--violet); }
+  .fiche-elilos::before { background: var(--red); }
+
+  .fiche-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .fiche-avatar {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+  }
+
+  .fiche-pseudo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--white);
+  }
+
+  .fiche-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .fiche-traits {
+    margin-bottom: 20px;
+  }
+
+  .fiche-traits h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey-dim);
+    margin-bottom: 10px;
+  }
+
+  .trait {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--white);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .trait-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .fiche-mpb .trait-dot { background: var(--violet-pale); }
+  .fiche-elilos .trait-dot { background: var(--red); }
+
+  .trait.risk .trait-dot { background: var(--gold); }
+
+  .fiche-quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    border-top: 1px solid rgba(240,165,0,0.2);
+    padding-top: 16px;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* Compatibilité bar */
+  .compat-section {
+    max-width: 1100px;
+    margin: 0 auto 80px;
+    padding: 0 40px;
+  }
+
+  .compat-bar-wrap {
+    background: var(--card-dark);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .compat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+  }
+
+  .compat-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .compat-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--violet), var(--red));
+    transition: width 1.5s cubic-bezier(0.23, 1, 0.32, 1) 0.5s;
+  }
+
+  .compat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════
+     PROLOGUE
+  ═══════════════════════════════════ */
+  .prologue {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .prologue-inner {
+    border-left: 3px solid var(--gold);
+    padding: 32px 40px;
+    background: linear-gradient(135deg, rgba(240,165,0,0.04) 0%, transparent 60%);
+  }
+
+  /* ═══════════════════════════════════
+     SEMAINES
+  ═══════════════════════════════════ */
+  .semaine {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .semaine-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .semaine-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(40px, 6vw, 64px);
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+
+  .semaine-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    color: var(--white);
+  }
+
+  .semaine-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.12em;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .semaine-meta span { color: var(--grey); }
+
+  /* Carton jour */
+  .carton-jour {
+    background: var(--card-dark);
+    text-align: center;
+    padding: 14px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #5555aa;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* Scène */
+  .scene {
+    margin-bottom: 56px;
+  }
+
+  .scene-prose {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--white);
+    margin-bottom: 20px;
+    max-width: 720px;
+  }
+
+  .scene-prose p { margin-bottom: 16px; }
+
+  /* Dialogue */
+  .dialogue {
+    background: var(--card);
+    border-left: 3px solid var(--violet);
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .dialogue .line {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: baseline;
+  }
+
+  .dialogue .line:last-child { margin-bottom: 0; }
+
+  .dialogue .speaker {
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+
+  .dialogue .speaker.mpb { color: var(--mpb-color); }
+  .dialogue .speaker.elilos { color: var(--elilos-color); }
+
+  .dialogue .text {
+    color: rgba(232,232,240,0.85);
+    font-style: normal;
+  }
+
+  /* Monologue intérieur */
+  .monologue {
+    font-style: italic;
+    color: var(--gold);
+    padding-left: 28px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    border-left: none;
+    opacity: 0.9;
+  }
+
+  /* Citation Discord */
+  cite.discord {
+    display: block;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 14px;
+    margin: 16px 0;
+    line-height: 1.6;
+  }
+
+  cite.discord sup {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #5555aa;
+    letter-spacing: 0.1em;
+    margin-left: 6px;
+    font-style: normal;
+  }
+
+  /* Incident */
+  .incident {
+    background: var(--incident-bg);
+    border-left: 4px solid var(--red);
+    padding: 20px 24px;
+    margin: 32px 0;
+  }
+
+  .incident-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .incident-text {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .incident-verdict {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    border-top: 1px solid rgba(233,69,96,0.2);
+    padding-top: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ═══════════════════════════════════
+     GRAPHIQUE D3
+  ═══════════════════════════════════ */
+  .chart-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  #tension-chart {
+    width: 100%;
+    height: 320px;
+    background: var(--card-dark);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ═══════════════════════════════════
+     JOUR 30
+  ═══════════════════════════════════ */
+  .jour30 {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 120px;
+  }
+
+  .jour30-inner {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .jour30-text .scene-prose { max-width: 100%; }
+
+  .jour30-quote {
+    padding: 32px;
+    background: rgba(240,165,0,0.04);
+    border: 1px solid rgba(240,165,0,0.15);
+  }
+
+  .jour30-quote p {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold);
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════ */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px;
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  footer .footer-pseudos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+  }
+
+  footer .pseudo-stat {
+    text-align: center;
+  }
+
+  footer .pseudo-name {
+    font-size: 14px;
+    color: var(--grey);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  footer .pseudo-count {
+    font-size: 20px;
+    color: var(--white);
+    display: block;
+  }
+
+  /* ═══════════════════════════════════
+     DIVIDER
+  ═══════════════════════════════════ */
+  .divider {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 40px;
+  }
+
+  .divider hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ═══════════════════════════════════
+     UTILITIES
+  ═══════════════════════════════════ */
+  .text-violet { color: var(--violet-pale); }
+  .text-red { color: var(--red); }
+  .text-gold { color: var(--gold); }
+  .text-grey { color: var(--grey); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  @media (max-width: 768px) {
+    .fiches-grid { grid-template-columns: 1fr; }
+    .jour30-inner { grid-template-columns: 1fr; }
+    .semaine-header { flex-direction: column; gap: 4px; }
+    .dialogue .line { grid-template-columns: 80px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     HEADER
+═══════════════════════════════════ -->
+<header>
+  <div class="header-tag">⬡ Fiction documentaire · Discord</div>
+  <h1 class="header-title">La Colocation</h1>
+  <p class="header-sub">MPB × elilos — <span>30 jours</span> / données réelles<br>
+  L'appartement d'elilos · ville non précisée · mars–avril 2021</p>
+  <div class="header-exergue">
+    <blockquote>"viens en colloc avec moi mpb"</blockquote>
+    <cite>elilos · 21 mars 2021 · 00h08</cite>
+  </div>
+  <div class="scroll-hint">↓ · · ·</div>
+</header>
+
+<!-- ═══════════════════════════════════
+     FICHES COLOCATAIRES
+═══════════════════════════════════ -->
+<section class="section">
+  <div class="section-label">Dossier colocataires</div>
+  <h2 class="section-title">Les résidents</h2>
+
+  <div class="fiches-grid">
+
+    <!-- MPB -->
+    <div class="fiche fiche-mpb">
+      <div class="fiche-header">
+        <svg class="fiche-avatar" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="29" stroke="#533483" stroke-width="1.5" fill="rgba(83,52,131,0.12)"/>
+          <circle cx="30" cy="22" r="9" fill="rgba(83,52,131,0.4)" stroke="#7b5ea7" stroke-width="1"/>
+          <path d="M10 52 Q10 38 30 38 Q50 38 50 52" fill="rgba(83,52,131,0.3)" stroke="#7b5ea7" stroke-width="1"/>
+          <circle cx="30" cy="22" r="4" fill="#9d7ec9"/>
+        </svg>
+        <div>
+          <div class="fiche-pseudo">MPB</div>
+          <div class="fiche-role">monpotestbon · stagiaire prof-maternelle · chez ses parents</div>
+        </div>
+      </div>
+
+      <div class="fiche-traits">
+        <h4>Atouts coloc</h4>
+        <div class="trait"><span class="trait-dot"></span><span>Cuisine (tartines, graisse de canard, "spécialités de maisonnée")</span></div>
+        <div class="trait"><span class="trait-dot"></span><span>Fait le premier geste après une dispute — jamais par excuse, toujours par question sur LoL</span></div>
+        <div class="trait"><span class="trait-dot"></span><span>Analytique : explique ce qui se passe dans un conflit, au bon moment ou trois heures trop tard</span></div>
+      </div>
+
+      <div class="fiche-traits">
+        <h4>Risques coloc</h4>
+        <div class="trait risk"><span class="trait-dot"></span><span>Vocal fort, présence sonore permanente, incapable de laisser passer une affirmation fausse</span></div>
+        <div class="trait risk"><span class="trait-dot"></span><span>Weaponized private — sort en dispute ce qui a été confié la nuit</span></div>
+      </div>
+
+      <div class="fiche-quote">
+        "literallement" · "paix sur toi en dépit de" · "g off" · "fils de pute" (presque affectif)
+      </div>
+    </div>
+
+    <!-- ELILOS -->
+    <div class="fiche fiche-elilos">
+      <div class="fiche-header">
+        <svg class="fiche-avatar" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="29" stroke="#e94560" stroke-width="1.5" fill="rgba(233,69,96,0.08)"/>
+          <circle cx="30" cy="22" r="9" fill="rgba(233,69,96,0.3)" stroke="#e94560" stroke-width="1"/>
+          <path d="M10 52 Q10 38 30 38 Q50 38 50 52" fill="rgba(233,69,96,0.2)" stroke="#e94560" stroke-width="1"/>
+          <circle cx="30" cy="22" r="4" fill="#e94560"/>
+        </svg>
+        <div>
+          <div class="fiche-pseudo">elilos</div>
+          <div class="fiche-role">elilos · étudiant en fac fermée (covid) · appartement seul</div>
+        </div>
+      </div>
+
+      <div class="fiche-traits">
+        <h4>Atouts coloc</h4>
+        <div class="trait"><span class="trait-dot"></span><span>Streamer en soirée — crée une ambiance passive et fonctionnelle</span></div>
+        <div class="trait"><span class="trait-dot"></span><span>Muscu + musique classique en reset — apporte une forme de structure extérieure</span></div>
+        <div class="trait"><span class="trait-dot"></span><span>Humour noir efficace, décharge la tension sans en être conscient</span></div>
+      </div>
+
+      <div class="fiche-traits">
+        <h4>Risques coloc</h4>
+        <div class="trait risk"><span class="trait-dot"></span><span>Réveil à 13h-17h, courses à l'improviste, frigo traité comme accessoire</span></div>
+        <div class="trait risk"><span class="trait-dot"></span><span>"on se parle plus jamais" + retour dans les 10 minutes — en coloc, la porte ne se bloque pas</span></div>
+      </div>
+
+      <div class="fiche-quote">
+        "kai'sa" · "j'ai la haine" · "l'algo" · "fin bref" · CAPS aux moments de crise
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Barre compatibilité -->
+<div class="compat-section">
+  <div class="compat-bar-wrap">
+    <span class="compat-label">Compatibilité coloc</span>
+    <div class="compat-bar">
+      <div class="compat-fill" id="compat-fill"></div>
+    </div>
+    <span class="compat-value" id="compat-value">—</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PROLOGUE
+═══════════════════════════════════ -->
+<section class="prologue">
+  <div class="section-label">Prologue · 21 mars 2021 · 00h08</div>
+  <h2 class="section-title" style="margin-bottom: 32px;">La proposition</h2>
+  <div class="prologue-inner">
+    <div class="scene-prose">
+      <p>Il est minuit passé. Elilos a perdu quatre games de suite. Son appartement est dans le même état qu'avant — le frigo a toujours besoin d'être approvisionné, la fac est toujours fermée, et ça fait presque un an maintenant que les visages humains passent par un écran ou pas du tout.</p>
+      <p>Il tape la phrase sans vraiment y penser. Ou plutôt : il y pense exactement autant qu'il le faut pour la taper, et pas assez pour l'effacer.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">ca doit etre trop bien la colloc</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">l'autre en colloc à côté de son hosto</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">viens en colloc avec moi mpb</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>MPB répond le lendemain matin à 13h41, après avoir dormi, après avoir eu le temps d'y penser, ou peut-être sans y avoir pensé du tout :</p>
+    </div>
+
+    <cite class="discord">✨ ma colloc parfaite ✨ : ranipo 😬 / karma 🤪 / elilos 😡 / mpb 🤓 / ransberg 👨🏿<sup>21 mars 2021 · 13h41</sup></cite>
+
+    <div class="scene-prose">
+      <p>L'emoji 😡 n'est pas disqualifiant. MPB sait exactement ce qu'il choisit.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     SEMAINE 1
+═══════════════════════════════════ -->
+<section class="semaine">
+  <div class="semaine-header">
+    <div class="semaine-num">01</div>
+    <h2 class="semaine-title">Installation</h2>
+  </div>
+  <div class="semaine-meta">
+    <span>Jours 1–7</span>
+    <span>Heure dominante : <span>23h</span></span>
+    <span>État des lieux : <span>Frigo vide · Vocal allumé · Observation mutuelle</span></span>
+  </div>
+
+  <!-- Scène J1 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 1 — 15h00 — Entrée de l'appartement</div>
+    <div class="scene-prose">
+      <p>MPB arrive avec deux cartons organisés. Pas beaucoup — il vit encore chez ses parents, il n'a pas grand-chose à lui. Les cartons sont bien fermés, les objets groupés par catégorie. C'est quelqu'un qui enseigne en maternelle, qui sait que le désordre coûte du temps.</p>
+      <p>Elilos est déjà là. Il l'a toujours été — c'est son appartement. Il lève la tête depuis l'écran, fait un signe vague, retourne à sa game. L'installation se fait sans cérémonie.</p>
+      <p>Le soir, MPB ouvre le frigo. Il y a dedans : un demi-pot de ketchup, deux yaourts à date dépassée, et quelque chose dans du film plastique dont il préfère ne pas savoir. Il referme le frigo. Il comprend quelque chose sur le gap entre vivre chez ses parents et vivre.</p>
+    </div>
+
+    <div class="monologue">
+      "Je suis en mode je m'en fous du salaire parce que je vis chez mes parents." Sauf que là il est plus chez ses parents. Et le frigo ne se remplit pas tout seul. Il reste debout dans la cuisine pendant trente secondes, puis il va poser la question.
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">t'as quoi comme routine de courses</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">bon MPB je bouffe pas les termites de mon appart pour me nourrir comme toi donc faut bien que je sorte m'approvisionner</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">c'est une réponse ça</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">bah</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scène J3 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 3 — 01h30 — Salon · Lumière bleue</div>
+    <div class="scene-prose">
+      <p>C'est MPB qui propose. Pas de raison particulière — il est en soloQ, il perd, et elilos est là sur le canapé avec son PC.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">go stream une duoQ sah / je joue support / no vocal only focus / ça peut être marrant</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">viens MPB</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Ils jouent jusqu'à 3h du matin sans se parler vraiment. MPB est en support, elilos en ADC. La dynamique est mécanique et fonctionnelle : elilos ne suit pas tous les calls, MPB s'énerve une fois en silence, recadre son jeu. Ils gagnent deux games sur trois. À la fin, elilos ferme son PC sans commenter le résultat. MPB lance une game soloQ. C'est suffisant.</p>
+    </div>
+  </div>
+
+  <!-- Incident S1 -->
+  <div class="incident">
+    <div class="incident-title">⚡ Incident · Jour 5 — 03h20</div>
+    <div class="incident-text">
+      MPB est en vocal avec quelqu'un d'autre. Volume moyen-haut. Elilos sort de sa chambre à 3h20 en pyjama, se plante dans l'encadrement de la porte du salon. Il ne dit rien. Il reste là dix secondes. MPB le voit, coupe le micro, baisse le volume du casque. Elilos retourne se coucher. Personne ne formule quoi que ce soit. Ce silence durera exactement autant que nécessaire.
+    </div>
+    <div class="incident-verdict">Verdict : résolu sans être nommé. Ça ne durera pas.</div>
+  </div>
+
+  <!-- Scène cuisine J6 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 6 — 22h00 — Cuisine</div>
+    <div class="scene-prose">
+      <p>MPB cuisine ce soir-là sans prévenir. Il ne pose pas la question parce que la question lui semble évidente en sens inverse : il fait pour deux, voilà tout. Elilos entre dans la cuisine, s'arrête, regarde.</p>
+    </div>
+
+    <cite class="discord">"Spécialité de ma maisonnée, la tartine dorée au four à l'huile avec sa crème champignons ail oignon et finement grillée de gruyère 100 % français"<sup>MPB</sup></cite>
+
+    <div class="scene-prose">
+      <p>Elilos s'assoit sans un mot. Il mange. C'est objectivement bon. Il ne le dira pas ce soir-là — mais deux jours plus tard, il demandera s'il en reste.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     SEMAINE 2
+═══════════════════════════════════ -->
+<section class="semaine">
+  <div class="semaine-header">
+    <div class="semaine-num">02</div>
+    <h2 class="semaine-title">Premières frictions</h2>
+  </div>
+  <div class="semaine-meta">
+    <span>Jours 8–14</span>
+    <span>Heure dominante : <span>03h du matin</span></span>
+    <span>État des lieux : <span>Vaisselle non faite · LP en chute · Routine révélée</span></span>
+  </div>
+
+  <!-- Scène J9 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 9 — 16h30 — Canapé · MPB debout depuis 2h</div>
+    <div class="scene-prose">
+      <p>Elilos entre dans le salon à 16h30. MPB est là depuis le matin, a déjà fait deux games, a déjà eu une dispute argumentée avec quelqu'un sur le vocal. Il regarde elilos sortir de sa chambre, cheveux debout.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">il est 16h30</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">bah oui</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">t'as des cours à 8h 4 jours sur 7 d'après ce que t'as dit</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">la fac va jamais rouvrir</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">…</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>MPB ne répond rien. Ce n'est pas faute de trouver quoi dire. C'est parce qu'il n'y a rien à dire à ça.</p>
+    </div>
+  </div>
+
+  <!-- Scène sport J11 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 11 — 18h30 — Couloir · Retour de la salle</div>
+    <div class="scene-prose">
+      <p>Elilos revient de la salle. MPB est affalé sur le canapé depuis 14h, en pyjama, troisième game de la journée. Elilos traverse le salon vers la cuisine avec son sac de sport, et sans s'arrêter :</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">ptn c'est fou ce qu'on joue mieux après avoir fait un peu de sport</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Il disparaît dans sa chambre. MPB regarde l'écran. Il est en 2/6 sur Twisted Fate. Il ne répond pas. Mais il finit la game, puis il sort se faire à manger debout devant la cuisine plutôt que de continuer à jouer. Ce n'est pas de l'obéissance. C'est juste que la phrase a atterri quelque part.</p>
+    </div>
+
+    <cite class="discord">"La vie est de la merde je confirme mais j'avoue que taunter MPB m'apporte une certaine satisfaction"<sup>elilos — dit en souriant, une heure plus tard</sup></cite>
+  </div>
+
+  <!-- Incident S2 -->
+  <div class="incident">
+    <div class="incident-title">⚡ Incident · Jour 13 — 03h00</div>
+    <div class="incident-text">
+      Loose streak commune. Cinq défaites d'affilée. La sixième game : elilos ne suit pas un engage de MPB au bot, MPB meurt seul, l'échange dégénère — d'abord sur l'engage, puis sur les timings, puis sur la vaisselle dans l'évier depuis deux jours, puis sur le fait que MPB "joue en ayant peur" selon elilos et qu'elilos "joue en attendant que ça se passe" selon MPB. À 3h15, MPB relance une game soloQ. Elilos va se coucher. Le lendemain, ni l'un ni l'autre n'y revient. Les termes sont posés.
+    </div>
+    <div class="incident-verdict">Verdict : résolution non verbale. Première vraie dette accumulée.</div>
+  </div>
+
+  <!-- Fenêtre elilos J14 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 14 — 02h45 — Fenêtre du salon</div>
+    <div class="scene-prose">
+      <p>MPB le trouve comme ça une fois — pas souvent, mais une fois suffit. Elilos debout devant la fenêtre, le jeu fermé, rien dans les mains. Il ne regarde pas quelque chose de précis. MPB s'arrête dans l'encadrement de la porte. Il comprend immédiatement ce que c'est. Il ne dit pas "ça va". Il sait que la question est inutile.</p>
+    </div>
+
+    <div class="monologue">
+      Elilos pense : la seule raison pour laquelle je saute pas d'un pont c'est que j'ai 18 ans, admettons que je vive jusqu'à 90 ans, il me reste 72 ans à vivre, et je me dis que si j'ai de la chance au moins une fois peut-être qu'il m'arrivera un truc de bien.
+    </div>
+
+    <div class="scene-prose">
+      <p>Ce n'est pas une crise. C'est un calcul. Elilos fait beaucoup de calculs comme ça — des probabilités, des marges, des seuils de rentabilité existentielle. MPB dit une chose, une seule :</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">t'as mangé ce soir</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">je sais pas</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">je fais des pâtes</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Puis il va dans la cuisine. C'est la seule forme de geste qu'il connaît dans ce registre, et c'est suffisant pour ce soir.</p>
+    </div>
+
+    <div class="monologue">
+      MPB pense, plus tard, en remuant les pâtes : Si la seule chose qui permet à elilos de tenir le coup c'est de me blâmer, qu'il fasse donc.
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     SEMAINE 3
+═══════════════════════════════════ -->
+<section class="semaine">
+  <div class="semaine-header">
+    <div class="semaine-num">03</div>
+    <h2 class="semaine-title">Rupture</h2>
+  </div>
+  <div class="semaine-meta">
+    <span>Jours 15–21</span>
+    <span>Heure dominante : <span>04h du matin</span></span>
+    <span>État des lieux : <span>36h de silence · Porte fermée · Arme sortie</span></span>
+  </div>
+
+  <!-- Scène J16 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 16 — 04h15 — Salon</div>
+    <div class="scene-prose">
+      <p>MPB est encore en game. Elilos sort de sa chambre, s'assoit sur le canapé à côté de lui. Il ne joue pas. Il regarde l'écran de MPB pendant dix minutes sans rien dire. MPB finit sa game — une défaite. Il retire son casque.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">Je joue car ça fait 1 an bientôt que je vois personne à cause du covid</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>C'est dit à plat, sans inflexion, adressé à personne en particulier — à la pièce, à l'écran. MPB ne répond pas immédiatement. Il lance une nouvelle game.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">Cours, nage, fait du surf, monte un poney. Baise. Vie quoi.</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">la fac va jamais rouvrir</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">Bah sors quand même</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">faire quoi</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>MPB ne répond plus. Pas parce qu'il n'a rien à dire. Il a même beaucoup à dire. Mais à 4h15 du matin, ce qu'il y a à dire est soit trop court soit trop long, et aucune des deux longueurs ne convient à ce moment-là.</p>
+    </div>
+  </div>
+
+  <!-- Incident S3 — LA rupture -->
+  <div class="incident">
+    <div class="incident-title">⚡ Incident · Jour 19 — heure non précisée</div>
+    <div class="incident-text">
+      La dispute commence sur quelque chose de concret — le loyer à avancer, peut-être, ou la vaisselle encore, ou MPB qui a parlé fort la nuit précédente. La cause exacte n'a pas d'importance parce qu'elle n'est jamais la vraie cause. Ce qui se passe : MPB sort quelque chose qu'elilos lui avait dit à 3h du matin pendant la deuxième semaine. Pas le détail complet — assez. Le mot exact que MPB utilise est exact, et elilos le sait, et MPB sait qu'il le sait. Elilos ne répond pas. Il rentre dans sa chambre. Il ferme la porte. Il n'en sort pas pendant 36 heures.
+    </div>
+    <div class="incident-verdict">Verdict : dette remboursée en une frappe. Le compte est ouvert pour de bon.</div>
+  </div>
+
+  <!-- Scène silence J20-J21 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 20 — 14h00 — Salon · Silence</div>
+    <div class="scene-prose">
+      <p>MPB est seul dans le salon. Il joue. Il ne cogite pas ouvertement — ce n'est pas son mode de fonctionnement — mais à un moment il retire son casque et reste assis sans rien faire pendant trois minutes. C'est beaucoup pour lui.</p>
+    </div>
+
+    <div class="monologue">
+      Avec le temps il apaisera sa haine.
+    </div>
+
+    <div class="scene-prose">
+      <p>Ce n'est pas de l'arrogance. C'est ce qu'il croit vraiment. Et il a probablement raison — ce n'est pas ce qui pose problème. Ce qui pose problème, c'est que la phrase lui permet de ne pas faire autre chose.</p>
+    </div>
+  </div>
+
+  <!-- Scène retour J21 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 21 — Fin de soirée — Cuisine puis salon</div>
+    <div class="scene-prose">
+      <p>Elilos sort de sa chambre à l'heure où MPB est en train de se faire à manger. Ils se croisent dans la cuisine. Elilos prend un verre d'eau. Le silence n'est pas hostile — il est simplement là. Elilos dit ce qu'il dit :</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">pas de vocal après 2h du mat. les courses le jeudi ou le dimanche pour qu'on soit deux. ce qui se dit là se dit là.</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>MPB écoute. Il ne s'excuse pas. Il dit :</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">ok</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Ce soir-là, à 23h, ils jouent ensemble. Même Discord. Pas de vocal. C'est la seule zone neutre qui reste et ils le savent tous les deux.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     SEMAINE 4
+═══════════════════════════════════ -->
+<section class="semaine">
+  <div class="semaine-header">
+    <div class="semaine-num">04</div>
+    <h2 class="semaine-title">Coexistence apprise</h2>
+  </div>
+  <div class="semaine-meta">
+    <span>Jours 22–30</span>
+    <span>Heure dominante : <span>23h</span></span>
+    <span>État des lieux : <span>Règles tacites · Pas de réconciliation · Équilibre précaire</span></span>
+  </div>
+
+  <!-- Scène J24 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 24 — 23h30 — Cuisine</div>
+    <div class="scene-prose">
+      <p>MPB fait des courses le jeudi. Il rentre avec un sac, pose tout sur le plan de travail. Il n'y a pas eu de concertation sur ce qu'il fallait acheter — il a pris ce qui lui semblait manquer. Elilos passe dans la cuisine, regarde.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">t'as pris du gruyère</span>
+      </div>
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">100 % français</span>
+      </div>
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">bah</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Elilos prend un yaourt et repart dans sa chambre. Ce n'est pas de la gratitude. Ce n'est pas de l'indifférence non plus. C'est quelque chose entre les deux pour lequel il n'y a pas de mot juste.</p>
+    </div>
+  </div>
+
+  <!-- Scène J27 -->
+  <div class="scene">
+    <div class="carton-jour">Jour 27 — 01h00 — Salon</div>
+    <div class="scene-prose">
+      <p>Elilos est en train de streamer. MPB joue soloQ à côté, casque sur les oreilles. Il n'y a pas de vocal entre eux ce soir — la règle tient. À un moment, elilos perd une game de façon absurde et balance un commentaire à voix haute sans s'adresser à MPB :</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker elilos">elilos</span>
+        <span class="text">cet homme. cet homme a joué Garen support. cet homme a joué Garen support et il a gagné. je vais aller vivre dans les bois.</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>MPB retire une oreillette. Regarde l'écran d'elilos. Regarde le Garen support. Remet son oreillette.</p>
+    </div>
+
+    <div class="dialogue">
+      <div class="line">
+        <span class="speaker mpb">MPB</span>
+        <span class="text">literallement comment</span>
+      </div>
+    </div>
+
+    <div class="scene-prose">
+      <p>Ils passent les vingt minutes suivantes à analyser le build du Garen. Ce n'est pas une réconciliation. C'est deux personnes qui regardent le même écran et ne peuvent pas s'empêcher d'avoir une opinion.</p>
+    </div>
+  </div>
+
+  <!-- Incident final S4 -->
+  <div class="incident">
+    <div class="incident-title">⚡ Incident · Jour 28 — Téléphone</div>
+    <div class="incident-text">
+      MPB reçoit un appel de chez lui — ses parents, une question administrative sur le stage. Il parle debout dans le couloir pendant dix minutes. Sa voix est différente quand il parle à sa famille — moins tranchante, plus posée. Elilos l'entend sans le vouloir depuis sa chambre. Il ne dit rien. MPB racccroche et retourne dans le salon sans commenter. Mais pendant dix secondes, dans le couloir, avant de rouvrir la porte du salon, il reste immobile. Il pense au gap. Il pense qu'il commence à comprendre ce que c'est que d'être là plutôt qu'ailleurs.
+    </div>
+    <div class="incident-verdict">Verdict : pas d'incident déclaré. Quelque chose s'est déplacé quand même.</div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     GRAPHIQUE D3
+═══════════════════════════════════ -->
+<section class="chart-section">
+  <div class="section-label">Données colocation</div>
+  <h2 class="section-title" style="margin-bottom: 32px;">Indice de tension — 30 jours</h2>
+  <svg id="tension-chart"></svg>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ═══════════════════════════════════
+     JOUR 30 — SCÈNE FINALE
+═══════════════════════════════════ -->
+<section class="jour30">
+  <div class="section-label">Jour 30 · 23h47</div>
+  <h2 class="section-title" style="margin-bottom: 40px;">Coexistence</h2>
+  <div class="jour30-inner">
+    <div class="jour30-text">
+      <div class="scene-prose">
+        <p>Les deux sont dans le salon. Lumière bleue des écrans — aucune autre. MPB joue soloQ. Elilos scroll son Discord sans but précis. Pas de vocal entre eux ce soir. Le silence est différent de celui d'avant — il n'est plus en attente de quelque chose, il n'est plus la forme déguisée d'une dispute future. C'est juste du silence.</p>
+        <p>Il n'y a pas eu de réconciliation. Il n'y en aura probablement pas. La colocation tient pour des raisons que ni l'un ni l'autre ne formulera jamais à voix haute : MPB a besoin de savoir que le gap est gérable. Elilos a besoin que quelqu'un soit là quand la fenêtre l'attire à 3h du matin.</p>
+        <p>À un moment, sans raison apparente, elilos dit :</p>
+      </div>
+      <div class="dialogue">
+        <div class="line">
+          <span class="speaker elilos">elilos</span>
+          <span class="text">t'as vu le patch notes</span>
+        </div>
+        <div class="line">
+          <span class="speaker mpb">MPB</span>
+          <span class="text">literallement brisé</span>
+        </div>
+        <div class="line">
+          <span class="speaker elilos">elilos</span>
+          <span class="text">bah</span>
+        </div>
+      </div>
+      <div class="scene-prose">
+        <p>Ils continuent à regarder leurs écrans. Même Discord. La lumière bleue ne change pas.</p>
+      </div>
+    </div>
+
+    <div class="jour30-quote">
+      <p>Il lui reste 72 ans à vivre, il a fait ce calcul, et cette nuit-là quelqu'un est dans la pièce d'à côté — pas par affection déclarée, pas par amitié constituée, mais présent, réel, tangible dans l'appartement sombre. C'est peut-être le truc de bien qui arrive. Peut-être juste pour ce soir. Ça suffit pour ce soir.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FOOTER
+═══════════════════════════════════ -->
+<footer>
+  <p>Basé sur 8 383 messages Discord réels — fév.–mars 2021</p>
+  <p>Fiction documentaire — les citations sont reformulées depuis de vrais échanges</p>
+  <p>Les événements, scènes et dialogues sont fictifs. Les patterns comportementaux sont déduits des données.</p>
+  <div class="footer-pseudos">
+    <div class="pseudo-stat">
+      <span class="pseudo-name" style="color: var(--mpb-color);">monpotestbon</span>
+      <span class="pseudo-count">3 474 messages</span>
+    </div>
+    <div class="pseudo-stat">
+      <span class="pseudo-name" style="color: var(--elilos-color);">elilos</span>
+      <span class="pseudo-count">4 909 messages</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════
+// COMPATIBILITÉ BAR ANIMATION
+// ═══════════════════════════════════
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const fill = document.getElementById('compat-fill');
+    const value = document.getElementById('compat-value');
+    if (fill) {
+      fill.style.width = '34%';
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        value.textContent = count + ' %';
+        if (count >= 34) {
+          clearInterval(interval);
+          value.textContent = '34 % — coexistence apprise';
+        }
+      }, 40);
+    }
+  }, 800);
+});
+
+// ═══════════════════════════════════
+// D3 TENSION CHART
+// ═══════════════════════════════════
+const tensionData = [
+  { jour: 1,  tension: 2,  label: null },
+  { jour: 2,  tension: 2.5, label: null },
+  { jour: 3,  tension: 1.5, label: "DuoQ J3" },
+  { jour: 4,  tension: 2,  label: null },
+  { jour: 5,  tension: 3.5, label: "Vocal nocturne" },
+  { jour: 6,  tension: 2,  label: null },
+  { jour: 7,  tension: 2.5, label: null },
+  { jour: 8,  tension: 3,  label: null },
+  { jour: 9,  tension: 3.5, label: null },
+  { jour: 10, tension: 3,  label: null },
+  { jour: 11, tension: 2.5, label: "Sport → tension basse" },
+  { jour: 12, tension: 3.5, label: null },
+  { jour: 13, tension: 7,  label: "Dispute 3h (loose streak)" },
+  { jour: 14, tension: 4.5, label: "Fenêtre nuit" },
+  { jour: 15, tension: 5,  label: null },
+  { jour: 16, tension: 5.5, label: "Covid / fac / 4h15" },
+  { jour: 17, tension: 6,  label: null },
+  { jour: 18, tension: 6.5, label: null },
+  { jour: 19, tension: 9.5, label: "Weaponized private" },
+  { jour: 20, tension: 8,  label: "36h silence" },
+  { jour: 21, tension: 5,  label: "Règles reformulées" },
+  { jour: 22, tension: 4,  label: null },
+  { jour: 23, tension: 3.5, label: null },
+  { jour: 24, tension: 3,  label: "Gruyère 100% FR" },
+  { jour: 25, tension: 3.5, label: null },
+  { jour: 26, tension: 4,  label: null },
+  { jour: 27, tension: 2.5, label: "Garen support" },
+  { jour: 28, tension: 3,  label: "Appel parents" },
+  { jour: 29, tension: 2.5, label: null },
+  { jour: 30, tension: 2,  label: "Coexistence · J30" },
+];
+
+const container = document.getElementById('tension-chart');
+const W = container.parentElement.clientWidth - 80;
+const H = 320;
+
+const svg = d3.select('#tension-chart')
+  .attr('width', W)
+  .attr('height', H);
+
+const margin = { top: 30, right: 30, bottom: 40, left: 50 };
+const iW = W - margin.left - margin.right;
+const iH = H - margin.top - margin.bottom;
+
+const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+const x = d3.scaleLinear().domain([1, 30]).range([0, iW]);
+const y = d3.scaleLinear().domain([0, 10]).range([iH, 0]);
+
+// Grid lines
+g.selectAll('.grid-h')
+  .data([2, 4, 6, 8, 10])
+  .enter().append('line')
+  .attr('x1', 0).attr('x2', iW)
+  .attr('y1', d => y(d)).attr('y2', d => y(d))
+  .attr('stroke', 'rgba(255,255,255,0.04)')
+  .attr('stroke-width', 1);
+
+// Gradient def
+const defs = svg.append('defs');
+const gradient = defs.append('linearGradient')
+  .attr('id', 'tension-gradient')
+  .attr('gradientUnits', 'userSpaceOnUse')
+  .attr('x1', 0).attr('y1', y(10))
+  .attr('x2', 0).attr('y2', y(0));
+
+gradient.append('stop').attr('offset', '0%').attr('stop-color', '#e94560');
+gradient.append('stop').attr('offset', '40%').attr('stop-color', '#a03070');
+gradient.append('stop').attr('offset', '100%').attr('stop-color', '#533483');
+
+// Area fill
+const area = d3.area()
+  .x(d => x(d.jour))
+  .y0(iH)
+  .y1(d => y(d.tension))
+  .curve(d3.curveCatmullRom.alpha(0.5));
+
+g.append('path')
+  .datum(tensionData)
+  .attr('fill', 'url(#tension-gradient)')
+  .attr('fill-opacity', 0.12)
+  .attr('d', area);
+
+// Line
+const line = d3.line()
+  .x(d => x(d.jour))
+  .y(d => y(d.tension))
+  .curve(d3.curveCatmullRom.alpha(0.5));
+
+const path = g.append('path')
+  .datum(tensionData)
+  .attr('fill', 'none')
+  .attr('stroke', 'url(#tension-gradient)')
+  .attr('stroke-width', 2)
+  .attr('d', line);
+
+// Animate line draw
+const totalLength = path.node().getTotalLength();
+path
+  .attr('stroke-dasharray', totalLength)
+  .attr('stroke-dashoffset', totalLength)
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .attr('stroke-dashoffset', 0);
+
+// Points with labels
+const labeled = tensionData.filter(d => d.label);
+const dots = g.selectAll('.dot')
+  .data(labeled)
+  .enter();
+
+dots.append('circle')
+  .attr('cx', d => x(d.jour))
+  .attr('cy', d => y(d.tension))
+  .attr('r', 4)
+  .attr('fill', d => d.tension > 7 ? '#e94560' : d.tension > 4 ? '#a03070' : '#533483')
+  .attr('stroke', '#0d0d1a')
+  .attr('stroke-width', 2)
+  .style('opacity', 0)
+  .transition().delay(2000).duration(400)
+  .style('opacity', 1);
+
+dots.append('text')
+  .attr('x', d => x(d.jour))
+  .attr('y', d => y(d.tension) - 12)
+  .attr('text-anchor', d => {
+    if (d.jour < 5) return 'start';
+    if (d.jour > 26) return 'end';
+    return 'middle';
+  })
+  .attr('font-family', '"JetBrains Mono", monospace')
+  .attr('font-size', '9px')
+  .attr('fill', d => d.tension > 7 ? '#e94560' : '#9999bb')
+  .attr('letter-spacing', '0.05em')
+  .text(d => d.label)
+  .style('opacity', 0)
+  .transition().delay(2200).duration(400)
+  .style('opacity', 1);
+
+// Axes
+g.append('g')
+  .attr('transform', `translate(0,${iH})`)
+  .call(d3.axisBottom(x).ticks(10).tickFormat(d => `J${d}`))
+  .selectAll('text')
+  .attr('font-family', '"JetBrains Mono", monospace')
+  .attr('font-size', '10px')
+  .attr('fill', '#555577');
+
+g.append('g')
+  .call(d3.axisLeft(y).ticks(5))
+  .selectAll('text')
+  .attr('font-family', '"JetBrains Mono", monospace')
+  .attr('font-size', '10px')
+  .attr('fill', '#555577');
+
+g.selectAll('.domain, .tick line').attr('stroke', 'rgba(255,255,255,0.08)');
+
+// Y axis label
+g.append('text')
+  .attr('transform', 'rotate(-90)')
+  .attr('x', -iH / 2)
+  .attr('y', -38)
+  .attr('text-anchor', 'middle')
+  .attr('font-family', '"JetBrains Mono", monospace')
+  .attr('font-size', '9px')
+  .attr('fill', '#555577')
+  .attr('letter-spacing', '0.1em')
+  .text('INDICE TENSION (0–10)');
+
+</script>
+</body>
+</html>
