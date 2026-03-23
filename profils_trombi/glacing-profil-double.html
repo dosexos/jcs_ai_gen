@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glacing — Profil Double · Trombinoscope × QQ-Only</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e17;
+  --bg2: #1a1a2e;
+  --bg3: #16213e;
+  --purple: #533483;
+  --purple-light: #7b52b9;
+  --red: #e94560;
+  --red-light: #ff6b8a;
+  --gold: #f0a500;
+  --text: #e8e8f0;
+  --text-dim: #9999bb;
+  --text-muted: #5555aa;
+  --card-bg: #1e1e38;
+  --card-border: rgba(83, 52, 131, 0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.blob-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; right: -200px; opacity: 0.12; }
+.blob-2 { width: 500px; height: 500px; background: var(--red); bottom: -150px; left: -150px; opacity: 0.10; }
+.blob-3 { width: 400px; height: 400px; background: var(--purple-light); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.07; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+/* ===== BADGES ===== */
+.badge, .badge-purple, .badge-red, .badge-gold, .badge-channel {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 3px 10px;
+  border-radius: 20px;
+  vertical-align: middle;
+  letter-spacing: 0.04em;
+}
+.badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); color: var(--text-dim); }
+.badge-purple { background: rgba(83,52,131,0.25); border: 1px solid rgba(123,82,185,0.4); color: var(--purple-light); }
+.badge-red { background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.4); color: var(--red-light); }
+.badge-gold { background: rgba(240,165,0,0.15); border: 1px solid rgba(240,165,0,0.4); color: var(--gold); }
+.badge-channel.trombi { background: rgba(83,52,131,0.3); border: 1px solid rgba(123,82,185,0.5); color: var(--purple-light); }
+.badge-channel.qq { background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.5); color: var(--red-light); }
+.badge-channel.both { background: rgba(240,165,0,0.15); border: 1px solid rgba(240,165,0,0.4); color: var(--gold); }
+
+/* ===== SERVER TAG ===== */
+.server-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 5px 14px;
+  background: rgba(83,52,131,0.2);
+  border: 1px solid rgba(83,52,131,0.5);
+  border-radius: 4px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* ===== HEADER ===== */
+header {
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(83,52,131,0.4), rgba(233,69,96,0.4), transparent);
+}
+
+header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(64px, 10vw, 110px);
+  line-height: 1;
+  background: linear-gradient(135deg, #ffffff 0%, #c8b8ff 35%, #e94560 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 16px 0 20px;
+  animation: fadeInDown 0.8s ease;
+}
+
+.header-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  letter-spacing: 0.06em;
+}
+
+.header-badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px; }
+
+/* ===== QUOTE HERO ===== */
+.quote-hero {
+  max-width: 680px;
+  margin: 0 auto;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--text-dim);
+  border-left: 3px solid var(--purple);
+  padding: 16px 0 16px 28px;
+  text-align: left;
+  line-height: 1.5;
+  position: relative;
+}
+.quote-hero::before { content: '"'; font-size: 60px; color: rgba(83,52,131,0.3); position: absolute; left: -8px; top: -10px; font-family: 'DM Serif Display', serif; line-height: 1; }
+.quote-source {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  letter-spacing: 0.06em;
+}
+
+/* ===== STATS GRID ===== */
+.stats-grid-double { margin: 64px 0; }
+
+.stats-row-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+.stats-row-label.trombi { color: var(--purple-light); }
+.stats-row-label.qq { color: var(--red-light); }
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+.stat-card.trombi { border-color: rgba(83,52,131,0.4); background: rgba(30,20,60,0.8); }
+.stat-card.qq { border-color: rgba(233,69,96,0.3); background: rgba(40,15,25,0.8); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-card.trombi::before { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+.stat-card.qq::before { background: linear-gradient(90deg, var(--red), var(--red-light)); }
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--purple-light), var(--red-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+
+.stat-detail {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  color: var(--text);
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(83,52,131,0.4), transparent);
+}
+
+/* ===== HOUR CHARTS ===== */
+.hour-charts-double {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 64px 0;
+}
+
+.hour-chart-wrap {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hour-chart-wrap.trombi { border-color: rgba(83,52,131,0.4); }
+.hour-chart-wrap.qq { border-color: rgba(233,69,96,0.3); }
+
+.chart-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+.chart-title.trombi { color: var(--purple-light); }
+.chart-title.qq { color: var(--red-light); }
+
+.hour-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 120px;
+  gap: 3px;
+}
+
+.hour-bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 0;
+  position: relative;
+  cursor: default;
+}
+.hour-bar.trombi { background: linear-gradient(180deg, var(--purple-light), var(--purple)); }
+.hour-bar.qq { background: linear-gradient(180deg, var(--red-light), var(--red)); }
+.hour-bar.animated { transform: scaleY(1); }
+
+.hour-bar:hover::after {
+  content: attr(data-val);
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text);
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.hour-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.hour-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ===== ACTIVITY TIMELINE ===== */
+.activity-timeline {
+  margin: 64px 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 36px;
+  overflow: hidden;
+}
+
+.timeline-scroll {
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.timeline-inner {
+  min-width: 1200px;
+}
+
+.timeline-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 160px;
+  gap: 2px;
+}
+
+.timeline-col { display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1; }
+.timeline-bar-t {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.4s ease;
+}
+.timeline-bar-t.animated { transform: scaleY(1); }
+.bar-trombi { background: var(--purple); opacity: 0.9; }
+.bar-qq { background: var(--red); opacity: 0.9; }
+
+.timeline-labels {
+  display: flex;
+  gap: 2px;
+  margin-top: 8px;
+}
+.timeline-label {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+  text-align: center;
+  overflow: hidden;
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim); }
+.legend-dot { width: 12px; height: 12px; border-radius: 2px; }
+.legend-dot.purple { background: var(--purple); }
+.legend-dot.red { background: var(--red); }
+
+.timeline-peak {
+  position: relative;
+}
+.peak-label {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--gold);
+  white-space: nowrap;
+  background: rgba(15,14,23,0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(240,165,0,0.3);
+}
+
+/* ===== TOPIC BARS ===== */
+.topic-bars-section { margin: 64px 0; }
+
+.canal-section {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.canal-section-header {
+  padding: 16px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.canal-section-header.trombi { background: rgba(83,52,131,0.25); color: var(--purple-light); border-bottom: 1px solid rgba(83,52,131,0.3); }
+.canal-section-header.qq { background: rgba(233,69,96,0.15); color: var(--red-light); border-bottom: 1px solid rgba(233,69,96,0.3); }
+
+.canal-section-body {
+  background: var(--card-bg);
+  padding: 28px;
+  border: 1px solid var(--card-border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.topic-item { margin-bottom: 18px; }
+.topic-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.topic-pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+.topic-bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.topic-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.34, 1.1, 0.64, 1);
+}
+.topic-bar-fill.trombi { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+.topic-bar-fill.qq { background: linear-gradient(90deg, var(--red), var(--red-light)); }
+.topic-bar-fill.animated { width: var(--target-width); }
+
+/* ===== COMPARATIVE SECTION ===== */
+.comparative-section {
+  background: var(--bg3);
+  border-top: 2px solid var(--gold);
+  border-bottom: 1px solid rgba(83,52,131,0.2);
+  padding: 60px 0;
+  margin: 64px 0;
+  position: relative;
+}
+
+.comparative-section::before {
+  content: 'ANALYSE COMPARATIVE';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  background: var(--bg3);
+  padding: 0 16px;
+}
+
+.comparative-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.comparative-col { }
+.comparative-col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid;
+}
+.comparative-col-label.trombi { color: var(--purple-light); border-color: rgba(83,52,131,0.3); }
+.comparative-col-label.qq { color: var(--red-light); border-color: rgba(233,69,96,0.3); }
+
+.comparative-body p { color: var(--text-dim); font-size: 15px; margin-bottom: 20px; line-height: 1.8; }
+
+.versus-quote {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 32px 0;
+}
+.versus-item {
+  padding: 18px;
+  border-radius: 8px;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.versus-item.trombi { background: rgba(83,52,131,0.12); border-left: 3px solid var(--purple); }
+.versus-item.qq { background: rgba(233,69,96,0.08); border-left: 3px solid var(--red); }
+.versus-item-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.08em; }
+
+/* ===== PROSE SECTIONS ===== */
+.prose-section {
+  margin: 64px 0;
+}
+
+.prose-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 36px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(83,52,131,0.2);
+}
+
+.prose-block { margin-bottom: 40px; }
+.prose-block h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sub-num {
+  color: var(--red);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.prose-block p { color: var(--text-dim); font-size: 15px; line-height: 1.85; margin-bottom: 16px; }
+
+.inline-quote {
+  font-style: italic;
+  color: var(--purple-light);
+  position: relative;
+}
+.inline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  vertical-align: super;
+  margin-left: 3px;
+}
+
+/* ===== RELATIONS ===== */
+.relations-section { margin: 64px 0; }
+
+.relations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.relation-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 22px 22px 22px 26px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.relation-card:hover { transform: translateY(-2px); }
+.relation-card.purple { border-left: 3px solid var(--purple); }
+.relation-card.red { border-left: 3px solid var(--red); }
+.relation-card.muted { border-left: 3px solid var(--text-muted); }
+
+.relation-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.relation-pseudo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: var(--gold);
+  font-weight: 500;
+}
+.relation-nature {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.relation-quote {
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 13px;
+  border-left: 2px solid rgba(83,52,131,0.3);
+  padding-left: 12px;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+.relation-analysis { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* ===== PORTRAIT ===== */
+.portrait-section {
+  background: var(--bg2);
+  border-top: 2px solid var(--purple);
+  padding: 64px 0;
+  margin: 64px 0;
+  position: relative;
+}
+
+.portrait-body p { color: var(--text-dim); font-size: 16px; line-height: 1.9; margin-bottom: 28px; }
+
+.portrait-highlight {
+  background: rgba(83,52,131,0.15);
+  border-radius: 4px;
+  padding: 0 6px;
+  color: var(--purple-light);
+}
+
+/* ===== VERDICT ===== */
+.verdict-section {
+  border-top: 2px solid var(--red);
+  padding: 60px 0;
+  margin: 64px 0;
+}
+
+.verdict-line {
+  border-left: 3px solid var(--red);
+  padding-left: 24px;
+  margin-bottom: 28px;
+  font-size: 16px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.verdict-line strong { color: var(--text); font-weight: 700; }
+
+/* ===== FOOTER ===== */
+footer {
+  border-top: 1px solid rgba(83,52,131,0.2);
+  padding: 48px 0;
+  text-align: center;
+}
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in { animation: fadeIn 0.6s ease both; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .hour-charts-double { grid-template-columns: 1fr; }
+  .comparative-grid { grid-template-columns: 1fr; }
+  .relations-grid { grid-template-columns: 1fr; }
+  .versus-quote { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="container">
+    <div class="server-tag">⬡ PROFIL DOUBLE · TROMBINOSCOPE × QQ-ONLY</div>
+    <h1>Glacing</h1>
+    <p class="header-sub">glacing · #trombinoscope · #qq-only</p>
+    <div class="header-badges">
+      <span class="badge-gold badge">✦ 3 539 messages combinés</span>
+      <span class="badge-purple badge">2019 → 2026</span>
+      <span class="badge-channel trombi">#trombinoscope · 1 535 msgs</span>
+      <span class="badge-channel qq">#qq-only · 2 004 msgs</span>
+      <span class="badge-gold badge">⚑ Procureur de la raison</span>
+    </div>
+    <div class="quote-hero">
+      Le regret d'avoir mangé un bigmac avec simple chien alors que je pouvais participer à la réunion des astrophysiciens.
+      <div class="quote-source">— glacing · #trombinoscope · 02 déc. 2021</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== STATS GRID ===== -->
+<section class="container">
+  <div class="stats-grid-double">
+    <p class="stats-row-label trombi">↗ #trombinoscope</p>
+    <div class="stats-row">
+      <div class="stat-card trombi">
+        <div class="stat-label">Total messages</div>
+        <div class="stat-number">1 535</div>
+        <div class="stat-detail">sur le canal public</div>
+      </div>
+      <div class="stat-card trombi">
+        <div class="stat-label">Période d'activité</div>
+        <div class="stat-number" style="font-size:28px;">juil. 2019</div>
+        <div class="stat-detail">→ fév. 2026 · 7 ans</div>
+      </div>
+      <div class="stat-card trombi">
+        <div class="stat-label">Heure de pic</div>
+        <div class="stat-number">14h</div>
+        <div class="stat-detail">186 msgs · pic déjeuner</div>
+      </div>
+    </div>
+
+    <p class="stats-row-label qq">↗ #qq-only</p>
+    <div class="stats-row">
+      <div class="stat-card qq">
+        <div class="stat-label">Total messages</div>
+        <div class="stat-number">2 004</div>
+        <div class="stat-detail">sur le canal privé</div>
+      </div>
+      <div class="stat-card qq">
+        <div class="stat-label">Période d'activité</div>
+        <div class="stat-number" style="font-size:28px;">jan. 2019</div>
+        <div class="stat-detail">→ mars 2026 · 7 ans</div>
+      </div>
+      <div class="stat-card qq">
+        <div class="stat-label">Heure de pic</div>
+        <div class="stat-number">22h</div>
+        <div class="stat-detail">223 msgs · soirées tardives</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOUR CHARTS ===== -->
+<section class="container">
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <h2 class="section-title">Distribution horaire</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="hour-charts-double">
+    <div class="hour-chart-wrap trombi">
+      <div class="chart-title trombi">▸ #trombinoscope — pic 14h (déjeuner)</div>
+      <div class="hour-bars" id="trombi-hours"></div>
+      <div class="hour-labels">
+        <span class="hour-label">0h</span>
+        <span class="hour-label">3h</span>
+        <span class="hour-label">6h</span>
+        <span class="hour-label">9h</span>
+        <span class="hour-label">12h</span>
+        <span class="hour-label">15h</span>
+        <span class="hour-label">18h</span>
+        <span class="hour-label">21h</span>
+      </div>
+    </div>
+    <div class="hour-chart-wrap qq">
+      <div class="chart-title qq">▸ #qq-only — pic 22h (nocturne)</div>
+      <div class="hour-bars" id="qq-hours"></div>
+      <div class="hour-labels">
+        <span class="hour-label">0h</span>
+        <span class="hour-label">3h</span>
+        <span class="hour-label">6h</span>
+        <span class="hour-label">9h</span>
+        <span class="hour-label">12h</span>
+        <span class="hour-label">15h</span>
+        <span class="hour-label">18h</span>
+        <span class="hour-label">21h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACTIVITY TIMELINE ===== -->
+<section class="container">
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <h2 class="section-title">Timeline d'activité 2019–2026</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="activity-timeline">
+    <div class="timeline-scroll">
+      <div class="timeline-inner">
+        <div class="timeline-bars" id="timeline-bars"></div>
+        <div class="timeline-labels" id="timeline-labels"></div>
+      </div>
+    </div>
+    <div class="timeline-legend">
+      <div class="legend-item"><div class="legend-dot purple"></div> #trombinoscope</div>
+      <div class="legend-item"><div class="legend-dot red"></div> #qq-only</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOPIC BARS ===== -->
+<section class="container">
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <h2 class="section-title">Thèmes par canal</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="topic-bars-section">
+
+    <div class="canal-section">
+      <div class="canal-section-header trombi">▸ #trombinoscope — thèmes dominants</div>
+      <div class="canal-section-body">
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Analyse méta League of Legends (champions, équilibre, kits)</span><span class="topic-pct">38%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill trombi" style="--target-width: 90%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Débats compétitifs (JCS, showmatch, équipes, tournois)</span><span class="topic-pct">24%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill trombi" style="--target-width: 58%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Performances individuelles & salve de flammes argumentées</span><span class="topic-pct">20%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill trombi" style="--target-width: 47%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Punition & modération semi-humoristique (goulag, règles)</span><span class="topic-pct">10%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill trombi" style="--target-width: 24%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Copypasta, vannes internes & moments de culture serveur</span><span class="topic-pct">8%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill trombi" style="--target-width: 19%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="canal-section">
+      <div class="canal-section-header qq">▸ #qq-only — thèmes dominants</div>
+      <div class="canal-section-body">
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Vie quotidienne, anecdotes personnelles & voyages</span><span class="topic-pct">31%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill qq" style="--target-width: 91%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Gastronomie, photos de repas & débats culinaires</span><span class="topic-pct">22%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill qq" style="--target-width: 65%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Humour & vannes entre membres (sinnoh, poupi, fley, mpb)</span><span class="topic-pct">20%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill qq" style="--target-width: 59%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Réflexions sociales, économiques & questions de société</span><span class="topic-pct">16%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill qq" style="--target-width: 47%"></div></div>
+        </div>
+        <div class="topic-item obs-topic">
+          <div class="topic-label"><span>Relations amoureuses, récits sentimentaux & conseils</span><span class="topic-pct">11%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill qq" style="--target-width: 32%"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== COMPARATIVE ===== -->
+<div class="comparative-section">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:48px;">
+      <span class="section-num">§04</span>
+      <h2 class="section-title">Ce qui change entre les canaux</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="comparative-body">
+      <p>Sur le <strong style="color:var(--purple-light)">#trombinoscope</strong>, Glacing est en permanence en position haute. Il ne répond pas&nbsp;: il tranche. Son registre d'écriture y est délibérément soutenu — constructions syntaxiques longues, ironie distanciée, précision technique sur l'équilibrage des champions, appels à la logique formelle contre les approximations ambiantes. <span class="inline-quote">«&nbsp;Gg à toi pour avoir fait une analyse aussi poussée sur un échantillon de deux games&nbsp;»</span><span class="inline-date">2020-09-09</span> : la formule est le modèle de sa posture trombi — sarcasme poli, supériorité affichée, sourire en coin. Il y construit une réputation de juriste du meta, celui qui cite des matchups, rappelle des nerfs passés, et refuse les généralisations.</p>
+
+      <p>Sur le <strong style="color:var(--red-light)">#qq-only</strong>, le même individu parle de voitures, de permis moto, de la Bretagne qu'il déteste cordialement, d'une fille qui l'a fait tourner en bateau pendant des mois, de Bernard Arnault et de l'injustice de l'investissement. <span class="inline-quote">«&nbsp;j'ai du mal à voir en quoi c'est lui qui fait "vivre" les employés des entreprises qu'il a racheté&nbsp;»</span><span class="inline-date">2025-02-01</span>. Le registre bascule vers quelque chose de plus ouvert, moins performatif&nbsp;: il questionne, il raconte, il concède l'incertitude. La syntaxe se détend, les minuscules prolifèrent, les phrases s'achèvent parfois sans majuscule.</p>
+
+      <div class="versus-quote">
+        <div class="versus-item trombi">
+          <div class="versus-item-label">#TROMBINOSCOPE — REGISTRE ARGUMENTATIF</div>
+          «&nbsp;encore une fois je vais rappeler ce qu'il se passe : le R essaie de se convaincre que la toplane n'est pas broken en inventant des sorts broken sur le role sans impact, a savoir adc&nbsp;»
+          <div class="quote-source" style="margin-top:8px;font-size:10px;">— 2022-02-19</div>
+        </div>
+        <div class="versus-item qq">
+          <div class="versus-item-label">#QQ-ONLY — REGISTRE NARRATIF</div>
+          «&nbsp;t'es adulte tu peux juste me le dire au lieu de me demander de parler et de changer de direction du jour au lendemain&nbsp;»
+          <div class="quote-source" style="margin-top:8px;font-size:10px;">— 2025-06-26</div>
+        </div>
+      </div>
+
+      <p>Ce qui change encore plus fondamentalement, c'est l'enjeu de chaque intervention. Sur le trombi, chaque message est un mouvement dans un espace de réputation collective&nbsp;: il s'agit de ne pas se faire sortir du débat, d'avoir raison, ou au moins d'avoir le dernier mot avec élégance. <span class="inline-quote">«&nbsp;T'es gold 2 2000 games tu connais autant le jeu que Ranipo quand Elise traverse toute sa jungle en étant même pas niveau 6&nbsp;»</span><span class="inline-date">2021-12-11</span>. Sur le qq-only, l'enjeu est personnel et vrai : une relation sentimentale qui s'est mal terminée, une question sur la fortune de Arnault qui le dérange moralement, des doutes sur ses études en informatique qu'il a choisies par déduction négative.</p>
+
+      <p>Ce que la présence sur les deux canaux révèle qu'aucun seul ne montrerait&nbsp;: Glacing est quelqu'un qui a développé une armure intellectuelle précise et efficace sur le canal public, mais qui, dans l'espace restreint du qq-only, se permet une forme de vulnérabilité réfléchie. Ce n'est pas de la faiblesse&nbsp;: c'est la même rigueur appliquée à lui-même. <span class="inline-quote">«&nbsp;j'ai essayé de changer mon mindset de manière générale "si t'as un problème c'est que t'y es forcément pour quelque chose"&nbsp;»</span><span class="inline-date">2023-11-18</span>. L'homme qui sur le trombi refuse les excuses foireuses des mauvaises performances est le même qui, sur le qq-only, applique cette exigence à sa propre vie sentimentale. La cohérence n'est pas de façade.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROSE TROMBI ===== -->
+<section class="container prose-section">
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <h2 class="section-title">Sur le #trombinoscope</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">01/</span> Son positionnement dans le groupe</h3>
+    <p>Sur le trombi, Glacing occupe la fonction que certains groupes confient à un avocat général : il arrive dans les fils déjà lancés, identifie l'argument le plus faible, et le démonte méthodiquement. Il ne cherche pas la bagarre&nbsp;; il cherche la justesse. Cette posture lui vaut une présence remarquable lors des mois de forte activité — décembre 2021 avec 329 messages, dont une part disproportionnée dans des fils de débat sur des champions, des showmatch et la hiérarchie informelle du serveur. <span class="inline-quote">«&nbsp;Dorian étant dans le top 5 des mecs les plus smarts du discord (liste faite par ma personne) ses propos sont vrais — la liste comportant : Le Don, Forandos, Poupi, Dorian et Sooth&nbsp;»</span><span class="inline-date">2021-12-02</span>. Il classe. Il évalue. Il distribue les brevets de compétence avec une assurance qui ne s'excuse pas.</p>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">02/</span> Ses obsessions sur ce canal</h3>
+    <p>La balance des champions dans League of Legends est son sujet de prédilection absolu sur le trombi. Aphelios, Yuumi, Garen, Malphite, Fiora&nbsp;: il connaît les historiques de nerfs, cite les winrates par elo, sait que Garen "est injouable à partir de master". <span class="inline-quote">«&nbsp;delete yuumi the fucking kitten delete yuumi the fucking kitten delete yuumi the fucking kitten&nbsp;»</span><span class="inline-date">2020-05-29</span> — là où d'autres seraient frustrés, Glacing produit un manifeste en boucle. Son obsession n'est pas une humeur, c'est une conviction de fond : le jeu est déséquilibré de manière structurelle, et ceux qui prétendent le contraire n'ont pas regardé les chiffres. GK (le pseudo le plus cité dans ses messages trombi, 28 fois) incarne cet adversaire récurrent — celui qui représente une posture que Glacing considère intellectuellement malhonnête.</p>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">03/</span> Son registre, son humour</h3>
+    <p>L'humour de Glacing sur le trombi est un humour de précision. Il n'insulte pas&nbsp;: il compare. <span class="inline-quote">«&nbsp;La dernière fois j'suis allé sur le stream de potent il m'a dit "oh glacing glad to see you OG"&nbsp;»</span><span class="inline-date">2021-12-07</span> — il plante l'information comme un titre de noblesse dans une conversation sur les showmatch. Il pratique aussi le copypasta avec un timing parfait, choisissant les mèmes les plus absurdes pour les lâcher au moment exact où le débat atteint son apogée. <span class="inline-quote">«&nbsp;En me répondant tu actives ma carte piège, prison du QQ ! Tu es désormais enfermé dans le QQ à vie&nbsp;»</span><span class="inline-date">2022-05-24</span> : humour de geek assumé, référence à Yu-Gi-Oh, mais également signal que même dans le registre du jeu, il contrôle l'espace.</p>
+  </div>
+</section>
+
+<!-- ===== PROSE QQ ===== -->
+<section class="container prose-section">
+  <div class="section-header">
+    <span class="section-num">§06</span>
+    <h2 class="section-title" style="color:var(--red-light);">Sur le #qq-only</h2>
+    <div class="section-line" style="background: linear-gradient(90deg, rgba(233,69,96,0.4), transparent);"></div>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">01/</span> Son rapport à la vie quotidienne sur ce canal</h3>
+    <p>Le qq-only est le canal où Glacing raconte. Pas des stories Instagram — des récits vrais avec des arêtes. En juin 2025, il déroule plusieurs semaines d'une relation amoureuse ambiguë sur une trentaine de messages consécutifs, avec une précision chronologique de procès-verbal. <span class="inline-quote">«&nbsp;arrive en septembre on se reparle et elle est vrmnt très avenante — puis genre un peu après (vers octobre) elle vient me parler, elle me fait mes 4 vérités en mode si y'a pas un truc sérieux c'est 100% ma faute&nbsp;»</span><span class="inline-date">2025-06-26</span>. Ce niveau de détail révèle quelqu'un qui a besoin de mettre les choses en ordre par l'écriture — qui articule pour comprendre. Il passe également beaucoup de temps à commenter des photos de nourriture, des balades en voiture (le fameux "gamos"), et des randonnées. La vie physique et concrète le nourrit autant que les débats abstraits.</p>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">02/</span> Comment il se positionne dans les échanges du groupe</h3>
+    <p>Sur le qq, il n'est pas l'avocat général. Il est un participant égal — parfois le plus drôle, parfois celui qui pose la question qu'on évite. Il aime la vanne brute mais la manie avec une certaine économie de moyens. <span class="inline-quote">«&nbsp;Charles mid qui soulève autant au lit qu'au mid&nbsp;»</span><span class="inline-date">2019-03-25</span>. Il interpelle Sinnoh, Poupi, Fley avec la familiarité de quelqu'un qui connaît ses interlocuteurs par cœur — leurs vulnérabilités, leurs running gags, leurs réactions prévisibles. Sur le qq, la Bretagne est un sujet récurrent de moquerie douce&nbsp;: <span class="inline-quote">«&nbsp;classement où seuls les bretons prennent le temps de répondre car ils se font chier chez eux&nbsp;»</span><span class="inline-date">2023-03-27</span>. La géographie comme outil de taquinerie.</p>
+  </div>
+
+  <div class="prose-block">
+    <h3><span class="sub-num">03/</span> Ce qui transparaît dans ce contexte plus brut</h3>
+    <p>C'est sur le qq que Glacing laisse apparaître une curiosité intellectuelle qui dépasse le gaming. Ses échanges de février 2025 sur la fortune de Bernard Arnault sont ceux de quelqu'un qui pense à voix haute sur des questions économiques qu'il n'a pas encore résolues. <span class="inline-quote">«&nbsp;j'ai du mal à voir en quoi c'est lui qui fait "vivre" les employés des entreprises qu'il a racheté — j'ai l'impression de ce que t'as expliqué que l'investissement c'est un système qui snowball de fou&nbsp;»</span><span class="inline-date">2025-02-01</span>. Ce n'est pas un grand soir politique&nbsp;: c'est une honnêteté face au fait qu'il ne sait pas. Sur le trombi, il sait toujours. Sur le qq, il apprend encore.</p>
+  </div>
+</section>
+
+<!-- ===== RELATIONS ===== -->
+<section class="container relations-section">
+  <div class="section-header">
+    <span class="section-num">§07</span>
+    <h2 class="section-title">Relations & dynamiques</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="relations-grid">
+
+    <div class="relation-card red">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">GK</span>
+        <span class="badge-channel trombi badge">trombi</span>
+      </div>
+      <span class="badge-red badge">friction institutionnelle</span>
+      <div class="relation-quote">«&nbsp;Tu te réveilles et tu te rappelles que gk te termines dans le domaine dans lequel t'as mis 5 ans d'études&nbsp;»</div>
+      <div class="relation-analysis">GK est l'adversaire récurrent absolu du trombi (28 citations). Glacing l'utilise comme repoussoir, figure incarnant tout ce qu'il considère intellectuellement défaillant. La relation est moins personnelle qu'idéologique — GK représente une posture que Glacing refuse, et chaque échange devient un manuel de ce qu'il ne faut pas faire.</div>
+    </div>
+
+    <div class="relation-card purple">
+      <span class="relation-pseudo">Sinnoh</span>
+      <div class="relation-card-top">
+        <span></span>
+        <span class="badge-channel qq badge">qq-only</span>
+      </div>
+      <span class="badge-purple badge">complicité & taquinerie</span>
+      <div class="relation-quote">«&nbsp;Sinnoh m'a même OFFERT un ride dans son gamonstre dans les crêtes marseillaises&nbsp;»</div>
+      <div class="relation-analysis">Le membre le plus cité sur le qq-only (23 fois). Sinnoh est celui avec qui Glacing voyage, plaisante sur la Bretagne, et dont il décrit les aventures automobiles avec une tendresse moqueuse constante. C'est une relation de vraie affection, exprimée par la vanne régulière et l'invitation répétée à partager les mêmes espaces.</div>
+    </div>
+
+    <div class="relation-card purple">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">Poupi</span>
+        <span class="badge-channel both badge">les deux</span>
+      </div>
+      <span class="badge-purple badge">amitié solide</span>
+      <div class="relation-quote">«&nbsp;poupi m'avait sucé dans le gamonstre pour éviter ça jle remercie encore&nbsp;»</div>
+      <div class="relation-analysis">Poupi figure sur les deux canaux (17 fois sur le qq). La relation est faite de camaraderie ancienne — des voyages partagés, des moments en commun qui deviennent des références internes du groupe. Glacing cite Poupi avec la chaleur de quelqu'un qui connaît ses failles et les aime quand même.</div>
+    </div>
+
+    <div class="relation-card red">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">Karma</span>
+        <span class="badge-channel trombi badge">trombi</span>
+      </div>
+      <span class="badge-red badge">agacement raisonné</span>
+      <div class="relation-quote">«&nbsp;btg essayer de parler avec karma c'est une perte de temps&nbsp;»</div>
+      <div class="relation-analysis">Karma (11 citations trombi) est l'autre grande figure d'opposition. Contrairement à GK, c'est une friction plus proche, moins distanciée — Glacing l'interpelle directement, s'énerve vraiment, avant de conclure que l'échange est stérile. L'irritation est sincère là où avec GK elle est presque performative.</div>
+    </div>
+
+    <div class="relation-card red">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">MPB</span>
+        <span class="badge-channel both badge">les deux</span>
+      </div>
+      <span class="badge-red badge">rivalité technique</span>
+      <div class="relation-quote">«&nbsp;j'imagine que tu lock tes études à côté vu le temps que tu peux y consacrer&nbsp;»</div>
+      <div class="relation-analysis">MPB revient sur les deux canaux (17 fois trombi, 12 fois qq) — ce qui lui confère un statut à part dans l'orbite de Glacing. Sur le trombi, les échanges sont débats de niveau ; sur le qq, MPB est convoqué comme référence ou exemple. Une relation qui existe dans plusieurs registres simultanément.</div>
+    </div>
+
+    <div class="relation-card purple">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">Fley</span>
+        <span class="badge-channel qq badge">qq-only</span>
+      </div>
+      <span class="badge-purple badge">affection & piques</span>
+      <div class="relation-quote">«&nbsp;Ce discours de remise de diplôme pourrait être important pour fley&nbsp;»</div>
+      <div class="relation-analysis">Fley (13 citations qq) est un membre proche dont Glacing surveille la trajectoire de loin — études, jeu, statut. Le ton est bienveillant mais légèrement surplombant, comme on parle d'un ami dont on connaît les angles morts. La relation existe presque exclusivement sur le qq-only, ce qui la rend plus intime.</div>
+    </div>
+
+    <div class="relation-card muted">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">Ransberg</span>
+        <span class="badge-channel trombi badge">trombi</span>
+      </div>
+      <span class="badge badge">observationnel</span>
+      <div class="relation-quote">«&nbsp;"La game où je joue ils mettent ransberg sur son fiddle de merde et gilos qui troll"&nbsp;»</div>
+      <div class="relation-analysis">Ransberg est cité à 8 reprises sur le trombi, principalement comme cas d'étude dans des analyses de performance. Glacing ne l'attaque pas directement — il le cite pour illustrer une mécanique de jeu ou une dynamique d'équipe. Une relation d'observateur plus que de combattant.</div>
+    </div>
+
+    <div class="relation-card purple">
+      <div class="relation-card-top">
+        <span class="relation-pseudo">Kaspei</span>
+        <span class="badge-channel qq badge">qq-only</span>
+      </div>
+      <span class="badge-purple badge">curiosité & portrait</span>
+      <div class="relation-quote">«&nbsp;je peux établir un portrait robot de kaspei selon les infos que j'ai&nbsp;»</div>
+      <div class="relation-analysis">Kaspei est quelqu'un que Glacing ne connaît peut-être pas directement mais dont il reconstitue le profil à partir d'indices indirects — démarche typiquement glacing, analytique, légèrement detective. 8 citations sur le qq-only, toutes dans ce registre d'analyse à distance.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== PORTRAIT ===== -->
+<div class="portrait-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">§08</span>
+      <h2 class="section-title">Portrait humain</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="portrait-body">
+      <p>Sur le #trombinoscope, Glacing est <span class="portrait-highlight">un juriste du gaming qui n'a jamais passé le barreau mais aurait pu</span>. Sa posture est celle de quelqu'un qui a décidé très tôt que la rigueur argumentative était une forme de respect — envers soi-même d'abord, envers l'interlocuteur ensuite. Quand il démontre qu'Aphelios a été nerfé quinze fois depuis sa sortie et qu'il est encore trop fort, ce n'est pas pour gagner une dispute&nbsp;: c'est parce qu'il croit que la vérité mérite d'être défendue même dans un canal Discord sur League of Legends. Cette conviction peut parfois rendre les échanges épuisants pour ses contradicteurs, mais elle confère à ses interventions une densité qui persiste.</p>
+
+      <p>Sur le #qq-only, le même Glacing est <span class="portrait-highlight">quelqu'un qui pense à voix haute et qui le sait</span>. Les longues chaînes de messages de juin 2025 sur sa vie sentimentale ne sont pas une plainte — elles sont une mise en ordre par l'écriture. Il analyse sa propre situation avec la même grille qu'il applique aux performances de ses adversaires en solo queue&nbsp;: quels facteurs étaient sous son contrôle, lesquels ne l'étaient pas, où il a commis des erreurs de lecture. L'honnêteté qu'il demande aux autres, il se l'inflige aussi. Ce n'est pas toujours confortable à lire.</p>
+
+      <p>L'observation contre-intuitive sur Glacing est la suivante&nbsp;: <span class="portrait-highlight">ses deux pics d'activité les plus importants coïncident avec des contextes de groupe mobilisateur, pas des périodes de vie personnelle paisible</span>. Décembre 2021 sur le trombi (329 messages) correspond aux showmatch de fin d'année et à une effervescence collective intense. Juin-juillet 2025 sur le qq (183 et 113 messages) correspond à une période de stage à l'étranger suivie d'un retour compliqué. Glacing ne s'investit pas quand tout va bien — il s'investit quand il y a quelque chose à démêler, à construire, ou à défendre. Le silence relatif des périodes creuses (quelques messages épars en 2023) n'est pas de la distance&nbsp;: c'est l'absence de matière à traiter.</p>
+
+      <p>Son heure de pic sur le trombi (14h) révèle un homme qui résout ses désaccords du gaming pendant la pause déjeuner — ce qui est à la fois très organisé et légèrement maniaque. Sur le qq, le pic à 22h dit autre chose&nbsp;: les conversations qui comptent vraiment, celles sur les filles, sur Arnault, sur l'escalade avec Sinnoh, ont lieu quand les défenses sont un peu plus basses. <span class="portrait-highlight">Il y a deux rythmes biologiques chez Glacing&nbsp;: le mid-journée combatif et le late-night pensif</span>. Les deux coexistent sans se contredire.</p>
+
+      <p>Ce qui reste, en croisant les deux canaux&nbsp;: Glacing est quelqu'un de structurellement cohérent. La même exigence de vérité, la même intolérance pour les arguments de mauvaise foi, la même tendance à cartographier les gens (son top 5 des membres les plus intelligents, son portrait-robot de Kaspei, ses 4 vérités sur l'investissement de Bernard Arnault) opèrent dans tous les registres. Le trombi et le qq-only ne révèlent pas deux Glacing différents — ils révèlent les deux fréquences d'un seul signal, l'une tournée vers le dehors et l'autre vers le dedans.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VERDICT ===== -->
+<section class="container verdict-section">
+  <div class="section-header" style="margin-bottom:40px;">
+    <span class="section-num">§09</span>
+    <h2 class="section-title">Verdict</h2>
+    <div class="section-line" style="background: linear-gradient(90deg, rgba(233,69,96,0.4), transparent);"></div>
+  </div>
+
+  <div class="verdict-line">
+    <strong>Glacing est le procureur que le serveur mérite et redoute à la fois.</strong> Sur le trombi, il structure les débats même quand il n'est pas modérateur&nbsp;: ses interventions agissent comme des arrêts de jurisprudence sur l'équilibre des champions, les performances d'équipe, et la légitimité des postures. On peut ne pas être d'accord avec lui — on ne peut pas l'ignorer.
+  </div>
+
+  <div class="verdict-line">
+    <strong>Sur le qq-only, il est la preuve que l'exigence intellectuelle peut coexister avec la vulnérabilité.</strong> Les mêmes mois où il distribue des verdicts sur Garen et Fiora, il raconte avec une précision étonnante comment une fille l'a fait tourner en bateau et ce qu'il en conclut sur lui-même. Ce n'est pas une contradiction&nbsp;: c'est l'intégralité d'un caractère.
+  </div>
+
+  <div class="verdict-line">
+    <strong>Ses pics d'activité — décembre 2021, juin 2025 — ne sont pas des accidents statistiques.</strong> Ils marquent des moments de combustion collective ou personnelle où Glacing a quelque chose à résoudre, à défendre, ou à comprendre. En dehors de ces moments, il se tait avec la même économie qu'il parle. Les deux valent la peine d'être notés.
+  </div>
+
+  <div class="verdict-line">
+    <strong>Ce que Glacing laisse comme empreinte sur 3 539 messages, c'est la trace d'une intelligence en travail permanent</strong> — appliquée aux champions d'un jeu vidéo, aux fortunes des milliardaires français, aux mécaniques du désir amoureux, et aux hiérarchies informelles d'un Discord de gamers. Le périmètre importe moins que la méthode. La méthode, elle, est toujours la même.
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <p class="footer-text">Généré depuis 1 535 messages (#trombinoscope) + 2 004 messages (#qq-only) · 2019 → 2026</p>
+    <span class="badge-gold badge">GLACING PROFILE DOUBLE v1.0</span>
+  </div>
+</footer>
+
+<script>
+// ===== HOUR CHARTS =====
+const trombiHours = [60,29,9,0,0,4,3,7,43,57,47,112,157,122,186,62,88,126,48,43,64,112,112,44];
+const qqHours = [39,17,4,0,0,2,4,15,41,49,152,105,190,99,98,89,72,95,216,189,85,165,223,55];
+
+function buildHourBars(data, containerId, cls) {
+  const container = document.getElementById(containerId);
+  const max = Math.max(...data);
+  data.forEach((val, i) => {
+    const bar = document.createElement('div');
+    bar.className = `hour-bar ${cls}`;
+    bar.style.height = (val / max * 100) + '%';
+    bar.setAttribute('data-val', val + ' msgs');
+    bar.setAttribute('title', `${i}h: ${val} messages`);
+    container.appendChild(bar);
+  });
+}
+
+buildHourBars(trombiHours, 'trombi-hours', 'trombi');
+buildHourBars(qqHours, 'qq-hours', 'qq');
+
+// ===== TIMELINE =====
+const months = ["2019-01","2019-02","2019-03","2019-04","2019-05","2019-06","2019-07","2019-08","2019-09","2019-10","2019-11","2019-12","2020-01","2020-02","2020-03","2020-04","2020-05","2020-06","2020-07","2020-08","2020-09","2020-10","2020-11","2020-12","2021-01","2021-02","2021-03","2021-04","2021-05","2021-06","2021-07","2021-08","2021-09","2021-10","2021-11","2021-12","2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03"];
+const trombiVals = [0,0,0,0,0,0,3,1,6,0,3,0,1,0,0,0,5,33,37,5,9,3,5,11,9,170,53,95,57,47,47,29,18,17,4,329,39,43,25,17,44,97,2,57,3,25,3,0,1,1,15,17,0,0,11,11,6,1,9,0,0,2,0,0,0,0,12,8,42,1,0,3,6,3,3,6,7,0,1,0,0,0,0,0,0,17,0];
+const qqVals = [1,0,18,8,3,7,0,0,0,0,5,11,5,4,17,25,22,115,117,9,33,18,20,26,1,7,51,16,6,1,11,23,13,40,20,28,7,1,16,7,13,1,2,0,6,16,4,10,25,4,6,13,191,21,19,23,2,1,104,5,24,4,2,0,11,0,83,54,2,5,37,12,5,62,24,12,20,113,183,64,14,29,10,1,6,31,18];
+
+const peaks = {
+  35: "déc. 2021\n329 trombi",
+  52: "mai 2023\n191 qq",
+  58: "nov. 2023\n104 qq",
+  78: "juil. 2025\n183 qq"
+};
+
+const barsContainer = document.getElementById('timeline-bars');
+const labelsContainer = document.getElementById('timeline-labels');
+const maxVal = Math.max(...trombiVals.map((t,i) => t + qqVals[i]));
+
+months.forEach((m, i) => {
+  const t = trombiVals[i];
+  const q = qqVals[i];
+  const total = t + q;
+
+  const col = document.createElement('div');
+  col.className = 'timeline-col';
+
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.flexDirection = 'column';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.width = '100%';
+  wrapper.style.height = '160px';
+  wrapper.style.justifyContent = 'flex-end';
+  wrapper.style.position = 'relative';
+
+  if (peaks[i]) {
+    const lbl = document.createElement('div');
+    lbl.className = 'peak-label';
+    lbl.textContent = peaks[i].split('\n')[1];
+    lbl.style.top = '-28px';
+    lbl.style.fontSize = '8px';
+    wrapper.appendChild(lbl);
+  }
+
+  if (q > 0) {
+    const barQ = document.createElement('div');
+    barQ.className = 'timeline-bar-t bar-qq';
+    barQ.style.height = (q / maxVal * 155) + 'px';
+    barQ.style.width = '100%';
+    barQ.setAttribute('title', `${m} qq: ${q}`);
+    wrapper.appendChild(barQ);
+  }
+  if (t > 0) {
+    const barT = document.createElement('div');
+    barT.className = 'timeline-bar-t bar-trombi';
+    barT.style.height = (t / maxVal * 155) + 'px';
+    barT.style.width = '100%';
+    barT.setAttribute('title', `${m} trombi: ${t}`);
+    wrapper.appendChild(barT);
+  }
+
+  col.appendChild(wrapper);
+  barsContainer.appendChild(col);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'timeline-label';
+  // Show label only for Jan of each year
+  if (m.endsWith('-01') || m === '2026-03') {
+    lbl.textContent = m.slice(0, 4);
+    lbl.style.color = 'rgba(153,153,187,0.8)';
+    lbl.style.fontWeight = '500';
+  }
+  labelsContainer.appendChild(lbl);
+});
+
+// ===== INTERSECTION OBSERVER =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Hour bars
+      entry.target.querySelectorAll('.hour-bar').forEach((bar, i) => {
+        setTimeout(() => bar.classList.add('animated'), i * 15);
+      });
+      // Timeline bars
+      entry.target.querySelectorAll('.timeline-bar-t').forEach((bar, i) => {
+        setTimeout(() => bar.classList.add('animated'), i * 5);
+      });
+      // Topic bars
+      entry.target.querySelectorAll('.topic-bar-fill').forEach((bar, i) => {
+        setTimeout(() => bar.classList.add('animated'), i * 100 + 200);
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.hour-chart-wrap, .activity-timeline, .canal-section-body').forEach(el => {
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
