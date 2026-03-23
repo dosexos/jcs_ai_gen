@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zaydy — Profil Trombinoscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --bg2: #1a1a2e;
+    --bg3: #16213e;
+    --purple: #533483;
+    --purple-light: #7b52b9;
+    --red: #e94560;
+    --red-light: #ff6b8a;
+    --gold: #f0a500;
+    --text: #e8e8f0;
+    --text-dim: #9999bb;
+    --text-muted: #5555aa;
+    --card-bg: #1e1e38;
+    --card-border: rgba(83, 52, 131, 0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--purple); opacity: 0.12; top: -200px; right: -200px; }
+  .blob-2 { width: 500px; height: 500px; background: var(--red); opacity: 0.10; bottom: -100px; left: -150px; }
+  .blob-3 { width: 400px; height: 400px; background: var(--purple-light); opacity: 0.08; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SERVER TAG */
+  .server-tag {
+    display: inline-block;
+    background: rgba(83, 52, 131, 0.2);
+    border: 1px solid rgba(83, 52, 131, 0.5);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  /* HEADER */
+  header { padding: 0 0 60px; }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 50%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+  }
+  .badge-purple {
+    background: rgba(83, 52, 131, 0.25);
+    border: 1px solid rgba(83, 52, 131, 0.6);
+    color: var(--purple-light);
+  }
+  .badge-red {
+    background: rgba(233, 69, 96, 0.2);
+    border: 1px solid rgba(233, 69, 96, 0.5);
+    color: var(--red-light);
+  }
+  .badge-ghost {
+    background: transparent;
+    border: 1px dashed var(--gold);
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .quote-hero {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.5vw, 24px);
+    color: var(--text-dim);
+    border-left: 3px solid var(--purple);
+    padding-left: 24px;
+    line-height: 1.5;
+    max-width: 720px;
+  }
+  .quote-hero .quote-source {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-style: normal;
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px 20px;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* HOUR CHART */
+  .chart-section { margin-bottom: 60px; }
+  .hour-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 120px;
+    gap: 3px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 20px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hour-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+  }
+  .hour-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 2px;
+    background: rgba(83, 52, 131, 0.5);
+  }
+  .hour-bar.peak {
+    background: linear-gradient(0deg, var(--red), var(--red-light));
+  }
+  .hour-bar.active {
+    background: rgba(123, 82, 185, 0.7);
+  }
+  .hour-label {
+    position: absolute;
+    bottom: -22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ACTIVITY TIMELINE */
+  .timeline-section { margin-bottom: 60px; }
+  .activity-timeline {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+    overflow-x: auto;
+  }
+  .timeline-inner {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 100px;
+    min-width: 700px;
+  }
+  .month-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+    min-width: 20px;
+  }
+  .month-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: height 1.2s ease;
+    min-height: 2px;
+    cursor: default;
+  }
+  .month-bar.era-2018 {
+    background: linear-gradient(0deg, var(--gold), rgba(240, 165, 0, 0.5));
+  }
+  .month-bar.era-2024 {
+    background: linear-gradient(0deg, var(--purple-light), rgba(83, 52, 131, 0.5));
+  }
+  .month-bar.era-peak {
+    background: linear-gradient(0deg, var(--red), var(--red-light));
+  }
+  .month-bar.silence {
+    background: rgba(255,255,255,0.04);
+    border: 1px dashed rgba(255,255,255,0.08);
+    height: 100% !important;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .silence-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.1em;
+  }
+  .month-label {
+    position: absolute;
+    bottom: -18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .timeline-legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* TOPIC BARS */
+  .topics-section { margin-bottom: 60px; }
+  .topic-bar {
+    background: var(--bg2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .topic-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 180px;
+  }
+  .topic-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .topic-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--red));
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease;
+  }
+  .topic-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* PROSE SECTIONS */
+  .prose-section {
+    margin-bottom: 56px;
+  }
+  .prose-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .sub-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 400;
+  }
+  .prose-section p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .inline-quote {
+    font-style: italic;
+    color: var(--purple-light);
+  }
+  .inline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  /* RELATIONS */
+  .relations-section { margin-bottom: 60px; }
+  .relations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .relation-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .relation-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+  .relation-card.type-affection::before { background: var(--purple); }
+  .relation-card.type-friction::before { background: var(--red); }
+  .relation-card.type-neutral::before { background: var(--text-muted); }
+
+  .relation-pseudo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .relation-nature {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+  .relation-nature.affection { background: rgba(83,52,131,0.3); color: var(--purple-light); }
+  .relation-nature.friction { background: rgba(233,69,96,0.2); color: var(--red-light); }
+  .relation-nature.neutral { background: rgba(85,85,170,0.2); color: var(--text-muted); }
+
+  .relation-quote {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--purple-light);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .relation-analysis {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* PORTRAIT */
+  .portrait-section {
+    background: var(--bg2);
+    border-top: 2px solid var(--purple);
+    border-radius: 0 0 12px 12px;
+    padding: 40px;
+    margin-bottom: 60px;
+  }
+  .portrait-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+  .portrait-section p {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .portrait-highlight {
+    background: rgba(83, 52, 131, 0.15);
+    border-radius: 4px;
+    padding: 0 6px;
+    color: var(--purple-light);
+  }
+
+  /* VERDICT */
+  .verdict-section {
+    background: var(--bg2);
+    border-top: 2px solid var(--red);
+    border-radius: 0 0 12px 12px;
+    padding: 40px;
+    margin-bottom: 60px;
+  }
+  .verdict-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .verdict-line {
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+  .verdict-line strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .footer-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    border: 1px dashed rgba(240, 165, 0, 0.4);
+    padding: 4px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 48px 0;
+  }
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="server-tag">⬡ TROMBINOSCOPE · DISCORD</div>
+    <h1>Zaydy</h1>
+    <div class="subtitle">zaydy · #trombinoscope</div>
+    <div class="badges">
+      <span class="badge badge-purple">#trombinoscope</span>
+      <span class="badge badge-purple">332 messages</span>
+      <span class="badge badge-purple">2018 + 2024–2026</span>
+      <span class="badge badge-red">PARISIEN DE BANLIEUE</span>
+      <span class="badge badge-ghost">REVENANT · 2018 → 2024</span>
+    </div>
+    <blockquote class="quote-hero">
+      "je suis un campagnard pour les Parisiens, et un Parisien pour les campagnards"
+      <span class="quote-source">— zaydy, 30 sept. 2024</span>
+    </blockquote>
+  </header>
+
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total messages</div>
+      <div class="stat-number">332</div>
+      <div class="stat-sub">Sur #trombinoscope</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Période</div>
+      <div class="stat-number" style="font-size:22px;">2018<br>+2024</div>
+      <div class="stat-sub">Juin 2018 · Sept 2024 → fév 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Heure de pic</div>
+      <div class="stat-number">10h</div>
+      <div class="stat-sub">Matinée active (10h–12h)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Ratio vagues</div>
+      <div class="stat-number" style="font-size:22px;">6<br>pics</div>
+      <div class="stat-sub">Micro-bursts sur 7 fenêtres actives</div>
+    </div>
+  </div>
+
+  <!-- HOUR CHART -->
+  <div class="chart-section">
+    <div class="section-title">Activité par heure</div>
+    <div class="hour-chart" id="hourChart"></div>
+  </div>
+
+  <!-- ACTIVITY TIMELINE -->
+  <div class="timeline-section">
+    <div class="section-title">Timeline d'activité mensuelle</div>
+    <div class="activity-timeline">
+      <div class="timeline-inner" id="timelineInner"></div>
+      <div class="timeline-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--gold)"></div>
+          <span>2018 — Période d'origine</span>
+        </div>
+        <div class="legend-dot" style="background:rgba(255,255,255,0.08);border:1px dashed rgba(255,255,255,0.15)"></div>
+        <div class="legend-item" style="margin-left:-20px">
+          <span>Silence 2018–2024 (≈ 6 ans)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--purple-light)"></div>
+          <span>2024–2026 — Retour</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--red)"></div>
+          <span>Pics d'activité intense</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEMES -->
+  <div class="topics-section">
+    <div class="section-title">Thèmes récurrents</div>
+    <div class="topic-bar">
+      <div class="topic-name">Mode & style vestimentaire</div>
+      <div class="topic-track"><div class="topic-fill" data-width="95"></div></div>
+      <div class="topic-pct">95%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Politique & économie FR</div>
+      <div class="topic-track"><div class="topic-fill" data-width="80"></div></div>
+      <div class="topic-pct">80%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Paris / Transports / Vie urbaine</div>
+      <div class="topic-track"><div class="topic-fill" data-width="65"></div></div>
+      <div class="topic-pct">65%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Relations amoureuses & physique</div>
+      <div class="topic-track"><div class="topic-fill" data-width="58"></div></div>
+      <div class="topic-pct">58%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Food, cuisine, restos</div>
+      <div class="topic-track"><div class="topic-fill" data-width="35"></div></div>
+      <div class="topic-pct">35%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Service public / Hôpital / AP-HP</div>
+      <div class="topic-track"><div class="topic-fill" data-width="30"></div></div>
+      <div class="topic-pct">30%</div>
+    </div>
+    <div class="topic-bar">
+      <div class="topic-name">Danse (bachata / salsa)</div>
+      <div class="topic-track"><div class="topic-fill" data-width="22"></div></div>
+      <div class="topic-pct">22%</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PROSE SECTIONS -->
+  <div class="prose-section">
+    <h3><span class="sub-num">01/</span> Le retour</h3>
+    <p>
+      En juin 2018, un certain Zaydy apparaît sur le canal avec une vingtaine de messages épars. Il commente des photos, lâche des <span class="inline-quote">"t'es bg tte façon"</span><span class="inline-date">sept. 2018</span>, interpelle avec légèreté. Rien dans ce fragment initial ne laisse deviner qu'il va disparaître pour six ans. Et pourtant : entre novembre 2018 et septembre 2024, silence absolu. Pas un message. Une coupure nette, sans explication dans le CSV, sans message de départ.
+    </p>
+    <p>
+      Le 23 septembre 2024, il réapparaît d'un simple <span class="inline-quote">"cc"</span><span class="inline-date">23 sept. 2024</span> adressé à un membre par son ID. Ce n'est pas une annonce de retour, pas une explication, pas un "j'étais où" — juste un salut discret comme si six ans n'avaient pas existé. Ce détail dit quelque chose d'essentiel : Zaydy ne rejoue pas son retour. Il reprend la conversation là où il l'a laissée, sans dramatiser, sans raconter. L'absence est ravalée, non liquidée. Ce qui a changé, en revanche, est très visible dans l'écriture : le Zaydy de 2018 use d'un argot vernaculaire condensé ("isse", "tte façon", emojis discrets), là où le Zaydy de 2024 parle en phrases articulées, citant McKinsey, l'AP-HP, les dépenses publiques. La syntaxe elle-même a grandi.
+    </p>
+    <p>
+      L'hypothèse la plus probable — et que le CSV confirme en filigrane — est que ces six ans ont correspondu à une période de construction : études supérieures, intégration professionnelle à l'hôpital Bichat comme ingénieur de recherche en biostatistiques, ancrage dans Paris. Le groupe Discord appartient peut-être à un âge antérieur ; y revenir signifie assumer la continuité entre l'adolescent de 2018 et l'adulte de 2024. Ce qu'il fait sans ostentation.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">02/</span> Ses obsessions de prédilection</h3>
+    <p>
+      Si un thème domine massivement le Zaydy post-2024, c'est la mode masculine. Non pas comme hobby superficiel mais comme domaine structuré, avec une grammaire propre. Il possède quarante pantalons (<span class="inline-quote">"Ah mais je suis réellement à 40 pantalons atm"</span><span class="inline-date">30 sept. 2024</span>), distingue la chemisette de la chemise, le pantalon taille haute du taille basse, connaît les coupes, les matières, sait que le lin n'a pas sa place en automne-hiver. Il envoie des liens vers des marques pointues comme Frizmworks, commente l'Uniqlo avec réserve sur la qualité. Face à des interlocuteurs qui rationalisent la mode comme séduction, il oppose une vision esthétique désintéressée : <span class="inline-quote">"malaise de s'habiller pour une cible"</span><span class="inline-date">1er juil. 2025</span>.
+    </p>
+    <p>
+      Son deuxième grand territoire est politique-économique, et là il surprend. Zaydy défend le service public avec une argumentation structurée, citant les dépenses vs les recettes, la politique de l'offre, la privatisation d'EDF et des autoroutes. Il ne se contente pas de postures : il distingue l'État de ses dirigeants, interroge les chiffres, reproche à ses interlocuteurs de confondre cause et conséquence. Dans un long message de novembre 2025, il dresse une analyse macro de la désindustrialisation française qui n'aurait pas dépareillé dans un article de presse. Ce registre, totalement absent en 2018, est apparu avec son parcours professionnel à l'hôpital public.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">03/</span> Style d'expression et registre</h3>
+    <p>
+      L'écriture de Zaydy opère sur deux registres simultanés, qu'il manie sans transition apparente. Le premier est familier, paresseux, conversationnel : <span class="inline-quote">"trop de malaise de bon matin"</span><span class="inline-date">28 sept. 2024</span>, "dtf" pour "dans tous les faits", le verlan léger, les emojis utilisés avec parcimonie comme ponctuation émotionnelle. Le second est précis, analytique, presque didactique : il reformule les arguments adverses avant de les réfuter, exige des chiffres, souligne quand on lui invente des propos (<span class="inline-quote">"Encore une fois je n'ai pas dit ça"</span><span class="inline-date">1er juil. 2025</span>).
+    </p>
+    <p>
+      Ce double registre n'est pas une incohérence — c'est une marque de style. Zaydy calibre son niveau de langue selon l'enjeu du sujet. Il peut glisser d'une blague sur les bonnet de bain à une analyse sur la politique de l'offre dans le même fil, sans que la transition paraisse forcée. L'ironie est présente mais rarement cruelle ; sa pique la plus acérée est souvent un constat factuel déposé froidement : <span class="inline-quote">"Personne de sain ferait 40 ans la même chose en voyant que ça ne marche pas"</span><span class="inline-date">15 nov. 2025</span>.
+    </p>
+    <p>
+      Un trait distinctif : il dit "nonobstant" à l'oral Discord, utilise "dtf" comme abréviation personnelle récurrente, et ponctue certains désaccords d'un <span class="inline-quote">"¿"</span> — le point d'interrogation à l'envers comme signal de perplexité ironique. Ce sont de petits marqueurs identitaires qui traversent toutes les périodes.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">04/</span> Les vagues d'activité</h3>
+    <p>
+      L'activité de Zaydy sur le canal suit une logique de bursts — des concentrations denses de messages sur quelques heures ou quelques jours, suivies de silences pouvant durer plusieurs semaines. Après son retour en septembre 2024, il est très présent en octobre 2024 (discussions mode, transports, physique). Puis le canal ne le voit presque plus jusqu'à une large séquence en janvier-février 2025, dominée par des débats économiques et politiques prolongés. Juin 2025 constitue un autre pic intense autour du style vestimentaire, avec des échanges animés sur les pantalons taille haute et basse. Novembre 2025 explose en un marathon politique à 3h du matin où il rédige des paragraphes entiers.
+    </p>
+    <p>
+      Ce pattern suggère que Zaydy vient sur ce canal quand un sujet le mobilise, pas par habitude quotidienne. Il ne commente pas pour maintenir une présence sociale — il intervient parce qu'il a quelque chose à dire. L'heure de pointe à 10h, la fréquence des messages matinaux depuis son bureau à l'AP-HP (<span class="inline-quote">"bureau sans fenêtres, lumière blanche de merde"</span><span class="inline-date">4 fév. 2025</span>), confirment que Discord est souvent un à-côté de sa journée de travail, une fenêtre ouverte pendant les pauses.
+    </p>
+  </div>
+
+  <div class="prose-section">
+    <h3><span class="sub-num">05/</span> Sa place dans le groupe</h3>
+    <p>
+      En tant que revenant, Zaydy occupe une position singulière : il est à la fois un ancien et un nouveau. Il connaît certains membres depuis 2018 (il interpelle Sinnoh et un autre par ID dès son retour), mais il a loupé six ans de dynamiques, d'inside jokes, d'évolutions relationnelles. Cette position est inconfortable dans n'importe quel groupe ; Zaydy la gère en ne la signalant jamais. Il ne demande pas à être mis à jour, ne s'excuse pas de son absence. Il re-entre comme si la porte était restée ouverte.
+    </p>
+    <p>
+      Ce qui lui permet de s'installer rapidement, c'est qu'il apporte de la substance. Les discussions qu'il lance ou rejoint ont de la tenue ; il défend ses positions avec cohérence et reconnaît ses erreurs de lecture (<span class="inline-quote">"ah nn j'ai mal lu"</span><span class="inline-date">11 oct. 2024</span>). Il ne cherche pas à être drôle à tout prix ni à plaire — il dit ce qu'il pense, quitte à ne pas être d'accord. Cette indépendance lui confère une forme d'autorité tranquille, particulièrement visible dans les débats mode où il est clairement le plus informé, et dans les débats politiques où il tient face à des positions libérales avec des arguments factuels sans devenir agressif.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- RELATIONS -->
+  <div class="relations-section">
+    <div class="section-title">Relations & dynamiques</div>
+    <div class="relations-grid">
+
+      <div class="relation-card type-affection">
+        <div class="relation-pseudo">sinnoh</div>
+        <span class="relation-nature affection">Complicité / interlocuteur principal</span>
+        <div class="relation-quote">"c'est quand on irl sinnoh"<span class="inline-date"> 30 sept. 2024</span></div>
+        <div class="relation-analysis">Sinnoh est l'interlocuteur le plus cité de tout le CSV. Zaydy l'interpelle directement pour planifier une rencontre à Paris dès ses premiers messages de retour, lui partage des podcasts True Crime, lui envoie des liens mode. Leur relation semble être celle d'un ami du groupe qu'il a voulu retrouver en priorité. Dans les débats économiques, il le taquine sur ses positions libérales sans jamais basculer dans la friction réelle.</div>
+      </div>
+
+      <div class="relation-card type-neutral">
+        <div class="relation-pseudo">ID 116552991057772549</div>
+        <span class="relation-nature neutral">Relation ancienne / cordiale</span>
+        <div class="relation-quote">"ce mâle alpha"<span class="inline-date"> juin 2018</span></div>
+        <div class="relation-analysis">Interpellé dès 2018 avec un clin d'œil moqueur-affectueux. En 2024, Zaydy lui suggère d'aller au Maghreb valoriser ses yeux clairs, lui regrette qu'il ne soit plus en Île-de-France pour aller à la salle ensemble. Trace d'une amitié dont les contours exacts ont évolué hors canal, mais dont la chaleur reste visible à travers le format des apostrophes.</div>
+      </div>
+
+      <div class="relation-card type-friction">
+        <div class="relation-pseudo">lyd</div>
+        <span class="relation-nature friction">Désaccord stylistique affectueux</span>
+        <div class="relation-quote">"Non juste lyd n'aime pas mon style"<span class="inline-date"> juin 2025</span></div>
+        <div class="relation-analysis">Lyd et Zaydy s'affrontent régulièrement sur les questions vestimentaires, notamment la taille des pantalons et le port des chemises. Zaydy formule ses désaccords clairement mais sans acrimonie — il convoque un vote des autres membres pour arbitrer, tout en ajoutant aussitôt que chacun fait ce qu'il veut. La friction est productive, pas toxique. C'est le type de désaccord qui structure une communauté sans l'abîmer.</div>
+      </div>
+
+      <div class="relation-card type-affection">
+        <div class="relation-pseudo">caps (ID 203502091623333888)</div>
+        <span class="relation-nature affection">Admin / interlocuteur régulier</span>
+        <div class="relation-quote">"je peux pas avoir un rôle mieux que celui là couleur chiasse ?"<span class="inline-date"> 8 oct. 2024</span></div>
+        <div class="relation-analysis">Zaydy l'interpelle directement pour réclamer une upgrade de rôle Discord — signe qu'il se sent assez à l'aise pour faire ce genre de demande dès les premières semaines de retour. Il le cite ensuite dans les débats mode pour arbitrage visuel. Une relation de confiance fonctionnelle.</div>
+      </div>
+
+      <div class="relation-card type-affection">
+        <div class="relation-pseudo">igo (ID 146323243085594625)</div>
+        <span class="relation-nature affection">Pote / échanges cuisine & vie</span>
+        <div class="relation-quote">"tu cuisines quoi de beau sinon"<span class="inline-date"> 18 oct. 2024</span></div>
+        <div class="relation-analysis">Zaydy lui pose des questions sur sa cuisine, valide ses choix amoureux ("mais content pour toi igo"), s'intéresse à ses recettes de pâtes et chocolat. Une relation détendue, bienveillante, sans frottements. Igo semble être quelqu'un avec qui Zaydy maintient un intérêt sincère pour les petits détails du quotidien.</div>
+      </div>
+
+      <div class="relation-card type-neutral">
+        <div class="relation-pseudo">giorgio (ID 231863822296678410)</div>
+        <span class="relation-nature neutral">Convivialité / restos & mode</span>
+        <div class="relation-quote">"giorgio si tu veux tester"<span class="inline-date"> 20 mars 2025</span></div>
+        <div class="relation-analysis">Zaydy l'invite à tester une pizzeria qu'il fréquente, lui demande son avis sur des looks, le convoque dans les votes mode. Une relation de surface sympathique, centrée sur les plaisirs partagés. Pas d'échanges émotionnels visibles mais une inclusion régulière dans les moments légers.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PORTRAIT HUMAIN -->
+  <div class="portrait-section">
+    <h2>Portrait humain</h2>
+    <p>
+      Il y a quelque chose d'étrange dans une absence de six ans sur un canal Discord. Les groupes numériques ont une durée de vie courte ; les gens partent, reviennent, disparaissent. Mais six ans représentent un cycle complet — l'adolescence qui finit, les études qui se terminent, un métier qui commence. Que Zaydy soit revenu sur ce canal précis, avec ces gens précis, dit qu'il <span class="portrait-highlight">n'a pas considéré ce groupe comme une parenthèse close, mais comme un fil qu'on peut reprendre</span>. La question de savoir pourquoi il est parti n'a pas de réponse dans le CSV. Ce qui est lisible, en revanche, c'est le type de retour qu'il a choisi : sans effusions, sans explication, avec ce simple "cc" qui ne demande pas de pardon et n'en offre pas.
+    </p>
+    <p>
+      Ce que le retour dit de lui est plus intéressant encore. On pourrait s'attendre à un homme qui teste, qui cherche à savoir si sa place est encore là. Ce n'est pas ce qu'on voit. Zaydy reprend le fil avec une assurance tranquille — il <span class="portrait-highlight">partage son adresse (banlieue côté Disney), révèle son salaire approximatif, son poste à l'AP-HP, son rapport au célibat</span> dans les premières semaines. Il ne construit pas sa présence progressivement ; il se dépose d'un coup. Cela ressemble moins à quelqu'un qui cherche à être accepté qu'à quelqu'un qui sait déjà qu'il l'est.
+    </p>
+    <p>
+      L'irrégularité de son activité n'est pas un symptôme de désengagement — c'est un trait de caractère qu'on retrouve dans d'autres aspects du profil. Zaydy est <span class="portrait-highlight">un homme qui fonctionne par vagues de concentration</span> : quarante pantalons accumulés, des débats politiques à 3h du matin qui durent des heures, une sortie bachata puis des semaines sans mention de danse. Il ne fait pas les choses à moitié ou régulièrement ; il les fait intensément, puis passe à autre chose. Ce profil d'investissement intermittent mais profond se retrouve dans sa façon d'aborder les sujets sur le canal : il n'intervient pas pour meubler, il intervient pour argumenter.
+    </p>
+    <p>
+      L'observation contre-intuitive sur Zaydy est la suivante : pour quelqu'un qui parle autant de style, de physique, de mode, il ne se vend pas. Il dit être à 65 kg "au lieu de 70", être chauve, admettre que les applications de rencontre l'ont gavé. <span class="portrait-highlight">Il n'est pas dans la performance de soi</span> — il est dans la description de soi. Ce n'est pas de la fausse modestie ; c'est une forme de confort personnel rare. Il peut parler pendant des heures de la coupe d'un pantalon et se décrire "desco, pauvre et moche" deux phrases plus tard, sans que l'une invalide l'autre. Il a intégré que l'esthétique n'est pas une question de statut mais de soin porté aux choses.
+    </p>
+    <p>
+      Ce qui reste le plus visible à la lecture de l'ensemble du CSV, c'est une cohérence remarquable entre 2018 et 2026. Le registre a évolué, le vocabulaire s'est densifié, les sujets se sont complexifiés — mais la posture de fond est identique : bienveillance directe, refus de la flatterie inutile, franchise sans brutalité. Le Zaydy de 2018 dit à quelqu'un "t'es bg tte façon" pour le rassurer ; le Zaydy de 2025 dit à quelqu'un "prends tes couilles et fais un choix" pour le même motif. Le fond n'a pas changé. Seul le langage a mûri.
+    </p>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-section">
+    <h2>Verdict</h2>
+    <div class="verdict-line">
+      <strong>Zaydy laisse une empreinte de densité.</strong> Ses messages ne sont jamais du remplissage — quand il parle, c'est pour avancer quelque chose : une information, une position, un conseil concret. Il économise sa présence et ça lui donne du poids.
+    </div>
+    <div class="verdict-line">
+      <strong>Il est le type rare qui revient sans réclamer d'avoir été attendu.</strong> Six ans d'absence, un simple "cc", et il est là. Pas de mise en scène du retour, pas de nostalgie cultivée. Il reprend sa place comme si elle n'avait jamais été à quelqu'un d'autre.
+    </div>
+    <div class="verdict-line">
+      <strong>Sa connaissance de la mode n'est pas un hobby — c'est une langue.</strong> Il pense par matières, par coupes, par proportions. C'est l'un des rares membres du canal capable d'argumenter un désaccord esthétique avec des concepts précis plutôt qu'avec des opinions brutes. Ça agace parfois, ça instruit souvent.
+    </div>
+    <div class="verdict-line">
+      <strong>Ce qu'il transporte depuis 2018, c'est une forme d'honnêteté à bas régime.</strong> Pas spectaculaire, pas démonstrative — juste constante. Il dit ce qu'il pense, corrige quand il a tort, défend quand il a raison. Sur un canal Discord, en 2026, c'est déjà beaucoup.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-text">
+      Généré depuis 332 messages · 2018 + sept. 2024 → fév. 2026<br>
+      Canal #trombinoscope
+    </div>
+    <div class="footer-badge">ZAYDY PROFILE v1.0</div>
+  </footer>
+
+</div>
+
+<script>
+// ─── HOUR CHART ───────────────────────────────────────────────────────────────
+const hourData = [
+  0, 0, 3, 1, 1, 4, 8, 7, 11, 19, 38, 29, 18, 10, 8, 11, 9, 12, 7, 10, 12, 11, 8, 4
+];
+// Peak = hour 10 (index 10)
+const maxHour = Math.max(...hourData);
+const hourChart = document.getElementById('hourChart');
+hourData.forEach((val, i) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'hour-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'hour-bar' + (i === 10 ? ' peak' : (val > maxHour * 0.5 ? ' active' : ''));
+  const pct = Math.round((val / maxHour) * 100);
+  bar.style.height = '0px';
+  bar.dataset.target = pct;
+  wrap.appendChild(bar);
+  if (i % 3 === 0) {
+    const label = document.createElement('div');
+    label.className = 'hour-label';
+    label.textContent = i + 'h';
+    wrap.appendChild(label);
+  }
+  hourChart.appendChild(wrap);
+});
+
+// ─── ACTIVITY TIMELINE ────────────────────────────────────────────────────────
+// Real monthly data from CSV
+const monthlyData = [
+  { label: 'Jun 18', count: 2, era: '2018' },
+  { label: 'Jul 18', count: 1, era: '2018' },
+  { label: 'Sep 18', count: 9, era: '2018' },
+  { label: 'Nov 18', count: 8, era: '2018' },
+  { label: '', count: 0, era: 'silence', silenceLabel: '← 6 ans de silence →' },
+  { label: 'Sep 24', count: 6, era: '2024' },
+  { label: 'Oct 24', count: 68, era: 'peak' },
+  { label: 'Nov 24', count: 3, era: '2024' },
+  { label: 'Dec 24', count: 1, era: '2024' },
+  { label: 'Jan 25', count: 12, era: '2024' },
+  { label: 'Feb 25', count: 82, era: 'peak' },
+  { label: 'Mar 25', count: 8, era: '2024' },
+  { label: 'Apr 25', count: 6, era: '2024' },
+  { label: 'May 25', count: 4, era: '2024' },
+  { label: 'Jun 25', count: 58, era: 'peak' },
+  { label: 'Jul 25', count: 14, era: '2024' },
+  { label: 'Aug 25', count: 3, era: '2024' },
+  { label: 'Sep 25', count: 18, era: '2024' },
+  { label: 'Oct 25', count: 3, era: '2024' },
+  { label: 'Nov 25', count: 42, era: 'peak' },
+  { label: 'Dec 25', count: 2, era: '2024' },
+  { label: 'Jan 26', count: 7, era: '2024' },
+  { label: 'Feb 26', count: 10, era: '2024' },
+];
+
+const maxMonth = Math.max(...monthlyData.filter(d => d.era !== 'silence').map(d => d.count));
+const timelineInner = document.getElementById('timelineInner');
+
+monthlyData.forEach(d => {
+  const wrap = document.createElement('div');
+  wrap.className = 'month-bar-wrap';
+  if (d.era === 'silence') {
+    wrap.style.flex = '3';
+    const bar = document.createElement('div');
+    bar.className = 'month-bar silence';
+    const sl = document.createElement('div');
+    sl.className = 'silence-label';
+    sl.textContent = d.silenceLabel;
+    bar.appendChild(sl);
+    wrap.appendChild(bar);
+  } else {
+    const bar = document.createElement('div');
+    bar.className = 'month-bar era-' + d.era;
+    const pct = Math.round((d.count / maxMonth) * 100);
+    bar.style.height = '0px';
+    bar.dataset.target = pct;
+    wrap.appendChild(bar);
+    if (d.label) {
+      const lbl = document.createElement('div');
+      lbl.className = 'month-label';
+      lbl.textContent = d.label;
+      wrap.appendChild(lbl);
+    }
+  }
+  timelineInner.appendChild(wrap);
+});
+
+// ─── ANIMATE ALL BARS ─────────────────────────────────────────────────────────
+function animateBars() {
+  document.querySelectorAll('.hour-bar[data-target], .month-bar[data-target]').forEach(bar => {
+    const target = parseInt(bar.dataset.target);
+    const parentH = bar.parentElement.classList.contains('hour-bar-wrap') ? 80 : 94;
+    bar.style.height = Math.max(2, Math.round(parentH * target / 100)) + 'px';
+  });
+}
+
+// ─── TOPIC BARS (IntersectionObserver) ────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.topic-fill').forEach(fill => {
+        fill.style.width = fill.dataset.width + '%';
+      });
+      entry.target.querySelectorAll('.hour-bar[data-target], .month-bar[data-target]').forEach(bar => {
+        animateBars();
+      });
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.topics-section, .chart-section, .timeline-section').forEach(el => observer.observe(el));
+
+// Trigger on load after short delay
+setTimeout(animateBars, 300);
+setTimeout(() => {
+  document.querySelectorAll('.topic-fill').forEach(fill => {
+    fill.style.width = fill.dataset.width + '%';
+  });
+}, 400);
+</script>
+</body>
+</html>
