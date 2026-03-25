@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raydo — Profil Trombinoscope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --bg2: #1a1a2e;
+    --bg3: #16213e;
+    --purple: #533483;
+    --purple-light: #7b52b9;
+    --red: #e94560;
+    --red-light: #ff6b8a;
+    --gold: #f0a500;
+    --text: #e8e8f0;
+    --text-dim: #9999bb;
+    --text-muted: #5555aa;
+    --card-bg: #1e1e38;
+    --card-border: rgba(83, 52, 131, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 {
+    width: 600px; height: 600px;
+    background: var(--purple);
+    opacity: 0.12;
+    top: -200px; right: -200px;
+  }
+  .blob-2 {
+    width: 500px; height: 500px;
+    background: var(--red);
+    opacity: 0.10;
+    bottom: -150px; left: -150px;
+  }
+  .blob-3 {
+    width: 400px; height: 400px;
+    background: var(--purple-light);
+    opacity: 0.08;
+    top: 40%; left: 40%;
+    transform: translate(-50%, -50%);
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+
+  .server-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: rgba(83, 52, 131, 0.2);
+    border: 1px solid rgba(83, 52, 131, 0.5);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(64px, 12vw, 110px);
+    background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 45%, var(--red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+
+  .badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-default {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-dim);
+  }
+
+  .badge-purple {
+    background: rgba(83, 52, 131, 0.25);
+    border: 1px solid rgba(123, 82, 185, 0.5);
+    color: var(--purple-light);
+  }
+
+  .badge-red {
+    background: rgba(233, 69, 96, 0.2);
+    border: 1px solid rgba(233, 69, 96, 0.45);
+    color: var(--red-light);
+  }
+
+  .badge-gold {
+    background: rgba(240, 165, 0, 0.15);
+    border: 1px solid rgba(240, 165, 0, 0.4);
+    color: var(--gold);
+  }
+
+  .quote-hero {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(18px, 3vw, 24px);
+    color: var(--text-dim);
+    border-left: 3px solid var(--purple);
+    padding: 16px 24px;
+    text-align: left;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .quote-hero .quote-attr {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-style: normal;
+    color: var(--text-muted);
+    margin-top: 10px;
+  }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 60px 0;
+  }
+
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    background: linear-gradient(135deg, var(--purple-light), var(--red));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stat-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ── HOUR CHART ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px 24px 20px;
+    margin: 0 0 60px;
+  }
+
+  .hour-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 120px;
+    gap: 3px;
+  }
+
+  .hour-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .hour-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    background: rgba(83, 52, 131, 0.4);
+    transition: height 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    height: 0;
+    min-height: 2px;
+  }
+
+  .hour-bar.peak {
+    background: linear-gradient(to top, var(--red), var(--red-light));
+  }
+
+  .hour-bar.high {
+    background: rgba(123, 82, 185, 0.7);
+  }
+
+  .hour-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── TOPICS ── */
+  .topics-section {
+    margin: 0 0 60px;
+  }
+
+  .topic-item {
+    margin-bottom: 18px;
+  }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+
+  .topic-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .topic-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .topic-bar {
+    background: var(--bg2);
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .topic-bar-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(to right, var(--purple), var(--red));
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  /* ── PROSE SECTIONS ── */
+  .prose-section {
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(83, 52, 131, 0.2);
+  }
+
+  .prose-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--red);
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .prose-section h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .prose-section p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .inline-quote {
+    font-style: italic;
+    color: var(--purple-light);
+  }
+
+  .inline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  /* ── RELATIONS ── */
+  .relations-section {
+    margin-bottom: 60px;
+  }
+
+  .relations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .relations-grid { grid-template-columns: 1fr; }
+  }
+
+  .relation-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px;
+    border-left-width: 3px;
+    border-left-style: solid;
+  }
+
+  .relation-card.complicite { border-left-color: var(--purple); }
+  .relation-card.friction { border-left-color: var(--red); }
+  .relation-card.neutre { border-left-color: var(--text-muted); }
+  .relation-card.admiration { border-left-color: var(--gold); }
+
+  .relation-pseudo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .relation-nature {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nature-complicite { background: rgba(83,52,131,0.3); color: var(--purple-light); }
+  .nature-friction { background: rgba(233,69,96,0.2); color: var(--red-light); }
+  .nature-neutre { background: rgba(85,85,170,0.2); color: var(--text-muted); }
+  .nature-admiration { background: rgba(240,165,0,0.15); color: var(--gold); }
+
+  .relation-quote {
+    font-style: italic;
+    color: var(--purple-light);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 2px solid rgba(123,82,185,0.3);
+  }
+
+  .relation-analysis {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── PORTRAIT ── */
+  .portrait-section {
+    background: var(--bg2);
+    border-top: 2px solid rgba(83, 52, 131, 0.5);
+    padding: 48px 40px;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 60px;
+  }
+
+  .portrait-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .portrait-section p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .portrait-highlight {
+    background: rgba(83, 52, 131, 0.15);
+    border-radius: 4px;
+    padding: 0 6px;
+    color: var(--purple-light);
+  }
+
+  /* ── VERDICT ── */
+  .verdict-section {
+    border-top: 2px solid var(--red);
+    padding-top: 48px;
+    margin-bottom: 60px;
+  }
+
+  .verdict-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .verdict-line {
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .verdict-line strong {
+    color: var(--red-light);
+    font-weight: 700;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--card-border);
+    padding: 32px 0;
+    text-align: center;
+  }
+
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .footer-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--purple-light);
+    background: rgba(83,52,131,0.2);
+    border: 1px solid rgba(83,52,131,0.4);
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, var(--purple), var(--red));
+    margin-bottom: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="container">
+    <div class="server-tag">⬡ Trombinoscope · Discord</div>
+    <h1>Raydo</h1>
+    <p class="subtitle">raydo7139 · #trombinoscope</p>
+    <div class="badges">
+      <span class="badge badge-default">#trombinoscope</span>
+      <span class="badge badge-purple">6 819 messages</span>
+      <span class="badge badge-default">Déc 2022 → Déc 2025</span>
+      <span class="badge badge-red">Philosophe du Dating</span>
+      <span class="badge badge-gold">Rhéteur compulsif</span>
+    </div>
+    <blockquote class="quote-hero">
+      « #1 trouver nouveau travail. #2 séduire une 8+/10 et se marier avec pour vivre ensemble forever and everafter. »
+      <span class="quote-attr">— raydo7139 · 25/12/2022</span>
+    </blockquote>
+  </div>
+</header>
+
+<!-- ── STATS GRID ── -->
+<section>
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">6 819</div>
+        <div class="stat-label">Messages</div>
+        <div class="stat-sub">canal unique</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:26px; padding-top:8px;">Déc 2022<br>→ Déc 2025</div>
+        <div class="stat-label">Période active</div>
+        <div class="stat-sub">3 ans de présence</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">14h</div>
+        <div class="stat-label">Pic d'activité</div>
+        <div class="stat-sub">777 msgs à cette heure</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">44.5</div>
+        <div class="stat-label">Longueur moy.</div>
+        <div class="stat-sub">caractères / message</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOUR CHART ── -->
+<section>
+  <div class="container">
+    <div class="chart-wrapper">
+      <div class="section-title">Activité horaire — distribution réelle</div>
+      <div class="hour-chart" id="hourChart">
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:8px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">00h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">03h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">06h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">09h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">12h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">15h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">18h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">21h</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">23h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THÈMES ── -->
+<section class="topics-section">
+  <div class="container">
+    <div class="section-title">Thèmes récurrents</div>
+
+    <div class="topic-item" data-pct="100">
+      <div class="topic-header">
+        <span class="topic-name">Séduction, dating & dynamiques hommes-femmes</span>
+        <span class="topic-pct">100 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="57">
+      <div class="topic-header">
+        <span class="topic-name">Physique, taille & attraction physique</span>
+        <span class="topic-pct">57 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="40">
+      <div class="topic-header">
+        <span class="topic-name">Gaming (League of Legends, LoL)</span>
+        <span class="topic-pct">40 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="22">
+      <div class="topic-header">
+        <span class="topic-name">Débats rhétoriques & contradictions amicales</span>
+        <span class="topic-pct">22 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="18">
+      <div class="topic-header">
+        <span class="topic-name">Vie professionnelle & salaires</span>
+        <span class="topic-pct">18 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="12">
+      <div class="topic-header">
+        <span class="topic-name">Féminisme, politique & société</span>
+        <span class="topic-pct">12 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+
+    <div class="topic-item" data-pct="8">
+      <div class="topic-header">
+        <span class="topic-name">Santé, sport, nutrition & bien-être</span>
+        <span class="topic-pct">8 %</span>
+      </div>
+      <div class="topic-bar"><div class="topic-bar-fill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROSE SECTIONS ── -->
+<section>
+  <div class="container">
+
+    <!-- 01 -->
+    <div class="prose-section">
+      <span class="section-num">01/</span>
+      <h3>Sa posture dans le groupe — le tribun du quotidien</h3>
+      <p>
+        Raydo occupe l'espace conversationnel avec l'aisance naturelle de quelqu'un qui n'a jamais douté de sa légitimité à parler. Il intervient tôt dans les fils de discussion, pose des questions directes — <span class="inline-quote">« T'habites où ? »</span><span class="inline-date">09/12/2022</span> — et structure immédiatement le débat selon ses propres catégories. Il n'attend pas d'invitation. Son entrée dans le serveur en décembre 2022 ressemble moins à une arrivée timide qu'à une prise de position : dès le premier message, il contredit Risto sur les posts LinkedIn féministes avec un <span class="inline-quote">« Va sur Linkedin Risto et tu t'apercevras que, hélas, ce ne sont pas des trolls. »</span><span class="inline-date">09/12/2022</span>
+      </p>
+      <p>
+        Sur 3 ans de présence, le rythme d'activité reflète une vie sociale bien ancrée dans les heures ouvrables : le pic à 14h (777 messages) et les volumes importants de 11h à 19h dessinent le profil d'un homme qui discute en parallèle de ses obligations quotidiennes, le canal fonctionnant comme une soupape intellectuelle permanente plutôt que comme un divertissement du soir. Les accalmies profondes entre 1h et 6h du matin confirment une hygiène de sommeil plus respectueuse que la moyenne du serveur.
+      </p>
+      <p>
+        Sa posture de fond est celle du contradicteur de bonne foi : il relance, nuance, exige qu'on précise les termes, et quand il se fait clouer le bec, il le reconnaît — parfois à contre-cœur, parfois avec une élégance désarmante. <span class="inline-quote">« Ouais y a un truc pas net »</span><span class="inline-date">2023</span> est une formule-type : bref, honnête, et qui laisse la porte ouverte à la suite.
+      </p>
+    </div>
+
+    <!-- 02 -->
+    <div class="prose-section">
+      <span class="section-num">02/</span>
+      <h3>Ses obsessions — la taille, le désir, et la rigueur des théories</h3>
+      <p>
+        Le sujet qui traverse l'intégralité des trois années de présence de Raydo comme un fil rouge indestructible, c'est la question des dynamiques d'attraction — et au cœur de cette question, celle de la taille. Pas comme une plainte répétée, mais comme un cadre analytique à part entière, une variable qu'il intègre à tous les raisonnements connexes : le dating, le marché du travail, la perception sociale. <span class="inline-quote">« C'est une bataille pour dépasser la condition de petit. »</span><span class="inline-date">12/12/2022</span> La formule est presque borgésienne dans sa densité.
+      </p>
+      <p>
+        Ce qui est remarquable, c'est la rigueur formelle qu'il applique à des sujets qui relèvent habituellement du vécu brut. Quand il parle de Tinder, il parle de MMR, de signaux, de ratios matchs/dates. Quand il analyse l'attraction physique, il décompose les variables et propose des expériences : <span class="inline-quote">« J'invite par exemple chacun à poster sa taille et son salaire et nous observerons des corrélations très surprenantes pour les anti-heightpill. »</span><span class="inline-date">02/05/2023</span> Il a fait de sa propre situation le terrain d'une investigation pseudo-sociologique à laquelle il convie le reste du groupe.
+      </p>
+      <p>
+        La deuxième grande obsession est la cohérence interne des arguments adverses. Dès qu'un interlocuteur se contredit, Raydo l'a. <span class="inline-quote">« Aïe, la psychologie de comptoir, ne le prends pas mal Merko mais c'est ce qu'on sort quand on n'a plus d'arguments. »</span><span class="inline-date">03/05/2023</span> Il tient les fils, retient les positions énoncées plusieurs jours plus tôt, et les ressoude au moment opportun.
+      </p>
+    </div>
+
+    <!-- 03 -->
+    <div class="prose-section">
+      <span class="section-num">03/</span>
+      <h3>Son registre d'expression — l'ironie comme armure et comme outil</h3>
+      <p>
+        Raydo écrit comme il pense : vite, dense, avec une ponctuation qui tient parfois du poing sur la table. Il a développé un style personnel reconnaissable — des phrases qui commencent par une capitulation feinte pour mieux enchaîner sur une contre-attaque, des formules lapidaires à la limite du proverbe, et un sens aigu du timing comique. L'emoji <code style="font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:12px;">:zemmour:</code> (présent dans des dizaines de messages) fonctionne comme un marqueur d'ironie assumée : il dit une chose et le smiley indique qu'il sait pertinemment ce qu'il dit.
+      </p>
+      <p>
+        Son humour est du type « absurde factuel » : <span class="inline-quote">« Gin Tonic pcq c'est mon seul vrai ami »</span><span class="inline-date">2023</span>, ou encore l'image saisissante <span class="inline-quote">« En gros le 190 commande un deliveroo tandis que le 171 doit cuisiner sous la pluie et réussir à créer quelque chose de délicieux. »</span><span class="inline-date">21/12/2022</span> Ce n'est pas de l'autodérision au sens thérapeutique — c'est de la mise en scène de la condition humaine telle qu'il la conçoit, avec lui-même comme personnage principal d'un roman légèrement tragicomique.
+      </p>
+      <p>
+        Il pratique aussi le registre solennel avec une habileté rare : <span class="inline-quote">« L'existence est dure, Risto, on n'est pas tous des chad comme toi ; fort heureusement elle n'est pas impitoyable au point de ne pas nous avoir donné l'alcool. »</span><span class="inline-date">09/12/2022</span> — premier jour sur le canal, ton immédiatement posé. Quelqu'un qui écrit ça à froid lors de sa toute première interaction a une maîtrise stylistique consciente.
+      </p>
+    </div>
+
+    <!-- 04 -->
+    <div class="prose-section">
+      <span class="section-num">04/</span>
+      <h3>Ce qui transparaît de sa vie hors Discord</h3>
+      <p>
+        Raydo vit dans le sud de la France, y est attaché, et envisage Paris avec une curiosité mêlée de méfiance. Il travaille — le sujet revient régulièrement, notamment autour des dynamiques salariales et des tensions de l'environnement professionnel. Fin 2022 il consulte un médecin pour des tendinites aux coudes : <span class="inline-quote">« j'ai l'impression que j'ai des tendinites aux coudes »</span><span class="inline-date">18/12/2022</span> — ce qui est cohérent avec la pratique intensive du sport qu'il évoque par ailleurs. À partir de 2024 il réduit sa consommation d'alcool au profit du sport : <span class="inline-quote">« je me suis mis à faire énormément de sport et je trouvais ça con d'intox mon corps avec de l'alcool. »</span><span class="inline-date">31/10/2024</span>
+      </p>
+      <p>
+        Sa vie sentimentale est à la fois son sujet de prédilection et son angle mort le plus exposé : les anecdotes s'accumulent sur trois ans — la meuf de Tinder qui le ghoste à Paris après lui avoir donné rendez-vous, les sessions Tinder en lobby vocal, l'application mobile comme terrain d'étude autant que de rencontre. Ce qu'il ne dit jamais explicitement mais qui ressort en creux : il est célibataire sur toute la période, cette situation le préoccupe réellement, et l'humour est à la fois son bouclier et son mode d'intégration de l'échec.
+      </p>
+      <p>
+        Il y a aussi un Raydo plus discret qui apparaît dans les derniers messages de décembre 2025, dispensant des conseils sur le sommeil, le magnésium et la gestion du stress chronique avec une précision qui suggère soit une lecture personnelle approfondie, soit une expérience directe : <span class="inline-quote">« Stress = adrénaline. À court terme c'est cool par contre si ça devient du stress chronique c'est super mauvais. »</span><span class="inline-date">30/12/2025</span> Ce Raydo-là — bienveillant, informé, tourné vers l'autre — contraste saisissant avec le polémiste flamboyant des débats dating.
+      </p>
+    </div>
+
+    <!-- 05 -->
+    <div class="prose-section">
+      <span class="section-num">05/</span>
+      <h3>Ce qui le rend unique — la lucidité comme arme à double tranchant</h3>
+      <p>
+        Ce qui distingue Raydo de la masse des participants, c'est une qualité rare dans les espaces de discussion en ligne : il tient une position sans se laisser submerger par elle. Il peut défendre pendant vingt messages une thèse sur l'attraction physique et conclure sur un <span class="inline-quote">« Mais allez pas croire que je suis déprimé etc juste la taille c'est chiant mais sinon je trace ma route »</span><span class="inline-date">12/12/2022</span> — signalant qu'il sait exactement où finit l'argument et où commence l'ego. C'est une forme d'auto-observation peu commune.
+      </p>
+      <p>
+        Il possède également une capacité à faire évoluer ses positions sur des fenêtres longues — non pas dans la même conversation (où il est rarement concédant), mais d'une année sur l'autre. Le Raydo de fin 2025 — moins volatile, plus soucieux des dynamiques de groupe, plus attentif au bien-être d'autrui — n'est pas le même que celui de l'été 2023 en mode Tinder stream. La maturation est visible dans le corpus.
+      </p>
+      <p>
+        Sa singularité tient aussi à un paradoxe structurel : il est à la fois le membre qui théorise le plus volontiers sur les rapports humains et celui qui semble en avoir la compréhension émotionnelle la plus variable. Les modèles qu'il construit sont élégants, souvent justes dans leur mécanique, mais ils manquent parfois du facteur de friction que seule l'expérience irrationnelle apporte. C'est ce décalage — entre la rigueur analytique et la réalité vécue — qui rend ses interventions si souvent stimulantes et si souvent discutées.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── RELATIONS ── -->
+<section class="relations-section">
+  <div class="container">
+    <div class="section-title">Relations &amp; dynamiques</div>
+    <div class="section-divider"></div>
+
+    <div class="relations-grid">
+
+      <div class="relation-card complicite">
+        <div class="relation-pseudo">Caps</div>
+        <span class="relation-nature nature-complicite">Référence &amp; modèle</span>
+        <p class="relation-quote">« Jpense aussi que Caps a des photos vraiment bonnes pour l'app, qui communiquent la bonne vibe : la vibe de baise. »</p>
+        <p class="relation-analysis">Caps est la figure la plus citée du corpus avec 26+ occurrences. Raydo lui reconnaît une expertise Tinder qu'il traite comme un oracle : il lui demande sa bio, son score, ses techniques. La relation est asymétrique — Caps est au-dessus dans la hiérarchie tacite du dating, et Raydo l'assume sans amertume. Il y a une admiration teintée d'une légère compétition conceptuelle, jamais personnelle.</p>
+      </div>
+
+      <div class="relation-card admiration">
+        <div class="relation-pseudo">Yoob</div>
+        <span class="relation-nature nature-admiration">Admiration franche</span>
+        <p class="relation-quote">« Anyway on est tous les putes de Yoob sur ce discord. »</p>
+        <p class="relation-analysis">Yoob incarne pour Raydo l'archétype réussi : financièrement, physiquement. Les formules sont sans ambiguïté — « my Goat », « un titan », « largement plus stock ». Ce type d'admiration décomplexée, exprimée publiquement, est rare ; elle dit quelque chose sur la capacité de Raydo à reconnaître une supériorité sans en faire une blessure narcissique.</p>
+      </div>
+
+      <div class="relation-card friction">
+        <div class="relation-pseudo">Kaspei</div>
+        <span class="relation-nature nature-friction">Friction affectueuse</span>
+        <p class="relation-quote">« Je ferais confiance à Kaspei pour mon PEA mais ses avis sur le genre féminin bon.. »</p>
+        <p class="relation-analysis">Kaspei est le contradicteur attitré. La relation est vive — Raydo le titille sur ses goûts en matière de femmes, le reprend quand il joue « l'anticonformiste », mais l'invite aussi à des IRL parisiens et sollicite son expertise sur d'autres sujets. C'est la dynamique classique du binôme qui s'entend mieux en se disputant.</p>
+      </div>
+
+      <div class="relation-card complicite">
+        <div class="relation-pseudo">Risto</div>
+        <span class="relation-nature nature-complicite">Sparring partenaire originel</span>
+        <p class="relation-quote">« L'existence est dure, Risto, on n'est pas tous des chad comme toi. »</p>
+        <p class="relation-analysis">Risto est l'interlocuteur du premier message. Raydo lui parle avec une familiarité immédiate qui suggère une relation préexistante ou une reconnaissance instantanée. Le ton est celui de la complicité assurée — Raydo le reprend, lui reconnaît des qualités, et retourne régulièrement le nommer dans les débats comme point d'ancrage.</p>
+      </div>
+
+      <div class="relation-card complicite">
+        <div class="relation-pseudo">Merko</div>
+        <span class="relation-nature nature-complicite">Allié pragmatique</span>
+        <p class="relation-quote">« Ptain Merko est turbo based. »</p>
+        <p class="relation-analysis">La relation avec Merko évolue sur trois ans. En 2023 Raydo lui oppose une critique rhétorique sèche ; en 2024-2025 il le déclare « my goat » et « turbo based ». La trajectoire inverse suggère que Merko a dit des choses qui ont fait mouche, ou que le temps a donné raison à ses positions. Raydo sait reconnaître qu'on avait tort lui.</p>
+      </div>
+
+      <div class="relation-card neutre">
+        <div class="relation-pseudo">poupzer / demme</div>
+        <span class="relation-nature nature-neutre">Mentions ponctuelles</span>
+        <p class="relation-quote">« @kaspei expertise requise »</p>
+        <p class="relation-analysis">Plusieurs membres apparaissent de façon sporadique dans le corpus — interpellés pour une expertise précise, mentionnés dans un récit ou cités en exemple. Ces relations restent à la périphérie du noyau dur, sans dynamique particulière documentée sur la durée.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PORTRAIT HUMAIN ── -->
+<div class="container">
+<section class="portrait-section">
+  <h2>Portrait humain</h2>
+
+  <p>
+    Raydo est le genre de personne qui rend les conversations <span class="portrait-highlight">plus denses que nécessaire</span> — et dont on réalise après coup qu'on en avait besoin. Il arrive dans un fil sur les posts LinkedIn féministes et en fait une thèse. Il commente une question de dating et produit une grille d'analyse. Cette tendance à la systématisation n'est pas de la pédanterie : c'est une façon de prendre les sujets au sérieux, même ceux qui ne le méritent pas toujours.
+  </p>
+
+  <p>
+    Ce qui est moins immédiatement visible — et qui pourtant traverse tout le corpus — c'est une <span class="portrait-highlight">vulnérabilité bien gérée</span>. Raydo sait qu'il est de taille moyenne dans un monde où la hauteur compte selon ses propres théories. Il vit ce décalage avec une lucidité surprenante, ni dans le déni ni dans la victimisation : <span class="inline-quote">« je sais que je suis pas bg »</span><span class="inline-date">17/12/2022</span>, dit-il simplement, avant d'enchaîner sur autre chose. Cette capacité à nommer ses désavantages perçus sans s'y perdre est l'une de ses qualités les plus saines.
+  </p>
+
+  <p>
+    L'observation contre-intuitive : Raydo, qui construit pendant des années une rhétorique assez dure sur les rapports hommes-femmes, laisse apparaître en filigrane une <span class="portrait-highlight">conception du mariage et de la famille profondément romantique</span>. Sa liste de vœux du 25 décembre 2022 — trouver un travail, « séduire une 8+/10 et se marier pour vivre ensemble forever and everafter » — n'est pas cynique. C'est de l'idéalisme habillé en cynisme, la posture du désenchanté qui croit encore secrètement aux contes. La dureté du cadre analytique protège quelque chose de bien plus tendre.
+  </p>
+
+  <p>
+    Sur trois ans, <span class="portrait-highlight">quelque chose se dépose dans le corpus</span>. L'agitation dating de 2023 — les sessions Tinder en live, les déclarations tonitruantes — cède progressivement la place, en 2025, à un homme qui dispense des conseils de santé précis à quelqu'un qui se plaint de stress chronique, qui parle de sommeil et de magnésium avec le calme de quelqu'un qui a réglé une partie de ses propres équations. Ce n'est pas la même personne, exactement. Ou plutôt : c'est la même, mais qui a avancé.
+  </p>
+
+  <p>
+    Il laisse une empreinte stylistique sur le canal. Plusieurs de ses formules — la métaphore du cuisinier sous la pluie, l'image du « gaymomètre qui explose », l'idée que les meufs célibataires sont <span class="inline-quote">« mathématiquement »</span> suspectes — ont le statut de références partagées. On ne l'imite pas, mais on le cite. C'est une forme de <span class="portrait-highlight">persistance dans la mémoire collective du groupe</span> que peu de membres atteignent.
+  </p>
+</section>
+</div>
+
+<!-- ── VERDICT ── -->
+<section class="verdict-section">
+  <div class="container">
+    <h2>Verdict</h2>
+
+    <div class="verdict-line">
+      <strong>Il rend le canal plus exigeant.</strong> Pas toujours confortablement — ses contradictions obligent à préciser sa pensée, ses formules parfois tranchantes forcent la réponse. Mais un fil sans Raydo est souvent plus plat, plus consensuel, moins vivant.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Il est sa propre théorie.</strong> Le corpus entier est une démonstration involontaire de la thèse qu'il défend : que les conditions initiales comptent énormément, que les gens qui partent avec moins travaillent plus dur pour arriver au même endroit, et que cette injustice vaut d'être nommée plutôt que niée — même si le nommer est inconfortable.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Sa trajectoire est lisible dans le temps.</strong> En 2022-2023 il construit ses positions ; en 2024-2025 il les affine, les corrige en silence, et commence à regarder les autres avec plus de sollicitude. Ce mouvement est discret — il ne le commente jamais — mais il est réel et, dans un espace où beaucoup restent figés, il mérite d'être salué.
+    </div>
+
+    <div class="verdict-line">
+      <strong>Il croit plus profondément à l'amour qu'il ne le laisse paraître.</strong> L'armure rhétorique est solide, les formules cyniques sont bien rodées — mais derrière le catalogue des désillusions, derrière les théories et les stats Tinder, il y a quelqu'un qui attend quelque chose de réel avec une patience et une sincérité qu'il protège jalousement. C'est peut-être la chose la plus intéressante à savoir sur Raydo.
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <p class="footer-text">Généré depuis 6 819 messages · 09/12/2022 → 30/12/2025 · Canal #trombinoscope</p>
+    <span class="footer-badge">RAYDO PROFILE v1.0</span>
+  </div>
+</footer>
+
+<script>
+// ── HOUR CHART ──
+const hourData = [36, 0, 0, 0, 0, 0, 2, 16, 45, 68, 335, 495, 569, 628, 777, 732, 434, 471, 399, 544, 207, 280, 406, 375];
+const maxVal = Math.max(...hourData);
+const chart = document.getElementById('hourChart');
+
+hourData.forEach((val, h) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'hour-bar-wrap';
+
+  const bar = document.createElement('div');
+  const pct = val / maxVal;
+  bar.className = 'hour-bar' + (h === 14 ? ' peak' : pct > 0.6 ? ' high' : '');
+  bar.dataset.height = Math.max(pct * 110, val > 0 ? 2 : 0);
+  bar.style.height = '0px';
+
+  wrap.appendChild(bar);
+  chart.appendChild(wrap);
+});
+
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.hour-bar').forEach(bar => {
+    bar.style.height = bar.dataset.height + 'px';
+  });
+}, 300);
+
+// ── TOPIC BARS ── IntersectionObserver
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const pct = entry.target.dataset.pct;
+      const fill = entry.target.querySelector('.topic-bar-fill');
+      if (fill) fill.style.width = pct + '%';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.topic-item').forEach(item => observer.observe(item));
+</script>
+</body>
+</html>
